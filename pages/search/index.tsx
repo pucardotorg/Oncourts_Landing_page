@@ -17,7 +17,6 @@ const SearchForCase = () => {
   };
 
   const handleSubmit = () => {
-    // Handle form submission logic, e.g., sending data to an API or processing it
     console.log("Form submitted:", { caseNumber, selectedYear, selectedCaseType, captchaValue });
   };
 
@@ -35,20 +34,20 @@ const SearchForCase = () => {
       <div className="flex border-2 border-teal rounded-xl mb-6 p-2">
         <button
           onClick={() => handleButtonClick("CNR")}
-          className={`flex-1 py-2 px-2 text-center rounded-sm ${selectedButton === "CNR" ? "bg-teal text-white" : "bg-white text-teal"} border-r-2 border-teal`}
+          className={`flex-1 py-2 px-2 text-center rounded-sm ${selectedButton === "CNR" ? "bg-teal text-white" : "text-teal"} border-r-2 border-teal`}
         >
           Case Number Record (CNR)
         </button>
         <button
           onClick={() => handleButtonClick("CaseNumber")}
-          className={`flex-1 py-2 text-center rounded-sm ${selectedButton === "CaseNumber" ? "bg-teal text-white" : "bg-white text-teal"}`}
+          className={`flex-1 py-2 text-center rounded-sm ${selectedButton === "CaseNumber" ? "bg-teal text-white" : "text-teal"}`}
         >
           Case Number
         </button>
       </div>
       </div>
 
-      <div className="bg-white p-6 rounded-2xl shadow-md">
+      <div className="p-6 rounded-2xl shadow-md">
         {selectedButton === "CNR" && (
           <>
             <div className="mb-4">
@@ -59,8 +58,8 @@ const SearchForCase = () => {
                   id="cnrInput"
                   value={caseNumber}
                   onChange={(e) => setCaseNumber(e.target.value)}
-                  placeholder="MHAU02153654478"
-                  className="w-full py-2 px-4 rounded-2xl outline-none"
+                  placeholder="For example : MHAU02153654478"
+                  className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
                 />
               </div>
             </div>
@@ -76,7 +75,7 @@ const SearchForCase = () => {
                   id="caseType"
                   value={selectedCaseType}
                   onChange={(e) => setSelectedCaseType(e.target.value)}
-                  className="w-full py-2 px-4 rounded-2xl outline-none"
+                  className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
                 >
                   <option value="">Select Case Type</option>
                   <option value="Type1">Type 1</option>
@@ -95,16 +94,16 @@ const SearchForCase = () => {
                     id="caseNumberInput"
                     value={caseNumber}
                     onChange={(e) => setCaseNumber(e.target.value)}
-                    placeholder="MHAU02153654478"
-                    className="w-full py-2 px-4 rounded-2xl outline-none"
+                    placeholder="For example : 02153654478"
+                    className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
                   />
                 </div>
-                <div className="w-1/2 rounded-2xl border border-teal p-4">
+                <div className="w-1/2 rounded-2xl border border-teal p-4 bg-transparent">
                   <select
                     id="yearInput"
                     value={selectedYear}
                     onChange={(e) => setSelectedYear(e.target.value)}
-                    className="w-full py-2 px-4 rounded-2xl outline-none"
+                    className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
                   >
                     <option value="">Select Year</option>
                     <option value="2023">2023</option>

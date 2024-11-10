@@ -14,9 +14,6 @@ module.exports = {
     },
     extend: {
       colors: {
-        remoteBlue: '#5489FF',
-        remoteOrange: '#FFC431',
-        remoteLightBrown: '#C88640',
         teal: '#007E7E',
         darkGrey: '#3A3A3A',
         white: '#FFFFFF',
