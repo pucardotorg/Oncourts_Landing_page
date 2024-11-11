@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import ReCAPTCHA from "react-google-recaptcha";
 
 const SearchForCase = () => {
@@ -8,16 +9,21 @@ const SearchForCase = () => {
   const [selectedCaseType, setSelectedCaseType] = useState("");
   const [captchaValue, setCaptchaValue] = useState(null);
 
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.query.type) {
+      setSelectedButton(Array.isArray(router.query.type) ? router.query.type[0] : router.query.type);
+    }
+  }, [router.query]);
+
   const handleButtonClick = (buttonType) => {
     setSelectedButton(buttonType);
+    router.push(`/search?type=${buttonType}`, undefined, { shallow: true });
   };
 
   const handleCaptchaChange = (value) => {
     setCaptchaValue(value);
-  };
-
-  const handleSubmit = () => {
-    console.log("Form submitted:", { caseNumber, selectedYear, selectedCaseType, captchaValue });
   };
 
   const handleClear = () => {
@@ -27,24 +33,69 @@ const SearchForCase = () => {
     setCaptchaValue(null);
   };
 
+  async function searchCaseSummary(caseId, filingNumber, cnrNumber) {
+    const url = 'https://dristi-kerala-dev.pucar.org/case/v1/search/_summary';
+    const requestBody = {
+      "RequestInfo": {
+        "authToken": "46593a5b-45db-421e-8001-668b65ad6733"
+      },
+      "tenantId": "kl",
+      "criteria": {
+        "tenantId": "kl",
+        "caseId": caseId,
+        "filingNumber": filingNumber,
+        "cnrNumber": cnrNumber
+      }
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  const handleSubmit = () => {
+    searchCaseSummary(
+      ["4c590e1d-0b1d-4973-879a-947c80cbb228"],
+      ["KL-000644-2024"],
+      ["KLKM520001312024"]
+    );
+  };
+
   return (
     <div className="font-Poppins max-w-xl mx-auto py-8">
       <h2 className="text-teal font-bold text-3xl mb-4 text-center">Search for a Case</h2>
       <div className="mx-8">
-      <div className="flex border-2 border-teal rounded-xl mb-6 p-2">
-        <button
-          onClick={() => handleButtonClick("CNR")}
-          className={`flex-1 py-2 px-2 text-center rounded-sm ${selectedButton === "CNR" ? "bg-teal text-white" : "text-teal"} border-r-2 border-teal`}
-        >
-          Case Number Record (CNR)
-        </button>
-        <button
-          onClick={() => handleButtonClick("CaseNumber")}
-          className={`flex-1 py-2 text-center rounded-sm ${selectedButton === "CaseNumber" ? "bg-teal text-white" : "text-teal"}`}
-        >
-          Case Number
-        </button>
-      </div>
+        <div className="flex border-2 border-teal rounded-xl mb-6 p-2">
+          <button
+            onClick={() => handleButtonClick("CNR")}
+            className={`flex-1 py-2 px-2 text-center rounded-sm ${selectedButton === "CNR" ? "bg-teal text-white" : "text-teal"} border-r-2 border-teal`}
+          >
+            Case Number Record (CNR)
+          </button>
+          <button
+            onClick={() => handleButtonClick("CaseNumber")}
+            className={`flex-1 py-2 text-center rounded-sm ${selectedButton === "CaseNumber" ? "bg-teal text-white" : "text-teal"}`}
+          >
+            Case Number
+          </button>
+        </div>
       </div>
 
       <div className="p-6 rounded-2xl shadow-md">
@@ -117,12 +168,12 @@ const SearchForCase = () => {
           </>
         )}
 
-        <div className="text-center mb-6">
+        {/* <div className="text-center mb-6">
           <ReCAPTCHA
             sitekey="YOUR_GOOGLE_RECAPTCHA_SITE_KEY"
             onChange={handleCaptchaChange}
           />
-        </div>
+        </div> */}
 
         <div className="flex justify-around mx-28">
           <button onClick={handleClear} className="py-2 px-6 rounded-2xl border border-teal text-teal">
