@@ -6,7 +6,7 @@ import {
     advocateClerksData,
     judgesData,
     courtStaffData
-} from './data';
+} from '../../data/about';
 
 const AccordionItem = ({ title, content, isOpen, onToggle }) => {
     return (
