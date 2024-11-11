@@ -39,17 +39,17 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-2">Important Links</h3>
             <ul>
               <li className="mb-5">
-                <Link href="/sub4">
+                <Link href="https://highcourt.kerala.gov.in/index.php#">
                   <a className="text-sm hover:underline">Kerala High Court Website</a>
                 </Link>
               </li>
               <li className="mb-5">
-                <Link href="/sub5">
+                <Link href="https://kollam.dcourts.gov.in/#">
                   <a className="text-sm hover:underline">Kollam e-courts website</a>
                 </Link>
               </li>
               <li className="mb-5">
-                <Link href="/sub6">
+                <Link href="https://www.youtube.com/watch?v=SuigEFEwGjk">
                   <a className="text-sm hover:underline">Kerala High Court YouTube Channel</a>
                 </Link>
               </li>
