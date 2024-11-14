@@ -13,7 +13,11 @@ const SearchForCase = () => {
 
   useEffect(() => {
     if (router.query.type) {
-      setSelectedButton(Array.isArray(router.query.type) ? router.query.type[0] : router.query.type);
+      setSelectedButton(
+        Array.isArray(router.query.type)
+          ? router.query.type[0]
+          : router.query.type,
+      );
     }
   }, [router.query]);
 
@@ -39,38 +43,37 @@ const SearchForCase = () => {
     var requestBody;
     if (selectedButton == "CNR") {
       requestBody = {
-        "RequestInfo": {
-          "authToken": `${process.env.AUTH_TOKEN_SEARCH}`
+        RequestInfo: {
+          authToken: `${process.env.AUTH_TOKEN_SEARCH}`,
         },
-        "tenantId": "kl",
-        "criteria": {
-          "tenantId": "kl",
-          "caseId": null,
-          "cnrNumber": [value]
-        }
+        tenantId: "kl",
+        criteria: {
+          tenantId: "kl",
+          caseId: null,
+          cnrNumber: [value],
+        },
       };
-    }
-    else {
+    } else {
       requestBody = {
-        "RequestInfo": {
-          "authToken": `${process.env.AUTH_TOKEN_SEARCH}`
+        RequestInfo: {
+          authToken: `${process.env.AUTH_TOKEN_SEARCH}`,
         },
-        "tenantId": "kl",
-        "criteria": {
-          "tenantId": "kl",
-          "caseId": [value],
-          "cnrNumber": null
-        }
+        tenantId: "kl",
+        criteria: {
+          tenantId: "kl",
+          caseId: [value],
+          cnrNumber: null,
+        },
       };
     }
     try {
       const response = await fetch(url, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
@@ -78,19 +81,21 @@ const SearchForCase = () => {
       }
 
       const data = await response.json();
-      const caseData = data.cases[0]
+      const caseData = data.cases[0];
       router.push({
-        pathname: '/casedetails',
+        pathname: "/casedetails",
         query: { data: JSON.stringify(caseData) },
       });
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   }
 
   return (
     <div className="font-Poppins max-w-xl mx-auto py-8">
-      <h2 className="text-teal font-bold text-3xl mb-4 text-center">Search for a Case</h2>
+      <h2 className="text-teal font-bold text-3xl mb-4 text-center">
+        Search for a Case
+      </h2>
       <div className="mx-8">
         <div className="flex border-2 border-teal rounded-xl mb-6 p-2">
           <button
@@ -112,7 +117,12 @@ const SearchForCase = () => {
         {selectedButton === "CNR" && (
           <>
             <div className="mb-4">
-              <label htmlFor="cnrInput" className="text-teal font-medium text-sm">Enter CNR Number</label>
+              <label
+                htmlFor="cnrInput"
+                className="text-teal font-medium text-sm"
+              >
+                Enter CNR Number
+              </label>
               <div className="rounded-xl border-2 border-teal p-2 mt-2">
                 <input
                   type="text"
@@ -130,7 +140,12 @@ const SearchForCase = () => {
         {selectedButton === "CaseNumber" && (
           <>
             <div className="mb-4">
-              <label htmlFor="caseType" className="text-teal font-medium text-sm">Select Case Type</label>
+              <label
+                htmlFor="caseType"
+                className="text-teal font-medium text-sm"
+              >
+                Select Case Type
+              </label>
               <div className="w-full rounded-2xl border border-teal p-4 mt-2">
                 <select
                   id="caseType"
@@ -147,7 +162,12 @@ const SearchForCase = () => {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="caseNumberInput" className="text-teal font-medium text-sm">Enter Case Number</label>
+              <label
+                htmlFor="caseNumberInput"
+                className="text-teal font-medium text-sm"
+              >
+                Enter Case Number
+              </label>
               <div className="flex space-x-4 mt-2">
                 <div className="w-1/2 rounded-2xl border border-teal p-4">
                   <input
@@ -186,7 +206,10 @@ const SearchForCase = () => {
         </div> */}
 
         <div className="flex justify-around mx-28">
-          <button onClick={handleClear} className="py-2 px-6 rounded-2xl border border-teal text-teal">
+          <button
+            onClick={handleClear}
+            className="py-2 px-6 rounded-2xl border border-teal text-teal"
+          >
             Clear Response
           </button>
           <button

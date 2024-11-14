@@ -31,19 +31,25 @@ const Header = () => {
               </motion.div>
 
               <Link href="/" passHref>
-                <div className={`py-1 text-base font-medium text-white hover:text-zinc-300 md:ml-4 lg:ml-8 cursor-pointer ${router.pathname === '/' ? 'underline underline-offset-4' : ''}`}>
+                <div
+                  className={`py-1 text-base font-medium text-white hover:text-zinc-300 md:ml-4 lg:ml-8 cursor-pointer ${router.pathname === "/" ? "underline underline-offset-4" : ""}`}
+                >
                   <h2>Home</h2>
                 </div>
               </Link>
 
               <Link href="/about" passHref>
-                <div className={`py-1 text-base font-medium text-white hover:text-zinc-300 md:ml-4 lg:ml-8 cursor-pointer ${router.pathname === '/about' ? 'underline underline-offset-4' : ''}`}>
+                <div
+                  className={`py-1 text-base font-medium text-white hover:text-zinc-300 md:ml-4 lg:ml-8 cursor-pointer ${router.pathname === "/about" ? "underline underline-offset-4" : ""}`}
+                >
                   <h2>About Us</h2>
                 </div>
               </Link>
 
               <Link href="/announcements" passHref>
-                <div className={`py-1 text-base font-medium text-white hover:text-zinc-300 md:ml-4 lg:ml-8 cursor-pointer ${router.pathname === '/announcements' ? 'underline underline-offset-4' : ''}`}>
+                <div
+                  className={`py-1 text-base font-medium text-white hover:text-zinc-300 md:ml-4 lg:ml-8 cursor-pointer ${router.pathname === "/announcements" ? "underline underline-offset-4" : ""}`}
+                >
                   <h2>Announcements</h2>
                 </div>
               </Link>
@@ -63,7 +69,7 @@ const Header = () => {
                 </button>
               </Link>
             </div>
-            {router.pathname === '/' && (
+            {router.pathname === "/" && (
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 bg-white rounded-full">
                 <Link href="/search" passHref>
                   <button className="flex items-center font-semibold text-black md:py-2 md:px-4 lg:mr-1">

@@ -8,7 +8,12 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto px-4 flex justify-between">
         <div className="flex flex-col w-1/5">
           <div className="flex items-center mb-2">
-            <Image src="/images/logo.png" alt="High Court of Kerala Logo" width={100} height={50} />
+            <Image
+              src="/images/logo.png"
+              alt="High Court of Kerala Logo"
+              width={100}
+              height={50}
+            />
           </div>
           <p className="text-sm leading-tight mb-2">
             Lorem ipsum dolor sit amet consectetur. Commodo pulvinar molesti.
@@ -20,7 +25,9 @@ const Footer = () => {
             <ul>
               <li className="mb-5">
                 <Link href="/sub1">
-                  <a className="text-sm hover:underline">Standard Operating Procedures (SOPs)</a>
+                  <a className="text-sm hover:underline">
+                    Standard Operating Procedures (SOPs)
+                  </a>
                 </Link>
               </li>
               <li className="mb-5">
@@ -30,7 +37,9 @@ const Footer = () => {
               </li>
               <li className="mb-5">
                 <Link href="/policies-conditions#terms">
-                  <a className="text-sm hover:underline">Terms and Conditions</a>
+                  <a className="text-sm hover:underline">
+                    Terms and Conditions
+                  </a>
                 </Link>
               </li>
             </ul>
@@ -40,17 +49,23 @@ const Footer = () => {
             <ul>
               <li className="mb-5">
                 <Link href="https://highcourt.kerala.gov.in/index.php#">
-                  <a className="text-sm hover:underline">Kerala High Court Website</a>
+                  <a className="text-sm hover:underline">
+                    Kerala High Court Website
+                  </a>
                 </Link>
               </li>
               <li className="mb-5">
                 <Link href="https://kollam.dcourts.gov.in/#">
-                  <a className="text-sm hover:underline">Kollam e-courts website</a>
+                  <a className="text-sm hover:underline">
+                    Kollam e-courts website
+                  </a>
                 </Link>
               </li>
               <li className="mb-5">
                 <Link href="https://www.youtube.com/watch?v=SuigEFEwGjk">
-                  <a className="text-sm hover:underline">Kerala High Court YouTube Channel</a>
+                  <a className="text-sm hover:underline">
+                    Kerala High Court YouTube Channel
+                  </a>
                 </Link>
               </li>
             </ul>
@@ -58,9 +73,7 @@ const Footer = () => {
         </div>
       </div>
       <hr className="border-gray-600 my-4" />
-      <div className="text-center text-sm">
-        © High Court of Kerala 2024
-      </div>
+      <div className="text-center text-sm">© High Court of Kerala 2024</div>
     </footer>
   );
 };

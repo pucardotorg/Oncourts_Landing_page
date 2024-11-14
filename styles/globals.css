@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 @layer base {
-    body {
-        @apply mx-auto;
-        @apply bg-zinc-50 text-zinc-900;
-    }
+  body {
+    @apply mx-auto;
+    @apply bg-zinc-50 text-zinc-900;
+  }
 }
