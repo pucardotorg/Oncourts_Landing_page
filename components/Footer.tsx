@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto px-4 flex justify-between">
         <div className="flex flex-col w-1/5">
           <div className="flex items-center mb-2">
-            <Image src="/images/logo.png" alt="Your Company" width={100} height={50} />
+            <Image src="/images/logo.png" alt="High Court of Kerala Logo" width={100} height={50} />
           </div>
           <p className="text-sm leading-tight mb-2">
             Lorem ipsum dolor sit amet consectetur. Commodo pulvinar molesti.

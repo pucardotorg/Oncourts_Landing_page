@@ -45,7 +45,8 @@ const Hero = () => {
         const newDate = `${year}-${months[month]}-${day.padStart(2, '0')}`;
         console.log(newDate)
         try {
-            const response = await fetch('https://dristi-kerala-uat.pucar.org/scheduler/causelist/v1/_download?_=1730882648559', {
+            const API_ENDPOINT = process.env.NEXT_PUBLIC_API_ENDPOINT;
+            const response = await fetch(`${API_ENDPOINT}/scheduler/causelist/v1/_download?_=1730882648559`, {
                 method: 'POST',
                 headers: {
                     'authority': 'dristi-kerala-uat.pucar.org',
@@ -132,10 +133,10 @@ const Hero = () => {
                 downloadLink.click();
                 document.body.removeChild(downloadLink);
             } else {
-                console.log("Failed to fetch roster data.");
+                alert("Failed to download the roster data. Please try again later.");
             }
         } catch (err) {
-            console.error("Error fetching roster data:", err);
+            alert("An error occurred while fetching the roster data. Please try again later.");
         }
     };
 
@@ -244,7 +245,7 @@ const Hero = () => {
                                             </div>
                                             <button className="py-1 px-3 border border-darkgrey rounded-md">
                                                 <a
-                                                    href={`/announcement/announcement-${announcement.id}.pdf`}
+                                                    href={`/ announcement / announcement - ${ announcement.id }.pdf`}
                                                     download
                                                     target="_blank"
                                                     className="flex items-center text-teal" rel="noreferrer"
@@ -274,7 +275,7 @@ const Hero = () => {
                                     <button
                                         key={index}
                                         onClick={() => handlePageChange(index + 1)}
-                                        className={`py-1 px-3 ${currentPage === index + 1 ? "bg-teal text-white" : "border border-darkgrey text-darkgrey"} rounded-md`}
+                                        className={`py - 1 px - 3 ${ currentPage === index + 1 ? "bg-teal text-white" : "border border-darkgrey text-darkgrey" } rounded - md`}
                                     >
                                         {index + 1}
                                     </button>

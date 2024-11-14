@@ -34,7 +34,8 @@ const SearchForCase = () => {
   };
 
   async function searchCaseSummary(value) {
-    const url = 'https://dristi-kerala-dev.pucar.org/case/v1/search/_summary';
+    const API_ENDPOINT = process.env.NEXT_PUBLIC_API_ENDPOINT;
+    const url = `${API_ENDPOINT}/case/v1/search/_summary`;
     var requestBody;
     if (selectedButton == "CNR") {
       requestBody = {
