@@ -73,7 +73,7 @@ const Hero = () => {
                     },
                     RequestInfo: {
                         apiId: 'Rainmaker',
-                        authToken: '6929440b-59c8-41fc-be33-3fd7a6dc90df',
+                        authToken: `${process.env.AUTH_TOKEN}`,
                         userInfo: {
                             id: 143,
                             uuid: 'c1c4a708-afd6-4c9c-91a5-fd6c8517fb39',

@@ -40,7 +40,7 @@ const SearchForCase = () => {
     if (selectedButton == "CNR") {
       requestBody = {
         "RequestInfo": {
-          "authToken": "46593a5b-45db-421e-8001-668b65ad6733"
+          "authToken": `${process.env.AUTH_TOKEN_SEARCH}`
         },
         "tenantId": "kl",
         "criteria": {
@@ -53,7 +53,7 @@ const SearchForCase = () => {
     else {
       requestBody = {
         "RequestInfo": {
-          "authToken": "46593a5b-45db-421e-8001-668b65ad6733"
+          "authToken": `${process.env.AUTH_TOKEN_SEARCH}`
         },
         "tenantId": "kl",
         "criteria": {
