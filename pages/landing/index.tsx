@@ -14,18 +14,6 @@ const Hero = () => {
     indexOfLastAnnouncement,
   );
 
-  const [currentDate, setCurrentDate] = useState("");
-
-  useEffect(() => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-    };
-    const date = new Date().toLocaleDateString("en-GB", options);
-    setCurrentDate(date);
-  }, []);
-
   const getDateOffset = (daysOffset) => {
     const date = new Date();
     date.setDate(date.getDate() - daysOffset);
@@ -368,7 +356,7 @@ const Hero = () => {
               </h2>
               <button
                 className="py-1 px-4 bg-white border border-teal rounded-[5px]"
-                onClick={() => (window.location.href = "/announcements")}
+                onClick={() => router.push("/announcements")}
               >
                 View All
               </button>
@@ -432,7 +420,7 @@ const Hero = () => {
                   <button
                     key={index}
                     onClick={() => handlePageChange(index + 1)}
-                    className={`py - 1 px - 3 ${currentPage === index + 1 ? "bg-teal text-white" : "border border-darkgrey text-darkgrey"} rounded - md`}
+                    className={`py-1 px-3 ${currentPage === index + 1 ? "bg-teal text-white" : "border border-darkgrey text-darkgrey"} rounded-md`}
                   >
                     {index + 1}
                   </button>
