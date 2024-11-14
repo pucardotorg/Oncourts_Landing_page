@@ -3,7 +3,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
 
-
 const AnnouncementsComponent = () => {
     const [timePeriod, setTimePeriod] = useState(null);
     const [selectedType, setSelectedType] = useState("");
@@ -32,9 +31,9 @@ const AnnouncementsComponent = () => {
     };
 
     const tableData = [
-        { srNo: 1, title: "Announcement 1", tags: "Urgent", date: "2024-11-10", action: "Edit" },
-        { srNo: 2, title: "Announcement 2", tags: "Important", date: "2024-11-11", action: "Edit" },
-        { srNo: 3, title: "Announcement 3", tags: "Reminder", date: "2024-11-12", action: "Edit" },
+        { srNo: 1, title: "Announcement 1", date: "2024-11-10", action: "Edit" },
+        { srNo: 2, title: "Announcement 2", date: "2024-11-11", action: "Edit" },
+        { srNo: 3, title: "Announcement 3", date: "2024-11-12", action: "Edit" },
     ];
 
     return (
@@ -123,8 +122,7 @@ const AnnouncementsComponent = () => {
                     <thead>
                         <tr>
                             <th className="px-4 py-2 border-b-2 border-darkGrey text-left bg-gray-100">SI. No.</th>
-                            <th className="px-4 py-2 border-b-2 border-darkGrey text-left bg-gray-100">Titles</th>
-                            <th className="px-4 py-2 border-b-2 border-darkGrey text-left bg-gray-100">Tags</th>
+                            <th className="px-4 py-2 border-b-2 border-darkGrey text-left bg-gray-100 w-1/2">Titles</th>
                             <th className="px-4 py-2 border-b-2 border-darkGrey text-left bg-gray-100">Date</th>
                             <th className="px-4 py-2 border-b-2 border-darkGrey text-left bg-gray-100">Action</th>
                         </tr>
@@ -133,13 +131,7 @@ const AnnouncementsComponent = () => {
                         {tableData.map((row, index) => (
                             <tr key={index}>
                                 <td className="px-4 py-2 border-b border-darkGrey">{row.srNo}.</td>
-                                <td className="px-4 py-2 border-b border-darkGrey">{row.title}</td>
-                                <td className="px-4 py-2 border-b border-darkGrey">
-                                    <button className="px-4 py-2 bg-teal text-white rounded-2xl">
-                                        {row.tags}
-                                    </button>
-                                </td>
-
+                                <td className="px-4 py-2 border-b border-darkGrey w-1/2">{row.title}</td>
                                 <td className="px-4 py-2 border-b border-darkGrey">{row.date}</td>
                                 <td className="px-4 py-2 border-b border-darkGrey">
                                     <span className="mr-2 text-teal">Download</span>
@@ -158,7 +150,7 @@ const AnnouncementsComponent = () => {
 
             <div className="flex justify-between items-center bg-gray-100">
                 <div className="flex items-center">
-                    <label htmlFor="rowsPerPage" className="text-teal mr-2">Rows per page:</label>
+                    <label htmlFor="rowsPerPage" className="text-teal mr-2 p-2">Rows per page:</label>
                     <select
                         id="rowsPerPage"
                         value={rowsPerPage}
@@ -170,7 +162,7 @@ const AnnouncementsComponent = () => {
                         <option value="30">30</option>
                     </select>
                 </div>
-                <div className="flex justify-center mt-6 space-x-2">
+                <div className="flex justify-center space-x-2 p-2">
                     <button className="py-1 px-3 border border-darkgrey rounded-md text-darkgrey">
                         &#8592; Prev
                     </button>

@@ -4,15 +4,30 @@ import {
     announcementData
 } from '../../data/announcements';
 import router from "next/router";
+import Link from "next/link";
 const Hero = () => {
 
-    const itemsPerPage = 6;  // Number of items to display per page
+    const itemsPerPage = 6;
     const [currentPage, setCurrentPage] = useState(1);
 
-    // Calculate the current page's data
     const indexOfLastAnnouncement = currentPage * itemsPerPage;
     const indexOfFirstAnnouncement = indexOfLastAnnouncement - itemsPerPage;
     const currentAnnouncements = announcementData.slice(indexOfFirstAnnouncement, indexOfLastAnnouncement);
+
+    const [currentDate, setCurrentDate] = useState('');
+
+    useEffect(() => {
+        const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: '2-digit' };
+        const date = new Date().toLocaleDateString('en-GB', options);
+        setCurrentDate(date);
+    }, []);
+
+    const getDateOffset = (daysOffset) => {
+        const date = new Date();
+        date.setDate(date.getDate() - daysOffset);
+        const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: '2-digit' };
+        return date.toLocaleDateString('en-GB', options);
+    };
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -20,7 +35,15 @@ const Hero = () => {
 
     const totalPages = Math.ceil(announcementData.length / itemsPerPage);
 
-    const fetchRosterData = async () => {
+    const fetchRosterData = async (date) => {
+        const months = {
+            "Jan": "01", "Feb": "02", "Mar": "03", "Apr": "04", "May": "05", "Jun": "06",
+            "Jul": "07", "Aug": "08", "Sep": "09", "Oct": "10", "Nov": "11", "Dec": "12"
+        };
+    
+        const [day, month, year] = date.split(" ");
+        const newDate = `${year}-${months[month]}-${day.padStart(2, '0')}`;
+        console.log(newDate)
         try {
             const response = await fetch('https://dristi-kerala-uat.pucar.org/scheduler/causelist/v1/_download?_=1730882648559', {
                 method: 'POST',
@@ -43,7 +66,7 @@ const Hero = () => {
                     tenantId: 'kl',
                     Criteria: {
                         courtId: 'KLKM52',
-                        searchDate: '2024-10-21',
+                        searchDate: newDate,
                         judgeIds: [],
                         caseIds: [],
                     },
@@ -116,12 +139,6 @@ const Hero = () => {
         }
     };
 
-    const handleButtonClick = (buttonType) => {
-        router.push(`/search?type=${buttonType}`);
-    };
-
-
-
     return (
         <div>
             <div className="relative w-full">
@@ -151,75 +168,65 @@ const Hero = () => {
                         </p>
                     </div>
                 </div>
-                <div className="flex space-x-4 m-8">
-                    <button
-                        onClick={() => handleButtonClick("CNR")}
-                        className={`flex items-center w-full rounded-[15px] border border-teal overflow-hidden`}
-                    >
-                        <div className="flex-1 flex items-center space-x-2 pl-4">
-                            <Image
-                                src="/images/search.svg"
-                                alt="Icon"
-                                width={24}
-                                height={24}
-                            />
-                            <span>Case Number Record (CNR)</span>
-                        </div>
-                        <div className="flex-1">
-                            <img
-                                src="/images/base.jpg"
-                                alt="Large Icon"
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-                    </button>
+                <div className="flex space-x-4 p-8">
+                    <div className="flex-1 flex space-x-4 p-4 rounded-[15px] border border-teal">
+                        <a
+                            href="/litigant-advocate"
+                            className="flex-1 flex flex-col items-start space-y-2 p-4 rounded-[15px] border border-teal"
+                        >
+                            <span className="font-semibold text-lg">Login as Litigant/Advocate</span>
+                            <span className="text-gray-600">
+                                To perform actions and see details of a case you&apos;re involved in
+                            </span>
+                        </a>
 
-                    <button
-                        onClick={() => handleButtonClick("CaseNumber")}
-                        className={`flex items-center w-full rounded-[15px] border border-teal overflow-hidden`}
-                    >
-                        <div className="flex-1 flex items-center space-x-2 pl-4">
-                            <Image
-                                src="/images/search.svg"
-                                alt="Icon"
-                                width={24}
-                                height={24}
-                            />
-                            <span>Case Number</span>
-                        </div>
-                        <div className="flex-1">
-                            <img
-                                src="/images/base.jpg"
-                                alt="Large Icon"
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-                    </button>
-                </div>
-                <div className="flex space-x-8 mx-2">
-                    <div className="w-1/2">
-                        <h2 className="text-teal font-bold text-xl mb-4">Cause List</h2>
-                        {[...Array(5)].map((_, index) => (
-                            <div key={index} className="flex items-center justify-between p-4 mb-4 bg-white rounded-[5px] border border-teal shadow-md">
-                                <div className="flex flex-col items-start space-y-1">
-                                    <span className="font-medium text-teal">Daily Roster</span>
-                                    <span className="text-sm text-gray-600 flex items-center">
-                                        <Image
-                                            src="/images/search.svg"
-                                            alt="Icon"
-                                            width={24}
-                                            height={24}
-                                        />
-                                        01 Jan 2024
-                                    </span>
-                                </div>
-                                <button className="py-1 px-3 bg-darkGrey text-white" id='btn' onClick={fetchRosterData}>
-                                    Download
-                                </button>
-                            </div>
-                        ))}
+                        <a
+                            href="/case-number"
+                            className="flex-1 flex flex-col items-start space-y-2 p-4 rounded-[15px] border border-teal"
+                        >
+                            <span className="font-semibold text-lg">Login as Officers/Court Staff</span>
+                            <span className="text-gray-600">
+                                To perform actions as a member of the court
+                            </span>
+                        </a>
                     </div>
 
+                    <div className="flex justify-center items-center h-full p-4">
+                        <div className="flex-1 p-4 rounded-[15px] border border-teal">
+                            <Link href="/search">
+                                <a className="flex flex-col items-center space-y-2 p-4 text-center">
+                                    <span className="font-semibold text-lg">Search for a Case</span>
+                                </a>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex space-x-8 mx-2 p-8">
+                    <div className="w-1/2">
+                        <h2 className="text-teal font-bold text-xl mb-4">Cause List</h2>
+                        {[...Array(5)].map((_, index) => {
+                            const date = getDateOffset(index);
+                            return (
+                                <div key={index} className="flex items-center justify-between p-4 mb-4 bg-white rounded-[5px] border border-teal shadow-md">
+                                    <div className="flex flex-col items-start space-y-1">
+                                        <span className="font-medium text-teal">Daily Roster</span>
+                                        <span className="text-sm text-gray-600 flex items-center">
+                                            <Image
+                                                src="/images/search.svg"
+                                                alt="Icon"
+                                                width={24}
+                                                height={24}
+                                            />
+                                            {date}
+                                        </span>
+                                    </div>
+                                    <button className="py-1 px-3 bg-darkGrey text-white" id='btn' onClick={() => fetchRosterData(date)}>
+                                        Download
+                                    </button>
+                                </div>
+                            );
+                        })}
+                    </div>
                     <div className="w-1/2 mb-2">
                         <div className="flex items-center justify-between mb-4">
                             <h2 className="text-teal font-bold text-xl">Notice Board / Announcements</h2>
@@ -280,15 +287,12 @@ const Hero = () => {
                     </div>
 
                 </div>
-
                 <div className="bg-[rgba(0,126,126,0.1)]">
-
                     <div className="flex flex-col items-center mt-16 mb-4">
                         <h2 className="text-teal font-bold text-xl mb-4 pt-8">Support</h2>
                         <p className="text-center text-darkGrey mb-8">
                             ON Courts are designed to realize the vision of taking courts to people and offer multiple benefits.
                         </p>
-
                         <div className="flex gap-6">
                             <div className="w-1/2 p-4 bg-white rounded-[15px] border border-teal shadow-md">
                                 <h3 className="font-bold text-black mb-4">Resources</h3>
@@ -310,7 +314,6 @@ const Hero = () => {
                                     />
                                 </div>
                                 <hr className="my-4" />
-
                                 <div className="flex items-center justify-between mb-4">
                                     <div className="flex space-x-2">
                                         <Image
@@ -329,7 +332,6 @@ const Hero = () => {
                                     />
                                 </div>
                                 <hr className="my-4" />
-
                                 <div className="flex items-center justify-between mb-4">
                                     <div className="flex space-x-2">
                                         <Image
@@ -348,7 +350,6 @@ const Hero = () => {
                                     />
                                 </div>
                             </div>
-
                             <div className="w-1/2 p-4 bg-white rounded-[15px] border border-teal shadow-md">
                                 <h3 className="font-bold text-black mb-4">Grievance Redressal</h3>
                                 <p className="text-gray-600 mb-4">
@@ -363,15 +364,13 @@ const Hero = () => {
                             </div>
                         </div>
                     </div>
-
-                    <div className="flex justify-between space-x-6 px-6 mx-auto max-w-screen-xl">
-                        <div className="w-1/2 px-20">
+                    <div className="flex justify-between space-x-6 px-6 mx-auto max-w-screen-xl p-8">
+                        <div className="w-1/2 px-28">
                             <h2 className="font-bold text-darkGrey">Contact Us</h2>
                             <p className="text-gray-600 mt-2">
                                 If you have any questions or need assistance, please feel free to contact us through the channels provided below.
                             </p>
                         </div>
-
                         <div className="w-1/2 px-40">
                             <div className="mb-4">
                                 <div className="flex items-center space-x-2">

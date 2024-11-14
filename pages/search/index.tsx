@@ -33,21 +33,35 @@ const SearchForCase = () => {
     setCaptchaValue(null);
   };
 
-  async function searchCaseSummary(caseId, filingNumber, cnrNumber) {
+  async function searchCaseSummary(value) {
     const url = 'https://dristi-kerala-dev.pucar.org/case/v1/search/_summary';
-    const requestBody = {
-      "RequestInfo": {
-        "authToken": "46593a5b-45db-421e-8001-668b65ad6733"
-      },
-      "tenantId": "kl",
-      "criteria": {
+    var requestBody;
+    if (selectedButton == "CNR") {
+      requestBody = {
+        "RequestInfo": {
+          "authToken": "46593a5b-45db-421e-8001-668b65ad6733"
+        },
         "tenantId": "kl",
-        "caseId": caseId,
-        "filingNumber": filingNumber,
-        "cnrNumber": cnrNumber
-      }
-    };
-
+        "criteria": {
+          "tenantId": "kl",
+          "caseId": null,
+          "cnrNumber": [value]
+        }
+      };
+    }
+    else {
+      requestBody = {
+        "RequestInfo": {
+          "authToken": "46593a5b-45db-421e-8001-668b65ad6733"
+        },
+        "tenantId": "kl",
+        "criteria": {
+          "tenantId": "kl",
+          "caseId": [value],
+          "cnrNumber": null
+        }
+      };
+    }
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -63,20 +77,15 @@ const SearchForCase = () => {
       }
 
       const data = await response.json();
-      console.log(data);
-      return data;
+      const caseData = data.cases[0]
+      router.push({
+        pathname: '/casedetails',
+        query: { data: JSON.stringify(caseData) },
+      });
     } catch (error) {
       console.error('Error:', error);
     }
   }
-
-  const handleSubmit = () => {
-    searchCaseSummary(
-      ["4c590e1d-0b1d-4973-879a-947c80cbb228"],
-      ["KL-000644-2024"],
-      ["KLKM520001312024"]
-    );
-  };
 
   return (
     <div className="font-Poppins max-w-xl mx-auto py-8">
@@ -179,7 +188,10 @@ const SearchForCase = () => {
           <button onClick={handleClear} className="py-2 px-6 rounded-2xl border border-teal text-teal">
             Clear Response
           </button>
-          <button onClick={handleSubmit} className="py-2 px-6 rounded-2xl bg-teal text-white">
+          <button
+            onClick={() => searchCaseSummary(caseNumber)}
+            className="py-2 px-6 rounded-2xl bg-teal text-white"
+          >
             Submit
           </button>
         </div>

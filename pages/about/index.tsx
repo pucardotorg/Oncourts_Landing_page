@@ -97,7 +97,7 @@ export default function About() {
 
             <h2 className="text-4xl font-bold text-teal text-center mb-2">Design Principles</h2>
             <h4 className="text-xl text-center mb-4">ON Courts are guided by the following design principles:</h4>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 text-darkGrey">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 text-darkGrey mx-8">
                 <div className="border rounded-lg p-4 text-center transition-colors duration-300 hover:bg-teal hover:text-white bg-white border-teal cursor-pointer">
                     <div className="border-2 border-teal rounded-full overflow-hidden mb-2 transition-colors duration-300 group-hover:border-white">
                         <Image
@@ -162,7 +162,7 @@ export default function About() {
                     />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 mx-8">
                     <div className="p-4">
                         <h3 className="font-bold text-lg uppercase underline mb-2">Accessible and Predictable</h3>
                         <p className="text-darkGrey">Communicate with the court and take actions that progress your case asynchronously. File a case, respond to summons, submit applications and coordinate hearing schedules from
@@ -347,7 +347,7 @@ export default function About() {
 
             </div>
 
-            <div className="flex flex-col items-start p-4">
+            <div className="flex flex-col items-start p-4 mx-8">
                 <div className="flex items-start mb-4 w-full">
                     <h2 className="text-teal font-bold text-2xl w-1/2 text-center">Roadmap</h2>
                     <p className="flex-1">

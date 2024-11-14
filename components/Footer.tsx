@@ -24,12 +24,12 @@ const Footer = () => {
                 </Link>
               </li>
               <li className="mb-5">
-                <Link href="/sub2">
+                <Link href="/policies-conditions#privacy">
                   <a className="text-sm hover:underline">Privacy Policy</a>
                 </Link>
               </li>
               <li className="mb-5">
-                <Link href="/sub3">
+                <Link href="/policies-conditions#terms">
                   <a className="text-sm hover:underline">Terms and Conditions</a>
                 </Link>
               </li>

@@ -1,7 +1,26 @@
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 
-const CaseDetails = ({data}) => {
+const CaseDetails = () => {
+    const router = useRouter();
+    const [data, setData] = useState({});
+
+    useEffect(() => {
+        if (router.isReady) {
+          const queryData = router.query.data;
+          if (typeof queryData === 'string') { 
+            try {
+              const parsedData = JSON.parse(queryData);
+              console.log(parsedData)
+              setData(parsedData)
+            } catch (error) {
+              console.error("Error parsing data:", error);
+            }
+          }
+        }
+      }, [router.isReady, router.query.data]);
+
     return (
         <div className="p-6">
             <div className="flex justify-between items-center mb-4 mx-8">
@@ -45,7 +64,7 @@ const CaseDetails = ({data}) => {
                         <hr />
                         <div className="flex justify-between">
                             <p className="font-semibold text-[rgba(2,137,233,1)]">Registration No. :</p>
-                            <p className="font-semibold">ST/12345/2024</p>
+                            <p className="font-semibold">{data["registrationNumber"]}</p>
                         </div>
                         <hr />
                         <div className="flex justify-between">
@@ -63,7 +82,7 @@ const CaseDetails = ({data}) => {
                         <hr />
                         <div className="flex justify-between">
                             <p className="font-semibold text-[rgba(2,137,233,1)]">Stage / Type of Dsip :</p>
-                            <p className="font-semibold">Admission</p>
+                            <p className="font-semibold">{data["stage"]}</p>
                         </div>
                     </div>
                 </div>
@@ -89,12 +108,12 @@ const CaseDetails = ({data}) => {
                     <div className="grid gap-4 mt-4 mb-4">
                         <div className="flex justify-between">
                             <p className="font-semibold text-[rgba(2,137,233,1)]">Filing Date :</p>
-                            <p className="font-semibold">23rd September 2024</p>
+                            <p className="font-semibold">{data["filingDate"]}</p>
                         </div>
                         <hr />
                         <div className="flex justify-between">
                             <p className="font-semibold text-[rgba(2,137,233,1)]">Registration Date :</p>
-                            <p className="font-semibold">23rd September 2024</p>
+                            <p className="font-semibold">{data["registrationDate"]}</p>
                         </div>
                         <hr />
                         <div className="flex justify-between">
