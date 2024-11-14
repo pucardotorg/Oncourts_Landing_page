@@ -43,7 +43,6 @@ const Hero = () => {
 
         const [day, month, year] = date.split(" ");
         const newDate = `${year}-${months[month]}-${day.padStart(2, '0')}`;
-        console.log(newDate)
         try {
             const API_ENDPOINT = process.env.NEXT_PUBLIC_API_ENDPOINT;
             const response = await fetch(`${API_ENDPOINT}/scheduler/causelist/v1/_download?_=1730882648559`, {

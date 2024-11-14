@@ -12,7 +12,6 @@ const CaseDetails = () => {
           if (typeof queryData === 'string') { 
             try {
               const parsedData = JSON.parse(queryData);
-              console.log(parsedData)
               setData(parsedData)
             } catch (error) {
               console.error("Error parsing data:", error);
