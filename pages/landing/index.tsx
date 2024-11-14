@@ -40,7 +40,7 @@ const Hero = () => {
             "Jan": "01", "Feb": "02", "Mar": "03", "Apr": "04", "May": "05", "Jun": "06",
             "Jul": "07", "Aug": "08", "Sep": "09", "Oct": "10", "Nov": "11", "Dec": "12"
         };
-    
+
         const [day, month, year] = date.split(" ");
         const newDate = `${year}-${months[month]}-${day.padStart(2, '0')}`;
         console.log(newDate)
@@ -243,12 +243,17 @@ const Hero = () => {
                                                 <span className="bg-teal text-white px-2 py-1 rounded-md text-sm">Tags</span>
                                             </div>
                                             <button className="py-1 px-3 border border-darkgrey rounded-md">
-                                                Download
+                                                <a
+                                                    href={`/announcement/announcement-${announcement.id}.pdf`}
+                                                    download
+                                                    target="_blank"
+                                                    className="flex items-center text-teal" rel="noreferrer"
+                                                >Download</a>
                                             </button>
                                         </div>
                                         <p className="text-gray-500 text-sm flex items-center space-x-2">
                                             <Image src="/images/search.svg" alt="Icon" width={24} height={24} />
-                                            <span>Date: {announcement.date}</span>
+                                            {announcement.date ? <span>Date: {announcement.date}</span> : null}
                                         </p>
                                         <h3 className="font-bold text-black mt-2">{announcement.heading}</h3>
                                         <p className="text-teal text-sm mt-1">{announcement.description}</p>

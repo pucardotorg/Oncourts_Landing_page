@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
+import {
+    announcementData
+} from '../../data/announcements';
 
 const AnnouncementsComponent = () => {
     const [timePeriod, setTimePeriod] = useState(null);
@@ -29,12 +32,6 @@ const AnnouncementsComponent = () => {
             setCurrentPage(currentPage + 1);
         }
     };
-
-    const tableData = [
-        { srNo: 1, title: "Announcement 1", date: "2024-11-10", action: "Edit" },
-        { srNo: 2, title: "Announcement 2", date: "2024-11-11", action: "Edit" },
-        { srNo: 3, title: "Announcement 3", date: "2024-11-12", action: "Edit" },
-    ];
 
     return (
         <div className="font-Poppins max-w-4xl mx-auto py-8">
@@ -128,19 +125,26 @@ const AnnouncementsComponent = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {tableData.map((row, index) => (
+                        {announcementData.map((row, index) => (
                             <tr key={index}>
-                                <td className="px-4 py-2 border-b border-darkGrey">{row.srNo}.</td>
-                                <td className="px-4 py-2 border-b border-darkGrey w-1/2">{row.title}</td>
-                                <td className="px-4 py-2 border-b border-darkGrey">{row.date}</td>
+                                <td className="px-4 py-2 border-b border-darkGrey">{row.id}.</td>
+                                <td className="px-4 py-2 border-b border-darkGrey w-1/2">{row.description}</td>
+                                <td className="px-4 py-2 border-b border-darkGrey">{row.date ? row.date : ""}</td>
                                 <td className="px-4 py-2 border-b border-darkGrey">
-                                    <span className="mr-2 text-teal">Download</span>
-                                    <Image
-                                        src="/images/search.svg"
-                                        alt="Icon"
-                                        width={24}
-                                        height={24}
-                                    />
+                                    <a
+                                        href={`/announcement/announcement-${row.id}.pdf`}
+                                        download
+                                        target="_blank"
+                                        className="flex items-center text-teal" rel="noreferrer"
+                                    >
+                                        <span className="mr-2">Download</span>
+                                        <Image
+                                            src="/images/search.svg"
+                                            alt="Download Icon"
+                                            width={24}
+                                            height={24}
+                                        />
+                                    </a>
                                 </td>
                             </tr>
                         ))}
