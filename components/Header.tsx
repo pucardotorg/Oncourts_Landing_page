@@ -12,14 +12,13 @@ interface NavLinkProps {
 const NavLink: React.FC<NavLinkProps> = ({ href, label }) => {
   const router = useRouter();
   return (
-    <Link href={href} passHref>
-      <div
-        className={`py-1 text-base font-medium text-white hover:text-zinc-300 md:ml-4 lg:ml-8 cursor-pointer ${
-          router.pathname === href ? "underline underline-offset-4" : ""
-        }`}
-      >
-        <h2>{label}</h2>
-      </div>
+    <Link
+      href={href}
+      className={`py-1 text-base font-medium text-white hover:text-zinc-300 md:ml-4 lg:ml-8 ${
+        router.pathname === href ? "underline underline-offset-4" : ""
+      }`}
+    >
+      {label}
     </Link>
   );
 };
