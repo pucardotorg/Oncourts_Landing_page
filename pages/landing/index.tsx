@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { announcementData } from "../../data/announcements";
 import router from "next/router";
@@ -244,7 +244,7 @@ const Hero = () => {
       }
     } catch (err) {
       alert(
-        "An error occurred while fetching the roster data. Please try again later.",
+        `An error occurred while fetching the roster data. Please try again later. ${err}`,
       );
     }
   };
@@ -256,9 +256,8 @@ const Hero = () => {
           <Image
             src="/images/base.jpg"
             alt="Base Image"
-            layout="fill"
             objectFit="cover"
-            height={600}
+            layout="fill"
           />
           <div className="absolute mt-12 top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white">
             <div className="mb-4">
@@ -281,37 +280,38 @@ const Hero = () => {
         </div>
         <div className="flex space-x-4 p-8">
           <div className="flex-1 flex space-x-4 p-4 rounded-[15px] border border-teal">
-            <Link href="/litigant-advocate">
-              <a className="flex-1 flex flex-col items-start space-y-2 p-4 rounded-[15px] border border-teal">
-                <span className="font-semibold text-lg">
-                  Login as Litigant/Advocate
-                </span>
-                <span className="text-gray-600">
-                  To perform actions and see details of a case you&apos;re
-                  involved in
-                </span>
-              </a>
+            <Link
+              href="/litigant-advocate"
+              className="flex-1 flex flex-col items-start space-y-2 p-4 rounded-[15px] border border-teal"
+            >
+              <span className="font-semibold text-lg">
+                Login as Litigant/Advocate
+              </span>
+              <span className="text-gray-600">
+                To perform actions and see details of a case you&apos;re
+                involved in
+              </span>
             </Link>
-            <Link href="/case-number">
-              <a className="flex-1 flex flex-col items-start space-y-2 p-4 rounded-[15px] border border-teal">
-                <span className="font-semibold text-lg">
-                  Login as Officers/Court Staff
-                </span>
-                <span className="text-gray-600">
-                  To perform actions as a member of the court
-                </span>
-              </a>
+            <Link
+              href="/case-number"
+              className="flex-1 flex flex-col items-start space-y-2 p-4 rounded-[15px] border border-teal"
+            >
+              <span className="font-semibold text-lg">
+                Login as Officers/Court Staff
+              </span>
+              <span className="text-gray-600">
+                To perform actions as a member of the court
+              </span>
             </Link>
           </div>
 
           <div className="flex justify-center items-center h-full p-4">
             <div className="flex-1 p-4 rounded-[15px] border border-teal">
-              <Link href="/search">
-                <a className="flex flex-col items-center space-y-2 p-4 text-center">
-                  <span className="font-semibold text-lg">
-                    Search for a Case
-                  </span>
-                </a>
+              <Link
+                href="/search"
+                className="flex flex-col items-center space-y-2 p-4 text-center"
+              >
+                <span className="font-semibold text-lg">Search for a Case</span>
               </Link>
             </div>
           </div>

@@ -5,12 +5,10 @@ import Image from "next/image";
 import { announcementData } from "../../data/announcements";
 
 const AnnouncementsComponent = () => {
-  const [timePeriod, setTimePeriod] = useState(null);
+  const [timePeriod, setTimePeriod] = useState<Date | null>(null);
   const [selectedType, setSelectedType] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
   const [downloadingId, setDownloadingId] = useState(null);
 
   const handleDownload = async (id) => {
@@ -28,23 +26,11 @@ const AnnouncementsComponent = () => {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (error) {
-      alert("Failed to download file");
+      alert(`Failed to download file ${error}`);
     } finally {
       setDownloadingId(null);
     }
   };
-
-  if (isLoading) {
-    return <div className="text-center py-4">Loading announcements...</div>;
-  }
-
-  if (error) {
-    return (
-      <div className="text-center py-4 text-red-500">
-        Error: {error.message}
-      </div>
-    );
-  }
 
   if (!announcementData?.length) {
     return <div className="text-center py-4">No announcements found</div>;
@@ -63,13 +49,13 @@ const AnnouncementsComponent = () => {
     alert("Filters Applied");
   };
 
-  const handlePageChange = (direction) => {
-    if (direction === "prev" && currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    } else if (direction === "next") {
-      setCurrentPage(currentPage + 1);
-    }
-  };
+  // const handlePageChange = (direction) => {
+  //   if (direction === "prev" && currentPage > 1) {
+  //     setCurrentPage(currentPage - 1);
+  //   } else if (direction === "next") {
+  //     setCurrentPage(currentPage + 1);
+  //   }
+  // };
 
   return (
     <div className="font-Poppins max-w-4xl mx-auto py-8">
@@ -116,7 +102,7 @@ const AnnouncementsComponent = () => {
               </div>
               <DatePicker
                 selected={timePeriod}
-                // onChange={(date) => setTimePeriod(date)}
+                onChange={(date: Date | null) => setTimePeriod(date)}
                 className="w-full py-2 pl-10 pr-4 border-b-2 border-gray-500 outline-none bg-transparent"
                 placeholderText="All Time"
               />
@@ -173,7 +159,7 @@ const AnnouncementsComponent = () => {
             </tr>
           </thead>
           <tbody>
-            {announcementData.map((row, index) => (
+            {announcementData.map((row) => (
               <tr key={row.id}>
                 <td className="px-4 py-2 border-b border-darkGrey">
                   {row.id}.
@@ -215,7 +201,7 @@ const AnnouncementsComponent = () => {
           <select
             id="rowsPerPage"
             value={rowsPerPage}
-            // onChange={(e) => setRowsPerPage(e.target.value)}
+            onChange={(e) => setRowsPerPage(Number(e.target.value))}
             className="py-2 px-4 bg-transparent outline-none"
           >
             <option value="10">10</option>

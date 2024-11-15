@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const Footer = () => {
+const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-800 text-white py-8">
       <div className="max-w-6xl mx-auto px-4 flex justify-between">
@@ -24,22 +24,24 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-2">Links</h3>
             <ul>
               <li className="mb-5">
-                <Link href="/sub1">
-                  <a className="text-sm hover:underline">
-                    Standard Operating Procedures (SOPs)
-                  </a>
+                <Link href="/sub1" className="text-sm hover:underline">
+                  Standard Operating Procedures (SOPs)
                 </Link>
               </li>
               <li className="mb-5">
-                <Link href="/policies-conditions#privacy">
-                  <a className="text-sm hover:underline">Privacy Policy</a>
+                <Link
+                  href="/policies-conditions#privacy"
+                  className="text-sm hover:underline"
+                >
+                  Privacy Policy
                 </Link>
               </li>
               <li className="mb-5">
-                <Link href="/policies-conditions#terms">
-                  <a className="text-sm hover:underline">
-                    Terms and Conditions
-                  </a>
+                <Link
+                  href="/policies-conditions#terms"
+                  className="text-sm hover:underline"
+                >
+                  Terms and Conditions
                 </Link>
               </li>
             </ul>
@@ -48,24 +50,27 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-2">Important Links</h3>
             <ul>
               <li className="mb-5">
-                <Link href="https://highcourt.kerala.gov.in/index.php#">
-                  <a className="text-sm hover:underline">
-                    Kerala High Court Website
-                  </a>
+                <Link
+                  href="https://highcourt.kerala.gov.in/index.php#"
+                  className="text-sm hover:underline"
+                >
+                  Kerala High Court Website
                 </Link>
               </li>
               <li className="mb-5">
-                <Link href="https://kollam.dcourts.gov.in/#">
-                  <a className="text-sm hover:underline">
-                    Kollam e-courts website
-                  </a>
+                <Link
+                  href="https://kollam.dcourts.gov.in/#"
+                  className="text-sm hover:underline"
+                >
+                  Kollam e-courts website
                 </Link>
               </li>
               <li className="mb-5">
-                <Link href="https://www.youtube.com/watch?v=SuigEFEwGjk">
-                  <a className="text-sm hover:underline">
-                    Kerala High Court YouTube Channel
-                  </a>
+                <Link
+                  href="https://www.youtube.com/watch?v=SuigEFEwGjk"
+                  className="text-sm hover:underline"
+                >
+                  Kerala High Court YouTube Channel
                 </Link>
               </li>
             </ul>

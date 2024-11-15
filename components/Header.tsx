@@ -4,6 +4,26 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 
+interface NavLinkProps {
+  href: string;
+  label: string;
+}
+
+const NavLink: React.FC<NavLinkProps> = ({ href, label }) => {
+  const router = useRouter();
+  return (
+    <Link href={href} passHref>
+      <div
+        className={`py-1 text-base font-medium text-white hover:text-zinc-300 md:ml-4 lg:ml-8 cursor-pointer ${
+          router.pathname === href ? "underline underline-offset-4" : ""
+        }`}
+      >
+        <h2>{label}</h2>
+      </div>
+    </Link>
+  );
+};
+
 const Header = () => {
   const router = useRouter();
 
@@ -23,36 +43,15 @@ const Header = () => {
                   <Image
                     className="block"
                     src="/images/logo.png"
-                    alt="Your Company"
+                    alt="OnCourts Logo"
                     width={120}
                     height={40}
                   />
                 </Link>
               </motion.div>
-
-              <Link href="/" passHref>
-                <div
-                  className={`py-1 text-base font-medium text-white hover:text-zinc-300 md:ml-4 lg:ml-8 cursor-pointer ${router.pathname === "/" ? "underline underline-offset-4" : ""}`}
-                >
-                  <h2>Home</h2>
-                </div>
-              </Link>
-
-              <Link href="/about" passHref>
-                <div
-                  className={`py-1 text-base font-medium text-white hover:text-zinc-300 md:ml-4 lg:ml-8 cursor-pointer ${router.pathname === "/about" ? "underline underline-offset-4" : ""}`}
-                >
-                  <h2>About Us</h2>
-                </div>
-              </Link>
-
-              <Link href="/announcements" passHref>
-                <div
-                  className={`py-1 text-base font-medium text-white hover:text-zinc-300 md:ml-4 lg:ml-8 cursor-pointer ${router.pathname === "/announcements" ? "underline underline-offset-4" : ""}`}
-                >
-                  <h2>Announcements</h2>
-                </div>
-              </Link>
+              <NavLink href="/" label="Home" />
+              <NavLink href="/about" label="About Us" />
+              <NavLink href="/announcements" label="Announcements" />
             </div>
 
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 bg-white rounded-full">
@@ -71,9 +70,9 @@ const Header = () => {
             </div>
             {router.pathname === "/" && (
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 bg-white rounded-full">
-                <Link href="/search" passHref>
+                <Link href="/login" passHref>
                   <button className="flex items-center font-semibold text-black md:py-2 md:px-4 lg:mr-1">
-                    <span className="hidden md:inline mr-2">Login</span>
+                    <span className="mr-2 hidden md:inline">Login</span>
                     <Image
                       className="block"
                       src="/images/search.svg"

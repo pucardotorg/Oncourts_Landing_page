@@ -339,7 +339,7 @@ export default function About() {
 
         <div className="flex items-start mb-12">
           <div className="w-1/2 pr-8">
-            <h3 className="text-2xl font-bold mb-4">Court Staffs</h3>
+            <h3 className="text-2xl font-bold mb-4">Court Staff</h3>
             <div className="mb-8">
               {courtStaffData.map((item, index) => (
                 <AccordionItem
