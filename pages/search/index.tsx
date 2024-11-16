@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import ReCAPTCHA from "react-google-recaptcha";
 
 const SearchForCase = () => {
   const [selectedButton, setSelectedButton] = useState("CNR");
   const [caseNumber, setCaseNumber] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedCaseType, setSelectedCaseType] = useState("");
-  const [captchaValue, setCaptchaValue] = useState(null);
 
   const router = useRouter();
 
@@ -26,21 +24,16 @@ const SearchForCase = () => {
     router.push(`/search?type=${buttonType}`, undefined, { shallow: true });
   };
 
-  const handleCaptchaChange = (value) => {
-    setCaptchaValue(value);
-  };
-
   const handleClear = () => {
     setCaseNumber("");
     setSelectedYear("");
     setSelectedCaseType("");
-    setCaptchaValue(null);
   };
 
   async function searchCaseSummary(value) {
     const API_ENDPOINT = process.env.NEXT_PUBLIC_API_ENDPOINT;
     const url = `${API_ENDPOINT}/case/v1/search/_summary`;
-    var requestBody;
+    let requestBody;
     if (selectedButton == "CNR") {
       requestBody = {
         RequestInfo: {
