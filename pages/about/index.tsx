@@ -7,7 +7,6 @@ import {
   judgesData,
   courtStaffData,
 } from "../../data/about";
-import DOMPurify from "dompurify";
 
 const AccordionItem = ({ title, content, isOpen, onToggle }) => {
   return (
@@ -239,7 +238,7 @@ export default function About() {
                 <AccordionItem
                   key={index}
                   title={item.title}
-                  content={DOMPurify.sanitize(item.content)}
+                  content={item.content}
                   isOpen={openIndices.litigants === index}
                   onToggle={() => handleToggle("litigants", index)}
                 />
@@ -275,7 +274,7 @@ export default function About() {
                 <AccordionItem
                   key={index}
                   title={item.title}
-                  content={DOMPurify.sanitize(item.content)}
+                  content={item.content}
                   isOpen={openIndices.advocates === index}
                   onToggle={() => handleToggle("advocates", index)}
                 />
@@ -292,7 +291,7 @@ export default function About() {
                 <AccordionItem
                   key={index}
                   title={item.title}
-                  content={DOMPurify.sanitize(item.content)}
+                  content={item.content}
                   isOpen={openIndices.advocateClerks === index}
                   onToggle={() => handleToggle("advocateClerks", index)}
                 />
@@ -328,7 +327,7 @@ export default function About() {
                 <AccordionItem
                   key={index}
                   title={item.title}
-                  content={DOMPurify.sanitize(item.content)}
+                  content={item.content}
                   isOpen={openIndices.judges === index}
                   onToggle={() => handleToggle("judges", index)}
                 />
@@ -345,7 +344,7 @@ export default function About() {
                 <AccordionItem
                   key={index}
                   title={item.title}
-                  content={DOMPurify.sanitize(item.content)}
+                  content={item.content}
                   isOpen={openIndices.courtStaff === index}
                   onToggle={() => handleToggle("courtStaff", index)}
                 />
