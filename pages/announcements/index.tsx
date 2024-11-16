@@ -224,32 +224,32 @@ const AnnouncementsComponent = () => {
           </select>
         </div>
         <div className="flex justify-center mt-6 space-x-2">
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  className="py-1 px-3 border border-darkgrey rounded-md text-darkgrey"
-                  disabled={currentPage === 1}
-                >
-                  &#8592; Prev
-                </button>
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            className="py-1 px-3 border border-darkgrey rounded-md text-darkgrey"
+            disabled={currentPage === 1}
+          >
+            &#8592; Prev
+          </button>
 
-                {[...Array(totalPages)].map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handlePageChange(index + 1)}
-                    className={`py-1 px-3 ${currentPage === index + 1 ? "bg-teal text-white" : "border border-darkgrey text-darkgrey"} rounded-md`}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
+          {[...Array(totalPages)].map((_, index) => (
+            <button
+              key={index}
+              onClick={() => handlePageChange(index + 1)}
+              className={`py-1 px-3 ${currentPage === index + 1 ? "bg-teal text-white" : "border border-darkgrey text-darkgrey"} rounded-md`}
+            >
+              {index + 1}
+            </button>
+          ))}
 
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  className="py-1 px-3 border border-darkgrey rounded-md text-darkgrey"
-                  disabled={currentPage === totalPages}
-                >
-                  Next &#8594;
-                </button>
-              </div>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            className="py-1 px-3 border border-darkgrey rounded-md text-darkgrey"
+            disabled={currentPage === totalPages}
+          >
+            Next &#8594;
+          </button>
+        </div>
       </div>
     </div>
   );
