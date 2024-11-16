@@ -5,7 +5,10 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <meta charSet="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; font-src 'self' fonts.gstatic.com fonts.googleapis.com;" />
           <link
             rel="preconnect"
             href="https://fonts.gstatic.com"

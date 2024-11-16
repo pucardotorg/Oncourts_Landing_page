@@ -81,7 +81,7 @@ const AnnouncementsComponent = () => {
           <input
             type="text"
             placeholder="Search"
-            className="w-full py-2 pl-10 pr-4 border-b-2 border-darkGrey outline-none bg-transparent"
+            className="w-full py-2 pl-10 pr-4 border-b-2 border-darkGray outline-none bg-transparent"
           />
           <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
             <Image

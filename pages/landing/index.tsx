@@ -325,7 +325,6 @@ const Hero = () => {
                   </div>
                   <button
                     className="py-1 px-3 bg-darkGrey text-white"
-                    id="btn"
                     onClick={() => fetchRosterData(date)}
                   >
                     Download
