@@ -245,7 +245,7 @@ const Hero = () => {
             layout="fill"
           />
           <div className="absolute mt-12 top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white">
-            <div className="mb-4">
+            <div className="mb-4 flex justify-center">
               <Image
                 src="/images/small_img.png"
                 alt="Small Image"

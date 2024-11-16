@@ -7,9 +7,23 @@ import { announcementData } from "../../data/announcements";
 const AnnouncementsComponent = () => {
   const [timePeriod, setTimePeriod] = useState<Date | null>(null);
   const [selectedType, setSelectedType] = useState("");
-  // const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [downloadingId, setDownloadingId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = rowsPerPage;
+
+  const indexOfLastAnnouncement = currentPage * itemsPerPage;
+  const indexOfFirstAnnouncement = indexOfLastAnnouncement - itemsPerPage;
+  const currentAnnouncements = announcementData.slice(
+    indexOfFirstAnnouncement,
+    indexOfLastAnnouncement,
+  );
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const totalPages = Math.ceil(announcementData.length / itemsPerPage);
 
   const handleDownload = async (id) => {
     try {
@@ -159,7 +173,7 @@ const AnnouncementsComponent = () => {
             </tr>
           </thead>
           <tbody>
-            {announcementData.map((row) => (
+            {currentAnnouncements.map((row) => (
               <tr key={row.id}>
                 <td className="px-4 py-2 border-b border-darkGrey">
                   {row.id}.
@@ -209,21 +223,33 @@ const AnnouncementsComponent = () => {
             <option value="30">30</option>
           </select>
         </div>
-        <div className="flex justify-center space-x-2 p-2">
-          <button className="py-1 px-3 border border-darkgrey rounded-md text-darkgrey">
-            &#8592; Prev
-          </button>
-          <button className="py-1 px-3 bg-teal text-white rounded-md">1</button>
-          <button className="py-1 px-3 border border-darkgrey text-darkgrey">
-            2
-          </button>
-          <button className="py-1 px-3 border border-darkgrey text-darkgrey">
-            3
-          </button>
-          <button className="py-1 px-3 bg-teal text-white rounded-md">
-            Next &#8594;
-          </button>
-        </div>
+        <div className="flex justify-center mt-6 space-x-2">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  className="py-1 px-3 border border-darkgrey rounded-md text-darkgrey"
+                  disabled={currentPage === 1}
+                >
+                  &#8592; Prev
+                </button>
+
+                {[...Array(totalPages)].map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handlePageChange(index + 1)}
+                    className={`py-1 px-3 ${currentPage === index + 1 ? "bg-teal text-white" : "border border-darkgrey text-darkgrey"} rounded-md`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  className="py-1 px-3 border border-darkgrey rounded-md text-darkgrey"
+                  disabled={currentPage === totalPages}
+                >
+                  Next &#8594;
+                </button>
+              </div>
       </div>
     </div>
   );
