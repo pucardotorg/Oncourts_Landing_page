@@ -2,6 +2,9 @@
 # Use the official Node.js image as the base image
 FROM node:20-alpine
 
+# Set environment variables
+ENV ONCOURTS_API_ENDPOINT=
+
 # Set the working directory inside the container
 WORKDIR /app
 
