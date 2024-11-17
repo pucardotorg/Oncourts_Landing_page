@@ -4,6 +4,8 @@ FROM node:20-alpine
 
 # Set environment variables
 ENV ONCOURTS_API_ENDPOINT=
+ENV ONCOURTS_CITIZEN_APP_ENDPOINT=https://oncourts-uat2.kerala.gov.in/digit-ui/citizen/login
+ENV ONCOURTS_EMPLOYEE_APP_ENDPOINT=https://oncourts-uat2.kerala.gov.in/digit-ui/employee/login
 
 # Set the working directory inside the container
 WORKDIR /app
