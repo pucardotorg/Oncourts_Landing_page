@@ -8,24 +8,44 @@ const AnnouncementsComponent = () => {
   const [timePeriod, setTimePeriod] = useState<Date | null>(null);
   const [selectedType, setSelectedType] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [downloadingId, setDownloadingId] = useState(null);
+  const [downloadingId, setDownloadingId] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState(""); // New state for search query
   const itemsPerPage = rowsPerPage;
+
+  const filteredAnnouncements = announcementData.filter((announcement) => {
+    const isWithinTimePeriod =
+      !timePeriod ||
+      new Date(announcement.date).getTime() <= timePeriod.getTime();
+    const matchesType = selectedType
+      ? announcement.type === selectedType
+      : true;
+
+    const matchesSearch =
+      (announcement.description &&
+        announcement.description
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())) ||
+      (announcement.title &&
+        announcement.title.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    return isWithinTimePeriod && matchesType && matchesSearch;
+  });
 
   const indexOfLastAnnouncement = currentPage * itemsPerPage;
   const indexOfFirstAnnouncement = indexOfLastAnnouncement - itemsPerPage;
-  const currentAnnouncements = announcementData.slice(
+  const currentAnnouncements = filteredAnnouncements.slice(
     indexOfFirstAnnouncement,
     indexOfLastAnnouncement,
   );
 
-  const handlePageChange = (pageNumber) => {
+  const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
 
-  const totalPages = Math.ceil(announcementData.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredAnnouncements.length / itemsPerPage);
 
-  const handleDownload = async (id) => {
+  const handleDownload = async (id: number) => {
     try {
       setDownloadingId(id);
       const response = await fetch(`/announcement/announcement-${id}.pdf`);
@@ -46,10 +66,6 @@ const AnnouncementsComponent = () => {
     }
   };
 
-  if (!announcementData?.length) {
-    return <div className="text-center py-4">No announcements found</div>;
-  }
-
   const handleHamburgerClick = () => {
     alert("Hamburger menu clicked!");
   };
@@ -57,19 +73,12 @@ const AnnouncementsComponent = () => {
   const handleClear = () => {
     setTimePeriod(null);
     setSelectedType("");
+    setSearchQuery(""); // Reset search query on clear
   };
 
   const handleApply = () => {
     alert("Filters Applied");
   };
-
-  // const handlePageChange = (direction) => {
-  //   if (direction === "prev" && currentPage > 1) {
-  //     setCurrentPage(currentPage - 1);
-  //   } else if (direction === "next") {
-  //     setCurrentPage(currentPage + 1);
-  //   }
-  // };
 
   return (
     <div className="max-w-4xl mx-auto py-8">
@@ -82,6 +91,8 @@ const AnnouncementsComponent = () => {
             type="text"
             placeholder="Search"
             className="w-full py-2 pl-10 pr-4 border-b-2 border-darkGray outline-none bg-transparent"
+            value={searchQuery} // Bind search input to the state
+            onChange={(e) => setSearchQuery(e.target.value)} // Update state on input change
           />
           <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
             <Image
@@ -223,31 +234,21 @@ const AnnouncementsComponent = () => {
             <option value="30">30</option>
           </select>
         </div>
-        <div className="flex justify-center mt-6 space-x-2">
+        <div className="flex items-center space-x-4">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
-            className="py-1 px-3 border border-darkgrey rounded-md text-darkgrey"
             disabled={currentPage === 1}
+            className="text-teal"
           >
-            &#8592; Prev
+            Previous
           </button>
-
-          {[...Array(totalPages)].map((_, index) => (
-            <button
-              key={index}
-              onClick={() => handlePageChange(index + 1)}
-              className={`py-1 px-3 ${currentPage === index + 1 ? "bg-teal text-white" : "border border-darkgrey text-darkgrey"} rounded-md`}
-            >
-              {index + 1}
-            </button>
-          ))}
-
+          <span className="text-teal">{`${currentPage} / ${totalPages}`}</span>
           <button
             onClick={() => handlePageChange(currentPage + 1)}
-            className="py-1 px-3 border border-darkgrey rounded-md text-darkgrey"
             disabled={currentPage === totalPages}
+            className="text-teal"
           >
-            Next &#8594;
+            Next
           </button>
         </div>
       </div>
