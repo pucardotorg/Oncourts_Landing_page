@@ -14,7 +14,7 @@ const NavLink: React.FC<NavLinkProps> = ({ href, label }) => {
   return (
     <Link
       href={href}
-      className={`py-1 text-base font-medium text-white hover:text-zinc-300 md:ml-4 lg:ml-8 ${
+      className={`py-1 text-base font-medium text-teal hover:text-black md:ml-4 lg:ml-8 ${
         router.pathname === href ? "underline underline-offset-4" : ""
       }`}
     >
@@ -27,8 +27,8 @@ const Header = () => {
   const router = useRouter();
 
   return (
-    <div className="font-Poppins">
-      <nav className="bg-teal">
+    <div>
+      <nav className="bg-white">
         <div className="justify-center hidden mx-auto shadow-sm sm:hidden md:block md:px-6 lg:px-44">
           <div className="relative flex items-center justify-between py-7">
             <div className="flex items-center justify-center flex-1 sm:items-stretch sm:justify-start">
@@ -40,11 +40,19 @@ const Header = () => {
               >
                 <Link href="/" passHref>
                   <Image
-                    className="block"
+                    src="/images/emblem.webp"
+                    alt="emblem"
+                    width={40}
+                    height={40}
+                    className="mt-4 mr-4"
+                  />
+                </Link>
+                <Link href="/" passHref>
+                  <Image
                     src="/images/logo.png"
                     alt="OnCourts Logo"
-                    width={120}
-                    height={40}
+                    width={80}
+                    height={800}
                   />
                 </Link>
               </motion.div>
@@ -53,9 +61,9 @@ const Header = () => {
               <NavLink href="/announcements" label="Announcements" />
             </div>
 
-            <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 bg-white rounded-full">
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 bg-teal rounded-full">
               <Link href="/search" passHref>
-                <button className="flex items-center font-semibold text-black md:py-2 md:px-4 lg:mr-1">
+                <button className="flex items-center font-semibold text-white md:py-2 md:px-4 lg:mr-1">
                   <Image
                     className="block"
                     src="/images/search.svg"
@@ -68,9 +76,9 @@ const Header = () => {
               </Link>
             </div>
             {router.pathname === "/" && (
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 bg-white rounded-full">
+              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 bg-teal rounded-full">
                 <Link href="/login" passHref>
-                  <button className="flex items-center font-semibold text-black md:py-2 md:px-4 lg:mr-1">
+                  <button className="flex items-center font-semibold text-white md:py-2 md:px-4 lg:mr-1">
                     <span className="mr-2 hidden md:inline">Login</span>
                     <Image
                       className="block"

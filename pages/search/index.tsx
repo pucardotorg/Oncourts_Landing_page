@@ -85,7 +85,7 @@ const SearchForCase = () => {
   }
 
   return (
-    <div className="font-Poppins max-w-xl mx-auto py-8">
+    <div className="max-w-xl mx-auto py-8">
       <h2 className="text-teal font-bold text-3xl mb-4 text-center">
         Search for a Case
       </h2>

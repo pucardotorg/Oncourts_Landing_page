@@ -4,17 +4,18 @@ import Link from "next/link";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-800 text-white py-8">
+    <footer className="bg-gray-100 text-black py-8 border border-black">
       <div className="max-w-6xl mx-auto px-4 flex justify-between">
         <div className="flex flex-col w-1/5">
           <div className="flex items-center mb-2">
             <Image
               src="/images/logo.png"
-              alt="High Court of Kerala Logo"
-              width={100}
-              height={50}
+              alt="OnCourts Logo"
+              width={80}
+              height={800}
             />
           </div>
+          <p>Courts that come to you.</p>
         </div>
         <div className="flex space-x-16">
           <div>

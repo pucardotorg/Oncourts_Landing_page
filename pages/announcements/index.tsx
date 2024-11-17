@@ -72,7 +72,7 @@ const AnnouncementsComponent = () => {
   // };
 
   return (
-    <div className="font-Poppins max-w-4xl mx-auto py-8">
+    <div className="max-w-4xl mx-auto py-8">
       <div className="flex justify-between items-center mb-6">
         <h2 className="font-bold text-3xl">Announcements</h2>
       </div>
