@@ -35,7 +35,7 @@ const Hero = () => {
     const dateObj = new Date(date);
     const newDate = dateObj.toISOString().split("T")[0];
     try {
-      const API_ENDPOINT = process.env.NEXT_PUBLIC_API_ENDPOINT;
+      const API_ENDPOINT = process.env.ONCOURTS_API_ENDPOINT;
       const response = await fetch(
         `${API_ENDPOINT}/scheduler/causelist/v1/_download?_=1730882648559`,
         {
