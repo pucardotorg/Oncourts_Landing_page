@@ -266,7 +266,7 @@ const Hero = () => {
         <div className="flex space-x-4 p-8">
           <div className="flex-1 flex space-x-4 p-4 rounded-[15px] border border-teal">
             <Link
-              href="/litigant-advocate"
+              href="{process.env.ONCOURTS_CITIZEN_APP_ENDPOINT}"
               className="flex-1 flex flex-col items-start space-y-2 p-4 rounded-[15px] border border-teal"
             >
               <span className="font-semibold text-lg">
@@ -278,7 +278,7 @@ const Hero = () => {
               </span>
             </Link>
             <Link
-              href="/case-number"
+              href="{process.env.ONCOURTS_EMPLOYEE_APP_ENDPOINT}"
               className="flex-1 flex flex-col items-start space-y-2 p-4 rounded-[15px] border border-teal"
             >
               <span className="font-semibold text-lg">
@@ -355,7 +355,7 @@ const Hero = () => {
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex space-x-2">
                         <span className="bg-teal text-white px-2 py-1 rounded-md text-sm">
-                          Tags
+                          {announcement.tag}
                         </span>
                       </div>
                       <button className="py-1 px-3 border border-darkgrey rounded-md">
