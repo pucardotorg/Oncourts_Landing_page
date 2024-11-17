@@ -15,9 +15,6 @@ const Footer: React.FC = () => {
               height={50}
             />
           </div>
-          <p className="text-sm leading-tight mb-2">
-            Lorem ipsum dolor sit amet consectetur. Commodo pulvinar molesti.
-          </p>
         </div>
         <div className="flex space-x-16">
           <div>
