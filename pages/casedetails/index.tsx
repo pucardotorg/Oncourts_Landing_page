@@ -25,12 +25,7 @@ const CaseDetails = () => {
       <div className="flex justify-between items-center mb-4 mx-8">
         <h2 className="text-2xl font-bold text-black">Case Details</h2>
         <div className="flex space-x-4">
-          <button className="py-2 px-4 bg-teal text-white rounded-md">
-            Download
-          </button>
-          <Link href="/search">
-            <a className="underline py-2 px-4">Find another case details</a>
-          </Link>
+          <Link href="/search" className="underline py-2 px-4">Find another case details</Link>
         </div>
       </div>
       <div className="bg-gray-200 h-[50px] mx-6  rounded-t-md"></div>
