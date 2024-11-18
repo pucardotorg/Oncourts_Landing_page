@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 const CaseDetails = () => {
   const router = useRouter();
-  const [data, setData] = useState({});
+  const [data, setData] = useState(null);
 
   useEffect(() => {
     if (router.isReady) {
@@ -19,6 +19,10 @@ const CaseDetails = () => {
       }
     }
   }, [router.isReady, router.query.data]);
+
+  if (!data) {
+    return <p className="p-6">Loading...</p>;
+  }
 
   return (
     <div className="p-6">
@@ -41,7 +45,11 @@ const CaseDetails = () => {
               <p className="font-semibold text-[rgba(2,137,233,1)]">
                 Petitioner :
               </p>
-              <p className="font-semibold">Siddarth Raman</p>
+              <p className="font-semibold">
+                {data["litigants"][1]['partyType'] === "complainant.primary"
+                  ? data["litigants"][1]['individualName']
+                  : ""}
+              </p>
             </div>
             <hr />
             <div className="flex justify-between">
@@ -102,7 +110,12 @@ const CaseDetails = () => {
               <p className="font-semibold text-[rgba(2,137,233,1)]">
                 Respondent :
               </p>
-              <p className="font-semibold">Siddarth Raman</p>
+              <p className="font-semibold">
+                {data["litigants"][0]['partyType'] === "respondent.primary"
+                  ? data["litigants"][0]['individualName']
+                  : ""}
+              </p>
+
             </div>
             <hr />
             <div className="flex justify-between">
