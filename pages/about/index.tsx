@@ -43,7 +43,7 @@ export default function About() {
 
   return (
     <div>
-      <div className="relative h-64 w-full">
+      <div className="relative h-80 w-full">
         <Image
           src="/images/base.jpg"
           alt="Header Image"
@@ -52,7 +52,7 @@ export default function About() {
           className="z-0"
         />
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-10">
-          <h1 className="text-white text-4xl font-bold">About Us</h1>
+          <h1 className="text-black text-4xl font-bold">About Us</h1>
         </div>
       </div>
 
@@ -107,15 +107,6 @@ export default function About() {
       </h4>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 text-darkGrey mx-8">
         <div className="border rounded-lg p-4 text-center transition-colors duration-300 hover:bg-teal hover:text-white bg-white border-teal cursor-pointer">
-          <div className="border-2 border-teal rounded-full overflow-hidden mb-2 transition-colors duration-300 group-hover:border-white">
-            <Image
-              src="/images/small_img.png"
-              alt="Box Image 1"
-              width={100}
-              height={100}
-              className="mx-auto"
-            />
-          </div>
           <h3 className="font-bold text-lg uppercase">People Centric</h3>
           <p className="mt-2">
             24x7 ON Courts transform processes to make court administration
@@ -126,15 +117,6 @@ export default function About() {
         </div>
 
         <div className="border rounded-lg p-4 text-center transition-colors duration-300 hover:bg-teal hover:text-white bg-white border-teal cursor-pointer">
-          <div className="border-2 border-teal rounded-full overflow-hidden mb-2 transition-colors duration-300 group-hover:border-white">
-            <Image
-              src="/images/small_img.png"
-              alt="Box Image 2"
-              width={100}
-              height={100}
-              className="mx-auto"
-            />
-          </div>
           <h3 className="font-bold text-lg uppercase">Open</h3>
           <p className="mt-2">
             24x7 ON Courts make information open and actionable to the users,
@@ -145,15 +127,6 @@ export default function About() {
         </div>
 
         <div className="border rounded-lg p-4 text-center transition-colors duration-300 hover:bg-teal hover:text-white bg-white border-teal cursor-pointer">
-          <div className="border-2 border-teal rounded-full overflow-hidden mb-2 transition-colors duration-300 group-hover:border-white">
-            <Image
-              src="/images/small_img.png"
-              alt="Box Image 3"
-              width={100}
-              height={100}
-              className="mx-auto"
-            />
-          </div>
           <h3 className="font-bold text-lg uppercase">Design for Management</h3>
           <p className="mt-2">
             24x7 ON Courts are designed through an iterative process through
@@ -172,15 +145,6 @@ export default function About() {
         <p className="text-center text-darkGrey mb-4">
           You will find the process
         </p>
-        <div className="relative h-64 w-full mx-auto max-w-7xl px-4">
-          <Image
-            src="/images/base.jpg"
-            alt="Header Image"
-            layout="fill"
-            objectFit="cover"
-            className="z-0"
-          />
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 mx-8">
           <div className="p-4">
@@ -230,7 +194,7 @@ export default function About() {
           people and offer multiple benefits.
         </p>
 
-        <div className="flex items-start mb-12">
+        <div className="flex items-start mb-12 justify-between">
           <div className="w-1/2 pr-8">
             <h3 className="text-2xl font-bold mb-4">Litigants</h3>
             <div className="mb-8">
@@ -246,24 +210,24 @@ export default function About() {
             </div>
           </div>
 
-          <div className="w-1/2">
+          <div className="flex justify-center items-center w-1/2">
             <Image
-              src="/images/base.jpg"
+              src="/images/litigants.png"
               alt="Benefits Image"
-              width={600}
-              height={200}
+              width={200}
+              height={100}
               className="object-cover"
             />
           </div>
         </div>
 
-        <div className="flex items-start mb-12">
-          <div className="w-1/2">
+        <div className="flex items-center mb-12 justify-between">
+          <div className="flex justify-center items-center w-1/2">
             <Image
-              src="/images/base.jpg"
+              src="/images/lawyer.png"
               alt="Benefits Image"
-              width={600}
-              height={200}
+              width={200}
+              height={100}
               className="object-cover"
             />
           </div>
@@ -283,7 +247,7 @@ export default function About() {
           </div>
         </div>
 
-        <div className="flex items-start mb-12">
+        <div className="flex items-center justify-between mb-12">
           <div className="w-1/2 pr-8">
             <h3 className="text-2xl font-bold mb-4">Advocate Clerks</h3>
             <div className="mb-8">
@@ -299,27 +263,28 @@ export default function About() {
             </div>
           </div>
 
-          <div className="w-1/2">
+          <div className="w-1/2 flex justify-center items-center">
             <Image
-              src="/images/base.jpg"
+              src="/images/adv_clerk.png"
               alt="Benefits Image"
-              width={600}
-              height={200}
+              width={200}
+              height={100}
               className="object-cover"
             />
           </div>
         </div>
 
-        <div className="flex items-start mb-12">
-          <div className="w-1/2">
+        <div className="flex items-center justify-between mb-12">
+          <div className="w-1/2 flex justify-center items-center">
             <Image
-              src="/images/base.jpg"
+              src="/images/judge.png"
               alt="Benefits Image"
-              width={600}
-              height={200}
+              width={200}
+              height={100}
               className="object-cover"
             />
           </div>
+
           <div className="w-1/2 pr-8">
             <h3 className="text-2xl font-bold mb-4">Judge</h3>
             <div className="mb-8">
@@ -336,7 +301,7 @@ export default function About() {
           </div>
         </div>
 
-        <div className="flex items-start mb-12">
+        <div className="flex items-center justify-between mb-12">
           <div className="w-1/2 pr-8">
             <h3 className="text-2xl font-bold mb-4">Court Staff</h3>
             <div className="mb-8">
@@ -352,9 +317,9 @@ export default function About() {
             </div>
           </div>
 
-          <div className="w-1/2">
+          <div className="w-1/2 flex justify-center items-center">
             <Image
-              src="/images/base.jpg"
+              src="/images/court staff.png"
               alt="Benefits Image"
               width={600}
               height={200}
@@ -364,15 +329,6 @@ export default function About() {
         </div>
 
         <div className="flex items-start mb-12">
-          <div className="w-1/2">
-            <Image
-              src="/images/base.jpg"
-              alt="Benefits Image"
-              width={600}
-              height={200}
-              className="object-cover"
-            />
-          </div>
           <div className="w-1/2 pr-8">
             <h3 className="text-2xl font-bold mb-4">Governance</h3>
             <div className="mb-8">
@@ -383,29 +339,17 @@ export default function About() {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div className="flex flex-col items-start p-4 mx-8">
-        <div className="flex items-start mb-4 w-full">
-          <h2 className="text-teal font-bold text-2xl w-1/2 text-center">
-            Roadmap
-          </h2>
-          <p className="flex-1">
-            The High Court of Kerala is committed to improve ON Courts through a
-            continuous process of feedback, monitoring and evaluation. To
-            increase access to court services, the High Court of Kerala seeks to
-            scale ON Courts in a phased manner over the next three years.
-          </p>
-        </div>
-        <div className="relative h-64 w-full">
-          <Image
-            src="/images/base.jpg"
-            alt="Header Image"
-            layout="fill"
-            objectFit="cover"
-            className="z-0"
-          />
+          <div className="w-1/2">
+            <h2 className="text-teal font-bold text-2xl text-center">
+              Roadmap
+            </h2>
+            <p className="flex-1">
+              The High Court of Kerala is committed to improve ON Courts through
+              a continuous process of feedback, monitoring and evaluation. To
+              increase access to court services, the High Court of Kerala seeks
+              to scale ON Courts in a phased manner over the next three years.
+            </p>
+          </div>
         </div>
       </div>
     </div>

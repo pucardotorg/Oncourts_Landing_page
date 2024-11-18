@@ -237,15 +237,15 @@ const Hero = () => {
   return (
     <div>
       <div className="relative w-full">
-        <div className="w-full h-64 relative">
+        <div className="w-full h-80 relative">
           <Image
             src="/images/base.jpg"
             alt="Base Image"
             objectFit="cover"
             layout="fill"
           />
-          <div className="absolute mt-12 top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white">
-            <div className="mb-4 flex justify-center">
+          <div className="absolute mt-12 top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-black">
+            {/* <div className="mb-4 flex justify-center">
               <Image
                 src="/images/small_img.png"
                 alt="Small Image"
@@ -253,54 +253,57 @@ const Hero = () => {
                 height={80}
                 className="rounded-full"
               />
-            </div>
+            </div> */}
             <h2 className="text-2xl font-bold">24X7 Open & Networked Courts</h2>
-            <p className="mt-2 text-base">
+            <p className="mt-2 text-black font-semibold">
               The Kerala High Court is launching a new court, called 24x7 ON
-              Courts, with a transformed dispute resolution experience for all
-              users. The 24x7 ON Courts advance the vision outlined in Phase III
-              of the Supreme Court eCourts policy.
+              Courts, with a <br />
+              transformed dispute resolution experience for all users. The 24x7
+              ON Courts advance
+              <br /> the vision outlined in Phase III of the Supreme Court
+              eCourts policy.
             </p>
           </div>
         </div>
-        <div className="flex space-x-4 p-8">
-          <div className="flex-1 flex space-x-4 p-4 rounded-[15px] border border-teal">
+        <div className="flex space-x-4 p-8 mx-8 gap-5">
+          <div className="flex-1 flex space-x-8 p-4 rounded-[15px] border border-teal bg-teal text-center">
             <Link
               href="{process.env.ONCOURTS_CITIZEN_APP_ENDPOINT}"
-              className="flex-1 flex flex-col items-start space-y-2 p-4 rounded-[15px] border border-teal"
+              className="flex-1 flex flex-col space-y-4 p-3 rounded-[10px] border border-teal bg-white"
             >
-              <span className="font-semibold text-lg">
+              <span className="font-semibold text-base">
                 Login as Litigant/Advocate
               </span>
-              <span className="text-gray-600">
+              <span className="text-gray-600 text-sm">
                 To perform actions and see details of a case you&apos;re
                 involved in
               </span>
             </Link>
             <Link
               href="{process.env.ONCOURTS_EMPLOYEE_APP_ENDPOINT}"
-              className="flex-1 flex flex-col items-start space-y-2 p-4 rounded-[15px] border border-teal"
+              className="flex-1 flex flex-col space-y-4 p-3 rounded-[10px] border border-teal bg-white"
             >
-              <span className="font-semibold text-lg">
+              <span className="font-semibold text-base">
                 Login as Officers/Court Staff
               </span>
-              <span className="text-gray-600">
+              <span className="text-gray-600 text-sm">
                 To perform actions as a member of the court
               </span>
             </Link>
           </div>
 
-          <div className="flex justify-center items-center h-full p-4">
-            <div className="flex-1 p-4 rounded-[15px] border border-teal">
-              <Link
-                href="/search"
-                className="flex flex-col items-center space-y-2 p-4 text-center"
-              >
-                <span className="font-semibold text-lg">Search for a Case</span>
-              </Link>
-            </div>
+          <div className="flex-1 flex justify-center items-center h-full p-4 rounded-[15px] border bg-teal">
+            <Link
+              href="/search"
+              className="w-1/2 flex flex-col space-y-4 p-3 rounded-[10px] border border-teal bg-white"
+            >
+              <span className="font-semibold text-lg text-center">
+                Search for a Case
+              </span>
+            </Link>
           </div>
         </div>
+
         <div className="flex space-x-8 mx-2 p-8">
           <div className="w-1/2">
             <h2 className="text-teal font-bold text-xl mb-4">Cause List</h2>
@@ -309,7 +312,7 @@ const Hero = () => {
               return (
                 <div
                   key={index}
-                  className="flex items-center justify-between p-4 mb-4 bg-white rounded-[5px] border border-teal shadow-md"
+                  className="flex items-center justify-between p-4 mb-2 bg-white rounded-[5px] border border-teal shadow-md mx-16"
                 >
                   <div className="flex flex-col items-start space-y-1">
                     <span className="font-medium text-teal">Daily Roster</span>
@@ -434,15 +437,15 @@ const Hero = () => {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex space-x-2">
                     <Image
-                      src="/images/search.svg"
-                      alt="Search Icon"
+                      src="/images/boarding.svg"
+                      alt="Boarding Icon"
                       width={24}
                       height={24}
                     />
                     <span className="text-gray-600">On-Boarding Guide</span>
                   </div>
                   <Image
-                    src="/images/search.svg"
+                    src="/images/arrow.svg"
                     alt="Icon"
                     width={24}
                     height={24}
@@ -452,7 +455,7 @@ const Hero = () => {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex space-x-2">
                     <Image
-                      src="/images/search.svg"
+                      src="/images/boarding.svg"
                       alt="Search Icon"
                       width={24}
                       height={24}
@@ -460,7 +463,7 @@ const Hero = () => {
                     <span className="text-gray-600">XX Doc</span>
                   </div>
                   <Image
-                    src="/images/search.svg"
+                    src="/images/arrow.svg"
                     alt="Icon"
                     width={24}
                     height={24}
@@ -470,15 +473,15 @@ const Hero = () => {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex space-x-2">
                     <Image
-                      src="/images/search.svg"
-                      alt="Search Icon"
+                      src="/images/youtube.svg"
+                      alt="Youtube Icon"
                       width={24}
                       height={24}
                     />
                     <span className="text-teal">OnCourt Youtube</span>
                   </div>
                   <Image
-                    src="/images/search.svg"
+                    src="/images/arrow.svg"
                     alt="Icon"
                     width={24}
                     height={24}
@@ -514,7 +517,7 @@ const Hero = () => {
               <div className="mb-4">
                 <div className="flex items-center space-x-2">
                   <Image
-                    src="/images/search.svg"
+                    src="/images/phone.svg"
                     alt="Icon"
                     width={24}
                     height={24}
@@ -529,7 +532,7 @@ const Hero = () => {
               <div className="mb-4">
                 <div className="flex items-center space-x-2">
                   <Image
-                    src="/images/search.svg"
+                    src="/images/email.svg"
                     alt="Icon"
                     width={24}
                     height={24}
@@ -542,7 +545,7 @@ const Hero = () => {
               <div className="mb-4">
                 <div className="flex items-center space-x-2">
                   <Image
-                    src="/images/search.svg"
+                    src="/images/time.svg"
                     alt="Icon"
                     width={24}
                     height={24}
