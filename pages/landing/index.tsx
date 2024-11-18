@@ -358,7 +358,7 @@ const Hero = () => {
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex space-x-2">
                         <span className="bg-teal text-white px-2 py-1 rounded-md text-sm">
-                          {announcement.tag}
+                          {announcement.type}
                         </span>
                       </div>
                       <button className="py-1 px-3 border border-darkgrey rounded-md">
