@@ -10,13 +10,20 @@ const AnnouncementsComponent = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [downloadingId, setDownloadingId] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState(""); // New state for search query
+  const [searchQuery, setSearchQuery] = useState("");
   const itemsPerPage = rowsPerPage;
 
   const filteredAnnouncements = announcementData.filter((announcement) => {
+    const announcementDate = new Date(announcement.date);
+    const selectedDate = timePeriod ? new Date(timePeriod) : null;
+
+    if (selectedDate) {
+      announcementDate.setHours(0, 0, 0, 0);
+      selectedDate.setHours(0, 0, 0, 0);
+    }
+
     const isWithinTimePeriod =
-      !timePeriod ||
-      new Date(announcement.date).getTime() <= timePeriod.getTime();
+      !selectedDate || announcementDate <= selectedDate;
     const matchesType = selectedType
       ? announcement.type === selectedType
       : true;
@@ -66,20 +73,11 @@ const AnnouncementsComponent = () => {
     }
   };
 
-  const handleHamburgerClick = () => {
-    alert("Hamburger menu clicked!");
-  };
-
   const handleClear = () => {
     setTimePeriod(null);
     setSelectedType("");
     setSearchQuery(""); // Reset search query on clear
   };
-
-  const handleApply = () => {
-    alert("Filters Applied");
-  };
-
   return (
     <div className="max-w-4xl mx-auto py-8">
       <div className="flex justify-between items-center mb-6">
@@ -91,8 +89,8 @@ const AnnouncementsComponent = () => {
             type="text"
             placeholder="Search"
             className="w-full py-2 pl-10 pr-4 border-b-2 border-darkGray outline-none bg-transparent"
-            value={searchQuery} // Bind search input to the state
-            onChange={(e) => setSearchQuery(e.target.value)} // Update state on input change
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
           <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
             <Image
@@ -102,19 +100,13 @@ const AnnouncementsComponent = () => {
               height={16}
             />
           </div>
-          <button
-            onClick={handleHamburgerClick}
-            className="text-teal text-xl ml-4 border-2 border-darkGrey px-2 py-2"
-          >
-            &#9776;
-          </button>
         </div>
       </div>
       <div className="mb-6">
         <div className="flex justify-between items-center mb-6">
           <div className="w-2/5 pr-4 relative">
             <label className="text-gray-700 font-medium text-sm">
-              Time Period
+              Date upto which announcements are shown
             </label>
             <div className="mt-2 relative">
               <div className="absolute left-3 top-2/3 transform -translate-y-1/2">
@@ -141,10 +133,8 @@ const AnnouncementsComponent = () => {
               onChange={(e) => setSelectedType(e.target.value)}
               className="w-full py-2 px-4 border-b-2 border-gray-500 outline-none bg-transparent"
             >
-              <option value="Judge">Judge</option>
-              <option value="Type1">Type 1</option>
-              <option value="Type2">Type 2</option>
-              <option value="Type3">Type 3</option>
+              <option value="General">General</option>
+              <option value="Obituary">Obituary</option>
             </select>
           </div>
 
@@ -154,12 +144,6 @@ const AnnouncementsComponent = () => {
               className="py-2 px-6 rounded-[10px] border border-gray-500 text-gray-700 bg-white"
             >
               Clear
-            </button>
-            <button
-              onClick={handleApply}
-              className="py-2 px-6 rounded-[10px] bg-gray-100 text-teal bg-gray-100 border-b-1 border-darkGray"
-            >
-              Apply
             </button>
           </div>
         </div>
