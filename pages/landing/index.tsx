@@ -34,6 +34,7 @@ const Hero = () => {
   const fetchRosterData = async (date) => {
     const dateObj = new Date(date);
     const newDate = dateObj.toISOString().split("T")[0];
+
     try {
       const API_ENDPOINT = process.env.NEXT_PUBLIC_ONCOURTS_API_ENDPOINT;
       const response = await fetch(
@@ -259,8 +260,8 @@ const Hero = () => {
           </div>
         </div>
         <div className="flex space-x-4 p-8 mx-8 gap-5">
-          <Link
-            href="{process.env.NEXT_PUBLIC_ONCOURTS_CITIZEN_APP_ENDPOINT}"
+          <a
+            href={process.env.NEXT_PUBLIC_ONCOURTS_CITIZEN_APP_ENDPOINT}
             className="flex-1 flex items-center space-x-4 p-3 rounded-[10px] border border-teal bg-teal text-white"
           >
             <Image
@@ -277,10 +278,10 @@ const Hero = () => {
                 To perform actions and see details of a case you&apos;re involved in
               </span>
             </div>
-          </Link>
+          </a>
 
-          <Link
-            href="{process.env.NEXT_PUBLIC_ONCOURTS_EMPLOYEE_APP_ENDPOINT}"
+          <a
+            href={process.env.NEXT_PUBLIC_ONCOURTS_EMPLOYEE_APP_ENDPOINT}
             className="flex-1 flex items-center space-x-4 p-3 rounded-[10px] border border-teal bg-white text-teal"
           >
             <Image
@@ -297,7 +298,7 @@ const Hero = () => {
                 To perform actions as a member of the court
               </span>
             </div>
-          </Link>
+          </a>
         </div>
 
 
