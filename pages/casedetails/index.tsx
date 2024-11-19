@@ -38,7 +38,7 @@ const CaseDetails = () => {
           <div className="grid gap-4 mb-4">
             <div className="flex justify-between">
               <p className="font-semibold text-[rgba(2,137,233,1)]">CNR :</p>
-              <p className="font-semibold">KLKM1000242592002</p>
+              <p className="font-semibold">{data["cnrNumber"]}</p>
             </div>
             <hr />
             <div className="flex justify-between">
@@ -48,7 +48,8 @@ const CaseDetails = () => {
               <p className="font-semibold">
                 {data["litigants"][1]['partyType'] === "complainant.primary"
                   ? data["litigants"][1]['individualName']
-                  : ""}
+                  : data["litigants"][0]['partyType'] === "complainant.primary" ?
+                    data["litigants"][0]['individualName'] : ""}
               </p>
             </div>
             <hr />
@@ -56,7 +57,7 @@ const CaseDetails = () => {
               <p className="font-semibold text-[rgba(2,137,233,1)]">
                 Petitioner Advocate :
               </p>
-              <p className="font-semibold">Siddarth Raman</p>
+              <p className="font-semibold">{data["petitionerAdvocate"]}</p>
             </div>
           </div>
           <hr className="mb-1" />
@@ -66,7 +67,7 @@ const CaseDetails = () => {
               <p className="font-semibold text-[rgba(2,137,233,1)]">
                 Filing Number :
               </p>
-              <p className="font-semibold">ST/12345/2024</p>
+              <p className="font-semibold">{data["filingNumber"]}</p>
             </div>
             <hr />
             <div className="flex justify-between">
@@ -80,7 +81,7 @@ const CaseDetails = () => {
               <p className="font-semibold text-[rgba(2,137,233,1)]">
                 Case Type :
               </p>
-              <p className="font-semibold">Summary Trail</p>
+              <p className="font-semibold">{data["caseType"]}</p>
             </div>
           </div>
           <hr className="mb-1" />
@@ -88,7 +89,7 @@ const CaseDetails = () => {
           <div className="grid gap-4 mt-4">
             <div className="flex justify-between">
               <p className="font-semibold text-[rgba(2,137,233,1)]">Status :</p>
-              <p className="font-semibold">Value 1</p>
+              <p className="font-semibold">{data["status"]}</p>
             </div>
             <hr />
             <div className="flex justify-between">
@@ -103,7 +104,7 @@ const CaseDetails = () => {
           <div className="grid gap-4 mb-4">
             <div className="flex justify-between">
               <p className="font-semibold text-[rgba(2,137,233,1)]">Judge :</p>
-              <p className="font-semibold">Justice DY Chandrachud</p>
+              <p className="font-semibold">{data["judgeName"]}</p>
             </div>
             <hr />
             <div className="flex justify-between">
@@ -113,6 +114,8 @@ const CaseDetails = () => {
               <p className="font-semibold">
                 {data["litigants"][0]['partyType'] === "respondent.primary"
                   ? data["litigants"][0]['individualName']
+                  : data["litigants"][1]['partyType'] === "respondent.primary" 
+                  ? data["litigants"][1]['individualName']
                   : ""}
               </p>
 
@@ -122,7 +125,7 @@ const CaseDetails = () => {
               <p className="font-semibold text-[rgba(2,137,233,1)]">
                 Respondent Advocate :
               </p>
-              <p className="font-semibold">Siddarth Raman</p>
+              <p className="font-semibold">{data["respondantAdvocate"]}</p>
             </div>
           </div>
           <hr className="mb-1" />
@@ -146,7 +149,7 @@ const CaseDetails = () => {
               <p className="font-semibold text-[rgba(2,137,233,1)]">
                 First Hearing date :
               </p>
-              <p className="font-semibold">24th September 2024</p>
+              <p className="font-semibold">{new Date(data["hearingDate"]).toUTCString()}</p>
             </div>
           </div>
           <hr className="mb-1" />
@@ -154,7 +157,7 @@ const CaseDetails = () => {
           <div className="grid gap-4 mt-4">
             <div className="flex justify-between">
               <p className="font-semibold text-[rgba(2,137,233,1)]">Judge :</p>
-              <p className="font-semibold">Justice DY Chandrachud</p>
+              <p className="font-semibold">{data["judgeName"]}</p>
             </div>
             <hr />
             <div className="flex justify-between">
