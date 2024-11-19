@@ -263,6 +263,7 @@ const Hero = () => {
           <a
             href="https://oncourts.kerala.gov.in/digit-ui/citizen/dristi/home/login"
             className="flex-1 flex items-center space-x-4 pl-3 rounded-[10px] border border-teal bg-teal text-white"
+            target="/"
           >
             <Image
               src="/images/order.svg"
@@ -292,6 +293,7 @@ const Hero = () => {
           <a
             href="https://oncourts.kerala.gov.in/digit-ui/employee/user/login"
             className="flex-1 flex items-center space-x-4 pl-3 rounded-[10px] border border-teal bg-white text-teal"
+            target="/"
           >
             <Image
               src="/images/order_teal.svg"
