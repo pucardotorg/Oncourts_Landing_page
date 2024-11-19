@@ -190,14 +190,6 @@ const SearchForCase = () => {
             </div>
           </>
         )}
-
-        {/* <div className="text-center mb-6">
-          <ReCAPTCHA
-            sitekey="YOUR_GOOGLE_RECAPTCHA_SITE_KEY"
-            onChange={handleCaptchaChange}
-          />
-        </div> */}
-
         <div className="flex justify-around mx-28">
           <button
             onClick={handleClear}
