@@ -22,8 +22,8 @@ const Footer: React.FC = () => {
             <h3 className="text-lg font-semibold mb-2">Links</h3>
             <ul>
               <li className="mb-5">
-                <Link href="/sub1" className="text-sm hover:underline">
-                  Standard Operating Procedures (SOPs)
+                <Link href="/" className="text-sm hover:underline">
+                  Standard Operating Procedures (SOPs) - coming soon
                 </Link>
               </li>
               <li className="mb-5">
@@ -65,7 +65,7 @@ const Footer: React.FC = () => {
               </li>
               <li className="mb-5">
                 <Link
-                  href="https://www.youtube.com/watch?v=SuigEFEwGjk"
+                  href="https://www.youtube.com/watch?v=-JoWnkE-uTs"
                   className="text-sm hover:underline"
                 >
                   Kerala High Court YouTube Channel

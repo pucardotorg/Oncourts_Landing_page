@@ -291,17 +291,6 @@ const Hero = () => {
               </span>
             </Link>
           </div>
-
-          <div className="flex-1 flex justify-center items-center h-full p-4 rounded-[15px] border bg-teal">
-            <Link
-              href="/search"
-              className="w-1/2 flex flex-col space-y-4 p-3 rounded-[10px] border border-teal bg-white"
-            >
-              <span className="font-semibold text-lg text-center">
-                Search for a Case
-              </span>
-            </Link>
-          </div>
         </div>
 
         <div className="flex space-x-8 mx-2 p-8">
@@ -442,14 +431,8 @@ const Hero = () => {
                       width={24}
                       height={24}
                     />
-                    <span className="text-gray-600">On-Boarding Guide</span>
+                    <span className="text-gray-600">User Manuals -  Coming soon</span>
                   </div>
-                  <Image
-                    src="/images/arrow.svg"
-                    alt="Icon"
-                    width={24}
-                    height={24}
-                  />
                 </div>
                 <hr className="my-4" />
                 <div className="flex items-center justify-between mb-4">
@@ -462,12 +445,6 @@ const Hero = () => {
                     />
                     <span className="text-gray-600">XX Doc</span>
                   </div>
-                  <Image
-                    src="/images/arrow.svg"
-                    alt="Icon"
-                    width={24}
-                    height={24}
-                  />
                 </div>
                 <hr className="my-4" />
                 <div className="flex items-center justify-between mb-4">
@@ -478,14 +455,16 @@ const Hero = () => {
                       width={24}
                       height={24}
                     />
-                    <span className="text-teal">OnCourt Youtube</span>
+                    <span className="text-teal">24x7 ON Court Training Videos || Advocates</span>
                   </div>
-                  <Image
-                    src="/images/arrow.svg"
-                    alt="Icon"
-                    width={24}
-                    height={24}
-                  />
+                  <Link href="https://www.youtube.com/playlist?list=PL2HnAXES1w-ShQIq8DAhvqeYe-uLCAr6F">
+                    <Image
+                      src="/images/arrow.svg"
+                      alt="Icon"
+                      width={24}
+                      height={24}
+                    />
+                  </Link>
                 </div>
               </div>
               <div className="w-1/2 p-4 bg-white rounded-[15px] border border-teal shadow-md">
@@ -499,7 +478,7 @@ const Hero = () => {
                 </p>
                 <div className="flex justify-center items-center">
                   <button className="py-2 px-4 border-2 border-darkGrey rounded-[5px] text-teal">
-                    Click here to Submit the Grievance
+                    Click here to Submit the Grievance - Coming soon
                   </button>
                 </div>
               </div>
@@ -523,7 +502,7 @@ const Hero = () => {
                     height={24}
                   />
                   <span className="text-teal font-bold">
-                    Helpline: 123-456-7890
+                    Helpline: 0472-2919099
                   </span>
                 </div>
                 <hr className="my-2 border-teal" />
@@ -551,8 +530,8 @@ const Hero = () => {
                     height={24}
                   />
                   <span className="text-teal font-bold">
-                    Available from 9:30 - 18:00 IST <br />
-                    Our Opening Hours Mon. - Fri.
+                    Available from 10:00 - 17:00 IST <br />
+                    Monday - Saturday (except 2nd)
                   </span>
                 </div>
               </div>
