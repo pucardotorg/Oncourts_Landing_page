@@ -14,9 +14,8 @@ const NavLink: React.FC<NavLinkProps> = ({ href, label }) => {
   return (
     <Link
       href={href}
-      className={`py-1 text-base font-medium text-teal hover:text-black md:ml-4 lg:ml-8 ${
-        router.pathname === href ? "underline underline-offset-4" : ""
-      }`}
+      className={`py-1 text-base font-medium text-teal hover:text-black md:ml-4 lg:ml-8 ${router.pathname === href ? "underline underline-offset-4" : ""
+        }`}
     >
       {label}
     </Link>
@@ -28,7 +27,7 @@ const Header = () => {
   return (
     <div>
       <nav className="bg-white">
-        <div className="justify-center hidden mx-auto shadow-sm sm:hidden md:block md:px-6 lg:px-44">
+        <div className="justify-center hidden mx-12 shadow-sm sm:hidden md:block">
           <div className="relative flex items-center justify-between py-7">
             <div className="flex items-center justify-center flex-1 sm:items-stretch sm:justify-start">
               <motion.div
@@ -77,6 +76,7 @@ const Header = () => {
           </div>
         </div>
       </nav>
+
     </div>
   );
 };

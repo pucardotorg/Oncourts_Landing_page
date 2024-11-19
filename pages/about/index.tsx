@@ -45,17 +45,16 @@ export default function About() {
     <div>
       <div className="relative h-80 w-full">
         <Image
-          src="/images/base.jpg"
+          src="/images/base.jpeg"
           alt="Header Image"
           layout="fill"
           objectFit="cover"
           className="z-0"
         />
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-10">
-          <h1 className="text-black text-4xl font-bold">About Us</h1>
+        <div className="absolute inset-0 flex items-center justify-center bg-opacity-10">
+          <h1 className="text-4xl font-bold bg-white text-black p-4">About Us</h1>
         </div>
       </div>
-
       <div className="text-center my-8 mx-16">
         <p className="text-lg mb-4">
           The Kerala High Court is launching a new court, called 24x7 ON Courts,
@@ -102,13 +101,15 @@ export default function About() {
       <h2 className="text-4xl font-bold text-teal text-center mb-2">
         Design Principles
       </h2>
-      <h4 className="text-xl text-center mb-4">
+      <h4 className="text-xl text-center mb-8">
         ON Courts are guided by the following design principles:
       </h4>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 text-darkGrey mx-8">
-        <div className="border rounded-lg p-4 text-center transition-colors duration-300 hover:bg-teal hover:text-white bg-white border-teal cursor-pointer">
-          <h3 className="font-bold text-lg uppercase">People Centric</h3>
-          <p className="mt-2">
+        <div className="group border rounded-lg p-4 text-center transition-colors duration-300 hover:bg-teal bg-white border-teal cursor-pointer">
+          <h3 className="font-bold text-lg uppercase text-teal transition-colors duration-300 group-hover:text-white mb-2">
+            People Centric
+          </h3>
+          <p className="mt-2 text-black transition-colors duration-300 group-hover:text-white">
             24x7 ON Courts transform processes to make court administration
             people centric. They prioritise understanding user needs to improve
             accessibility, fairness, equity, and empathy in the resolution
@@ -116,9 +117,10 @@ export default function About() {
           </p>
         </div>
 
-        <div className="border rounded-lg p-4 text-center transition-colors duration-300 hover:bg-teal hover:text-white bg-white border-teal cursor-pointer">
-          <h3 className="font-bold text-lg uppercase">Open</h3>
-          <p className="mt-2">
+
+        <div className="group border rounded-lg p-4 text-center transition-colors duration-300 hover:bg-teal bg-white border-teal cursor-pointer">
+          <h3 className="font-bold text-lg uppercase text-teal transition-colors duration-300 group-hover:text-white mb-2">Open</h3>
+          <p className="mt-2 text-black transition-colors duration-300 group-hover:text-white">
             24x7 ON Courts make information open and actionable to the users,
             adopt open technology, access and data on functioning of courts.
             They are open subject to data governance frameworks to ensure
@@ -126,9 +128,9 @@ export default function About() {
           </p>
         </div>
 
-        <div className="border rounded-lg p-4 text-center transition-colors duration-300 hover:bg-teal hover:text-white bg-white border-teal cursor-pointer">
-          <h3 className="font-bold text-lg uppercase">Design for Management</h3>
-          <p className="mt-2">
+        <div className="group border rounded-lg p-4 text-center transition-colors duration-300 hover:bg-teal bg-white border-teal cursor-pointer">
+          <h3 className="font-bold text-lg uppercase text-teal transition-colors duration-300 group-hover:text-white mb-2">Design for Management</h3>
+          <p className="mt-2 text-black transition-colors duration-300 group-hover:text-white">
             24x7 ON Courts are designed through an iterative process through
             consultations from various users of the court. They also enable
             integrations with allied departments and institutions to ensure
@@ -137,6 +139,7 @@ export default function About() {
           </p>
         </div>
       </div>
+
 
       <div className="my-8">
         <h2 className="text-4xl font-bold text-teal text-center mb-4">
@@ -148,7 +151,7 @@ export default function About() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 mx-8">
           <div className="p-4">
-            <h3 className="font-bold text-lg uppercase underline mb-2">
+            <h3 className="font-bold text-lg uppercase text-teal mb-2 text-center">
               Accessible and Predictable
             </h3>
             <p className="text-darkGrey">
@@ -160,7 +163,7 @@ export default function About() {
             </p>
           </div>
           <div className="p-4">
-            <h3 className="font-bold text-lg uppercase underline mb-2">
+            <h3 className="font-bold text-lg uppercase text-teal mb-2 text-center">
               Assisted and Empowering
             </h3>
             <p className="text-darkGrey">
@@ -172,7 +175,7 @@ export default function About() {
             </p>
           </div>
           <div className="p-4">
-            <h3 className="font-bold text-lg uppercase underline mb-2">
+            <h3 className="font-bold text-lg uppercase text-teal mb-2 text-center">
               Seamless & Frictionless
             </h3>
             <p className="text-darkGrey">
@@ -302,6 +305,7 @@ export default function About() {
         </div>
 
         <div className="flex items-center justify-between mb-12">
+
           <div className="w-1/2 pr-8">
             <h3 className="text-2xl font-bold mb-4">Court Staff</h3>
             <div className="mb-8">
@@ -310,7 +314,7 @@ export default function About() {
                   key={index}
                   title={item.title}
                   content={item.content}
-                  isOpen={openIndices.courtStaff === index}
+                  isOpen={openIndices.advocateClerks === index}
                   onToggle={() => handleToggle("courtStaff", index)}
                 />
               ))}
@@ -321,8 +325,8 @@ export default function About() {
             <Image
               src="/images/court staff.png"
               alt="Benefits Image"
-              width={600}
-              height={200}
+              width={200}
+              height={100}
               className="object-cover"
             />
           </div>
