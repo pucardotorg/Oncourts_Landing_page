@@ -516,7 +516,7 @@ const Hero = () => {
                   Grievance Redressal
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  
+
                 </p>
                 <div className="flex justify-center items-center">
                   <button className="py-2 px-4 border-2 border-darkGrey rounded-[5px] text-teal">
@@ -544,7 +544,7 @@ const Hero = () => {
                     height={24}
                   />
                   <span className="text-teal font-bold">
-                    Helpline: 0472-2919099
+                    Helpline: <a href="callto:oncourt@gmail.com">0472 2919099</a>
                   </span>
                 </div>
                 <hr className="my-2 border-teal" />
@@ -558,7 +558,7 @@ const Hero = () => {
                     width={24}
                     height={24}
                   />
-                  <span className="text-teal font-bold">oncourt@gmail.com</span>
+                  <span className="text-teal font-bold"><a href="mailto:niacourtkollam@gmail.com">niacourtkollam@gmail.com</a></span>
                 </div>
                 <hr className="my-2 border-teal" />
               </div>
