@@ -35,7 +35,7 @@ const Hero = () => {
     const dateObj = new Date(date);
     const newDate = dateObj.toISOString().split("T")[0];
     try {
-      const API_ENDPOINT = process.env.ONCOURTS_API_ENDPOINT;
+      const API_ENDPOINT = process.env.NEXT_PUBLIC_ONCOURTS_API_ENDPOINT;
       const response = await fetch(
         `${API_ENDPOINT}/scheduler/causelist/v1/_download?_=1730882648559`,
         {
@@ -259,38 +259,48 @@ const Hero = () => {
           </div>
         </div>
         <div className="flex space-x-4 p-8 mx-8 gap-5">
-          <div className="flex-1 flex space-x-8 p-4 rounded-[15px] border border-teal bg-teal text-center">
-            <Link
-              href="{process.env.ONCOURTS_CITIZEN_APP_ENDPOINT}"
-              className="flex-1 flex flex-col space-y-4 p-3 rounded-[10px] border border-teal bg-white"
-            >
-              <span
-                className="font-semibold text-base"
-                style={{ fontSize: '18px' }}
-              >
+          <Link
+            href="{process.env.NEXT_PUBLIC_ONCOURTS_CITIZEN_APP_ENDPOINT}"
+            className="flex-1 flex items-center space-x-4 p-3 rounded-[10px] border border-teal bg-teal text-white"
+          >
+            <Image
+              src="/images/order.svg"
+              alt="Logo"
+              width={40}
+              height={40}
+            />
+            <div>
+              <span className="block font-semibold text-base" style={{ fontSize: '18px' }}>
                 Login as Litigant/Advocate
               </span>
-              <span className="text-gray-600 text-sm">
-                To perform actions and see details of a case you&apos;re
-                involved in
+              <span className="block text-sm">
+                To perform actions and see details of a case you&apos;re involved in
               </span>
-            </Link>
-            <Link
-              href="{process.env.ONCOURTS_EMPLOYEE_APP_ENDPOINT}"
-              className="flex-1 flex flex-col space-y-4 p-3 rounded-[10px] border border-teal bg-white"
-            >
-              <span
-                className="font-semibold text-base"
-                style={{ fontSize: '18px' }}
-              >
+            </div>
+          </Link>
+
+          <Link
+            href="{process.env.NEXT_PUBLIC_ONCOURTS_EMPLOYEE_APP_ENDPOINT}"
+            className="flex-1 flex items-center space-x-4 p-3 rounded-[10px] border border-teal bg-white text-teal"
+          >
+            <Image
+              src="/images/order_teal.svg"
+              alt="Logo"
+              width={40}
+              height={40}
+            />
+            <div>
+              <span className="block font-semibold text-base" style={{ fontSize: '18px' }}>
                 Login as Officers/Court Staff
               </span>
-              <span className="text-gray-600 text-sm">
+              <span className="block text-sm">
                 To perform actions as a member of the court
               </span>
-            </Link>
-          </div>
+            </div>
+          </Link>
         </div>
+
+
 
         <div className="flex space-x-8 mx-2 p-8">
           <div className="w-1/2">
