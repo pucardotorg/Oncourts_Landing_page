@@ -325,8 +325,9 @@ const Hero = () => {
 
         <div className="flex space-x-8 mx-2 p-8">
           <div className="w-1/2">
-            <h2 className="text-teal font-bold text-xl mb-4">Cause List</h2>
-            {[...Array(5)].map((_, index) => {
+            <h2 className="text-teal font-bold text-xl mb-4">Cause Lists</h2>
+            <p className="text-center">No Causelists</p>
+            {/* {[...Array(5)].map((_, index) => {
               const date = getDateOffset(index);
               return (
                 <div
@@ -353,7 +354,7 @@ const Hero = () => {
                   </button>
                 </div>
               );
-            })}
+            })} */}
           </div>
           <div className="w-1/2 mb-2">
             <div className="flex items-center justify-between mb-4">
@@ -421,7 +422,7 @@ const Hero = () => {
                 </div>
               )}
               {currentAnnouncements.length === 0 ? (
-                <p className="text-center">No announcement</p>
+                <p className="text-center">No announcements</p>
               ) : (
                 <div className="flex justify-center mt-6 space-x-2">
                   <button
@@ -484,7 +485,7 @@ const Hero = () => {
                       width={24}
                       height={24}
                     />
-                    <span className="text-gray-600">Standard Operating Procedures (SOPs) - coming soon</span>
+                    <span className="text-gray-600">Standard Operating Procedures (SOPs) - Coming soon</span>
                   </div>
                 </div>
                 <hr className="my-4" />
@@ -519,7 +520,7 @@ const Hero = () => {
                 </p>
                 <div className="flex justify-center items-center">
                   <button className="py-2 px-4 border-2 border-darkGrey rounded-[5px] text-teal">
-                    Click here to Submit the Grievance - Coming soon
+                    Click here to Submit the Grievance  (Coming soon)
                   </button>
                 </div>
               </div>
