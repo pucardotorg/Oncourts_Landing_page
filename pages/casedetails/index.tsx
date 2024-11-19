@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 const CaseDetails = () => {
   const router = useRouter();
-  const [data, setData] = useState({});
+  const [data, setData] = useState(null);
 
   useEffect(() => {
     if (router.isReady) {
@@ -20,17 +20,16 @@ const CaseDetails = () => {
     }
   }, [router.isReady, router.query.data]);
 
+  if (!data) {
+    return <p className="p-6">Loading...</p>;
+  }
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-4 mx-8">
         <h2 className="text-2xl font-bold text-black">Case Details</h2>
         <div className="flex space-x-4">
-          <button className="py-2 px-4 bg-teal text-white rounded-md">
-            Download
-          </button>
-          <Link href="/search">
-            <a className="underline py-2 px-4">Find another case details</a>
-          </Link>
+          <Link href="/search" className="underline py-2 px-4">Find another case details</Link>
         </div>
       </div>
       <div className="bg-gray-200 h-[50px] mx-6  rounded-t-md"></div>
@@ -46,7 +45,11 @@ const CaseDetails = () => {
               <p className="font-semibold text-[rgba(2,137,233,1)]">
                 Petitioner :
               </p>
-              <p className="font-semibold">Siddarth Raman</p>
+              <p className="font-semibold">
+                {data["litigants"][1]['partyType'] === "complainant.primary"
+                  ? data["litigants"][1]['individualName']
+                  : ""}
+              </p>
             </div>
             <hr />
             <div className="flex justify-between">
@@ -107,7 +110,12 @@ const CaseDetails = () => {
               <p className="font-semibold text-[rgba(2,137,233,1)]">
                 Respondent :
               </p>
-              <p className="font-semibold">Siddarth Raman</p>
+              <p className="font-semibold">
+                {data["litigants"][0]['partyType'] === "respondent.primary"
+                  ? data["litigants"][0]['individualName']
+                  : ""}
+              </p>
+
             </div>
             <hr />
             <div className="flex justify-between">
