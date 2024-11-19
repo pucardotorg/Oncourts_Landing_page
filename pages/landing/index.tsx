@@ -36,7 +36,7 @@ const Hero = () => {
     const newDate = dateObj.toISOString().split("T")[0];
 
     try {
-      const API_ENDPOINT = process.env.NEXT_PUBLIC_ONCOURTS_API_ENDPOINT;
+      const API_ENDPOINT = "https://oncourts.kerala.gov.in";
       const response = await fetch(
         `${API_ENDPOINT}/scheduler/causelist/v1/_download?_=1730882648559`,
         {
@@ -261,7 +261,7 @@ const Hero = () => {
         </div>
         <div className="flex space-x-4 p-8 gap-5">
           <a
-            href={process.env.NEXT_PUBLIC_ONCOURTS_CITIZEN_APP_ENDPOINT}
+            href="https://oncourts.kerala.gov.in/digit-ui/citizen/dristi/home/login"
             className="flex-1 flex items-center space-x-4 pl-3 rounded-[10px] border border-teal bg-teal text-white"
           >
             <Image
@@ -290,7 +290,7 @@ const Hero = () => {
           </a>
 
           <a
-            href={process.env.NEXT_PUBLIC_ONCOURTS_EMPLOYEE_APP_ENDPOINT}
+            href="https://oncourts.kerala.gov.in/digit-ui/employee/user/login"
             className="flex-1 flex items-center space-x-4 pl-3 rounded-[10px] border border-teal bg-white text-teal"
           >
             <Image

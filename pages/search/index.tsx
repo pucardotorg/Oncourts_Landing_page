@@ -31,7 +31,7 @@ const SearchForCase = () => {
   };
 
   async function searchCaseSummary(value) {
-    const API_ENDPOINT = process.env.NEXT_PUBLIC_ONCOURTS_API_ENDPOINT;
+    const API_ENDPOINT = "https://oncourts.kerala.gov.in";
     const url = `${API_ENDPOINT}/case/v1/search/_summary`;
     let requestBody;
     if (selectedButton == "CNR") {
