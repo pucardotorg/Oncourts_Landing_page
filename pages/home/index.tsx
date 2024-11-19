@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 // import Hero from "../landing/index"
 // import Head from "next/head";
 
-export default function Home(): JSX.Element {
+export default function Home(): React.JSX.Element {
   const router = useRouter();
 
   useEffect(() => {
@@ -11,7 +11,9 @@ export default function Home(): JSX.Element {
       pathname: "/",
     });
   })
-
+  return (
+    <></>
+  )
 
   // return (
   //   <main>
