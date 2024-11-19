@@ -24,7 +24,6 @@ const NavLink: React.FC<NavLinkProps> = ({ href, label }) => {
 };
 
 const Header = () => {
-  const router = useRouter();
 
   return (
     <div>
@@ -75,22 +74,6 @@ const Header = () => {
                 </button>
               </Link>
             </div>
-            {router.pathname === "/" && (
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 bg-teal rounded-full">
-                <Link href="/login" passHref>
-                  <button className="flex items-center font-semibold text-white md:py-2 md:px-4 lg:mr-1">
-                    <span className="mr-2 hidden md:inline">Login</span>
-                    <Image
-                      className="block"
-                      src="/images/search.svg"
-                      alt="Search Icon"
-                      width={24}
-                      height={24}
-                    />
-                  </button>
-                </Link>
-              </div>
-            )}
           </div>
         </div>
       </nav>
