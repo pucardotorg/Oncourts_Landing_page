@@ -9,7 +9,7 @@ const Policies = () => {
             id="terms"
             className="bg-white p-8 rounded-lg shadow-lg space-y-6"
           >
-            <h2 className="text-2xl font-semibold text-blue-600 text-center">
+            <h2 className="text-2xl font-semibold text-teal text-center">
               Terms and Conditions
             </h2>
             <ol className="list-decimal pl-6 space-y-4">
@@ -102,7 +102,7 @@ const Policies = () => {
             id="privacy"
             className="bg-white p-8 rounded-lg shadow-lg space-y-6"
           >
-            <h2 className="text-2xl font-semibold text-blue-600 text-center">
+            <h2 className="text-2xl font-semibold text-teal text-center">
               Privacy Policy
             </h2>
             <ol className="list-decimal pl-6 space-y-4">

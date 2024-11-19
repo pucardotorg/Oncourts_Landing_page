@@ -239,23 +239,16 @@ const Hero = () => {
       <div className="relative w-full">
         <div className="w-full h-80 relative">
           <Image
-            src="/images/base.jpg"
+            src="/images/base.jpeg"
             alt="Base Image"
             objectFit="cover"
             layout="fill"
           />
-          <div className="absolute mt-12 top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-black">
-            {/* <div className="mb-4 flex justify-center">
-              <Image
-                src="/images/small_img.png"
-                alt="Small Image"
-                width={80}
-                height={80}
-                className="rounded-full"
-              />
-            </div> */}
-            <h2 className="text-2xl font-bold">24X7 Open & Networked Courts</h2>
-            <p className="mt-2 text-black font-semibold">
+          <div className="absolute mt-12 top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white">
+            <h2 className="text-2xl font-bold text-black bg-white p-2">
+              24X7 Open & Networked Courts
+            </h2>
+            <p className="mt-2 text-black font-semibold bg-white p-2">
               The Kerala High Court is launching a new court, called 24x7 ON
               Courts, with a <br />
               transformed dispute resolution experience for all users. The 24x7
@@ -271,7 +264,10 @@ const Hero = () => {
               href="{process.env.ONCOURTS_CITIZEN_APP_ENDPOINT}"
               className="flex-1 flex flex-col space-y-4 p-3 rounded-[10px] border border-teal bg-white"
             >
-              <span className="font-semibold text-base">
+              <span
+                className="font-semibold text-base"
+                style={{ fontSize: '18px' }}
+              >
                 Login as Litigant/Advocate
               </span>
               <span className="text-gray-600 text-sm">
@@ -283,7 +279,10 @@ const Hero = () => {
               href="{process.env.ONCOURTS_EMPLOYEE_APP_ENDPOINT}"
               className="flex-1 flex flex-col space-y-4 p-3 rounded-[10px] border border-teal bg-white"
             >
-              <span className="font-semibold text-base">
+              <span
+                className="font-semibold text-base"
+                style={{ fontSize: '18px' }}
+              >
                 Login as Officers/Court Staff
               </span>
               <span className="text-gray-600 text-sm">
@@ -443,7 +442,7 @@ const Hero = () => {
                       width={24}
                       height={24}
                     />
-                    <span className="text-gray-600">XX Doc</span>
+                    <span className="text-gray-600">Standard Operating Procedures (SOPs) - coming soon</span>
                   </div>
                 </div>
                 <hr className="my-4" />
