@@ -34,6 +34,7 @@ const Hero = () => {
   const fetchRosterData = async (date) => {
     const dateObj = new Date(date);
     const newDate = dateObj.toISOString().split("T")[0];
+
     try {
       const API_ENDPOINT = process.env.NEXT_PUBLIC_ONCOURTS_API_ENDPOINT;
       const response = await fetch(
@@ -258,10 +259,10 @@ const Hero = () => {
             </p>
           </div>
         </div>
-        <div className="flex space-x-4 p-8 mx-8 gap-5">
-          <Link
-            href="{process.env.NEXT_PUBLIC_ONCOURTS_CITIZEN_APP_ENDPOINT}"
-            className="flex-1 flex items-center space-x-4 p-3 rounded-[10px] border border-teal bg-teal text-white"
+        <div className="flex space-x-4 p-8 gap-5">
+          <a
+            href={process.env.NEXT_PUBLIC_ONCOURTS_CITIZEN_APP_ENDPOINT}
+            className="flex-1 flex items-center space-x-4 pl-3 rounded-[10px] border border-teal bg-teal text-white"
           >
             <Image
               src="/images/order.svg"
@@ -269,7 +270,7 @@ const Hero = () => {
               width={40}
               height={40}
             />
-            <div>
+            <div className="flex-1">
               <span className="block font-semibold text-base" style={{ fontSize: '18px' }}>
                 Login as Litigant/Advocate
               </span>
@@ -277,11 +278,20 @@ const Hero = () => {
                 To perform actions and see details of a case you&apos;re involved in
               </span>
             </div>
-          </Link>
+            <div className="relative w-[320px] h-[200px]">
+              <Image
+                src="/images/image.png"
+                alt="Logo"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-r-[10px]"
+              />
+            </div>
+          </a>
 
-          <Link
-            href="{process.env.NEXT_PUBLIC_ONCOURTS_EMPLOYEE_APP_ENDPOINT}"
-            className="flex-1 flex items-center space-x-4 p-3 rounded-[10px] border border-teal bg-white text-teal"
+          <a
+            href={process.env.NEXT_PUBLIC_ONCOURTS_EMPLOYEE_APP_ENDPOINT}
+            className="flex-1 flex items-center space-x-4 pl-3 rounded-[10px] border border-teal bg-white text-teal"
           >
             <Image
               src="/images/order_teal.svg"
@@ -289,7 +299,7 @@ const Hero = () => {
               width={40}
               height={40}
             />
-            <div>
+            <div className="flex-1">
               <span className="block font-semibold text-base" style={{ fontSize: '18px' }}>
                 Login as Officers/Court Staff
               </span>
@@ -297,8 +307,19 @@ const Hero = () => {
                 To perform actions as a member of the court
               </span>
             </div>
-          </Link>
+            <div className="relative w-[320px] h-[200px]">
+              <Image
+                src="/images/img1.jpeg"
+                alt="Logo"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-r-[10px]"
+              />
+            </div>
+          </a>
         </div>
+
+
 
 
 
@@ -339,86 +360,97 @@ const Hero = () => {
               <h2 className="text-teal font-bold text-xl">
                 Notice Board / Announcements
               </h2>
-              <button
-                className="py-1 px-4 bg-white border border-teal rounded-[5px]"
-                onClick={() => router.push("/announcements")}
-              >
-                View All
-              </button>
+              {currentAnnouncements.length === 0 ? (
+                <p></p>
+              ) : (
+                <button
+                  className="py-1 px-4 bg-white border border-teal rounded-[5px]"
+                  onClick={() => router.push("/announcements")}
+                >
+                  View All
+                </button>
+              )}
             </div>
             <div>
-              <div className="grid grid-cols-2 gap-4">
-                {currentAnnouncements.map((announcement) => (
-                  <div
-                    key={announcement.id}
-                    className="p-4 mb-4 bg-white rounded-[5px] border border-teal shadow-md"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex space-x-2">
-                        <span className="bg-teal text-white px-2 py-1 rounded-md text-sm">
-                          {announcement.type}
-                        </span>
+              {currentAnnouncements.length === 0 ? (
+                <p></p>
+              ) : (
+                <div className="grid grid-cols-2 gap-4">
+                  {currentAnnouncements.map((announcement) => (
+                    <div
+                      key={announcement.id}
+                      className="p-4 mb-4 bg-white rounded-[5px] border border-teal shadow-md"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex space-x-2">
+                          <span className="bg-teal text-white px-2 py-1 rounded-md text-sm">
+                            {announcement.type}
+                          </span>
+                        </div>
+                        <button className="py-1 px-3 border border-darkgrey rounded-md">
+                          <a
+                            href={`/ announcement / announcement - ${announcement.id}.pdf`}
+                            download
+                            target="_blank"
+                            className="flex items-center text-teal"
+                            rel="noreferrer"
+                          >
+                            Download
+                          </a>
+                        </button>
                       </div>
-                      <button className="py-1 px-3 border border-darkgrey rounded-md">
-                        <a
-                          href={`/ announcement / announcement - ${announcement.id}.pdf`}
-                          download
-                          target="_blank"
-                          className="flex items-center text-teal"
-                          rel="noreferrer"
-                        >
-                          Download
-                        </a>
-                      </button>
+                      <p className="text-gray-500 text-sm flex items-center space-x-2">
+                        <Image
+                          src="/images/search.svg"
+                          alt="Search Icon"
+                          width={24}
+                          height={24}
+                        />
+                        {announcement.date ? (
+                          <span>Date: {announcement.date}</span>
+                        ) : null}
+                      </p>
+                      <h3 className="font-bold text-black mt-2">
+                        {announcement.heading}
+                      </h3>
+                      <p className="text-teal text-sm mt-1">
+                        {announcement.description}
+                      </p>
                     </div>
-                    <p className="text-gray-500 text-sm flex items-center space-x-2">
-                      <Image
-                        src="/images/search.svg"
-                        alt="Search Icon"
-                        width={24}
-                        height={24}
-                      />
-                      {announcement.date ? (
-                        <span>Date: {announcement.date}</span>
-                      ) : null}
-                    </p>
-                    <h3 className="font-bold text-black mt-2">
-                      {announcement.heading}
-                    </h3>
-                    <p className="text-teal text-sm mt-1">
-                      {announcement.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex justify-center mt-6 space-x-2">
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  className="py-1 px-3 border border-darkgrey rounded-md text-darkgrey"
-                  disabled={currentPage === 1}
-                >
-                  &#8592; Prev
-                </button>
-
-                {[...Array(totalPages)].map((_, index) => (
+                  ))}
+                </div>
+              )}
+              {currentAnnouncements.length === 0 ? (
+                <p className="text-center">No announcement</p>
+              ) : (
+                <div className="flex justify-center mt-6 space-x-2">
                   <button
-                    key={index}
-                    onClick={() => handlePageChange(index + 1)}
-                    className={`py-1 px-3 ${currentPage === index + 1 ? "bg-teal text-white" : "border border-darkgrey text-darkgrey"} rounded-md`}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    className="py-1 px-3 border border-darkgrey rounded-md text-darkgrey"
+                    disabled={currentPage === 1}
                   >
-                    {index + 1}
+                    &#8592; Prev
                   </button>
-                ))}
 
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  className="py-1 px-3 border border-darkgrey rounded-md text-darkgrey"
-                  disabled={currentPage === totalPages}
-                >
-                  Next &#8594;
-                </button>
-              </div>
+                  {[...Array(totalPages)].map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handlePageChange(index + 1)}
+                      className={`py-1 px-3 ${currentPage === index + 1 ? "bg-teal text-white" : "border border-darkgrey text-darkgrey"} rounded-md`}
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    className="py-1 px-3 border border-darkgrey rounded-md text-darkgrey"
+                    disabled={currentPage === totalPages}
+                  >
+                    Next &#8594;
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
