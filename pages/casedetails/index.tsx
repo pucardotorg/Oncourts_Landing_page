@@ -135,21 +135,21 @@ const CaseDetails = () => {
               <p className="font-semibold text-[rgba(2,137,233,1)]">
                 Filing Date :
               </p>
-              <p className="font-semibold">{data["filingDate"]}</p>
+              <p className="font-semibold">{data["filingDate"] ? new Date(data["filingDate"]).toUTCString() : ""}</p>
             </div>
             <hr />
             <div className="flex justify-between">
               <p className="font-semibold text-[rgba(2,137,233,1)]">
                 Registration Date :
               </p>
-              <p className="font-semibold">{data["registrationDate"]}</p>
+              <p className="font-semibold">{data["registrationDate"] ? new Date(data["registrationDate"]).toUTCString() : ""}</p>
             </div>
             <hr />
             <div className="flex justify-between">
               <p className="font-semibold text-[rgba(2,137,233,1)]">
                 First Hearing date :
               </p>
-              <p className="font-semibold">{new Date(data["hearingDate"]).toUTCString()}</p>
+              <p className="font-semibold">{data["hearingDate"] ? new Date(data["hearingDate"]).toUTCString() : ""}</p>
             </div>
           </div>
           <hr className="mb-1" />

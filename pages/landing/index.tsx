@@ -516,9 +516,7 @@ const Hero = () => {
                   Grievance Redressal
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Integer nec odio. Praesent libero. Sed cursus ante dapibus
-                  diam.
+                  
                 </p>
                 <div className="flex justify-center items-center">
                   <button className="py-2 px-4 border-2 border-darkGrey rounded-[5px] text-teal">
