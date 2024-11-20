@@ -122,7 +122,7 @@ const SearchForCase = () => {
                   id="cnrInput"
                   value={caseNumber}
                   onChange={(e) => setCaseNumber(e.target.value)}
-                  placeholder="For example : MHAU02153654478"
+                  placeholder="For example : KLKM520000452024"
                   className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
                 />
               </div>
@@ -147,9 +147,8 @@ const SearchForCase = () => {
                   className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
                 >
                   <option value="">Select Case Type</option>
-                  <option value="Type1">Type 1</option>
-                  <option value="Type2">Type 2</option>
-                  <option value="Type3">Type 3</option>
+                  <option value="Type1">CMP</option>
+                  <option value="Type2">ST</option>
                 </select>
               </div>
             </div>
@@ -168,7 +167,7 @@ const SearchForCase = () => {
                     id="caseNumberInput"
                     value={caseNumber}
                     onChange={(e) => setCaseNumber(e.target.value)}
-                    placeholder="For example : 02153654478"
+                    placeholder="For example : CMP/15/2024"
                     className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
                   />
                 </div>
@@ -180,10 +179,10 @@ const SearchForCase = () => {
                     className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
                   >
                     <option value="">Select Year</option>
-                    <option value="2023">2023</option>
-                    <option value="2022">2022</option>
+                    <option value="2023">2024</option>
+                    {/* <option value="2022">2022</option>
                     <option value="2021">2021</option>
-                    <option value="2020">2020</option>
+                    <option value="2020">2020</option> */}
                   </select>
                 </div>
               </div>
