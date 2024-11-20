@@ -66,7 +66,7 @@ export default function About() {
           Starting with cheque-dishonor cases under the Negotiable Instruments
           Act that comprise 10% of the criminal pendency, the first of these
           courts, 24x7 ON Court Kollam will go live and accept the first case
-          from September 2024.
+          from November 2024.
         </p>
       </div>
 

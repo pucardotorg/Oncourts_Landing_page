@@ -238,14 +238,15 @@ const Hero = () => {
   return (
     <div>
       <div className="relative w-full">
-        <div className="w-full h-80 relative">
+        <div className="w-full h-96 relative">
           <Image
             src="/images/base.jpeg"
             alt="Base Image"
-            objectFit="cover"
+            objectFit="contain"
             layout="fill"
+            // className="w-full relative"
           />
-          <div className="absolute mt-12 top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white">
+          {/* <div className="absolute mt-12 top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white">
             <h2 className="text-2xl font-bold text-black bg-white p-2">
               24X7 Open & Networked Courts
             </h2>
@@ -257,7 +258,7 @@ const Hero = () => {
               <br /> the vision outlined in Phase III of the Supreme Court
               eCourts policy.
             </p>
-          </div>
+          </div> */}
         </div>
         <div className="flex space-x-4 p-8 gap-5">
           <a
