@@ -157,7 +157,7 @@ const SearchForCase = () => {
                   onChange={(e) => setSelectedCaseType(e.target.value)}
                   className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
                 >
-                  <option value="">Select Case Type</option>
+                  {/* <option value="">Select Case Type</option> */}
                   <option value="CMP">CMP</option>
                   <option value="ST">ST</option>
                 </select>
@@ -189,7 +189,7 @@ const SearchForCase = () => {
                     onChange={(e) => setSelectedYear(e.target.value)}
                     className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
                   >
-                    <option value="">Select Year</option>
+                    {/* <option value="">Select Year</option> */}
                     <option value="2024">2024</option>
                     {/* <option value="2022">2022</option>
                     <option value="2021">2021</option>

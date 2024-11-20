@@ -43,17 +43,17 @@ export default function About() {
 
   return (
     <div>
-      <div className="relative h-80 w-full">
+      <div className="relative h-96 w-full">
         <Image
           src="/images/base.jpeg"
           alt="Header Image"
           layout="fill"
-          objectFit="cover"
+          objectFit="contain"
           className="z-0"
         />
-        <div className="absolute inset-0 flex items-center justify-center bg-opacity-10">
+        {/* <div className="absolute inset-0 flex items-center justify-center bg-opacity-10">
           <h1 className="text-4xl font-bold bg-white text-black p-4">About Us</h1>
-        </div>
+        </div> */}
       </div>
       <div className="text-center my-8 mx-16">
         <p className="text-lg mb-4">
