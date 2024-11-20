@@ -6,10 +6,11 @@ const SearchForCase = () => {
   const [caseNumber, setCaseNumber] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedCaseType, setSelectedCaseType] = useState("");
-
   const router = useRouter();
 
   useEffect(() => {
+    setSelectedCaseType("CMP")
+    setSelectedYear("2024")
     if (router.query.type) {
       setSelectedButton(
         Array.isArray(router.query.type)
@@ -27,61 +28,71 @@ const SearchForCase = () => {
   const handleClear = () => {
     setCaseNumber("");
     setSelectedYear("");
-    setSelectedCaseType("");
+    setSelectedCaseType("CMP");
   };
 
   async function searchCaseSummary(value) {
     const API_ENDPOINT = "https://oncourts.kerala.gov.in";
     const url = `${API_ENDPOINT}/case/v1/search/_summary`;
     let requestBody;
-    if (selectedButton == "CNR") {
-      requestBody = {
-        RequestInfo: {
-          authToken: `${process.env.AUTH_TOKEN_SEARCH}`,
-        },
-        tenantId: "kl",
-        criteria: {
-          tenantId: "kl",
-          caseId: null,
-          cnrNumber: [value],
-        },
-      };
-    } else {
-      requestBody = {
-        RequestInfo: {
-          authToken: `${process.env.AUTH_TOKEN_SEARCH}`,
-        },
-        tenantId: "kl",
-        criteria: {
-          tenantId: "kl",
-          caseId: [value],
-          cnrNumber: null,
-        },
-      };
-    }
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+    if (value === "" || value === null) {
+      if (selectedButton === "CNR") {
+        alert("Please provide a CNR#")
+      } else {
+        alert("Please provide a Case#")
       }
-
-      const data = await response.json();
-      const caseData = data.cases[0];
-      router.push({
-        pathname: "/casedetails",
-        query: { data: JSON.stringify(caseData) },
-      });
-    } catch (error) {
-      console.error("Error:", error);
+    } else {
+      if (selectedButton === "CNR") {
+        requestBody = {
+          RequestInfo: {
+            authToken: `${process.env.AUTH_TOKEN_SEARCH}`,
+          },
+          tenantId: "kl",
+          criteria: {
+            tenantId: "kl",
+            caseId: null,
+            cnrNumber: [value],
+          },
+        };
+      } else {
+        requestBody = {
+          RequestInfo: {
+            authToken: `${process.env.AUTH_TOKEN_SEARCH}`,
+          },
+          tenantId: "kl",
+          criteria: {
+            tenantId: "kl",
+            caseId: [value],
+            cnrNumber: null,
+          },
+        };
+      }
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        const caseData = data.cases[0];
+        router.push({
+          pathname: "/casedetails",
+          query: { data: JSON.stringify(caseData) },
+        });
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    
     }
+
   }
 
   return (
@@ -122,7 +133,7 @@ const SearchForCase = () => {
                   id="cnrInput"
                   value={caseNumber}
                   onChange={(e) => setCaseNumber(e.target.value)}
-                  placeholder="For example : KLKM520000452024"
+                  placeholder="Example : KLKM520000452024"
                   className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
                 />
               </div>
@@ -147,8 +158,8 @@ const SearchForCase = () => {
                   className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
                 >
                   <option value="">Select Case Type</option>
-                  <option value="Type1">CMP</option>
-                  <option value="Type2">ST</option>
+                  <option value="CMP">CMP</option>
+                  <option value="ST">ST</option>
                 </select>
               </div>
             </div>
@@ -167,7 +178,7 @@ const SearchForCase = () => {
                     id="caseNumberInput"
                     value={caseNumber}
                     onChange={(e) => setCaseNumber(e.target.value)}
-                    placeholder="For example : CMP/15/2024"
+                    placeholder={selectedCaseType == 'CMP' ? "Example : CMP/15/2024": "Example : ST/15/2024"}
                     className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
                   />
                 </div>
@@ -179,7 +190,7 @@ const SearchForCase = () => {
                     className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
                   >
                     <option value="">Select Year</option>
-                    <option value="2023">2024</option>
+                    <option value="2024">2024</option>
                     {/* <option value="2022">2022</option>
                     <option value="2021">2021</option>
                     <option value="2020">2020</option> */}
