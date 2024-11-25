@@ -514,7 +514,7 @@ const Hero = () => {
               </div>
               <div className="w-1/2 p-4 bg-white rounded-[15px] border border-teal shadow-md">
                 <h3 className="font-bold text-black mb-4">
-                  Grievance Redressal
+                Support
                 </h3>
                 <p className="text-gray-600 mb-4">
 
