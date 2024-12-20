@@ -32,84 +32,26 @@ const SearchForCase = () => {
   };
 
   async function searchCaseSummary(caseNumber, selectedCaseType, selectedYear) {
-    const API_ENDPOINT = "https://oncourts.kerala.gov.in";
-    const url = `${API_ENDPOINT}/case/v1/search/_summary`;
-    let requestBody;
-    if ((caseNumber === "" || caseNumber === null) && selectedButton === "CNR") {
-      alert("Please provide a CNR#")
-    }
-    else {
-      if (selectedButton === "CNR") {
-        requestBody = {
-          RequestInfo: {
-            authToken: `${process.env.AUTH_TOKEN_SEARCH}`,
-          },
-          tenantId: "kl",
-          criteria: {
-            tenantId: "kl",
-            caseId: null,
-            cnrNumber: [caseNumber]
-          },
-        };
-      } else {
-        if (caseNumber === "" || caseNumber === null) {
-          requestBody = {
-            RequestInfo: {
-              authToken: `${process.env.AUTH_TOKEN_SEARCH}`,
-            },
-            tenantId: "kl",
-            criteria: {
-              tenantId: "kl",
-              caseId: null,
-              cnrNumber: null,
-              year: selectedYear,
-              caseType: selectedCaseType,
-            },
-          };
-        }
-        else {
-          requestBody = {
-            RequestInfo: {
-              authToken: `${process.env.AUTH_TOKEN_SEARCH}`,
-            },
-            tenantId: "kl",
-            criteria: {
-              tenantId: "kl",
-              caseId: [caseNumber],
-              cnrNumber: null,
-              year: selectedYear,
-              caseType: selectedCaseType
-            },
-          };
-        }
-      }
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestBody),
-        });
+    const queryParams: {
+      caseNumber?: string;
+      selectedCaseType?: string;
+      selectedYear?: string;
+      selectedButton?: string
+    } = {};
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+    if (caseNumber) queryParams.caseNumber = caseNumber;
+    if (selectedCaseType) queryParams.selectedCaseType = selectedCaseType;
+    if (selectedYear) queryParams.selectedYear = selectedYear;
+    if (selectedButton) queryParams.selectedButton = selectedButton;
 
-        const data = await response.json();
-        const caseData = data.cases[0];
-        router.push({
-          pathname: "/casedetails",
-          query: { data: JSON.stringify(caseData) },
-        });
-      } catch (error) {
-        console.error("Error:", error);
-      }
+    router.push({
+      pathname: "/casedetails",
+      query: queryParams,
+    });
 
-    }
 
   }
+
 
   return (
     <div className="max-w-xl mx-auto py-8">

@@ -1,173 +1,104 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import SingleCase from "./single_case";
+import MultipleCase from "./multiple_case";
 
 const CaseDetails = () => {
-  const router = useRouter();
   const [data, setData] = useState(null);
+  const [cases, setCases] = useState({});
+  const [multipleCase, setMultipleCase] = useState(false);
+  const [loading,setLoading]=useState(false)
+  const router = useRouter();
+  const { caseNumber, selectedCaseType, selectedYear, selectedButton } = router.query;
 
-  useEffect(() => {
-    if (router.isReady) {
-      const queryData = router.query.data;
-      if (typeof queryData === "string") {
+  async function searchCaseSummary() {
+    setLoading(true);
+    const API_ENDPOINT = "https://dristi-kerala-dev.pucar.org";
+    const tenantID = "kl";
+    let url;
+
+    if (selectedButton === "CNR") {
+      url = `${API_ENDPOINT}/openapi/v1/${tenantID}/case/cnr/${caseNumber}`;
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const res = await response.json();
+        const caseList = res["caseSummary"];
+        setData(caseList);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    } else {
+      if (caseNumber === "" || caseNumber === null || caseNumber === undefined) {
+        url = `${API_ENDPOINT}/openapi/v1/${tenantID}/case/${selectedYear}/${selectedCaseType}`;
+        setMultipleCase(true);
         try {
-          const parsedData = JSON.parse(queryData);
-          setData(parsedData);
+          const response = await fetch(url, {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const res = await response.json();
+          const caseList = await res["caseList"];
+          setCases(caseList)
         } catch (error) {
-          console.error("Error parsing data:", error);
+          console.error("Error:", error);
+        }
+      } else {
+        url = `${API_ENDPOINT}/openapi/v1/${tenantID}/case/${selectedYear}/${selectedCaseType}/${caseNumber}`;
+        try {
+          const response = await fetch(url, {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const res = await response.json();
+          const caseList = res["caseSummary"];
+          setData(caseList);
+        } catch (error) {
+          console.error("Error:", error);
         }
       }
     }
-  }, [router.isReady, router.query.data]);
-
-  if (!data) {
-    return <p className="p-6">Loading...</p>;
+    setLoading(false)
   }
+
+  useEffect(() => {
+    searchCaseSummary();
+  }, [caseNumber, selectedCaseType, selectedYear, selectedButton]);
+
+  // if (!data) {
+  //   return <p className="p-6">Loading...</p>;
+  // }
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-4 mx-8">
-        <h2 className="text-2xl font-bold text-black">Case Details</h2>
-        <div className="flex space-x-4">
-          <Link href="/search" className="underline py-2 px-4">Find another case details</Link>
-        </div>
-      </div>
-      <div className="bg-gray-200 h-[50px] mx-6  rounded-t-md"></div>
-      <div className="grid grid-cols-2 mx-6">
-        <div className="bg-white p-6 border border-gray-200">
-          <div className="grid gap-4 mb-4">
-            <div className="flex justify-between">
-              <p className="font-semibold text-[rgba(2,137,233,1)]">CNR :</p>
-              <p className="font-semibold">{data["cnrNumber"]}</p>
-            </div>
-            <hr />
-            <div className="flex justify-between">
-              <p className="font-semibold text-[rgba(2,137,233,1)]">
-                Petitioner :
-              </p>
-              <p className="font-semibold">
-                {data["litigants"][1]['partyType'] === "complainant.primary"
-                  ? data["litigants"][1]['individualName']
-                  : data["litigants"][0]['partyType'] === "complainant.primary" ?
-                    data["litigants"][0]['individualName'] : ""}
-              </p>
-            </div>
-            <hr />
-            <div className="flex justify-between">
-              <p className="font-semibold text-[rgba(2,137,233,1)]">
-                Petitioner Advocate :
-              </p>
-              <p className="font-semibold">{data["petitionerAdvocate"]}</p>
-            </div>
-          </div>
-          <hr className="mb-1" />
-          <hr />
-          <div className="grid gap-4 mt-4 mb-4">
-            <div className="flex justify-between">
-              <p className="font-semibold text-[rgba(2,137,233,1)]">
-                Filing Number :
-              </p>
-              <p className="font-semibold">{data["filingNumber"]}</p>
-            </div>
-            <hr />
-            <div className="flex justify-between">
-              <p className="font-semibold text-[rgba(2,137,233,1)]">
-                Registration No. :
-              </p>
-              <p className="font-semibold">{data["registrationNumber"]}</p>
-            </div>
-            <hr />
-            <div className="flex justify-between">
-              <p className="font-semibold text-[rgba(2,137,233,1)]">
-                Case Type :
-              </p>
-              <p className="font-semibold">{data["caseType"]}</p>
-            </div>
-          </div>
-          <hr className="mb-1" />
-          <hr />
-          <div className="grid gap-4 mt-4">
-            <div className="flex justify-between">
-              <p className="font-semibold text-[rgba(2,137,233,1)]">Status :</p>
-              <p className="font-semibold">{data["status"]}</p>
-            </div>
-            <hr />
-            <div className="flex justify-between">
-              <p className="font-semibold text-[rgba(2,137,233,1)]">
-                Stage / Type of Dsip :
-              </p>
-              <p className="font-semibold">{data["stage"]}</p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white p-6 border border-gray-200 rounded-r-md">
-          <div className="grid gap-4 mb-4">
-            <div className="flex justify-between">
-              <p className="font-semibold text-[rgba(2,137,233,1)]">Judge :</p>
-              <p className="font-semibold">{data["judgeName"]}</p>
-            </div>
-            <hr />
-            <div className="flex justify-between">
-              <p className="font-semibold text-[rgba(2,137,233,1)]">
-                Respondent :
-              </p>
-              <p className="font-semibold">
-                {data["litigants"][0]['partyType'] === "respondent.primary"
-                  ? data["litigants"][0]['individualName']
-                  : data["litigants"][1]['partyType'] === "respondent.primary" 
-                  ? data["litigants"][1]['individualName']
-                  : ""}
-              </p>
-
-            </div>
-            <hr />
-            <div className="flex justify-between">
-              <p className="font-semibold text-[rgba(2,137,233,1)]">
-                Respondent Advocate :
-              </p>
-              <p className="font-semibold">{data["respondantAdvocate"]}</p>
-            </div>
-          </div>
-          <hr className="mb-1" />
-          <hr />
-          <div className="grid gap-4 mt-4 mb-4">
-            <div className="flex justify-between">
-              <p className="font-semibold text-[rgba(2,137,233,1)]">
-                Filing Date :
-              </p>
-              <p className="font-semibold">{data["filingDate"] ? new Date(data["filingDate"]).toUTCString() : ""}</p>
-            </div>
-            <hr />
-            <div className="flex justify-between">
-              <p className="font-semibold text-[rgba(2,137,233,1)]">
-                Registration Date :
-              </p>
-              <p className="font-semibold">{data["registrationDate"] ? new Date(data["registrationDate"]).toUTCString() : ""}</p>
-            </div>
-            <hr />
-            <div className="flex justify-between">
-              <p className="font-semibold text-[rgba(2,137,233,1)]">
-                First Hearing date :
-              </p>
-              <p className="font-semibold">{data["hearingDate"] ? new Date(data["hearingDate"]).toUTCString() : ""}</p>
-            </div>
-          </div>
-          <hr className="mb-1" />
-          <hr />
-          <div className="grid gap-4 mt-4">
-            <div className="flex justify-between">
-              <p className="font-semibold text-[rgba(2,137,233,1)]">Judge :</p>
-              <p className="font-semibold">{data["judgeName"]}</p>
-            </div>
-            <hr />
-            <div className="flex justify-between">
-              <p className="font-semibold text-[rgba(2,137,233,1)]">Act :</p>
-              <p className="font-semibold">S13338, NI Act</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="bg-gray-200 h-[50px] mx-6 rounded-b-md"></div>
+      {!loading && !multipleCase && data && <SingleCase data={data} />}
+      {!loading && multipleCase && cases && <MultipleCase data={cases} />}
     </div>
   );
 };
