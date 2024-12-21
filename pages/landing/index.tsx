@@ -244,7 +244,7 @@ const Hero = () => {
             alt="Base Image"
             objectFit="contain"
             layout="fill"
-            // className="w-full relative"
+          // className="w-full relative"
           />
           {/* <div className="absolute mt-12 top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white">
             <h2 className="text-2xl font-bold text-black bg-white p-2">
@@ -514,15 +514,21 @@ const Hero = () => {
               </div>
               <div className="w-1/2 p-4 bg-white rounded-[15px] border border-teal shadow-md">
                 <h3 className="font-bold text-black mb-4">
-                Support
+                  Support
                 </h3>
                 <p className="text-gray-600 mb-4">
 
                 </p>
                 <div className="flex justify-center items-center">
-                  <button className="py-2 px-4 border-2 border-darkGrey rounded-[5px] text-teal">
-                    Click here to Submit the Grievance  (Coming soon)
-                  </button>
+                  <a
+                    href="https://forms.gle/uCSgGiqGiMQYjjgeA"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <button className="py-2 px-4 border-2 border-darkGrey rounded-[5px] text-teal">
+                      Click here to Submit the Grievance
+                    </button>
+                  </a>
                 </div>
               </div>
             </div>
