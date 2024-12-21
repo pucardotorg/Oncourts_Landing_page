@@ -6,7 +6,7 @@ const MultipleCase = (data) => {
     const router = useRouter();
 
     const handleViewClick = (caseItem) => {
-        const caseNo=caseItem.caseNumber
+        const caseNo = caseItem.caseNumber
         router.push({
             pathname: "/view_case",
             query: { caseData: caseNo },
@@ -26,7 +26,7 @@ const MultipleCase = (data) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {cases &&
+                    {cases && cases.length > 0 ? (
                         cases.map((caseItem, index) => (
                             <tr key={index} className="border-b">
                                 <td className="px-4 py-2">{index + 1}</td>
@@ -41,8 +41,16 @@ const MultipleCase = (data) => {
                                     </button>
                                 </td>
                             </tr>
-                        ))}
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan={4} className="px-4 py-2 text-center text-gray-500">
+                                No cases found.
+                            </td>
+                        </tr>
+                    )}
                 </tbody>
+
             </table>
         </div>
     );
