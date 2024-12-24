@@ -31,69 +31,27 @@ const SearchForCase = () => {
     setSelectedCaseType("CMP");
   };
 
-  async function searchCaseSummary(value) {
-    const API_ENDPOINT = "https://oncourts.kerala.gov.in";
-    const url = `${API_ENDPOINT}/case/v1/search/_summary`;
-    let requestBody;
-    if (value === "" || value === null) {
-      if (selectedButton === "CNR") {
-        alert("Please provide a CNR#")
-      } else {
-        alert("Please provide a Case#")
-      }
-    } else {
-      if (selectedButton === "CNR") {
-        requestBody = {
-          RequestInfo: {
-            authToken: `${process.env.AUTH_TOKEN_SEARCH}`,
-          },
-          tenantId: "kl",
-          criteria: {
-            tenantId: "kl",
-            caseId: null,
-            cnrNumber: [value],
-          },
-        };
-      } else {
-        requestBody = {
-          RequestInfo: {
-            authToken: `${process.env.AUTH_TOKEN_SEARCH}`,
-          },
-          tenantId: "kl",
-          criteria: {
-            tenantId: "kl",
-            caseId: [value],
-            cnrNumber: null,
-          },
-        };
-      }
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestBody),
-        });
-  
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-  
-        const data = await response.json();
-        const caseData = data.cases[0];
-        router.push({
-          pathname: "/casedetails",
-          query: { data: JSON.stringify(caseData) },
-        });
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    
-    }
+  async function searchCaseSummary(caseNumber, selectedCaseType, selectedYear) {
+    const queryParams: {
+      caseNumber?: string;
+      selectedCaseType?: string;
+      selectedYear?: string;
+      selectedButton?: string
+    } = {};
+
+    if (caseNumber) queryParams.caseNumber = caseNumber;
+    if (selectedCaseType) queryParams.selectedCaseType = selectedCaseType;
+    if (selectedYear) queryParams.selectedYear = selectedYear;
+    if (selectedButton) queryParams.selectedButton = selectedButton;
+
+    router.push({
+      pathname: "/casedetails",
+      query: queryParams,
+    });
+
 
   }
+
 
   return (
     <div className="max-w-xl mx-auto py-8">
@@ -144,11 +102,8 @@ const SearchForCase = () => {
         {selectedButton === "CaseNumber" && (
           <>
             <div className="mb-4">
-              <label
-                htmlFor="caseType"
-                className="text-teal font-medium text-sm"
-              >
-                Select Case Type
+              <label htmlFor="caseType" className="text-teal font-medium text-sm">
+                Select Case Type <span className="text-red-500">*</span>
               </label>
               <div className="w-full rounded-2xl border border-teal p-4 mt-2">
                 <select
@@ -156,6 +111,7 @@ const SearchForCase = () => {
                   value={selectedCaseType}
                   onChange={(e) => setSelectedCaseType(e.target.value)}
                   className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
+                  required
                 >
                   {/* <option value="">Select Case Type</option> */}
                   <option value="CMP">CMP</option>
@@ -163,41 +119,57 @@ const SearchForCase = () => {
                 </select>
               </div>
             </div>
-
             <div className="mb-4">
-              <label
-                htmlFor="caseNumberInput"
-                className="text-teal font-medium text-sm"
-              >
-                Enter Case Number
-              </label>
-              <div className="flex space-x-4 mt-2">
-                <div className="w-1/2 rounded-2xl border border-teal p-4">
-                  <input
-                    type="text"
-                    id="caseNumberInput"
-                    value={caseNumber}
-                    onChange={(e) => setCaseNumber(e.target.value)}
-                    placeholder={selectedCaseType == 'CMP' ? "Example : CMP/15/2024": "Example : ST/15/2024"}
-                    className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
-                  />
+              <div className="flex flex-wrap justify-between space-x-4">
+                {/* Case Number Input */}
+                <div >
+                  <div className="flex items-center space-x-1">
+                    <label htmlFor="caseNumberInput" className="text-teal font-medium text-sm">
+                      Enter Case Number
+                    </label>
+                  </div>
+                  <div className="rounded-2xl border border-teal p-2 mt-1">
+                    <input
+                      type="text"
+                      id="caseNumberInput"
+                      value={caseNumber}
+                      onChange={(e) => setCaseNumber(e.target.value)}
+                      placeholder={
+                        selectedCaseType === "CMP"
+                          ? "Example: CMP/15/2024"
+                          : "Example: ST/15/2024"
+                      }
+                      className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
+                    />
+                  </div>
                 </div>
-                <div className="w-1/2 rounded-2xl border border-teal p-4 bg-transparent">
-                  <select
-                    id="yearInput"
-                    value={selectedYear}
-                    onChange={(e) => setSelectedYear(e.target.value)}
-                    className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
-                  >
-                    {/* <option value="">Select Year</option> */}
-                    <option value="2024">2024</option>
-                    {/* <option value="2022">2022</option>
-                    <option value="2021">2021</option>
-                    <option value="2020">2020</option> */}
-                  </select>
+
+                {/* Select Year Input */}
+                <div className="w-full md:w-1/2">
+                  <div className="flex items-center space-x-1">
+                    <label htmlFor="yearInput" className="text-teal font-medium text-sm">
+                      Select Year
+                    </label>
+                    <span className="text-red-500 text-sm">*</span>
+                  </div>
+                  <div className="rounded-2xl border border-teal p-2 mt-1">
+                    <select
+                      id="yearInput"
+                      value={selectedYear}
+                      onChange={(e) => setSelectedYear(e.target.value)}
+                      className="w-full py-2 px-4 rounded-2xl outline-none bg-transparent"
+                      required
+                    >
+                      <option value="2024">2024</option>
+                      {/* Uncomment other options if needed */}
+                      {/* <option value="2023">2023</option> */}
+                      {/* <option value="2022">2022</option> */}
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
+
           </>
         )}
         <div className="flex justify-around mx-28">
@@ -208,7 +180,7 @@ const SearchForCase = () => {
             Clear Response
           </button>
           <button
-            onClick={() => searchCaseSummary(caseNumber)}
+            onClick={() => searchCaseSummary(caseNumber, selectedCaseType, selectedYear)}
             className="py-2 px-6 rounded-2xl bg-teal text-white"
           >
             Submit
