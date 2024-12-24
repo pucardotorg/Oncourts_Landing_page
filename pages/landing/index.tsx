@@ -559,7 +559,7 @@ const Hero = () => {
                     width={24}
                     height={24}
                   />
-                  <span className="text-teal font-bold"><a href="mailto:niacourtkollam@gmail.com">niacourtkollam@gmail.com</a></span>
+                  <span className="text-teal font-bold"><a href="mailto:oncourtkollam@keralacourts.in">oncourtkollam@keralacourts.in</a></span>
                 </div>
                 <hr className="my-2 border-teal" />
               </div>
