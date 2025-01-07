@@ -129,7 +129,7 @@ export default function About() {
         </div>
 
         <div className="group border rounded-lg p-4 text-center transition-colors duration-300 hover:bg-teal bg-white border-teal cursor-pointer">
-          <h3 className="font-bold text-lg uppercase text-teal transition-colors duration-300 group-hover:text-white mb-2">Design for Engagement </h3>
+          <h3 className="font-bold text-lg uppercase text-teal transition-colors duration-300 group-hover:text-white mb-2">Design for Engagement</h3>
           <p className="mt-2 text-black transition-colors duration-300 group-hover:text-white">
             24x7 ON Courts are designed through an iterative process through
             consultations from various users of the court. They also enable
