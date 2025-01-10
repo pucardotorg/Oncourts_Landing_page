@@ -14,16 +14,16 @@ const Hero = () => {
     indexOfLastAnnouncement,
   );
 
-  const getDateOffset = (daysOffset) => {
-    const date = new Date();
-    date.setDate(date.getDate() - daysOffset);
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-    };
-    return date.toLocaleDateString("en-GB", options);
-  };
+  // const getDateOffset = (daysOffset) => {
+  //   const date = new Date();
+  //   date.setDate(date.getDate() - daysOffset);
+  //   const options: Intl.DateTimeFormatOptions = {
+  //     year: "numeric",
+  //     month: "short",
+  //     day: "2-digit",
+  //   };
+  //   return date.toLocaleDateString("en-GB", options);
+  // };
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -31,209 +31,209 @@ const Hero = () => {
 
   const totalPages = Math.ceil(announcementData.length / itemsPerPage);
 
-  const fetchRosterData = async (date) => {
-    const dateObj = new Date(date);
-    const newDate = dateObj.toISOString().split("T")[0];
+  // const fetchRosterData = async (date) => {
+  //   const dateObj = new Date(date);
+  //   const newDate = dateObj.toISOString().split("T")[0];
 
-    try {
-      const API_ENDPOINT = "https://oncourts.kerala.gov.in";
-      const response = await fetch(
-        `${API_ENDPOINT}/scheduler/causelist/v1/_download?_=1730882648559`,
-        {
-          method: "POST",
-          headers: {
-            authority: "dristi-kerala-uat.pucar.org",
-            accept: "application/pdf",
-            "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
-            "content-type": "application/json",
-            origin: "https://dristi-kerala-uat.pucar.org",
-            referer:
-              "https://dristi-kerala-uat.pucar.org/digit-ui/employee/hearings/",
-            "sec-ch-ua":
-              '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": '"Linux"',
-            "sec-fetch-dest": "empty",
-            "sec-fetch-mode": "cors",
-            "sec-fetch-site": "same-origin",
-            "user-agent":
-              "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
-          },
-          body: JSON.stringify({
-            tenantId: "kl",
-            Criteria: {
-              courtId: "KLKM52",
-              searchDate: newDate,
-              judgeIds: [],
-              caseIds: [],
-            },
-            RequestInfo: {
-              apiId: "Rainmaker",
-              authToken: `${process.env.AUTH_TOKEN}`,
-              userInfo: {
-                id: 143,
-                uuid: "c1c4a708-afd6-4c9c-91a5-fd6c8517fb39",
-                userName: "uatJudge01",
-                name: "uatJudge01",
-                mobileNumber: "1002335566",
-                type: "EMPLOYEE",
-                roles: [
-                  {
-                    name: "HEARING_VIEWER",
-                    code: "HEARING_VIEWER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "DEPOSITION_EDITOR",
-                    code: "DEPOSITION_EDITOR",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "WORKFLOW_ABANDON",
-                    code: "WORKFLOW_ABANDON",
-                    tenantId: "kl",
-                  },
-                  { name: "ORDER_ESIGN", code: "ORDER_ESIGN", tenantId: "kl" },
-                  {
-                    name: "Workflow Admin",
-                    code: "WORKFLOW_ADMIN",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "DEPOSITION_PUBLISHER",
-                    code: "DEPOSITION_PUBLISHER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "TASK_APPROVER",
-                    code: "TASK_APPROVER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "HEARING_START",
-                    code: "HEARING_START",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "HEARING_APPROVER",
-                    code: "HEARING_APPROVER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "ORDER_VIEWER",
-                    code: "ORDER_VIEWER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "SUBMISSION_RESPONDER",
-                    code: "SUBMISSION_RESPONDER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "ORDER_REASSIGN",
-                    code: "ORDER_REASSIGN",
-                    tenantId: "kl",
-                  },
-                  { name: "CASE_EDITOR", code: "CASE_EDITOR", tenantId: "kl" },
-                  {
-                    name: "APPLICATION_APPROVER",
-                    code: "APPLICATION_APPROVER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "TASK_CREATOR",
-                    code: "TASK_CREATOR",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "HEARING_DATE_REQUESTOR",
-                    code: "HEARING_DATE_REQUESTOR",
-                    tenantId: "kl",
-                  },
-                  { name: "Employee", code: "EMPLOYEE", tenantId: "kl" },
-                  {
-                    name: "ORDER_DELETE",
-                    code: "ORDER_DELETE",
-                    tenantId: "kl",
-                  },
-                  { name: "CASE_VIEWER", code: "CASE_VIEWER", tenantId: "kl" },
-                  {
-                    name: "APPLICATION_REJECTOR",
-                    code: "APPLICATION_REJECTOR",
-                    tenantId: "kl",
-                  },
-                  { name: "TASK_EDITOR", code: "TASK_EDITOR", tenantId: "kl" },
-                  {
-                    name: "ORDER_APPROVER",
-                    code: "ORDER_APPROVER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "HEARING_CLOSER",
-                    code: "HEARING_CLOSER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "ORDER_CREATOR",
-                    code: "ORDER_CREATOR",
-                    tenantId: "kl",
-                  },
-                  { name: "JUDGE_ROLE", code: "JUDGE_ROLE", tenantId: "kl" },
-                  {
-                    name: "CASE_APPROVER",
-                    code: "CASE_APPROVER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "DEPOSITION_CREATOR",
-                    code: "DEPOSITION_CREATOR",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "SUBMISSION_APPROVER",
-                    code: "SUBMISSION_APPROVER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "TASK_UPDATOR",
-                    code: "TASK_UPDATOR",
-                    tenantId: "kl",
-                  },
-                  { name: "TASK_VIEWER", code: "TASK_VIEWER", tenantId: "kl" },
-                  {
-                    name: "HEARING_SCHEDULER",
-                    code: "HEARING_SCHEDULER",
-                    tenantId: "kl",
-                  },
-                ],
-                active: true,
-                tenantId: "kl",
-                permanentCity: null,
-              },
-              msgId: "1730882648558|en_IN",
-              plainAccessRequest: {},
-            },
-          }),
-        },
-      );
+  //   try {
+  //     const API_ENDPOINT = "https://oncourts.kerala.gov.in";
+  //     const response = await fetch(
+  //       `${API_ENDPOINT}/scheduler/causelist/v1/_download?_=1730882648559`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           authority: "dristi-kerala-uat.pucar.org",
+  //           accept: "application/pdf",
+  //           "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
+  //           "content-type": "application/json",
+  //           origin: "https://dristi-kerala-uat.pucar.org",
+  //           referer:
+  //             "https://dristi-kerala-uat.pucar.org/digit-ui/employee/hearings/",
+  //           "sec-ch-ua":
+  //             '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
+  //           "sec-ch-ua-mobile": "?0",
+  //           "sec-ch-ua-platform": '"Linux"',
+  //           "sec-fetch-dest": "empty",
+  //           "sec-fetch-mode": "cors",
+  //           "sec-fetch-site": "same-origin",
+  //           "user-agent":
+  //             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+  //         },
+  //         body: JSON.stringify({
+  //           tenantId: "kl",
+  //           Criteria: {
+  //             courtId: "KLKM52",
+  //             searchDate: newDate,
+  //             judgeIds: [],
+  //             caseIds: [],
+  //           },
+  //           RequestInfo: {
+  //             apiId: "Rainmaker",
+  //             authToken: `${process.env.AUTH_TOKEN}`,
+  //             userInfo: {
+  //               id: 143,
+  //               uuid: "c1c4a708-afd6-4c9c-91a5-fd6c8517fb39",
+  //               userName: "uatJudge01",
+  //               name: "uatJudge01",
+  //               mobileNumber: "1002335566",
+  //               type: "EMPLOYEE",
+  //               roles: [
+  //                 {
+  //                   name: "HEARING_VIEWER",
+  //                   code: "HEARING_VIEWER",
+  //                   tenantId: "kl",
+  //                 },
+  //                 {
+  //                   name: "DEPOSITION_EDITOR",
+  //                   code: "DEPOSITION_EDITOR",
+  //                   tenantId: "kl",
+  //                 },
+  //                 {
+  //                   name: "WORKFLOW_ABANDON",
+  //                   code: "WORKFLOW_ABANDON",
+  //                   tenantId: "kl",
+  //                 },
+  //                 { name: "ORDER_ESIGN", code: "ORDER_ESIGN", tenantId: "kl" },
+  //                 {
+  //                   name: "Workflow Admin",
+  //                   code: "WORKFLOW_ADMIN",
+  //                   tenantId: "kl",
+  //                 },
+  //                 {
+  //                   name: "DEPOSITION_PUBLISHER",
+  //                   code: "DEPOSITION_PUBLISHER",
+  //                   tenantId: "kl",
+  //                 },
+  //                 {
+  //                   name: "TASK_APPROVER",
+  //                   code: "TASK_APPROVER",
+  //                   tenantId: "kl",
+  //                 },
+  //                 {
+  //                   name: "HEARING_START",
+  //                   code: "HEARING_START",
+  //                   tenantId: "kl",
+  //                 },
+  //                 {
+  //                   name: "HEARING_APPROVER",
+  //                   code: "HEARING_APPROVER",
+  //                   tenantId: "kl",
+  //                 },
+  //                 {
+  //                   name: "ORDER_VIEWER",
+  //                   code: "ORDER_VIEWER",
+  //                   tenantId: "kl",
+  //                 },
+  //                 {
+  //                   name: "SUBMISSION_RESPONDER",
+  //                   code: "SUBMISSION_RESPONDER",
+  //                   tenantId: "kl",
+  //                 },
+  //                 {
+  //                   name: "ORDER_REASSIGN",
+  //                   code: "ORDER_REASSIGN",
+  //                   tenantId: "kl",
+  //                 },
+  //                 { name: "CASE_EDITOR", code: "CASE_EDITOR", tenantId: "kl" },
+  //                 {
+  //                   name: "APPLICATION_APPROVER",
+  //                   code: "APPLICATION_APPROVER",
+  //                   tenantId: "kl",
+  //                 },
+  //                 {
+  //                   name: "TASK_CREATOR",
+  //                   code: "TASK_CREATOR",
+  //                   tenantId: "kl",
+  //                 },
+  //                 {
+  //                   name: "HEARING_DATE_REQUESTOR",
+  //                   code: "HEARING_DATE_REQUESTOR",
+  //                   tenantId: "kl",
+  //                 },
+  //                 { name: "Employee", code: "EMPLOYEE", tenantId: "kl" },
+  //                 {
+  //                   name: "ORDER_DELETE",
+  //                   code: "ORDER_DELETE",
+  //                   tenantId: "kl",
+  //                 },
+  //                 { name: "CASE_VIEWER", code: "CASE_VIEWER", tenantId: "kl" },
+  //                 {
+  //                   name: "APPLICATION_REJECTOR",
+  //                   code: "APPLICATION_REJECTOR",
+  //                   tenantId: "kl",
+  //                 },
+  //                 { name: "TASK_EDITOR", code: "TASK_EDITOR", tenantId: "kl" },
+  //                 {
+  //                   name: "ORDER_APPROVER",
+  //                   code: "ORDER_APPROVER",
+  //                   tenantId: "kl",
+  //                 },
+  //                 {
+  //                   name: "HEARING_CLOSER",
+  //                   code: "HEARING_CLOSER",
+  //                   tenantId: "kl",
+  //                 },
+  //                 {
+  //                   name: "ORDER_CREATOR",
+  //                   code: "ORDER_CREATOR",
+  //                   tenantId: "kl",
+  //                 },
+  //                 { name: "JUDGE_ROLE", code: "JUDGE_ROLE", tenantId: "kl" },
+  //                 {
+  //                   name: "CASE_APPROVER",
+  //                   code: "CASE_APPROVER",
+  //                   tenantId: "kl",
+  //                 },
+  //                 {
+  //                   name: "DEPOSITION_CREATOR",
+  //                   code: "DEPOSITION_CREATOR",
+  //                   tenantId: "kl",
+  //                 },
+  //                 {
+  //                   name: "SUBMISSION_APPROVER",
+  //                   code: "SUBMISSION_APPROVER",
+  //                   tenantId: "kl",
+  //                 },
+  //                 {
+  //                   name: "TASK_UPDATOR",
+  //                   code: "TASK_UPDATOR",
+  //                   tenantId: "kl",
+  //                 },
+  //                 { name: "TASK_VIEWER", code: "TASK_VIEWER", tenantId: "kl" },
+  //                 {
+  //                   name: "HEARING_SCHEDULER",
+  //                   code: "HEARING_SCHEDULER",
+  //                   tenantId: "kl",
+  //                 },
+  //               ],
+  //               active: true,
+  //               tenantId: "kl",
+  //               permanentCity: null,
+  //             },
+  //             msgId: "1730882648558|en_IN",
+  //             plainAccessRequest: {},
+  //           },
+  //         }),
+  //       },
+  //     );
 
-      if (response.ok) {
-        const blob = await response.blob();
-        const downloadLink = document.createElement("a");
-        downloadLink.href = window.URL.createObjectURL(blob);
-        downloadLink.download = "downloaded-file.pdf";
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-      } else {
-        alert("Failed to download the roster data. Please try again later.");
-      }
-    } catch (err) {
-      alert(
-        `An error occurred while fetching the roster data. Please try again later. ${err}`,
-      );
-    }
-  };
+  //     if (response.ok) {
+  //       const blob = await response.blob();
+  //       const downloadLink = document.createElement("a");
+  //       downloadLink.href = window.URL.createObjectURL(blob);
+  //       downloadLink.download = "downloaded-file.pdf";
+  //       document.body.appendChild(downloadLink);
+  //       downloadLink.click();
+  //       document.body.removeChild(downloadLink);
+  //     } else {
+  //       alert("Failed to download the roster data. Please try again later.");
+  //     }
+  //   } catch (err) {
+  //     alert(
+  //       `An error occurred while fetching the roster data. Please try again later. ${err}`,
+  //     );
+  //   }
+  // };
 
   return (
     <div>
