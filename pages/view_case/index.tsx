@@ -15,40 +15,23 @@ const ViewCase = () => {
         [caseType, caseNumber, year] = caseString.split('/');
     }
 
-    async function searchCaseSummary() {
-        if (!caseNumber) {
-            return;
-        }
-
-        setLoading(true);
-        const API_ENDPOINT = "https://dristi-kerala-dev.pucar.org";
-        const tenantID = "kl";
-        const url = `${API_ENDPOINT}/openapi/v1/${tenantID}/case/${year}/${caseType}/${caseNumber}`;
-
-        try {
-            const response = await fetch(url, {
-                method: "GET",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            const res = await response.json();
-            const caseList = res["caseSummary"];
-            setData(caseList);
-        } catch (error) {
-            console.error("Error:", error);
-        }
-        setLoading(false);
-    }
-
     useEffect(() => {
-        searchCaseSummary();
+        if (!caseNumber.trim()) return;
+
+        const fetchCaseSummary = async () => {
+            setLoading(true);
+            try {
+                const response = await fetch(`/api/case/${year}/${caseType}/${caseNumber}`);
+                const res = await response.json();
+                setData(res.caseSummary || []);
+            } catch (error) {
+                // console.error("Error fetching case summary:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCaseSummary();
     }, [caseNumber, caseType, year]);
 
     if (loading) {

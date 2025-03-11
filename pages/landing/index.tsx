@@ -3,6 +3,7 @@ import Image from "next/image";
 import { announcementData } from "../../data/announcements";
 import router from "next/router";
 import Link from "next/link";
+import { FaCalendarAlt } from "react-icons/fa";
 const Hero = () => {
   const itemsPerPage = 6;
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,226 +15,34 @@ const Hero = () => {
     indexOfLastAnnouncement,
   );
 
-  const getDateOffset = (daysOffset) => {
-    const date = new Date();
-    date.setDate(date.getDate() - daysOffset);
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-    };
-    return date.toLocaleDateString("en-GB", options);
-  };
-
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
   const totalPages = Math.ceil(announcementData.length / itemsPerPage);
 
-  const fetchRosterData = async (date) => {
-    const dateObj = new Date(date);
-    const newDate = dateObj.toISOString().split("T")[0];
+  const getDates = () => {
+    const now = new Date();
+    const hours = now.getHours();
 
-    try {
-      const API_ENDPOINT = "https://oncourts.kerala.gov.in";
-      const response = await fetch(
-        `${API_ENDPOINT}/scheduler/causelist/v1/_download?_=1730882648559`,
-        {
-          method: "POST",
-          headers: {
-            authority: "dristi-kerala-uat.pucar.org",
-            accept: "application/pdf",
-            "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
-            "content-type": "application/json",
-            origin: "https://dristi-kerala-uat.pucar.org",
-            referer:
-              "https://dristi-kerala-uat.pucar.org/digit-ui/employee/hearings/",
-            "sec-ch-ua":
-              '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": '"Linux"',
-            "sec-fetch-dest": "empty",
-            "sec-fetch-mode": "cors",
-            "sec-fetch-site": "same-origin",
-            "user-agent":
-              "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
-          },
-          body: JSON.stringify({
-            tenantId: "kl",
-            Criteria: {
-              courtId: "KLKM52",
-              searchDate: newDate,
-              judgeIds: [],
-              caseIds: [],
-            },
-            RequestInfo: {
-              apiId: "Rainmaker",
-              authToken: `${process.env.AUTH_TOKEN}`,
-              userInfo: {
-                id: 143,
-                uuid: "c1c4a708-afd6-4c9c-91a5-fd6c8517fb39",
-                userName: "uatJudge01",
-                name: "uatJudge01",
-                mobileNumber: "1002335566",
-                type: "EMPLOYEE",
-                roles: [
-                  {
-                    name: "HEARING_VIEWER",
-                    code: "HEARING_VIEWER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "DEPOSITION_EDITOR",
-                    code: "DEPOSITION_EDITOR",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "WORKFLOW_ABANDON",
-                    code: "WORKFLOW_ABANDON",
-                    tenantId: "kl",
-                  },
-                  { name: "ORDER_ESIGN", code: "ORDER_ESIGN", tenantId: "kl" },
-                  {
-                    name: "Workflow Admin",
-                    code: "WORKFLOW_ADMIN",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "DEPOSITION_PUBLISHER",
-                    code: "DEPOSITION_PUBLISHER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "TASK_APPROVER",
-                    code: "TASK_APPROVER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "HEARING_START",
-                    code: "HEARING_START",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "HEARING_APPROVER",
-                    code: "HEARING_APPROVER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "ORDER_VIEWER",
-                    code: "ORDER_VIEWER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "SUBMISSION_RESPONDER",
-                    code: "SUBMISSION_RESPONDER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "ORDER_REASSIGN",
-                    code: "ORDER_REASSIGN",
-                    tenantId: "kl",
-                  },
-                  { name: "CASE_EDITOR", code: "CASE_EDITOR", tenantId: "kl" },
-                  {
-                    name: "APPLICATION_APPROVER",
-                    code: "APPLICATION_APPROVER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "TASK_CREATOR",
-                    code: "TASK_CREATOR",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "HEARING_DATE_REQUESTOR",
-                    code: "HEARING_DATE_REQUESTOR",
-                    tenantId: "kl",
-                  },
-                  { name: "Employee", code: "EMPLOYEE", tenantId: "kl" },
-                  {
-                    name: "ORDER_DELETE",
-                    code: "ORDER_DELETE",
-                    tenantId: "kl",
-                  },
-                  { name: "CASE_VIEWER", code: "CASE_VIEWER", tenantId: "kl" },
-                  {
-                    name: "APPLICATION_REJECTOR",
-                    code: "APPLICATION_REJECTOR",
-                    tenantId: "kl",
-                  },
-                  { name: "TASK_EDITOR", code: "TASK_EDITOR", tenantId: "kl" },
-                  {
-                    name: "ORDER_APPROVER",
-                    code: "ORDER_APPROVER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "HEARING_CLOSER",
-                    code: "HEARING_CLOSER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "ORDER_CREATOR",
-                    code: "ORDER_CREATOR",
-                    tenantId: "kl",
-                  },
-                  { name: "JUDGE_ROLE", code: "JUDGE_ROLE", tenantId: "kl" },
-                  {
-                    name: "CASE_APPROVER",
-                    code: "CASE_APPROVER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "DEPOSITION_CREATOR",
-                    code: "DEPOSITION_CREATOR",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "SUBMISSION_APPROVER",
-                    code: "SUBMISSION_APPROVER",
-                    tenantId: "kl",
-                  },
-                  {
-                    name: "TASK_UPDATOR",
-                    code: "TASK_UPDATOR",
-                    tenantId: "kl",
-                  },
-                  { name: "TASK_VIEWER", code: "TASK_VIEWER", tenantId: "kl" },
-                  {
-                    name: "HEARING_SCHEDULER",
-                    code: "HEARING_SCHEDULER",
-                    tenantId: "kl",
-                  },
-                ],
-                active: true,
-                tenantId: "kl",
-                permanentCity: null,
-              },
-              msgId: "1730882648558|en_IN",
-              plainAccessRequest: {},
-            },
-          }),
-        },
-      );
+    // Format date to YYYY-MM-DD
+    const formatDate = (date: Date) => date.toISOString().split("T")[0];
+    let firstDate, secondDate;
 
-      if (response.ok) {
-        const blob = await response.blob();
-        const downloadLink = document.createElement("a");
-        downloadLink.href = window.URL.createObjectURL(blob);
-        downloadLink.download = "downloaded-file.pdf";
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-      } else {
-        alert("Failed to download the roster data. Please try again later.");
-      }
-    } catch (err) {
-      alert(
-        `An error occurred while fetching the roster data. Please try again later. ${err}`,
-      );
+    if (hours < 17) {
+      firstDate = formatDate(now);
+      secondDate = formatDate(new Date(now.getTime() - 24 * 60 * 60 * 1000)); // Yesterday
+    } else {
+      firstDate = formatDate(new Date(now.getTime() + 24 * 60 * 60 * 1000)); // Tomorrow
+      secondDate = formatDate(now);
     }
+
+    return [
+      { title: "Daily Roaster", date: firstDate },
+      { title: "Daily Roaster", date: secondDate },
+    ];
   };
+  const items = getDates();
 
   return (
     <div>
@@ -327,9 +136,12 @@ const Hero = () => {
 
 
         <div className="flex space-x-8 mx-2 p-8">
-          <div className="w-1/2">
+          <div className="w-1/2 space-y-4">
             <h2 className="text-teal font-bold text-xl mb-4">Cause Lists</h2>
             <p className="text-center">No Causelists</p>
+            {items.map((item, index) => (
+              <ListItem key={index} title={item.title} date={item.date} />
+            ))}
             {/* {[...Array(5)].map((_, index) => {
               const date = getDateOffset(index);
               return (
@@ -469,15 +281,21 @@ const Hero = () => {
               <div className="w-1/2 p-4 bg-white rounded-[15px] border border-teal shadow-md">
                 <h3 className="font-bold text-black mb-4">Resources</h3>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex space-x-2">
+                  <a
+                    href="https://drive.google.com/file/d/1Z9JmIpv5fpFNYczYMRfbO37QAIhuzrS2/view?usp=drive_link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex space-x-2"
+                  >
                     <Image
                       src="/images/boarding.svg"
                       alt="Boarding Icon"
                       width={24}
                       height={24}
                     />
-                    <span className="text-gray-600">User Manuals -  Coming soon</span>
-                  </div>
+                    <span className="text-gray-600">Advocate User Guide</span>
+                  </a>
+
                 </div>
                 <hr className="my-4" />
                 <div className="flex items-center justify-between mb-4">
@@ -492,25 +310,45 @@ const Hero = () => {
                   </div>
                 </div>
                 <hr className="my-4" />
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex space-x-2">
-                    <Image
-                      src="/images/youtube.svg"
-                      alt="Youtube Icon"
-                      width={24}
-                      height={24}
-                    />
-                    <span className="text-teal">24x7 ON Court Training Videos || Advocates</span>
-                  </div>
-                  <Link href="https://www.youtube.com/playlist?list=PL2HnAXES1w-ShQIq8DAhvqeYe-uLCAr6F">
+                <Link href="https://www.youtube.com/playlist?list=PL2HnAXES1w-ShQIq8DAhvqeYe-uLCAr6F" className="block">
+                  <div className="flex items-center justify-between mb-4 cursor-pointer">
+                    <div className="flex space-x-2">
+                      <Image
+                        src="/images/youtube.svg"
+                        alt="Youtube Icon"
+                        width={24}
+                        height={24}
+                      />
+                      <span className="text-teal">24x7 ON Court Training Videos || Advocates</span>
+                    </div>
                     <Image
                       src="/images/arrow.svg"
                       alt="Icon"
                       width={24}
                       height={24}
                     />
-                  </Link>
-                </div>
+                  </div>
+                </Link>
+                <hr className="my-4" />
+                <Link href="https://www.youtube.com/watch?v=EDDAkm4FvBc" className="block">
+                  <div className="flex items-center justify-between mb-4 cursor-pointer">
+                    <div className="flex space-x-2">
+                      <Image
+                        src="/images/youtube.svg"
+                        alt="Youtube Icon"
+                        width={24}
+                        height={24}
+                      />
+                      <span className="text-teal">24X7 ON Court Launch Video</span>
+                    </div>
+                    <Image
+                      src="/images/arrow.svg"
+                      alt="Icon"
+                      width={24}
+                      height={24}
+                    />
+                  </div>
+                </Link>
               </div>
               <div className="w-1/2 p-4 bg-white rounded-[15px] border border-teal shadow-md">
                 <h3 className="font-bold text-black mb-4">
@@ -588,6 +426,60 @@ const Hero = () => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+const ListItem = ({ title, date }: { title: string; date: string }) => {
+  const handleDownload = async () => {
+    try {
+      const response = await fetch("/api/_download", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tenantId: "kl",
+          Criteria: {
+            courtId: "KLKM52",
+            searchDate: date,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const blob = await response.blob();
+
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `causelist-${date}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+    } catch (error) {
+      alert("Failed to download.");
+    }
+  };
+
+  return (
+    <div className="flex justify-between items-center p-4 border rounded-lg shadow-md bg-white">
+      <div>
+        <h3 className="text-lg font-semibold">{title}</h3>
+        <p className="text-gray-600 flex items-center gap-2">
+          <FaCalendarAlt className="text-gray-500" />
+          Date : {date}
+        </p>
+      </div>
+      <button
+        className="bg-gray-800 text-white px-4 py-2 rounded-md text-sm"
+        onClick={handleDownload}
+      >
+        Download
+      </button>
     </div>
   );
 };
