@@ -38,8 +38,8 @@ const Hero = () => {
     }
 
     return [
-      { title: "Daily Roaster", date: firstDate },
-      { title: "Daily Roaster", date: secondDate },
+      { title: "Daily Roster", date: firstDate },
+      { title: "Daily Roster", date: secondDate },
     ];
   };
   const items = getDates();
@@ -461,7 +461,8 @@ const ListItem = ({ title, date }: { title: string; date: string }) => {
       document.body.removeChild(link);
 
     } catch (error) {
-      alert("Failed to download.");
+      console.log("Download failed:", (error as Error).message);
+      alert(`Failed to download: ${error instanceof Error ? error.message : "Unknown error"}`);
     }
   };
 

@@ -24,8 +24,8 @@ const ViewCase = () => {
                 const response = await fetch(`/api/case/${year}/${caseType}/${caseNumber}`);
                 const res = await response.json();
                 setData(res.caseSummary || []);
-            } catch (error) {
-                // console.error("Error fetching case summary:", error);
+            } catch (error: unknown) {
+                console.log("Error fetching case summary:", (error as Error).message);
             } finally {
                 setLoading(false);
             }

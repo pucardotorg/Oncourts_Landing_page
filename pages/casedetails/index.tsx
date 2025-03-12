@@ -8,6 +8,7 @@ async function fetchCase(url: string) {
     const response = await fetch(url);
     return await response.json();
   } catch (error) {
+    console.log("Error fetching case summary:", (error as Error).message);
     return null;
   }
 }
