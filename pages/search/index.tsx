@@ -8,6 +8,10 @@ const SearchForCase = () => {
   const [selectedCaseType, setSelectedCaseType] = useState("");
   const router = useRouter();
 
+  const caseNumberPattern = /^[A-Z]+\/\d{1,4}\/\d{4}$/;
+  const isValidCaseNumber =
+    selectedButton === "CNR" ? caseNumber.trim() !== "" : caseNumber === "" || caseNumberPattern.test(caseNumber);
+
   useEffect(() => {
     setSelectedCaseType("CMP")
     setSelectedYear("2024")
@@ -39,7 +43,11 @@ const SearchForCase = () => {
       selectedButton?: string
     } = {};
 
-    if (caseNumber) queryParams.caseNumber = caseNumber;
+    if (caseNumber.includes("/")) {
+      queryParams.caseNumber = caseNumber.split("/")[1];
+    } else {
+      queryParams.caseNumber = caseNumber;
+    }
     if (selectedCaseType) queryParams.selectedCaseType = selectedCaseType;
     if (selectedYear) queryParams.selectedYear = selectedYear;
     if (selectedButton) queryParams.selectedButton = selectedButton;
@@ -133,7 +141,17 @@ const SearchForCase = () => {
                       type="text"
                       id="caseNumberInput"
                       value={caseNumber}
-                      onChange={(e) => setCaseNumber(e.target.value)}
+                      onChange={(e) => {
+                        const value = e.target.value.trim();
+                        setCaseNumber(value);
+
+                        const parts = value.split('/');
+                        if (parts.length === 3) {
+                          const [caseType, , year] = parts;
+                          if (caseType) setSelectedCaseType(caseType);
+                          if (year) setSelectedYear(year);
+                        }
+                      }}
                       placeholder={
                         selectedCaseType === "CMP"
                           ? "Example: CMP/15/2024"
@@ -162,7 +180,7 @@ const SearchForCase = () => {
                     >
                       <option value="2024">2024</option>
                       {/* Uncomment other options if needed */}
-                      {/* <option value="2023">2023</option> */}
+                      <option value="2025">2025</option>
                       {/* <option value="2022">2022</option> */}
                     </select>
                   </div>
@@ -181,7 +199,9 @@ const SearchForCase = () => {
           </button>
           <button
             onClick={() => searchCaseSummary(caseNumber, selectedCaseType, selectedYear)}
-            className="py-2 px-6 rounded-2xl bg-teal text-white"
+            className={`py-2 px-6 rounded-2xl bg-teal text-white transition-opacity ${isValidCaseNumber ? "opacity-100" : "opacity-50 cursor-not-allowed"
+              }`}
+            disabled={!isValidCaseNumber}
           >
             Submit
           </button>
