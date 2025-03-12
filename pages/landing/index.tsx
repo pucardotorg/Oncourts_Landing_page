@@ -282,7 +282,7 @@ const Hero = () => {
                 <h3 className="font-bold text-black mb-4">Resources</h3>
                 <div className="flex items-center justify-between mb-4">
                   <a
-                    href="https://drive.google.com/file/d/1Z9JmIpv5fpFNYczYMRfbO37QAIhuzrS2/view?usp=drive_link"
+                    href="https://drive.google.com/file/d/1j4mIw0K2F8m_urJE-zbu-oeluiOL-8Pg/view?usp=drive_link"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex space-x-2"
