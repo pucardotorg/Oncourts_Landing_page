@@ -3,104 +3,77 @@ import React, { useEffect, useState } from "react";
 import SingleCase from "./single_case";
 import MultipleCase from "./multiple_case";
 
-const CaseDetails = () => {
+async function fetchCase(url: string) {
+  try {
+    const response = await fetch(url);
+    return await response.json();
+  } catch (error) {
+    console.log("Error fetching case summary:", (error as Error).message);
+    return null;
+  }
+}
+
+function CaseDetails() {
   const [data, setData] = useState(null);
-  const [cases, setCases] = useState({});
+  const [cases, setCases] = useState([]);
   const [multipleCase, setMultipleCase] = useState(false);
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { caseNumber, selectedCaseType, selectedYear, selectedButton } = router.query;
 
-  async function searchCaseSummary() {
-    setLoading(true);
-    const API_ENDPOINT = "https://dristi-kerala-dev.pucar.org";
-    const tenantID = "kl";
-    let url;
+  useEffect(() => {
+    async function searchCaseSummary() {
+      setLoading(true);
 
-    if (selectedButton === "CNR") {
-      url = `${API_ENDPOINT}/openapi/v1/${tenantID}/case/cnr/${caseNumber}`;
-      try {
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const res = await response.json();
-        const caseList = res["caseSummary"];
-        setData(caseList);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    } else {
-      if (caseNumber === "" || caseNumber === null || caseNumber === undefined) {
-        url = `${API_ENDPOINT}/openapi/v1/${tenantID}/case/${selectedYear}/${selectedCaseType}`;
-        setMultipleCase(true);
-        try {
-          const response = await fetch(url, {
-            method: "GET",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-
-          const res = await response.json();
-          const caseList = await res["caseList"];
-          setCases(caseList)
-        } catch (error) {
-          console.error("Error:", error);
-        }
+      let url = "";
+      if (selectedButton === "CNR") {
+        url = `/api/case/cnr/${caseNumber}`;
       } else {
-        url = `${API_ENDPOINT}/openapi/v1/${tenantID}/case/${selectedYear}/${selectedCaseType}/${caseNumber}`;
-        try {
-          const response = await fetch(url, {
-            method: "GET",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-
-          const res = await response.json();
-          const caseList = res["caseSummary"];
-          setData(caseList);
-        } catch (error) {
-          console.error("Error:", error);
+        if (!caseNumber) {
+          setMultipleCase(true);
+          url = `/api/case/${selectedYear}/${selectedCaseType}`;
+        } else {
+          url = `/api/case/${selectedYear}/${selectedCaseType}/${caseNumber}`;
         }
       }
+
+      const res = await fetchCase(url);
+      if (res) {
+        if (selectedButton === "CNR" || caseNumber) {
+          setData(res["caseSummary"]);
+        } else {
+          setCases(res["caseList"]);
+        }
+      }
+      setLoading(false);
     }
-    setLoading(false)
-  }
+
+    searchCaseSummary();
+  }, [caseNumber, selectedButton, selectedCaseType, selectedYear]);
 
   useEffect(() => {
-    searchCaseSummary();
-  }, [caseNumber, selectedCaseType, selectedYear, selectedButton]);
+    if (!loading && !data && cases.length === 0) {
+      router.push("/search");
+    }
+  }, [loading, data, cases, router]);
 
-  // if (!data) {
-  //   return <p className="p-6">Loading...</p>;
-  // }
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center p-6">
+        <div className="animate-spin rounded-full h-8 w-8 border-4 border-blue-500 border-t-transparent"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">
-      {!loading && !multipleCase && data && <SingleCase data={data} />}
-      {!loading && multipleCase && cases && <MultipleCase data={cases} />}
+      {!multipleCase && data ? (
+        <SingleCase data={data} />
+      ) : multipleCase && cases.length > 0 ? (
+        <MultipleCase data={cases} />
+      ) : null}
     </div>
   );
-};
+}
 
 export default CaseDetails;
