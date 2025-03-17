@@ -138,7 +138,7 @@ const Hero = () => {
         <div className="flex space-x-8 mx-2 p-8">
           <div className="w-1/2 space-y-4">
             <h2 className="text-teal font-bold text-xl mb-4">Cause Lists</h2>
-            <p className="text-center">No Causelists</p>
+            {/* <p className="text-center">No Causelists</p> */}
             {items.map((item, index) => (
               <ListItem key={index} title={item.title} date={item.date} />
             ))}
