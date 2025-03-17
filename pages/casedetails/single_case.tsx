@@ -2,6 +2,7 @@ import Link from 'next/link'
 import React from 'react'
 
 const SingleCase = ({ data }) => {
+    if (!data) return <div>No case data found.</div>;
     return (
         <div>
             <div className="flex justify-between items-center mb-4 mx-8">

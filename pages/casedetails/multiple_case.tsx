@@ -2,8 +2,9 @@ import React from "react";
 import { useRouter } from "next/router";
 
 const MultipleCase = (data) => {
-    const cases = data["data"]
     const router = useRouter();
+    if (!data) return <div>No case data found.</div>;
+    const cases = data["data"]
 
     const handleViewClick = (caseItem) => {
         const caseNo = caseItem.caseNumber
