@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { benifitsData } from "../../data/about";
-import AccordionItem from "./AccordionItem";
+import AccordionItem from "../../components/AccordionItem";
 import { useState } from "react";
 
 export default function Benifits() {
