@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
+import { svgIcons } from "../data/svgIcons.js";
 
 interface NavLinkProps {
   href: string;
@@ -11,72 +12,173 @@ interface NavLinkProps {
 
 const NavLink: React.FC<NavLinkProps> = ({ href, label }) => {
   const router = useRouter();
+  const isActive = router.pathname === href;
+
   return (
     <Link
       href={href}
-      className={`py-1 text-base font-medium text-teal hover:text-black md:ml-4 lg:ml-8 ${router.pathname === href ? "underline underline-offset-4" : ""
-        }`}
+      className={`flex items-center h-[90px] px-6 transition 
+    hover:bg-white/30 
+    ${isActive ? "underline underline-offset-4" : "font-medium"} 
+    text-white text-lg`}
     >
       {label}
     </Link>
   );
 };
 
+const DropdownNavLink: React.FC<{
+  label: string;
+  isOpen: boolean;
+  toggleDropdown: () => void;
+  options: { label: string; href: string }[];
+}> = ({ label, isOpen, toggleDropdown, options }) => {
+  return (
+    <div className="relative">
+      <button
+        onClick={toggleDropdown}
+        className={`flex items-center h-[90px] px-6 transition 
+        hover:bg-white/30 font-medium text-white text-lg focus:outline-none`}
+      >
+        {label}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className={`ml-2 h-5 w-5 transition-transform ${isOpen ? "rotate-180" : ""}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+      </button>
+
+      {isOpen && (
+        <div className="absolute z-10 bg-white shadow-lg rounded w-max min-w-[10rem]">
+          {options.map((option, index) => (
+            <React.Fragment key={option.href}>
+              <Link href={option.href} passHref>
+                <div className="block px-4 py-3 text-[#0a0a0a] hover:text-[#007E7E] cursor-pointer text-xl">
+                  {option.label}
+                </div>
+              </Link>
+              {index < options.length - 1 && (
+                <div className="border-b border-gray-200 w-4/5 mx-auto"></div>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const Header = () => {
+  const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false);
+  const [supportDropdownOpen, setSupportDropdownOpen] = useState(false);
+
+  const toggleAboutDropdown = () => {
+    setAboutDropdownOpen(!aboutDropdownOpen);
+    setSupportDropdownOpen(false);
+  };
+
+  const toggleSupportDropdown = () => {
+    setSupportDropdownOpen(!supportDropdownOpen);
+    setAboutDropdownOpen(false);
+  };
+
+  React.useEffect(() => {
+    const handleClickOutside = () => {
+      setAboutDropdownOpen(false);
+      setSupportDropdownOpen(false);
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  const handleDropdownClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
 
   return (
     <div>
-      <nav className="bg-white">
+      <div className="flex justify-between items-center px-20 py-[14px] gap-[10px] w-full h-[80px] bg-white">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          className="flex items-center flex-shrink-0 h-8 md:w-32 lg:w-40"
+        >
+          <div className="w-[123px] h-[72.63px] bg-contain bg-no-repeat bg-left">
+            <Link href="/" passHref>
+              <Image
+                src="/images/logo.png"
+                alt="OnCourts Logo"
+                width={123}
+                height={73}
+              />
+            </Link>
+          </div>
+        </motion.div>
+
+        <div className="flex flex-row justify-end items-center gap-[12px] w-[132px] h-[24px]">
+          <svgIcons.FacebookIcon />
+          <svgIcons.InstagramIcon />
+          <svgIcons.TwitterIcon />
+          <svgIcons.LinkedinIcon />
+        </div>
+      </div>
+
+      <nav className="bg-[#007E7E]">
         <div className="justify-center hidden mx-12 shadow-sm sm:hidden md:block">
-          <div className="relative flex items-center justify-between py-7">
-            <div className="flex items-center justify-center flex-1 sm:items-stretch sm:justify-start">
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-                className="flex items-center flex-shrink-0 h-8 md:w-32 lg:w-40"
-              >
-                <Link href="/" passHref>
-                  <Image
-                    src="/images/emblem.webp"
-                    alt="emblem"
-                    width={40}
-                    height={40}
-                    className="mt-4 mr-4"
-                  />
-                </Link>
-                <Link href="/" passHref>
-                  <Image
-                    src="/images/logo.png"
-                    alt="OnCourts Logo"
-                    width={80}
-                    height={800}
-                  />
-                </Link>
-              </motion.div>
+          <div
+            className="relative flex items-center justify-between h-[90px]"
+            onClick={handleDropdownClick}
+          >
+            <div className="flex items-center justify-center flex-1 gap-6 sm:items-stretch sm:justify-start">
               <NavLink href="/" label="Home" />
-              <NavLink href="/about" label="About Us" />
-              <NavLink href="/announcements" label="Announcements" />
+              <DropdownNavLink
+                label="About Us"
+                isOpen={aboutDropdownOpen}
+                toggleDropdown={toggleAboutDropdown}
+                options={[
+                  { label: "About Us", href: "/about" },
+                  { label: "List of Judges", href: "/about/judges" },
+                ]}
+              />
+              <NavLink href="/notice-board" label="Notice Board" />
+              <NavLink href="/whats-new" label="What's New" />
+              <DropdownNavLink
+                label="Support"
+                isOpen={supportDropdownOpen}
+                toggleDropdown={toggleSupportDropdown}
+                options={[
+                  { label: "ON Court Resources", href: "/support/resources" },
+                  { label: "FAQs & Contact Details", href: "/support/faqs" },
+                ]}
+              />
             </div>
 
-            <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 bg-teal rounded-full">
+            <div className="flex flex-row justify-center items-center p-[10px] gap-[10px] w-[200px] h-[50px] bg-white rounded-[8px]">
               <Link href="/search" passHref>
-                <button className="flex items-center font-semibold text-white md:py-2 md:px-4 lg:mr-1">
-                  <Image
-                    className="block"
-                    src="/images/search.svg"
-                    alt="Search Icon"
-                    width={24}
-                    height={24}
-                  />
-                  <span className="hidden md:inline">Search for a Case</span>
+                <button className="flex items-center font-semibold text-[#007E7E]">
+                  <svgIcons.SearchIcon />
+                  <span className="ml-2 hidden md:inline">
+                    Search for a Case
+                  </span>
                 </button>
               </Link>
             </div>
           </div>
         </div>
       </nav>
-
     </div>
   );
 };
