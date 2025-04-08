@@ -24,6 +24,7 @@ module.exports = {
       },
       fontFamily: {
         Raleway: ["Raleway", "sans-serif"],
+        noto: ["Noto Sans", "sans-serif"],
       },
     },
   },
