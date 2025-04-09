@@ -1,0 +1,63 @@
+export const SupportData = {
+  header: "Help & Resources",
+  SubHeader:
+    "Access everything you need to navigate 24x7 ON Courts seamlessly. Find step-by-step tutorials, submit feedback or grievances, and explore quick links to essential services.",
+  Resources: {
+    header: "Resources",
+    data: [
+      {
+        link: "https://example.com/user-guide",
+        text: "24X7 ON Court User Guide for Advocates and Clerks",
+        section: "user-guide",
+      },
+      {
+        link: "https://www.youtube.com/playlist?list=PL2HnAXES1w-ShQIq8DAhvqeYe-uLCAr6F",
+        text: "24x7 ON Court Training Videos | Advocates and Advocate Clerks",
+        section: "trainingVideos",
+      },
+    ],
+  },
+  QuickLinks: {
+    header: "Quick Links",
+    data: [
+      {
+        link: "https://example.com/user-guide",
+        text: "Feedback form",
+        section: "feedback",
+      },
+      {
+        link: "https://example.com/user-guide",
+        text: "Video Conferencing link",
+        section: "video-conference",
+      },
+    ],
+  },
+  HelpDesk: {
+    header: "Need Further Assistance? Contact Us!",
+    data: [
+      {
+        icon: "PhoneIcon",
+        label: "Helpline Number",
+        data: "04742919099",
+        href: "callto:oncourt@gmail.com",
+      },
+      {
+        icon: "HelpDeskIcon",
+        label: "ON Court Helpdesk",
+        data: "",
+      },
+      {
+        icon: "EmailIcon",
+        label: "Email",
+        data: "oncourtkollam@keralacourts.in",
+        href: "mailto:oncourtkollam@keralacourts.in",
+      },
+      {
+        icon: "ClockIcon",
+        label: "Availability",
+        data: "10:00 - 17:00 IST",
+        subData: "Monday - Saturday except 2nd Saturday",
+      },
+    ],
+  },
+};
