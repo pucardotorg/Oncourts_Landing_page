@@ -122,10 +122,10 @@ const Support: React.FC = () => {
                         {item?.data ? `: ${item?.data}` : ""}
                       </a>
                     ) : (
-                      <div>
+                      <>
                         {item?.label}
                         {item?.data ? `: ${item?.data}` : ""}
-                      </div>
+                      </>
                     )}
                   </p>
                   {item?.subData && (
