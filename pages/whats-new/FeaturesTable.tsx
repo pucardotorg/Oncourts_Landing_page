@@ -15,11 +15,11 @@ const FeaturesTable: React.FC<FeaturesTableProps> = ({ data, heading }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(4);
 
-  const totalPages = Math.ceil(data.length / rowsPerPage);
+  const totalPages = Math.ceil(data?.length / rowsPerPage);
   const startIdx = (currentPage - 1) * rowsPerPage;
-  const paginatedData = data.slice(startIdx, startIdx + rowsPerPage);
+  const paginatedData = data?.slice(startIdx, startIdx + rowsPerPage);
 
-  const columns = data.length > 0 ? Object.keys(data[0]) : [];
+  const columns = data?.length > 0 ? Object.keys(data[0]) : [];
 
   return (
     <div className="w-full">
@@ -30,7 +30,7 @@ const FeaturesTable: React.FC<FeaturesTableProps> = ({ data, heading }) => {
         <table className="w-full text-left border-collapse">
           <thead className="bg-[#F7F7F8]">
             <tr className="text-sm font-medium text-gray-700">
-              {columns.map((col) => (
+              {columns?.map((col) => (
                 <th key={col} className="px-4 py-4 capitalize">
                   {col.replace(/_/g, " ")}
                 </th>
@@ -38,9 +38,9 @@ const FeaturesTable: React.FC<FeaturesTableProps> = ({ data, heading }) => {
             </tr>
           </thead>
           <tbody>
-            {paginatedData.map((feature, rowIdx) => (
+            {paginatedData?.map((feature, rowIdx) => (
               <tr key={feature.id ?? rowIdx} className="border-b text-sm">
-                {columns.map((col) => (
+                {columns?.map((col) => (
                   <td key={col} className="px-4 py-4">
                     {feature[col]}
                   </td>
