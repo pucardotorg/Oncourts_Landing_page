@@ -78,6 +78,7 @@ const DropdownNavLink: React.FC<{
 };
 
 const Header = () => {
+  const router = useRouter();
   const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false);
   const [supportDropdownOpen, setSupportDropdownOpen] = useState(false);
 
@@ -96,12 +97,18 @@ const Header = () => {
       setAboutDropdownOpen(false);
       setSupportDropdownOpen(false);
     };
+    const handleRouteChange = () => {
+      setAboutDropdownOpen(false);
+      setSupportDropdownOpen(false);
+    };
 
     document.addEventListener("click", handleClickOutside);
+    router.events.on("routeChangeStart", handleRouteChange);
     return () => {
       document.removeEventListener("click", handleClickOutside);
+      router.events.on("routeChangeStart", handleRouteChange);
     };
-  }, []);
+  }, [router.events]);
 
   const handleDropdownClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -127,13 +134,6 @@ const Header = () => {
             </Link>
           </div>
         </motion.div>
-
-        <div className="flex flex-row justify-end items-center gap-[12px] w-[132px] h-[24px]">
-          <svgIcons.FacebookIcon />
-          <svgIcons.InstagramIcon />
-          <svgIcons.TwitterIcon />
-          <svgIcons.LinkedinIcon />
-        </div>
       </div>
 
       <nav className="bg-[#007E7E]">
