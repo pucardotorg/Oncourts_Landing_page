@@ -1,7 +1,7 @@
-import DesignPrinciples from "./DesignPrinciples";
-import NewExperiences from "./NewExperiences";
-import Benifits from "./Benifits";
-import Header from "./Header";
+import DesignPrinciples from "../../components/AboutUs/DesignPrinciples";
+import NewExperiences from "../../components/AboutUs/NewExperiences";
+import Benifits from "../../components/AboutUs/Benifits";
+import Header from "../../components/AboutUs/Header";
 
 export default function About() {
   return (
