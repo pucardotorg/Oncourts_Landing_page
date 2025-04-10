@@ -160,7 +160,7 @@ const Header = () => {
                 isOpen={supportDropdownOpen}
                 toggleDropdown={toggleSupportDropdown}
                 options={[
-                  { label: "ON Court Resources", href: "/support/resources" },
+                  { label: "ON Court Resources", href: "/#resources" },
                   { label: "FAQs & Contact Details", href: "/support/faqs" },
                 ]}
               />
