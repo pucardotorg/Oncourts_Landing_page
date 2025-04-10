@@ -1,8 +1,8 @@
 export const headerData = {
   title: "About Us",
-  description1: "The Kerala High Court is launching a new court, called 24x7 ON Courts, with a transformed dispute resolution experience for all users. The 24x7 ON Courts advance the vision outlined in Phase III of the Supreme Court eCourts policy. Starting with cheque-dishonor cases under the Negotiable Instruments Act that comprise 10% of the criminal pendency, the first of these courts, 24x7 ON Court Kollam will go live and accept the first case from November 2024.",
+  description1: "The Kerala High Court has launched 24x7 ON Court, introducing a transformed dispute resolution experience for all users. This new digital court system is designed to enhance accessibility, efficiency, and transparency in legal proceedings. 24x7 ON Court marks a significant step forward in realizing the vision set forth in Phase III of the Supreme Court’s eCourts policy.",
   subTitle: "Vision",
-  description2: "24x7 ON Courts are like shifting from paper maps to digital maps. Just like a map app guides you to your destination, 24x7 ON Courts guide you towards justice. We envision a future in which courts go to people, instead of people going to courts. A future where courts proactively deliver and enable just-in-time services to people..."
+  description2: "24x7 ON Courts are like shifting from paper maps to digital maps. Just like a map app guides you to your destination, 24x7 ON Courts guide you towards justice. We envision a future in which courts go to people, instead of people going to courts. A future where courts proactively deliver and enable just-in-time services to people shaped around their unique needs, preferences, circumstances, and location. The 24x7 ON Courts have been designed to realise this vision. Starting with cheque-dishonor cases that comprise 10% of the criminal pendency, the 24x7 ON Courts seek to transform the resolution experience of people. They unlock the power of simplified processes, open information and communication."
 }
 
 export const designPrinciplesData = {
