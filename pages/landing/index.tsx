@@ -3,6 +3,7 @@ import Carousel from "../../components/HomePage/Carousel";
 import NoticeAndCauseListSection from "../../components/HomePage/NoticeAndCauseListSection";
 import Support from "../../components/HomePage/Support";
 import ImpactGlance from "../../components/HomePage/ImpactGlance";
+import TestimonialCarousel from "../../components/HomePage/TestimonialCarousel";
 
 const Hero = () => {
   return (
@@ -10,6 +11,7 @@ const Hero = () => {
       <Carousel />
       <NoticeAndCauseListSection />
       <ImpactGlance />
+      <TestimonialCarousel />
       <Support />
     </div>
   );
