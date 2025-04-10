@@ -20,7 +20,8 @@ module.exports = {
         teal: "#007E7E",
         darkGrey: "#3A3A3A",
         white: "#FFFFFF",
-        footerBg:"#3A3A3A"
+        footerBg:"#3A3A3A",
+        tealBg:"#007E7E1A"
       },
       fontFamily: {
         Raleway: ["Raleway", "sans-serif"],
