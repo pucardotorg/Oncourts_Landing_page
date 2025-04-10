@@ -5,22 +5,25 @@ export default function Judges() {
   const { sectionTitles, highCourt, current, former } = judges;
 
   return (
-    <div className="relative left-0 w-full h-[431px]">
-      <div className="relative w-full h-full">
-        <Image
-          src="/images/hero.png"
-          alt="Hero Background"
-          fill
-          className="object-cover"
-        />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <h1 className="w-[620px] h-[120px] font-raleway not-italic font-bold text-[94px] leading-[120px] text-white">
+    <>
+      <div className="relative left-0 w-full h-[431px]">
+        <div className="relative w-full h-[300px]">
+          <Image
+            src="/images/justice.png"
+            alt="Header Background"
+            layout="fill"
+            objectFit="cover"
+            className="z-0 top-10"
+          />
+        </div>
+
+        <div className="-mt-[200px] z-10 relative px-4 sm:px-8 md:px-16">
+          <h1 className="text-5xl font-bold text-center mb-32 text-white text-[94px]">
             {sectionTitles.main}
           </h1>
         </div>
       </div>
-
-      <section className="py-16 bg-white">
+      <section className="py-16 -mt-[100px]">
         <h2 className="text-center text-[#007E7E] text-2xl font-semibold mb-12">
           {sectionTitles.highCourt}
         </h2>
@@ -99,6 +102,6 @@ export default function Judges() {
           ))}
         </div>
       </section>
-    </div>
+    </>
   );
 }

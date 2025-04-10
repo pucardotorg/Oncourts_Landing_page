@@ -50,25 +50,31 @@ const FeaturesTable: React.FC<FeaturesTableProps> = ({ data, heading }) => {
 
   return (
     <div className="w-full">
-      {heading &&
+      {heading && (
         <h2 className="text-[#007E7E] text-lg sm:text-xl font-semibold mt-8 sm:mt-12 mb-4 text-left underline">
           {heading}
         </h2>
-      }
+      )}
 
       <div className="bg-white rounded-md shadow overflow-x-auto overflow-hidden border-[1.6px] border-[#D4D4D4]">
         <table className="w-full text-left border-collapse">
           <thead className="bg-[#F7F7F8]">
             <tr className="text-sm font-medium text-gray-700">
               {columns?.map((col) => (
-                <th key={col} onClick={() => {
-                  if (sortColumn === col) {
-                    setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
-                  } else {
-                    setSortColumn(col);
-                    setSortDirection("asc");
-                  }
-                }} className="px-4 py-4 capitalize">
+                <th
+                  key={col}
+                  onClick={() => {
+                    if (sortColumn === col) {
+                      setSortDirection((prev) =>
+                        prev === "asc" ? "desc" : "asc"
+                      );
+                    } else {
+                      setSortColumn(col);
+                      setSortDirection("asc");
+                    }
+                  }}
+                  className="px-4 py-4 capitalize"
+                >
                   <div className="flex items-center gap-1">
                     <span>{col.replace(/_/g, " ")}</span>
                     <span className="text-xs">
@@ -92,7 +98,19 @@ const FeaturesTable: React.FC<FeaturesTableProps> = ({ data, heading }) => {
               <tr key={feature.id ?? rowIdx} className="border-b text-sm">
                 {columns?.map((col) => (
                   <td key={col} className="px-4 py-4">
-                    {feature[col]}
+                    {col === "Feature Description"
+                      ? (() => {
+                          const [boldPart, rest] = (
+                            feature[col] as string
+                          ).split("–");
+                          return (
+                            <span>
+                              <strong>{boldPart?.trim()}</strong> –{" "}
+                              {rest?.trim()}
+                            </span>
+                          );
+                        })()
+                      : feature[col]}
                   </td>
                 ))}
               </tr>
@@ -123,10 +141,11 @@ const FeaturesTable: React.FC<FeaturesTableProps> = ({ data, heading }) => {
             <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((prev) => prev - 1)}
-              className={`px-3 py-1 border rounded ${currentPage === 1
-                ? "bg-[#F7F7F8] text-black"
-                : "bg-[#007E7E] text-white"
-                }`}
+              className={`px-3 py-1 border rounded ${
+                currentPage === 1
+                  ? "bg-[#F7F7F8] text-black"
+                  : "bg-[#007E7E] text-white"
+              }`}
             >
               ← Prev
             </button>
@@ -156,10 +175,11 @@ const FeaturesTable: React.FC<FeaturesTableProps> = ({ data, heading }) => {
             <button
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage((prev) => prev + 1)}
-              className={`px-3 py-1 border rounded ${currentPage === totalPages
-                ? "bg-[#F7F7F8] text-black"
-                : "bg-[#007E7E] text-white"
-                }`}
+              className={`px-3 py-1 border rounded ${
+                currentPage === totalPages
+                  ? "bg-[#F7F7F8] text-black"
+                  : "bg-[#007E7E] text-white"
+              }`}
             >
               Next →
             </button>

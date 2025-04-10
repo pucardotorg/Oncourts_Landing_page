@@ -7,7 +7,7 @@ const Support: React.FC = () => {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   return (
-    <div className="p-8 px-6 md:px-16 py-12 min-h-[500px]">
+    <div className="p-8 px-6 md:px-16 py-12 min-h-[500px]" id="resources">
       <div className="text-center mb-8">
         <h2 className="text-4xl md:text-5xl font-bold text-teal">
           {SupportData?.header}
