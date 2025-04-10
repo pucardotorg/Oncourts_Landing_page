@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { useMemo, useState } from "react";
 
 type Feature = {
   [key: string]: string | number;
@@ -6,7 +7,7 @@ type Feature = {
 
 type FeaturesTableProps = {
   data: Feature[];
-  heading: string;
+  heading?: string;
 };
 
 const rowsOptions = [4, 8, 12];
@@ -14,6 +15,8 @@ const rowsOptions = [4, 8, 12];
 const FeaturesTable: React.FC<FeaturesTableProps> = ({ data, heading }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(4);
+  const [sortColumn, setSortColumn] = useState("");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   const totalPages = Math.ceil(data?.length / rowsPerPage);
   const startIdx = (currentPage - 1) * rowsPerPage;
@@ -21,24 +24,71 @@ const FeaturesTable: React.FC<FeaturesTableProps> = ({ data, heading }) => {
 
   const columns = data?.length > 0 ? Object.keys(data[0]) : [];
 
+  const sortedData = useMemo(() => {
+    if (!sortColumn) return paginatedData;
+
+    return [...paginatedData].sort((a, b) => {
+      const valA = a[sortColumn];
+      const valB = b[sortColumn];
+
+      // Handle strings
+      if (typeof valA === "string" && typeof valB === "string") {
+        return sortDirection === "asc"
+          ? valA.localeCompare(valB)
+          : valB.localeCompare(valA);
+      }
+
+      // Handle numbers
+      if (typeof valA === "number" && typeof valB === "number") {
+        return sortDirection === "asc" ? valA - valB : valB - valA;
+      }
+
+      // Fallback
+      return 0;
+    });
+  }, [paginatedData, sortColumn, sortDirection]);
+
   return (
     <div className="w-full">
-      <h2 className="text-[#007E7E] text-lg sm:text-xl font-semibold mt-8 sm:mt-12 mb-4 text-left underline">
-        {heading}
-      </h2>
+      {heading &&
+        <h2 className="text-[#007E7E] text-lg sm:text-xl font-semibold mt-8 sm:mt-12 mb-4 text-left underline">
+          {heading}
+        </h2>
+      }
+
       <div className="bg-white rounded-md shadow overflow-x-auto overflow-hidden border-[1.6px] border-[#D4D4D4]">
         <table className="w-full text-left border-collapse">
           <thead className="bg-[#F7F7F8]">
             <tr className="text-sm font-medium text-gray-700">
               {columns?.map((col) => (
-                <th key={col} className="px-4 py-4 capitalize">
-                  {col.replace(/_/g, " ")}
+                <th key={col} onClick={() => {
+                  if (sortColumn === col) {
+                    setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
+                  } else {
+                    setSortColumn(col);
+                    setSortDirection("asc");
+                  }
+                }} className="px-4 py-4 capitalize">
+                  <div className="flex items-center gap-1">
+                    <span>{col.replace(/_/g, " ")}</span>
+                    <span className="text-xs">
+                      {sortColumn === col ? (
+                        sortDirection === "asc" ? (
+                          <ChevronUp className="w-4 h-4" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4" />
+                        )
+                      ) : (
+                        <ChevronDown className="w-4 h-4 opacity-30" />
+                      )}
+                    </span>
+                  </div>
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {paginatedData?.map((feature, rowIdx) => (
+            {sortedData?.map((feature, rowIdx) => (
               <tr key={feature.id ?? rowIdx} className="border-b text-sm">
                 {columns?.map((col) => (
                   <td key={col} className="px-4 py-4">
@@ -73,11 +123,10 @@ const FeaturesTable: React.FC<FeaturesTableProps> = ({ data, heading }) => {
             <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((prev) => prev - 1)}
-              className={`px-3 py-1 border rounded ${
-                currentPage === 1
-                  ? "bg-[#F7F7F8] text-black"
-                  : "bg-[#007E7E] text-white"
-              }`}
+              className={`px-3 py-1 border rounded ${currentPage === 1
+                ? "bg-[#F7F7F8] text-black"
+                : "bg-[#007E7E] text-white"
+                }`}
             >
               ← Prev
             </button>
@@ -107,11 +156,10 @@ const FeaturesTable: React.FC<FeaturesTableProps> = ({ data, heading }) => {
             <button
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage((prev) => prev + 1)}
-              className={`px-3 py-1 border rounded ${
-                currentPage === totalPages
-                  ? "bg-[#F7F7F8] text-black"
-                  : "bg-[#007E7E] text-white"
-              }`}
+              className={`px-3 py-1 border rounded ${currentPage === totalPages
+                ? "bg-[#F7F7F8] text-black"
+                : "bg-[#007E7E] text-white"
+                }`}
             >
               Next →
             </button>

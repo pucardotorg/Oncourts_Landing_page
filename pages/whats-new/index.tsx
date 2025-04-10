@@ -1,4 +1,4 @@
-import FeaturesTable from "./FeaturesTable";
+import FeaturesTable from "../../components/FeaturesTable";
 import { liveNowFeatures, comingSoon } from "../../data/whatsNew";
 
 const WhatNew = () => {
