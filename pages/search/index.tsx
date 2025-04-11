@@ -16,7 +16,8 @@ const SearchForCase = () => {
   const caseNumberPattern = /^[A-Z]+\/\d*\/\d{4}$/;
   const isValidCaseNumber =
     selectedButton === "CNR" ? caseNumber.trim() !== "" : caseNumber === "" || caseNumberPattern.test(caseNumber);
-  const isSubmitDisabled = !isValidCaseNumber || (selectedButton === "CaseNumber" && (selectedCaseType === "" || selectedYear === ""));
+  // const isSubmitDisabled = !isValidCaseNumber || (selectedButton === "CaseNumber" && (selectedCaseType === "" || selectedYear === ""));
+  const isSubmitDisabled = !isValidCaseNumber;
 
   const handleButtonClick = (buttonType) => {
     setSelectedButton(buttonType);
