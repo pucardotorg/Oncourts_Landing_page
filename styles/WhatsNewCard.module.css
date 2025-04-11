@@ -35,3 +35,8 @@
 .scrollContainer {
   transition: all 0.3s ease;
 }
+
+.customDateInput::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  display: none;
+}

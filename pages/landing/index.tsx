@@ -8,7 +8,7 @@ import WhatsNewSection from "../../components/HomePage/WhatNewSection";
 
 const Hero = () => {
   return (
-    <div className="w-full space-y-0">
+    <div className="w-full space-y-0 overflow-x-hidden">
       <Carousel />
       <NoticeAndCauseListSection />
       <WhatsNewSection />
