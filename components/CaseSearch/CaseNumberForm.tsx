@@ -34,8 +34,9 @@ const CaseNumberForm = ({
         <div className="w-full rounded-2xl border border-teal p-4 mt-2">
           <select
             id="caseType"
-            value={caseNumber ? "" : selectedCaseType}
-            disabled={!!caseNumber}
+            value={selectedCaseType}
+            // value={caseNumber ? "" : selectedCaseType}
+            // disabled={!!caseNumber}
             onChange={(e) => setSelectedCaseType(e.target.value)}
             className={`w-full py-2 px-4 rounded-2xl outline-none bg-transparent transition-all duration-300 ${caseNumber ? "opacity-50 cursor-not-allowed pointer-events-none" : ""}`}
             required
@@ -76,8 +77,9 @@ const CaseNumberForm = ({
           <div className="rounded-2xl border border-teal p-2 mt-1">
             <select
               id="yearInput"
-              value={caseNumber ? "" : selectedYear}
-              disabled={!!caseNumber}
+              value={selectedYear}
+              // value={caseNumber ? "" : selectedYear}
+              // disabled={!!caseNumber}
               onChange={(e) => setSelectedYear(e.target.value)}
               className={`w-full py-2 px-4 rounded-2xl outline-none bg-transparent transition-all duration-300 ${caseNumber ? "opacity-50 cursor-not-allowed pointer-events-none" : ""}`}
               required

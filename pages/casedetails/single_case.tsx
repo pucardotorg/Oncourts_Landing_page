@@ -66,7 +66,7 @@ const SingleCase = ({ data }) => {
           <div className="grid gap-4 mb-4">
             <div className="flex justify-between">
               <p className="font-semibold text-[rgba(2,137,233,1)]">Judge :</p>
-              <p className="font-semibold">{data["judgeName"] ?? "-"}</p>
+              <p className="font-semibold"> Michael George </p>
             </div>
             <hr />
             <div className="flex justify-between">
@@ -101,14 +101,10 @@ const SingleCase = ({ data }) => {
           <hr />
           <div className="grid gap-4 mt-4">
             <div className="flex justify-between">
-              <p className="font-semibold text-[rgba(2,137,233,1)]">Judge :</p>
-              <p className="font-semibold">{data["judgeName"] ?? "-"}</p>
+              <p className="font-semibold text-[rgba(2,137,233,1)]">Act :</p>
+              <p className="font-semibold">S138, NI Act</p>
             </div>
             <hr />
-            <div className="flex justify-between">
-              <p className="font-semibold text-[rgba(2,137,233,1)]">Act :</p>
-              <p className="font-semibold">S13338, NI Act</p>
-            </div>
           </div>
         </div>
       </div>
