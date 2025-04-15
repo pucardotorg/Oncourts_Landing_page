@@ -41,7 +41,7 @@ const WhatsNewSection: React.FC = () => {
   return (
     <section className="bg-tealBg py-12 px-6 lg:px-16">
       <div className="max-w-6xl mx-auto text-center">
-        <h2 className="text-4xl md:text-5xl font-bold text-teal">
+        <h2 className="text-4xl md:text-5xl font-bold text-teal ">
           {whatsNewData.title}
         </h2>
         <p className="mt-4 text-darkGrey text-lg">{whatsNewData.description}</p>
@@ -49,7 +49,7 @@ const WhatsNewSection: React.FC = () => {
 
       <div className="mt-10 grid gap-12 md:grid-cols-2 max-w-6xl mx-auto">
         {[latestUpgrades, upcomingFeatures].map((section, index) => (
-          <WhatsNewCard key={index} section={section} loading={loading}/>
+          <WhatsNewCard key={index} section={section} loading={loading} />
         ))}
       </div>
 

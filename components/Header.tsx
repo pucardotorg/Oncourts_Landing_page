@@ -18,9 +18,9 @@ const NavLink: React.FC<NavLinkProps> = ({ href, label }) => {
     <Link
       href={href}
       className={`flex items-center h-[90px] px-6 transition 
-    hover:bg-white/30 
-    ${isActive ? "underline underline-offset-4" : "font-medium"} 
-    text-white text-lg`}
+        hover:bg-white/30 
+        ${isActive ? "bg-white/30" : "font-medium"} 
+        text-white text-lg`}
     >
       {label}
     </Link>
@@ -33,12 +33,18 @@ const DropdownNavLink: React.FC<{
   toggleDropdown: () => void;
   options: { label: string; href: string }[];
 }> = ({ label, isOpen, toggleDropdown, options }) => {
+  const router = useRouter();
+  const isAnyOptionActive = options.some(
+    (option) => router.pathname === option.href
+  );
   return (
     <div className="relative">
       <button
         onClick={toggleDropdown}
         className={`flex items-center h-[90px] px-6 transition 
-        hover:bg-white/30 font-medium text-white text-lg focus:outline-none`}
+          hover:bg-white/30 
+          ${isAnyOptionActive ? "bg-white/30" : "font-medium"} 
+          text-white text-lg focus:outline-none`}
       >
         {label}
         <svg

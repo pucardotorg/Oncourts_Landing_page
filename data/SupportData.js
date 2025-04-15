@@ -30,6 +30,11 @@ export const SupportData = {
         text: "Video Conferencing link",
         section: "video-conference",
       },
+      {
+        link: "https://youtu.be/EDDAkm4FvBc?si=RDymu9ljxgJWSwLP",
+        text: "24x7 ON Court Launch Video",
+        section: "launch-video",
+      },
     ],
   },
   HelpDesk: {
