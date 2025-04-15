@@ -21,7 +21,7 @@ const TestimonialCarousel: React.FC = () => {
     <div className="bg-tealBg py-16 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-teal mb-4">{title || ""}</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-teal mb-4">{title || ""}</h2>
           <p className="text-gray-600 max-w-3xl mx-auto text-lg">
             {description || ""}
           </p>
