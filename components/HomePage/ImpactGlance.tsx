@@ -86,7 +86,7 @@ const ImpactGlance: React.FC = () => {
         </p>
 
         <div ref={ref} className="grid grid-cols-1 md:grid-cols-3 gap-12 pt-2">
-          {statItems.slice(0, 3).map((stat, index) => (
+          {statItems?.slice(0, 3).map((stat, index) => (
             <div
               key={index}
               className={`flex flex-col items-center text-center py-4 px-6 ${index < 2 ? "border-r border-gray-300" : ""
@@ -95,8 +95,8 @@ const ImpactGlance: React.FC = () => {
               <div className="flex items-center gap-4">
                 <div className="relative w-16 h-16 md:w-24 md:h-24">
                   <Image
-                    src={stat.icon}
-                    alt={stat.label}
+                    src={stat?.icon}
+                    alt={stat?.label}
                     fill
                     className="object-contain"
                   />
@@ -107,11 +107,11 @@ const ImpactGlance: React.FC = () => {
                   ) : (
                     "0"
                   )}{" "}
-                  {stat.suffix}
+                  {stat?.suffix}
                 </p>
               </div>
               <p className="text-darkGrey text-lg mt-2 font-medium">
-                {stat.label}
+                {stat?.label}
               </p>
             </div>
           ))}
@@ -122,7 +122,7 @@ const ImpactGlance: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 mt-8 justify-center">
-          {statItems.slice(3).map((stat, index) => (
+          {statItems?.slice(3).map((stat, index) => (
             <div
               key={index}
               className={`flex flex-col items-center text-center px-6 ${index < 1 ? "border-r border-gray-300" : ""}`}
@@ -130,8 +130,8 @@ const ImpactGlance: React.FC = () => {
               <div className="flex items-center gap-4">
                 <div className="relative w-16 h-16 md:w-24 md:h-24">
                   <Image
-                    src={stat.icon}
-                    alt={stat.label}
+                    src={stat?.icon}
+                    alt={stat?.label}
                     fill
                     className="object-contain"
                   />
@@ -142,11 +142,11 @@ const ImpactGlance: React.FC = () => {
                   ) : (
                     "0"
                   )}
-                  {stat.suffix || ""}
+                  {stat?.suffix || ""}
                 </p>
               </div>
               <p className="text-darkGrey text-lg mt-2 font-medium">
-                {stat.label}
+                {stat?.label}
               </p>
             </div>
           ))}

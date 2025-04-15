@@ -1,12 +1,11 @@
-import { whatsNewData } from "../../data/whatsNewConfig";
+import { whatsNewData, WhatsNewSection } from "../../data/whatsNewConfig";
 import { svgIcons } from "../../data/svgIcons";
 import Link from "next/link";
 import WhatsNewCard from "./WhatsNewCard";
 import { useEffect, useState } from "react";
 import { transformWhatsNewResponse } from "../../TransformData/transformResponseData";
-import type { WhatsNewSection } from "../../data/whatsNewConfig";
 
-const WhatsNewSection: React.FC = () => {
+const WhatsNewSections: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [latestUpgrades, setLatestUpgrades] = useState<WhatsNewSection>({
     title: "",
@@ -66,4 +65,4 @@ const WhatsNewSection: React.FC = () => {
   );
 };
 
-export default WhatsNewSection;
+export default WhatsNewSections;
