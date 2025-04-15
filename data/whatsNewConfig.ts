@@ -1,7 +1,9 @@
 export interface WhatsNewItem {
-  id: number;
-  title: string;
-  description: string;
+  itemId: string;
+  itemName: string;
+  itemCategory: "LIVE_NOW" | "COMING_SOON";
+  itemDateAdded: string;
+  itemDescription: string;
 }
 
 export interface WhatsNewSection {
@@ -19,22 +21,13 @@ export const whatsNewData = {
     subTitle: "Discover the latest features on the 24x7 ON Court platform",
     data: [
       {
-        id: 1,
-        title: "Easier Bail Applications",
-        description:
-          "Submit anytime, attach all documents, and include terms & conditions in one go.",
+        itemId: "1",
+        itemName: "Profile Editing",
+        itemCategory: "LIVE_NOW",
+        itemDateAdded: "April 2025",
+        itemDescription:
+          "Complainants can now request edits to party details directly from the case file; multiple accused addresses are also supported upon judge approval.",
       },
-      {
-        id: 2,
-        title: "Simpler Delay Condonation Requests",
-        description:
-          "Clear limitation rule making the process easier for advocates.",
-      },
-      {
-        id: 3,
-        title: "Better Complaint Documents",
-        description: "Duplicate entries in PDFs are now fixed.",
-      }
     ],
   },
   upcomingFeatures: {
@@ -42,19 +35,12 @@ export const whatsNewData = {
     subTitle: "Exciting new features are on the way!",
     data: [
       {
-        id: 1,
-        title: "Correcting stage labels (cognizance, admission, etc.)",
-        description: "",
-      },
-      {
-        id: 2,
-        title: "CMP numbers to be attached to each petition",
-        description: "",
-      },
-      {
-        id: 3,
-        title: "Email OTP to solve for downtime for SMS due to CDAC (vendor)",
-        description: "",
+        itemId: "1",
+        itemName: "Profile Editing",
+        itemCategory: "COMING_SOON",
+        itemDateAdded: "April 2025",
+        itemDescription:
+          "Complainants can now request edits to party details directly from the case file; multiple accused addresses are also supported upon judge approval.",
       },
     ],
   },
