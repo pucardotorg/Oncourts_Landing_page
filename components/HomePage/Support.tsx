@@ -12,17 +12,16 @@ const Support: React.FC = () => {
         <h2 className="text-4xl md:text-5xl font-bold text-teal">
           {SupportData?.header}
         </h2>
-        <p className="text-darkGrey text-lg md:text-xl lg:text-2xl xl:text-[22px] leading-[130%] tracking-[0%] text-center font-raleway font-normal mt-6 mx-auto max-w-[55%] sm:max-w-[65%] md:max-w-[50%] lg:max-w-[50%] xl:max-w-[50%]">
+        <p className="text-darkGrey text-base md:text-lg lg:text-xl xl:text-xl leading-[140%] tracking-[0%] text-center font-raleway font-normal mt-6 mx-auto max-w-[75%] sm:max-w-[70%] md:max-w-[65%] lg:max-w-[60%] xl:max-w-[60%]">
           {SupportData?.SubHeader}
         </p>
       </div>
 
-      <div className="flex gap-8 md:gap-4 sm:gap-2 w-full">
-        <div className="max-w-lg w-full mx-auto bg-white rounded-xl border border-gray-300 shadow-md p-8">
-          <h3 className="font-bold text-black mb-6 text-xl">
+      <div className="flex flex-col md:flex-row gap-8 w-full">
+        <div className="w-full md:w-1/2 bg-white rounded-xl border border-gray-300 shadow-md p-10 px-15">
+          <h3 className="font-bold text-black mb-6 text-3xl">
             {SupportData?.Resources?.header}
           </h3>
-          <div className="space-y-4"></div>
           {SupportData?.Resources?.data?.map((data, index) => (
             <div key={index} className="mb-4">
               <Link href={data?.link} className="block mb-4">
@@ -37,7 +36,7 @@ const Support: React.FC = () => {
                         isHovered={hoveredItem === data?.section}
                       />
                     </div>
-                    <span className="text-gray-700 hover:text-teal hover:font-semibold hover:underline font-raleway font-normal">
+                    <span className="text-gray-700 text-base md:text-lg hover:text-teal hover:font-semibold hover:underline font-raleway font-normal max-w-[360px]">
                       {data?.text}
                     </span>
                   </div>
@@ -55,11 +54,10 @@ const Support: React.FC = () => {
           ))}
         </div>
 
-        <div className="max-w-lg w-full mx-auto bg-white rounded-xl border border-gray-300 shadow-md p-8">
-          <h3 className="font-bold text-black mb-6 text-xl">
+        <div className="w-full md:w-1/2 bg-white rounded-xl border border-gray-300 shadow-md p-10 px-15">
+          <h3 className="font-bold text-black mb-6 text-3xl">
             {SupportData?.QuickLinks?.header}
           </h3>
-          <div className="space-y-4"></div>
           {SupportData?.QuickLinks?.data?.map((data, index) => (
             <div key={index} className="mb-4">
               <Link href={data?.link} className="block mb-4">
@@ -68,13 +66,13 @@ const Support: React.FC = () => {
                   onMouseEnter={() => setHoveredItem(data?.section)}
                   onMouseLeave={() => setHoveredItem(null)}
                 >
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-4">
                     <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
                       <svgIcons.GuideIcon
                         isHovered={hoveredItem === data?.section}
                       />
                     </div>
-                    <span className="text-gray-700 hover:text-teal hover:font-semibold hover:underline font-raleway font-normal">
+                    <span className="text-gray-700 text-base md:text-lg hover:text-teal hover:font-semibold hover:underline font-raleway font-normal">
                       {data?.text}
                     </span>
                   </div>
@@ -85,7 +83,7 @@ const Support: React.FC = () => {
                   </div>
                 </div>
               </Link>
-              {index !== SupportData?.Resources?.data?.length - 1 && (
+              {index !== SupportData?.QuickLinks?.data?.length - 1 && (
                 <hr className="my-2" />
               )}
             </div>
@@ -94,10 +92,10 @@ const Support: React.FC = () => {
       </div>
 
       <div className="mt-12 text-center">
-        <h3 className="text-3xl font-semibold text-black mb-6">
+        <h3 className="text-4xl font-semibold text-black mb-6">
           {SupportData?.HelpDesk?.header}
         </h3>
-        <div className="relative max-w-3xl mx-auto pt-4">
+        <div className="relative max-w-4xl mx-auto pt-4">
           <div className="absolute left-1/2 top-0 bottom-0 w-[0.5px] bg-teal"></div>
 
           <div className="grid grid-cols-2 gap-x-12 gap-y-2">
@@ -115,7 +113,7 @@ const Support: React.FC = () => {
                     React.createElement(svgIcons[item.icon])}
                 </div>
                 <div>
-                  <p className="text-teal font-medium">
+                  <p className="text-teal font-medium text-lg md:text-xl flex flex-wrap items-start">
                     {item?.href ? (
                       <a href={item?.href}>
                         {item?.label}

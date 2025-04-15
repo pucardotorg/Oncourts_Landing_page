@@ -77,17 +77,19 @@ const FeaturesTable: React.FC<FeaturesTableProps> = ({ data, heading }) => {
                 >
                   <div className="flex items-center gap-1">
                     <span>{col.replace(/_/g, " ")}</span>
-                    <span className="text-xs">
-                      {sortColumn === col ? (
-                        sortDirection === "asc" ? (
-                          <ChevronUp className="w-4 h-4" />
+                    {col !== "Feature Description" && (
+                      <span className="text-xs">
+                        {sortColumn === col ? (
+                          sortDirection === "asc" ? (
+                            <ChevronUp className="w-4 h-4" />
+                          ) : (
+                            <ChevronDown className="w-4 h-4" />
+                          )
                         ) : (
-                          <ChevronDown className="w-4 h-4" />
-                        )
-                      ) : (
-                        <ChevronDown className="w-4 h-4 opacity-30" />
-                      )}
-                    </span>
+                          <ChevronDown className="w-4 h-4 opacity-30" />
+                        )}
+                      </span>
+                    )}
                   </div>
                 </th>
               ))}

@@ -41,7 +41,7 @@ const WhatsNewSection: React.FC = () => {
   return (
     <section className="bg-tealBg py-12 px-6 lg:px-16">
       <div className="max-w-6xl mx-auto text-center">
-        <h2 className="text-4xl md:text-5xl font-bold text-teal">
+        <h2 className="text-4xl md:text-5xl font-bold text-teal ">
           {whatsNewData.title}
         </h2>
         <p className="mt-4 text-darkGrey text-lg">{whatsNewData.description}</p>
