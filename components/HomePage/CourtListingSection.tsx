@@ -32,7 +32,7 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
 }) => {
   const [searchDate, setSearchDate] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 4;
   const dateInputRef = useRef<HTMLInputElement>(null);
 
   const maxNoticePages = Math.ceil(noticeItems.length / itemsPerPage);

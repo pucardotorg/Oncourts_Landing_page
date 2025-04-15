@@ -21,8 +21,10 @@ const TestimonialCarousel: React.FC = () => {
     <div className="bg-tealBg py-16 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-teal mb-4">{title || ""}</h2>
-          <p className="text-gray-600 max-w-3xl mx-auto text-lg">
+          <h2 className="text-4xl md:text-5xl font-bold text-teal mb-4">
+            {title || ""}
+          </h2>
+          <p className="text-gray-600 max-w-4xl mx-auto text-lg">
             {description || ""}
           </p>
         </div>
@@ -39,22 +41,25 @@ const TestimonialCarousel: React.FC = () => {
                   index === activeIndex ? "opacity-100" : "opacity-60 blur-sm"
                 }`}
               >
-                <div className="bg-white rounded-[40px] shadow-lg p-6 md:p-12 border-2 border-teal w-full max-w-[900px] h-[320px] mx-auto flex flex-col justify-center items-center text-center">
-                  <div className="relative w-16 h-[5rem] mb-4">
+                <div className="bg-white rounded-[40px] shadow-lg p-3 md:p-6 border-2 border-teal w-full max-w-[900px] h-[320px] mx-auto flex flex-col justify-center items-center text-center">
+                  <div className="relative w-20 h-[6rem]">
                     <Image
                       src={testimonial?.image}
                       alt={testimonial?.name}
                       className="rounded-full object-cover"
                       fill
-                      sizes="(max-width: 768px) 96px, 96px"
+                      sizes="(max-width: 768px) 108px, 108px"
                     />
                   </div>
-                  <p className="text-teal text-center font-medium mb-4 mt-4 text-sm md:text-base max-w-[500px] md:max-w-[600px] lg:max-w-[700px]">
+                  <p className="text-teal text-center font-medium mb-4 mt-4 text-base md:text-lg max-w-[500px] md:max-w-[600px] lg:max-w-[700px]">
                     {testimonial?.content || ""}
                   </p>
                   <div className="mt-auto">
                     <p className="font-medium text-teal text-base md:text-lg">
-                      {testimonial?.name || ""} - {testimonial?.role || ""}
+                      {testimonial?.name || ""}
+                      <span className="text-sm md:text-base font-normal text-teal ml-1">
+                        - {testimonial?.role || ""}
+                      </span>
                     </p>
                   </div>
                 </div>

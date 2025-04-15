@@ -24,7 +24,7 @@ export default function Judges() {
         </div>
       </div>
       <section className="py-16 -mt-[100px]">
-        <h2 className="text-center text-[#007E7E] text-2xl font-semibold mb-12">
+        <h2 className="text-center text-[#007E7E] text-5xl font-semibold mb-12">
           {sectionTitles.highCourt}
         </h2>
         <div className="flex justify-center gap-10 flex-wrap mb-12">
@@ -38,7 +38,7 @@ export default function Judges() {
                 alt={judge.name}
                 width={298}
                 height={298}
-                className="w-full h-[298px] object-cover rounded-t"
+                className="w-full h-[298px] object-cover object-top rounded-t"
               />
               <div className="p-5">
                 <h2 className="text-[#007E7E] text-base font-semibold">
@@ -50,7 +50,7 @@ export default function Judges() {
           ))}
         </div>
 
-        <h2 className="text-center text-[#007E7E] text-2xl font-semibold mb-6">
+        <h2 className="text-center text-[#007E7E] text-4xl font-semibold mb-6 mt-16">
           {sectionTitles.current}
         </h2>
         <div className="flex justify-center gap-10 flex-wrap mb-12">
@@ -64,7 +64,7 @@ export default function Judges() {
                 alt={judge.name}
                 width={298}
                 height={298}
-                className="w-full h-[298px] object-cover rounded-t"
+                className="w-full h-[298px] object-cover object-top rounded-t"
               />
               <div className="p-5">
                 <h2 className="text-[#007E7E] text-base font-semibold">
@@ -76,7 +76,7 @@ export default function Judges() {
           ))}
         </div>
 
-        <h2 className="text-center text-[#007E7E] text-2xl font-semibold mb-6">
+        <h2 className="text-center text-[#007E7E] text-4xl font-semibold mb-6 mt-16">
           {sectionTitles.former}
         </h2>
         <div className="flex justify-center gap-10 flex-wrap">
@@ -90,7 +90,7 @@ export default function Judges() {
                 alt={judge.name}
                 width={298}
                 height={298}
-                className="w-full h-[298px] object-cover rounded-t"
+                className="w-full h-[298px] object-cover object-top rounded-t"
               />
               <div className="p-5">
                 <h2 className="text-[#007E7E] text-base font-semibold">
