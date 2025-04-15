@@ -3,7 +3,7 @@ import { svgIcons } from "../../data/svgIcons";
 import Link from "next/link";
 import WhatsNewCard from "./WhatsNewCard";
 import { useEffect, useState } from "react";
-import { transformWhatsNewResponse } from "../../TransformData/transformWhatsNewResponse";
+import { transformWhatsNewResponse } from "../../TransformData/transformResponseData";
 import type { WhatsNewSection } from "../../data/whatsNewConfig";
 
 const WhatsNewSection: React.FC = () => {
@@ -49,7 +49,7 @@ const WhatsNewSection: React.FC = () => {
 
       <div className="mt-10 grid gap-12 md:grid-cols-2 max-w-6xl mx-auto">
         {[latestUpgrades, upcomingFeatures].map((section, index) => (
-          <WhatsNewCard key={index} section={section} loading={loading}/>
+          <WhatsNewCard key={index} section={section} loading={loading} />
         ))}
       </div>
 

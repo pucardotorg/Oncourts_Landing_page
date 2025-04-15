@@ -38,7 +38,8 @@ const CaseNumberForm = ({
             // value={caseNumber ? "" : selectedCaseType}
             // disabled={!!caseNumber}
             onChange={(e) => setSelectedCaseType(e.target.value)}
-            className={`w-full py-2 px-4 rounded-2xl outline-none bg-transparent transition-all duration-300 ${caseNumber ? "opacity-50 cursor-not-allowed pointer-events-none" : ""}`}
+            // className={`w-full py-2 px-4 rounded-2xl outline-none bg-transparent transition-all duration-300 ${caseNumber ? "opacity-50 cursor-not-allowed pointer-events-none" : ""}`}
+            className={`w-full py-2 px-4 rounded-2xl outline-none bg-transparent transition-all duration-300`}
             required
           >
             <option value="" disabled hidden>
@@ -81,7 +82,8 @@ const CaseNumberForm = ({
               // value={caseNumber ? "" : selectedYear}
               // disabled={!!caseNumber}
               onChange={(e) => setSelectedYear(e.target.value)}
-              className={`w-full py-2 px-4 rounded-2xl outline-none bg-transparent transition-all duration-300 ${caseNumber ? "opacity-50 cursor-not-allowed pointer-events-none" : ""}`}
+              // className={`w-full py-2 px-4 rounded-2xl outline-none bg-transparent transition-all duration-300 ${caseNumber ? "opacity-50 cursor-not-allowed pointer-events-none" : ""}`}
+              className={`w-full py-2 px-4 rounded-2xl outline-none bg-transparent transition-all duration-300`}
               required
             >
               <option value="" disabled hidden>

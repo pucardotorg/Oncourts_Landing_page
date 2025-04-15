@@ -1,7 +1,49 @@
+import { useEffect, useState } from "react";
 import FeaturesTable from "../../components/FeaturesTable";
-import { liveNowFeatures, comingSoon } from "../../data/whatsNew";
+import { transformWhatsNewResponse } from "../../TransformData/transformResponseData";
+import { WhatsNewSection } from "../../data/whatsNewConfig";
 
 const WhatNew = () => {
+  const [latestUpgrades, setLatestUpgrades] = useState<WhatsNewSection>({
+    title: "",
+    subTitle: "",
+    data: [],
+  });
+
+  const [upcomingFeatures, setUpcomingFeatures] = useState<WhatsNewSection>({
+    title: "",
+    subTitle: "",
+    data: [],
+  });
+
+  useEffect(() => {
+    const fetchWhatsNew = async () => {
+      try {
+        const res = await fetch("/api/whatsNew");
+        const data = await res.json();
+
+        const transformed = transformWhatsNewResponse(data);
+        setLatestUpgrades(transformed?.latestUpgrades);
+        setUpcomingFeatures(transformed?.upcomingFeatures);
+      } catch (error) {
+        console.error("Failed to fetch Whats New data", error);
+      }
+    };
+
+    fetchWhatsNew();
+  }, []);
+
+  const liveNowFeatures = (latestUpgrades?.data || []).map((item, index) => ({
+    "S.No.": index + 1,
+    "Feature Description": `${item?.itemName} | ${item?.itemDescription}`,
+    "Released In": item?.itemDateAdded,
+  }));
+
+  const comingSoon = (upcomingFeatures?.data || []).map((item, index) => ({
+    "S.No.": index + 1,
+    "Feature Description": `${item?.itemName} | ${item?.itemDescription}`,
+  }));
+
   return (
     <div className="relative mx-auto mb-12 left-1/2 transform -translate-x-1/2 w-full max-w-[1858px] h-auto px-4 sm:px-8 gap-4 flex flex-col items-start">
       <div className="w-full flex flex-col items-center gap-4">

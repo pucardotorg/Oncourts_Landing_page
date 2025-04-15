@@ -100,16 +100,16 @@ const FeaturesTable: React.FC<FeaturesTableProps> = ({ data, heading }) => {
                   <td key={col} className="px-4 py-4">
                     {col === "Feature Description"
                       ? (() => {
-                          const [boldPart, rest] = (
-                            feature[col] as string
-                          ).split("–");
-                          return (
-                            <span>
-                              <strong>{boldPart?.trim()}</strong> –{" "}
-                              {rest?.trim()}
-                            </span>
-                          );
-                        })()
+                        const [boldPart, rest] = (
+                          feature[col] as string
+                        ).split("|");
+                        return (
+                          <span>
+                            <strong>{boldPart?.trim()}</strong> –{" "}
+                            {rest?.trim()}
+                          </span>
+                        );
+                      })()
                       : feature[col]}
                   </td>
                 ))}
@@ -141,11 +141,10 @@ const FeaturesTable: React.FC<FeaturesTableProps> = ({ data, heading }) => {
             <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((prev) => prev - 1)}
-              className={`px-3 py-1 border rounded ${
-                currentPage === 1
-                  ? "bg-[#F7F7F8] text-black"
-                  : "bg-[#007E7E] text-white"
-              }`}
+              className={`px-3 py-1 border rounded ${currentPage === 1
+                ? "bg-[#F7F7F8] text-black"
+                : "bg-[#007E7E] text-white"
+                }`}
             >
               ← Prev
             </button>
@@ -175,11 +174,10 @@ const FeaturesTable: React.FC<FeaturesTableProps> = ({ data, heading }) => {
             <button
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage((prev) => prev + 1)}
-              className={`px-3 py-1 border rounded ${
-                currentPage === totalPages
-                  ? "bg-[#F7F7F8] text-black"
-                  : "bg-[#007E7E] text-white"
-              }`}
+              className={`px-3 py-1 border rounded ${currentPage === totalPages
+                ? "bg-[#F7F7F8] text-black"
+                : "bg-[#007E7E] text-white"
+                }`}
             >
               Next →
             </button>
