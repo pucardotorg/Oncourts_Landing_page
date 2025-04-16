@@ -1,44 +1,75 @@
-import React from "react";
+import React, { useEffect, useState, } from "react";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
 import Image from "next/image";
+import { transformImpactGlance } from "../../TransformData/transformResponseData";
 
-type StatItem = {
-  icon: string;
-  value: number;
-  label: string;
-  suffix?: string;
+export interface DashboardMetrics {
+  id: string;
+  numberOfCasesFiled: number;
+  numberOfAdvocatesRegistered: number;
+  percentageOfSupportRequestsResolved: number;
+  averageNumberOfDaysBetweenHearingsForCase: number;
+  percentageOfCasesMovedFromFilingToRegistrationUnder3Days: number;
+}
+
+const dashboardStatsMap = (data: DashboardMetrics | undefined) => {
+  if (!data) return [];
+
+  return [
+    {
+      label: "Number of Cases Filed",
+      value: data.numberOfCasesFiled,
+      suffix: "",
+      icon: "/images/file.png",
+    },
+    {
+      label: "Unique Advocates Registered",
+      value: data.numberOfAdvocatesRegistered,
+      suffix: "",
+      icon: "/images/group.png",
+    },
+    {
+      label: "Average Number of Days Between Hearings",
+      value: data.averageNumberOfDaysBetweenHearingsForCase,
+      suffix: "",
+      icon: "/images/hammer.png",
+    },
+    {
+      label: "Support Requests Resolved",
+      value: data.percentageOfSupportRequestsResolved,
+      suffix: "%",
+      icon: "/images/support.png",
+    },
+    {
+      label: "of cases moving from “Filing” to “Registration” Stage under 3 days",
+      value: data.percentageOfCasesMovedFromFilingToRegistrationUnder3Days,
+      suffix: "%",
+      icon: "/images/graph.png",
+    },
+  ];
 };
-
-const stats: StatItem[] = [
-  { icon: "/images/file.png", value: 315, label: "Number of Cases Filed" },
-  {
-    icon: "/images/group.png",
-    value: 184,
-    label: "Unique Advocates Registered",
-  },
-  {
-    icon: "/images/hammer.png",
-    value: 17,
-    suffix: " Days",
-    label: "Average Number of Days Between Hearings",
-  },
-  {
-    icon: "/images/support.png",
-    value: 60,
-    suffix: "%",
-    label: "Support Requests Resolved",
-  },
-  {
-    icon: "/images/graph.png",
-    value: 90,
-    suffix: "%",
-    label: "of cases moving from “Filing” to “Registration” Stage under 3 days",
-  },
-];
 
 const ImpactGlance: React.FC = () => {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
+  const [stats, setStats] = useState<DashboardMetrics>();
+  const statItems = dashboardStatsMap(stats);
+
+  useEffect(() => {
+    const fetchImpactGlance = async () => {
+      try {
+        const res = await fetch("/api/impactGlance");
+        const data = await res.json();
+
+        const transformed = transformImpactGlance(data);
+        setStats(transformed?.stats || []);
+      } catch (error) {
+        console.error("Failed to fetch Whats New data", error);
+      }
+    };
+
+    fetchImpactGlance();
+  }, []);
 
   return (
     <div
@@ -55,18 +86,17 @@ const ImpactGlance: React.FC = () => {
         </p>
 
         <div ref={ref} className="grid grid-cols-1 md:grid-cols-3 gap-12 pt-2">
-          {stats.slice(0, 3).map((stat, index) => (
+          {statItems?.slice(0, 3).map((stat, index) => (
             <div
               key={index}
-              className={`flex flex-col items-center text-center py-4 px-6 ${
-                index < 2 ? "border-r border-gray-300" : ""
-              }`}
+              className={`flex flex-col items-center text-center py-4 px-6 ${index < 2 ? "border-r border-gray-300" : ""
+                }`}
             >
               <div className="flex items-center gap-4">
                 <div className="relative w-16 h-16 md:w-24 md:h-24">
                   <Image
-                    src={stat.icon}
-                    alt={stat.label}
+                    src={stat?.icon}
+                    alt={stat?.label}
                     fill
                     className="object-contain"
                   />
@@ -77,11 +107,11 @@ const ImpactGlance: React.FC = () => {
                   ) : (
                     "0"
                   )}{" "}
-                  {stat.suffix}
+                  {stat?.suffix}
                 </p>
               </div>
               <p className="text-darkGrey text-lg mt-2 font-medium">
-                {stat.label}
+                {stat?.label}
               </p>
             </div>
           ))}
@@ -92,7 +122,7 @@ const ImpactGlance: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 mt-8 justify-center">
-          {stats.slice(3).map((stat, index) => (
+          {statItems?.slice(3).map((stat, index) => (
             <div
               key={index}
               className={`flex flex-col items-center text-center px-6 ${index < 1 ? "border-r border-gray-300" : ""}`}
@@ -100,8 +130,8 @@ const ImpactGlance: React.FC = () => {
               <div className="flex items-center gap-4">
                 <div className="relative w-16 h-16 md:w-24 md:h-24">
                   <Image
-                    src={stat.icon}
-                    alt={stat.label}
+                    src={stat?.icon}
+                    alt={stat?.label}
                     fill
                     className="object-contain"
                   />
@@ -112,11 +142,11 @@ const ImpactGlance: React.FC = () => {
                   ) : (
                     "0"
                   )}
-                  {stat.suffix || ""}
+                  {stat?.suffix || ""}
                 </p>
               </div>
               <p className="text-darkGrey text-lg mt-2 font-medium">
-                {stat.label}
+                {stat?.label}
               </p>
             </div>
           ))}

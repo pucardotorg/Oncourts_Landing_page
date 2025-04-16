@@ -1,9 +1,11 @@
 import { WhatsNewItem, WhatsNewSection } from "../data/whatsNewConfig";
+import { DashboardMetrics } from "../components/HomePage/ImpactGlance";
 
 export interface MdmsApiResponse {
   MdmsRes: {
     LandingPage: {
-      LatestAndComingSoon: WhatsNewItem[];
+      LatestAndComingSoon?: WhatsNewItem[];
+      DashboardMeterics?: DashboardMetrics[];
     };
   };
 }
@@ -33,5 +35,14 @@ export function transformWhatsNewResponse(data: MdmsApiResponse): {
       subTitle: "Exciting new features are on the way!",
       data: comingSoonItems,
     },
+  };
+}
+
+export function transformImpactGlance(data: MdmsApiResponse): {
+  stats: DashboardMetrics;
+} {
+  const allItems = data?.MdmsRes?.LandingPage?.DashboardMeterics || [];
+  return {
+    stats: allItems[0],
   };
 }

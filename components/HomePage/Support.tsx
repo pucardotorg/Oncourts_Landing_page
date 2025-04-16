@@ -91,7 +91,7 @@ const Support: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-12 text-center">
+      <div id="contactUs" className="mt-12 text-center">
         <h3 className="text-4xl font-semibold text-black mb-6">
           {SupportData?.HelpDesk?.header}
         </h3>
@@ -102,11 +102,10 @@ const Support: React.FC = () => {
             {SupportData?.HelpDesk?.data?.map((item, index) => (
               <div
                 key={index}
-                className={`flex items-center space-x-2 pb-4 ${
-                  index < SupportData?.HelpDesk?.data?.length - 2
+                className={`flex items-center space-x-2 pb-4 ${index < SupportData?.HelpDesk?.data?.length - 2
                     ? "border-b border-teal"
                     : ""
-                }`}
+                  }`}
               >
                 <div className="w-5 h-5 flex items-center justify-center">
                   {svgIcons[item?.icon] &&

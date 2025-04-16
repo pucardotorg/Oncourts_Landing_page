@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { FooterConfig } from "../data/FooterConfig"; // Ensure path is correct
+import Link from "next/link";
 
 const Footer: React.FC = () => {
   return (
@@ -30,20 +31,19 @@ const Footer: React.FC = () => {
             Quick Links & User Terms
           </h3>
           <div
-            className={`grid ${
-              FooterConfig.quickLinks.length > 4
-                ? "grid-cols-2 gap-x-20 gap-y-4"
-                : "grid-cols-1 gap-y-4"
-            }`}
+            className={`grid ${FooterConfig.quickLinks.length > 4
+              ? "grid-cols-2 gap-x-20 gap-y-4"
+              : "grid-cols-1 gap-y-4"
+              }`}
           >
             {FooterConfig.quickLinks.map((link, index) => (
-              <a
+              <Link
                 key={index}
                 href={link.url}
                 className="text-sm hover:underline"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
         </div>
@@ -54,20 +54,19 @@ const Footer: React.FC = () => {
           {/* Updated margin */}
           <h3 className="text-lg font-semibold mb-2">External Links</h3>
           <div
-            className={`grid ${
-              FooterConfig.externalLinks.length > 4
-                ? "grid-cols-2 gap-x-20 gap-y-4"
-                : "grid-cols-1 gap-y-4"
-            }`}
+            className={`grid ${FooterConfig.externalLinks.length > 4
+              ? "grid-cols-2 gap-x-20 gap-y-4"
+              : "grid-cols-1 gap-y-4"
+              }`}
           >
             {FooterConfig.externalLinks.map((link, index) => (
-              <a
+              <Link
                 key={index}
                 href={link.url}
                 className="text-sm hover:underline"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
         </div>

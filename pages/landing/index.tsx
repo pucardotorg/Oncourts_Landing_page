@@ -4,7 +4,7 @@ import NoticeAndCauseListSection from "../../components/HomePage/NoticeAndCauseL
 import Support from "../../components/HomePage/Support";
 import ImpactGlance from "../../components/HomePage/ImpactGlance";
 import TestimonialCarousel from "../../components/HomePage/TestimonialCarousel";
-import WhatsNewSection from "../../components/HomePage/WhatNewSection";
+import WhatsNewSections from "../../components/HomePage/WhatNewSections";
 import StickyHelpButton from "../../components/StickyHelpButton";
 
 const Hero = () => {
@@ -13,7 +13,7 @@ const Hero = () => {
       <StickyHelpButton />
       <Carousel />
       <NoticeAndCauseListSection />
-      <WhatsNewSection />
+      <WhatsNewSections />
       <ImpactGlance />
       <TestimonialCarousel />
       <Support />

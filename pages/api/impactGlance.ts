@@ -1,4 +1,3 @@
-// pages/api/whats-new.ts
 export default async function handler(req, res) {
   try {
     const response = await fetch(
@@ -15,7 +14,7 @@ export default async function handler(req, res) {
             moduleDetails: [
               {
                 moduleName: "LandingPage",
-                masterDetails: [{ name: "LatestAndComingSoon" }],
+                masterDetails: [{ name: "DashboardMeterics" }],
               },
             ],
           },

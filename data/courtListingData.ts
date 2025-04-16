@@ -31,28 +31,7 @@ export const sampleCaseItems: CaseItem[] = [
     date: new Date("2024-07-04"),
     fileUrl: "/documents/causelist-4-july.pdf",
     isPriority: false,
-  },
-  {
-    id: "3",
-    title: "3rd July Causelist - 24x7 ON Court",
-    date: new Date("2024-07-03"),
-    fileUrl: "/documents/causelist-3-july.pdf",
-    isPriority: false,
-  },
-  {
-    id: "4",
-    title: "2nd July Causelist - 24x7 ON Court",
-    date: new Date("2024-07-02"),
-    fileUrl: "/documents/causelist-2-july.pdf",
-    isPriority: false,
-  },
-  {
-    id: "5",
-    title: "1st July Causelist - 24x7 ON Court",
-    date: new Date("2024-07-01"),
-    fileUrl: "/documents/causelist-1-july.pdf",
-    isPriority: false,
-  },
+  }
 ];
 
 export const sampleNoticeItems: NoticeItem[] = [
