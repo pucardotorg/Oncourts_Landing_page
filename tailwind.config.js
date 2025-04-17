@@ -20,10 +20,13 @@ module.exports = {
         teal: "#007E7E",
         darkGrey: "#3A3A3A",
         white: "#FFFFFF",
-        footerBg:"#3A3A3A"
+        footerBg:"#3A3A3A",
+        tealBg:"#007E7E1A",
+        tealShadow:"oklch(77.7% 0.152 181.912)"
       },
       fontFamily: {
-        Raleway: ["Raleway", "sans-serif"],
+        raleway: ["Raleway", "sans-serif"],
+        noto: ["Noto Sans", "sans-serif"],
       },
     },
   },

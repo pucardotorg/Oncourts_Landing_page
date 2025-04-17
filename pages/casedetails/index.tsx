@@ -3,23 +3,22 @@ import React, { useEffect, useState } from "react";
 import SingleCase from "./single_case";
 import MultipleCase from "./multiple_case";
 
-async function fetchCase(url: string) {
-  try {
-    const response = await fetch(url);
-    return await response.json();
-  } catch (error) {
-    console.log("Error fetching case summary:", (error as Error).message);
-    return null;
-  }
-}
-
 function CaseDetails() {
   const [data, setData] = useState(null);
   const [cases, setCases] = useState([]);
-  const [multipleCase, setMultipleCase] = useState(false);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { caseNumber, selectedCaseType, selectedYear, selectedButton } = router.query;
+
+  async function fetchCase(url: string) {
+    try {
+      const response = await fetch(url);
+      return await response.json();
+    } catch (error) {
+      console.log("Error fetching case summary:", (error as Error).message);
+      return null;
+    }
+  }
 
   useEffect(() => {
     async function searchCaseSummary() {
@@ -27,13 +26,17 @@ function CaseDetails() {
 
       let url = "";
       if (selectedButton === "CNR") {
+        if (!caseNumber) { router.push("/search"); return; }
         url = `/api/case/cnr/${caseNumber}`;
       } else {
-        if (!caseNumber) {
-          setMultipleCase(true);
-          url = `/api/case/${selectedYear}/${selectedCaseType}`;
+        if (!selectedYear || !selectedCaseType) {
+          router.push("/search"); return;
         } else {
-          url = `/api/case/${selectedYear}/${selectedCaseType}/${caseNumber}`;
+          if (!caseNumber) {
+            url = `/api/case/${selectedYear}/${selectedCaseType}`;
+          } else {
+            url = `/api/case/${selectedYear}/${selectedCaseType}/${caseNumber}`;
+          }
         }
       }
 
@@ -49,7 +52,7 @@ function CaseDetails() {
     }
 
     searchCaseSummary();
-  }, [caseNumber, selectedButton, selectedCaseType, selectedYear]);
+  }, [caseNumber, router, selectedButton, selectedCaseType, selectedYear]);
 
   useEffect(() => {
     if (!loading && !data && cases.length === 0) {
@@ -67,10 +70,10 @@ function CaseDetails() {
 
   return (
     <div className="p-6">
-      {!multipleCase && data ? (
+      {data ? (
         <SingleCase data={data} />
-      ) : multipleCase && cases.length > 0 ? (
-        <MultipleCase data={cases} />
+      ) : cases?.length > 0 ? (
+        <MultipleCase cases={cases} />
       ) : null}
     </div>
   );
