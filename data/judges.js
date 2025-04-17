@@ -19,8 +19,8 @@ export const judges = {
   ],
   current: [
     {
-      name: "Michael George",
-      title: "Judicial First Class Magistrate",
+      name: "Sri. Michael George",
+      title: "Judicial First Class Magistrate, Kollam",
       image: "/images/jThree.png",
     },
   ],

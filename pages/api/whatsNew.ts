@@ -2,7 +2,7 @@
 export default async function handler(req, res) {
   try {
     const response = await fetch(
-      "https://dristi-kerala-dev.pucar.org/egov-mdms-service/v1/_search?tenantId=kl",
+      "https://oncourts.kerala.gov.in/egov-mdms-service/v1/_search?tenantId=kl",
       {
         method: "POST",
         headers: {

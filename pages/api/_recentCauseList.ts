@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   // if (!tenantId || !Criteria) {
   //   return res.status(400).json({ error: 'Missing required parameters: tenantId and Criteria are required' });
   // }
-  const url = `https://dristi-kerala-dev.pucar.org/scheduler/causelist/v1/_recentCauseList`;
+  const url = `https://oncourts.kerala.gov.in/scheduler/causelist/v1/_recentCauseList`;
   try {
     const response = await fetch(url,
       {
