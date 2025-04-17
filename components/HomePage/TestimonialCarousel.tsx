@@ -37,12 +37,11 @@ const TestimonialCarousel: React.FC = () => {
             {testimonials?.map((testimonial: Testimonial, index: number) => (
               <div
                 key={index}
-                className={`min-w-full transition-opacity duration-[1500ms] ease-out flex justify-center items-center px-2 ${
-                  index === activeIndex ? "opacity-100" : "opacity-60 blur-sm"
-                }`}
+                className={`min-w-full transition-opacity duration-[1500ms] ease-out flex justify-center items-center px-2 ${index === activeIndex ? "opacity-100" : "opacity-60 blur-sm"
+                  }`}
               >
                 <div className="bg-white rounded-[40px] shadow-lg p-3 md:p-6 border-2 border-teal w-full max-w-[900px] h-[320px] mx-auto flex flex-col justify-center items-center text-center">
-                  <div className="relative w-20 h-[6rem]">
+                  <div className="relative w-24 h-[8rem]">
                     <Image
                       src={testimonial?.image}
                       alt={testimonial?.name}
@@ -55,7 +54,7 @@ const TestimonialCarousel: React.FC = () => {
                     {testimonial?.content || ""}
                   </p>
                   <div className="mt-auto">
-                    <p className="font-medium text-teal text-base md:text-lg">
+                    <p className="font-medium text-teal text-2xl">
                       {testimonial?.name || ""}
                       <span className="text-sm md:text-base font-normal text-teal ml-1">
                         - {testimonial?.role || ""}

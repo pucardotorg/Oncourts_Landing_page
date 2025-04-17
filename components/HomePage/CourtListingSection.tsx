@@ -3,14 +3,9 @@ import { format } from "date-fns";
 import Link from "next/link";
 import { svgIcons } from "../../data/svgIcons";
 import styles from "../../styles/WhatsNewCard.module.css";
-
-interface CaseItem {
-  id: string;
-  title: string;
-  date: Date;
-  fileUrl: string;
-  isPriority?: boolean;
-}
+import { CauseListItem } from "./NoticeAndCauseListSection";
+import { Eye } from "lucide-react";
+import PDFViewer from "../PDFViewer";
 
 interface NoticeItem {
   id: string;
@@ -22,18 +17,27 @@ interface NoticeItem {
 }
 
 interface CourtListingSectionProps {
-  caseItems: CaseItem[];
+  CauseListItem: CauseListItem[];
   noticeItems: NoticeItem[];
 }
 
+type DocViewerDocument = {
+  uri: string;
+  fileType: string;
+  fileName?: string;
+};
+
 const CourtListingSection: React.FC<CourtListingSectionProps> = ({
-  caseItems,
+  CauseListItem,
   noticeItems,
 }) => {
   const [searchDate, setSearchDate] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 4;
   const dateInputRef = useRef<HTMLInputElement>(null);
+  const [documents, setDocuments] = useState<DocViewerDocument[]>([]);
+  const [previewMode, setPreviewMode] = useState(false);
+
 
   const maxNoticePages = Math.ceil(noticeItems.length / itemsPerPage);
   const displayedNotices = noticeItems.slice(
@@ -52,6 +56,55 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+
+  const handlePreview = async (date: string) => {
+    try {
+      const response = await fetch("/api/_download", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tenantId: "kl",
+          Criteria: {
+            courtId: "KLKM52",
+            searchDate: date,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const blob = await response.blob();
+      const fileURL = URL.createObjectURL(blob);
+
+      // 1️⃣ Show preview using DocViewer
+      setDocuments([
+        {
+          uri: fileURL,
+          fileType: "pdf",
+          fileName: `causeList-${date}.pdf`,
+        },
+      ]);
+      setPreviewMode(true);
+
+      // Optional: auto-download after preview (if needed)
+      // const link = document.createElement("a");
+      // link.href = fileURL;
+      // link.download = `causelist-${date}.pdf`;
+      // link.click();
+
+    } catch (error) {
+      console.log("Download failed:", (error as Error).message);
+      alert(
+        `Failed to download: ${error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
+  };
+
 
   return (
     <div className="flex justify-center">
@@ -80,44 +133,56 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
                 type="date"
                 value={searchDate}
                 onChange={handleDateChange}
-                className={`${styles.customDateInput} w-full py-2 pr-10 text-gray-700 focus:outline-none appearance-none`}
+                className={`${styles.customDateInput} w-full py-2 pr-16 text-gray-700 focus:outline-none appearance-none`}
               />
+
+              {/* Calendar Icon */}
               <div
-                className="absolute right-2 text-teal cursor-pointer"
+                className="absolute right-10 text-teal cursor-pointer"
                 onClick={() => {
                   if (dateInputRef.current) {
                     dateInputRef.current.showPicker?.();
                     dateInputRef.current.focus();
                   }
                 }}
+                title="Pick Date"
               >
                 <svgIcons.CalanderIcon />
               </div>
+
+              {/* Preview Icon */}
+              <button
+                className="absolute right-2 text-teal transition cursor-pointer"
+                onClick={() => handlePreview(searchDate)}
+                disabled={!searchDate}
+                title="Preview Cause List"
+              >
+                <Eye size={24} />
+              </button>
             </div>
           </div>
 
+
           <div className="space-y-4 relative w-[90%] pt-4">
-            {caseItems.map((item) => (
+            {CauseListItem?.map((item) => (
               <div
                 key={item.id}
                 className="flex justify-between items-center border rounded p-4"
               >
                 <div className="flex items-center font-raleway text-lg">
-                  <a
-                    href="#"
-                    className="text-gray-700 hover:text-teal-600 font-semibold underline"
+                  <div className="text-gray-700 hover:text-teal-600 font-semibold underline"
                   >
-                    {item.title}
-                  </a>
+                    {item.fileStoreId ? item.title : `No hearings are scheduled for ${format(item.date, "dd MMM yyyy")}`}
+                  </div>
                 </div>
-                <a
-                  href={item.fileUrl}
-                  className="bg-teal text-white px-3 py-1 rounded flex items-center text-sm underline w-[125px] justify-center"
-                  download
+                {item.fileStoreId && <a
+                  onClick={() => handlePreview(format(item.date, "yyyy-MM-dd"))} // assuming item.date exists
+                  className="bg-teal text-white px-3 py-2 rounded flex items-center text-sm underline w-[125px] justify-center cursor-pointer"
                 >
-                  <span>Download</span>
-                  <svgIcons.DownloadIcon />
-                </a>
+                  <span>View List</span>
+                </a>}
+
+
               </div>
             ))}
           </div>
@@ -186,11 +251,10 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
                 <button
                   key={page}
                   onClick={() => handlePageChange(page)}
-                  className={`px-3 py-1 border rounded mx-1 ${
-                    page === currentPage
-                      ? "bg-teal text-white"
-                      : "text-gray-600"
-                  }`}
+                  className={`px-3 py-1 border rounded mx-1 ${page === currentPage
+                    ? "bg-teal text-white"
+                    : "text-gray-600"
+                    }`}
                 >
                   {page}
                 </button>
@@ -207,6 +271,14 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
           </div>
         </div>
       </div>
+      {previewMode && (
+        <PDFViewer
+          previewMode={previewMode}
+          documents={documents}
+          setPreviewMode={setPreviewMode}
+        />
+      )}
+
     </div>
   );
 };

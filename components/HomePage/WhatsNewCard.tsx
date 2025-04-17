@@ -100,9 +100,8 @@ const WhatsNewCard: React.FC<{ section: WhatsNewSectionType, loading: boolean }>
 
       <div
         ref={scrollRef}
-        className={`mt-6 space-y-5 text-gray-700 max-h-48 overflow-y-auto ${styles.scrollContainer} ${
-          isHovering ? styles.scrollbar : styles.scrollbarHide
-        }`}
+        className={`mt-6 space-y-5 text-gray-700 max-h-48 overflow-y-auto ${styles.scrollContainer} ${isHovering ? styles.scrollbar : styles.scrollbarHide
+          }`}
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
         onScroll={handleScroll}
@@ -110,22 +109,22 @@ const WhatsNewCard: React.FC<{ section: WhatsNewSectionType, loading: boolean }>
         <ul className="space-y-5 pr-4">
           {loading
             ? [...Array(3)].map((_, idx) => (
-                <li
-                  key={idx}
-                  className="border-l-2 border-teal pl-5 animate-pulse"
-                >
-                  <div className="h-4 bg-gray-200 rounded w-5/6 mb-1"></div>
-                  <div className="h-3 bg-gray-100 rounded w-4/6"></div>
-                </li>
-              ))
+              <li
+                key={idx}
+                className="border-l-2 border-teal pl-5 animate-pulse"
+              >
+                <div className="h-4 bg-gray-200 rounded w-5/6 mb-1"></div>
+                <div className="h-3 bg-gray-100 rounded w-4/6"></div>
+              </li>
+            ))
             : section?.data?.map((item) => (
-                <li key={item?.itemId} className="border-l-2 border-teal pl-5">
-                  <p className="text-base">
-                    <strong className="text-gray-900">{item?.itemName}</strong>
-                    {item?.itemDescription ? ` – ${item?.itemDescription}` : ""}
-                  </p>
-                </li>
-              ))}
+              <li key={item?.itemId} className="border-l-2 border-teal pl-5">
+                <p className="text-base">
+                  <strong className="text-gray-900">{item?.itemName}</strong>
+                  {item?.itemDescription ? ` – ${item?.itemDescription}` : ""}
+                </p>
+              </li>
+            ))}
         </ul>
       </div>
     </div>
