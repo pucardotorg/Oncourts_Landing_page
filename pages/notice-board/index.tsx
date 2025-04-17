@@ -98,7 +98,6 @@ const NoticeBoard = () => {
         </h1>
       </div>
       <div className="p-6 bg-white rounded shadow mx-auto w-full">
-
         {/* Search bar */}
         <div className="flex items-center gap-2 border-b pb-2 mb-4">
           <Search className="text-gray-500" />
@@ -205,13 +204,18 @@ const NoticeBoard = () => {
             </div>
           </div>
         )}
-
       </div>
 
-      <FeaturesTable
-        data={filteredData}
-      />
-
+      {filteredData.length === 0 ? (
+        <div className="flex items-center justify-center h-[300px] w-full">
+          <p className="text-gray-500 text-center text-2xl font-semibold px-4">
+            No official notices are available now.<br />
+            Please revisit this section for future updates and announcements.
+          </p>
+        </div>
+      ) : (
+        <FeaturesTable data={filteredData} />
+      )}
     </div>
   );
 };

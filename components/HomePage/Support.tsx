@@ -95,7 +95,7 @@ const Support: React.FC = () => {
         <h3 className="text-4xl font-semibold text-black mb-6">
           {SupportData?.HelpDesk?.header}
         </h3>
-        <div className="relative max-w-4xl mx-auto pt-4">
+        <div className="relative max-w-5xl mx-auto pt-4">
           <div className="absolute left-1/2 top-0 bottom-0 w-[0.5px] bg-teal"></div>
 
           <div className="grid grid-cols-2 gap-x-12 gap-y-2">
@@ -111,22 +111,22 @@ const Support: React.FC = () => {
                   {svgIcons[item?.icon] &&
                     React.createElement(svgIcons[item.icon])}
                 </div>
-                <div>
-                  <p className="text-teal font-medium text-lg md:text-xl flex flex-wrap items-start">
+                <div className="flex flex-col items-start">
+                  <div className="text-teal font-medium text-2xl flex flex-wrap items-start">
                     {item?.href ? (
                       <a href={item?.href}>
-                        {item?.label}
+                        <strong>{item?.label}</strong> 
                         {item?.data ? `: ${item?.data}` : ""}
                       </a>
                     ) : (
                       <>
-                        {item?.label}
+                        <strong>{item?.label}</strong> 
                         {item?.data ? `: ${item?.data}` : ""}
                       </>
                     )}
-                  </p>
+                  </div>
                   {item?.subData && (
-                    <p className="text-xs text-teal">{item?.subData}</p>
+                    <div className="text-teal">{item?.subData}</div>
                   )}
                 </div>
               </div>

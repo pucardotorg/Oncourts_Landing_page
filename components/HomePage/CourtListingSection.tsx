@@ -3,14 +3,8 @@ import { format } from "date-fns";
 import Link from "next/link";
 import { svgIcons } from "../../data/svgIcons";
 import styles from "../../styles/WhatsNewCard.module.css";
-
-interface CaseItem {
-  id: string;
-  title: string;
-  date: Date;
-  fileUrl: string;
-  isPriority?: boolean;
-}
+import { CauseListItem } from "./NoticeAndCauseListSection";
+import PDFViewer from "../PDFViewer";
 
 interface NoticeItem {
   id: string;
@@ -22,18 +16,28 @@ interface NoticeItem {
 }
 
 interface CourtListingSectionProps {
-  caseItems: CaseItem[];
+  CauseListItem: CauseListItem[];
   noticeItems: NoticeItem[];
 }
 
+type DocViewerDocument = {
+  uri: string;
+  fileType: string;
+  fileName?: string;
+};
+
 const CourtListingSection: React.FC<CourtListingSectionProps> = ({
-  caseItems,
+  CauseListItem,
   noticeItems,
 }) => {
   const [searchDate, setSearchDate] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 4;
   const dateInputRef = useRef<HTMLInputElement>(null);
+  const [documents, setDocuments] = useState<DocViewerDocument[]>([]);
+  const [previewMode, setPreviewMode] = useState(false);
+  const [causeListItemState, setCauseListItemState] = useState<CauseListItem>();
+  const [loading, setLoading] = useState(false);
 
   const maxNoticePages = Math.ceil(noticeItems.length / itemsPerPage);
   const displayedNotices = noticeItems.slice(
@@ -46,11 +50,78 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchDate(e.target.value);
+    const selectedDate = e.target.value;
+    setSearchDate(selectedDate);
+
+    const options: Intl.DateTimeFormatOptions = {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    };
+    const formattedDate = new Date(selectedDate).toLocaleDateString("en-IN", options);
+
+    const title = `${formattedDate} Causelist - 24x7 ON Court`;
+    setCauseListItemState({
+      id: "1",
+      title,
+      date: new Date(selectedDate),
+      fileStoreId: "",
+    });
   };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const handlePreview = async (date: string) => {
+    setLoading(true); // Start loading
+    try {
+      const response = await fetch("/api/_download", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tenantId: "kl",
+          Criteria: {
+            courtId: "KLKM52",
+            searchDate: date,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const blob = await response.blob();
+      const fileURL = URL.createObjectURL(blob);
+
+      // 1️⃣ Show preview using DocViewer
+      setDocuments([
+        {
+          uri: fileURL,
+          fileType: "pdf",
+          fileName: `CauseList-${date}.pdf`,
+        },
+      ]);
+      setPreviewMode(true);
+
+      // Optional: auto-download after preview (if needed)
+      // const link = document.createElement("a");
+      // link.href = fileURL;
+      // link.download = `causelist-${date}.pdf`;
+      // link.click();
+
+    } catch (error) {
+      console.log("Download failed:", (error as Error).message);
+      alert(
+        `Failed to download: ${error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    } finally {
+      setLoading(false); // Stop loading
+    }
   };
 
   return (
@@ -80,46 +151,77 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
                 type="date"
                 value={searchDate}
                 onChange={handleDateChange}
-                className={`${styles.customDateInput} w-full py-2 pr-10 text-gray-700 focus:outline-none appearance-none`}
+                onClick={() => {
+                  dateInputRef.current?.showPicker?.();
+                }}
+                className={`${styles.customDateInput} w-full py-2 pr-16 text-gray-700 focus:outline-none appearance-none`}
               />
+
+              {/* Calendar Icon */}
               <div
-                className="absolute right-2 text-teal cursor-pointer"
+                className=" text-teal cursor-pointer"
                 onClick={() => {
                   if (dateInputRef.current) {
                     dateInputRef.current.showPicker?.();
                     dateInputRef.current.focus();
                   }
                 }}
+                title="Pick Date"
               >
                 <svgIcons.CalanderIcon />
               </div>
+
+              {/* Clear Button */}
+              <button
+                className="bg-teal text-white mx-2 px-1 py-1 rounded flex items-center  justify-center cursor-pointer"
+                onClick={() => {
+                  setCauseListItemState(undefined);
+                  setSearchDate("");
+                }}
+                disabled={!searchDate}
+                title="Clear Date"
+              >
+                <span>Clear</span>
+              </button>
             </div>
           </div>
 
+
           <div className="space-y-4 relative w-[90%] pt-4">
-            {caseItems.map((item) => (
+            {!searchDate ? CauseListItem?.map((item) => (
               <div
                 key={item.id}
                 className="flex justify-between items-center border rounded p-4"
               >
                 <div className="flex items-center font-raleway text-lg">
-                  <a
-                    href="#"
-                    className="text-gray-700 hover:text-teal-600 font-semibold underline"
+                  <div className="text-gray-700 hover:text-teal-600 font-semibold underline"
                   >
-                    {item.title}
-                  </a>
+                    {item.fileStoreId ? item.title : `No hearings are scheduled for ${format(item.date, "dd MMM yyyy")}`}
+                  </div>
                 </div>
-                <a
-                  href={item.fileUrl}
-                  className="bg-teal text-white px-3 py-1 rounded flex items-center text-sm underline w-[125px] justify-center"
-                  download
+                {item.fileStoreId && <div
+                  onClick={() => handlePreview(format(item.date, "yyyy-MM-dd"))} // assuming item.date exists
+                  className="bg-teal text-white px-3 py-2 rounded flex items-center text-sm underline w-[125px] justify-center cursor-pointer"
                 >
-                  <span>Download</span>
-                  <svgIcons.DownloadIcon />
-                </a>
+                  <span>View List</span>
+                </div>
+                }
               </div>
-            ))}
+            )) : (
+              <div className="flex justify-between items-center border rounded p-4">
+                <div className="flex items-center font-raleway text-lg">
+                  <div className="text-gray-700 hover:text-teal-600 font-semibold underline">
+                    {causeListItemState?.title}
+                  </div>
+                </div>
+                <div
+                  onClick={() => handlePreview(searchDate)}
+                  className="bg-teal text-white px-3 py-2 rounded flex items-center text-sm underline w-[125px] justify-center cursor-pointer"
+                >
+                  <span>View List</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -141,72 +243,108 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
           </div>
 
           <div className="flex-1">
-            <div className="grid grid-cols-2 gap-6">
-              {displayedNotices.map((notice) => (
-                <div key={notice.id} className="pb-6">
-                  <div className="flex justify-between items-start mb-2">
-                    <div className="flex items-center">
-                      <div className="w-4 h-4 flex items-center me-1">
-                        <svgIcons.CalanderIcon />
+            {displayedNotices.length === 0 ? (
+              <div className="flex items-center justify-center h-[300px]">
+                <p className="text-gray-500 text-center text-2xl font-semibold px-4">
+                  No official notices are available now.<br />
+                  Please revisit this section for future updates and announcements.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-6">
+                {displayedNotices.map((notice) => (
+                  <div key={notice.id} className="pb-6">
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="flex items-center">
+                        <div className="w-4 h-4 flex items-center me-1">
+                          <svgIcons.CalanderIcon />
+                        </div>
+                        <span className="text-gray-500 text-sm">
+                          Date: {formatDate(notice.date)}
+                        </span>
                       </div>
-                      <span className="text-gray-500 text-sm">
-                        Date: {formatDate(notice.date)}
-                      </span>
+                      <a
+                        href={notice.fileUrl}
+                        className="text-grey-600 hover:underline flex items-center text-sm"
+                        download
+                      >
+                        <span className="underline">Download</span>
+                        <svgIcons.DownloadIcon />
+                      </a>
                     </div>
-                    <a
-                      href={notice.fileUrl}
-                      className="text-grey-600 hover:underline flex items-center text-sm"
-                      download
-                    >
-                      <span className="underline">Download</span>
-                      <svgIcons.DownloadIcon />
-                    </a>
-                  </div>
 
-                  <h3 className="font-semibold text-lg text-gray-800 mb-2">
-                    {notice.title}
-                  </h3>
-                  <p className="text-gray-600 text-md">{notice.description}</p>
-                </div>
-              ))}
-            </div>
+                    <h3 className="font-semibold text-lg text-gray-800 mb-2">
+                      {notice.title}
+                    </h3>
+                    <p className="text-gray-600 text-md">{notice.description}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          <div className="flex justify-center mt-auto pt-4">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="px-3 py-1 border rounded mr-2 text-gray-600 disabled:opacity-50"
-            >
-              ← Prev
-            </button>
+          {displayedNotices.length > 0 && (
+            <div className="flex justify-center mt-auto pt-4">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-3 py-1 border rounded mr-2 text-gray-600 disabled:opacity-50"
+              >
+                ← Prev
+              </button>
 
-            {Array.from({ length: maxNoticePages }, (_, i) => i + 1).map(
-              (page) => (
+              {Array.from({ length: maxNoticePages }, (_, i) => i + 1).map((page) => (
                 <button
                   key={page}
                   onClick={() => handlePageChange(page)}
-                  className={`px-3 py-1 border rounded mx-1 ${
-                    page === currentPage
-                      ? "bg-teal text-white"
-                      : "text-gray-600"
-                  }`}
+                  className={`px-3 py-1 border rounded mx-1 ${page === currentPage
+                    ? "bg-teal text-white"
+                    : "text-gray-600"
+                    }`}
                 >
                   {page}
                 </button>
-              )
-            )}
+              ))}
 
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === maxNoticePages}
-              className="px-3 py-1 border rounded ml-2 text-gray-600 disabled:opacity-50"
-            >
-              Next →
-            </button>
-          </div>
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === maxNoticePages}
+                className="px-3 py-1 border rounded ml-2 text-gray-600 disabled:opacity-50"
+              >
+                Next →
+              </button>
+            </div>
+          )}
+
         </div>
       </div>
+      {loading ? (
+        <div className="fixed inset-0 z-50 bg-gray-500 bg-opacity-60 flex items-center justify-center">
+          <svg className="animate-spin h-8 w-8 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+            ></path>
+          </svg>
+        </div>
+      ) : (
+        previewMode && (
+          <PDFViewer
+            previewMode={previewMode}
+            documents={documents}
+            setPreviewMode={setPreviewMode}
+          />
+        )
+      )}
     </div>
   );
 };

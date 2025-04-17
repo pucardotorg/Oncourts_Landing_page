@@ -1,5 +1,6 @@
 import { WhatsNewItem, WhatsNewSection } from "../data/whatsNewConfig";
 import { DashboardMetrics } from "../components/HomePage/ImpactGlance";
+import { CauseListItem, RecentCauseListResponse } from "../components/HomePage/NoticeAndCauseListSection";
 
 export interface MdmsApiResponse {
   MdmsRes: {
@@ -45,4 +46,28 @@ export function transformImpactGlance(data: MdmsApiResponse): {
   return {
     stats: allItems[0],
   };
+}
+
+export function transformCauseList(
+  data: RecentCauseListResponse
+): CauseListItem[] {
+  const list = data?.RecentCauseList || [];
+
+  return list.map((item, index) => {
+    const date = new Date(item.date);
+    const options: Intl.DateTimeFormatOptions = {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    };
+    const formattedDate = date.toLocaleDateString("en-IN", options);
+    const title = `${formattedDate} Causelist - 24x7 ON Court`;
+
+    return {
+      id: `${index + 1}`,
+      title,
+      date,
+      fileStoreId: item.fileStoreId,
+    };
+  });
 }

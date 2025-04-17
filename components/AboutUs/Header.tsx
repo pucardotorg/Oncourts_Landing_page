@@ -41,7 +41,7 @@ export default function Header() {
                   className="text-teal-600 cursor-pointer ml-1 underline"
                   onClick={() => setIsExpanded((prev) => !prev)}
                 >
-                  {isExpanded ? "read less" : "read more"}
+                  {isExpanded ? "Read Less" : "Read More"}
                 </span>
               )}
             </p>

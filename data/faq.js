@@ -35,7 +35,7 @@ export const rightColumnItems = [
     content: "Case details are accessible only to users directly associated with the case. Access is strictly controlled through secure login and role-based permissions. Unauthorized users cannot view or modify any case information. The system is also regularly audited by third-party security agencies to ensure continued compliance with data protection standards."
   },
   {
-    title: "How do you clone a template from the Showcase?",
+    title: "How can I get support if I face any issues?",
     content: (
       <>
         <div className="mb-2">
@@ -64,7 +64,7 @@ export const rightColumnItems = [
     ),
   },
   {
-    title: "How do you clone a template from the Showcase?",
+    title: "How can I report an issue or share feedback online?",
     content: (
       <>
         <p>You can submit issues, queries, or feature requests using the 24x7 ON Courts Support Form. The support team actively tracks all submissions and keeps you updated on the resolution status. Click here to access the form:</p>
