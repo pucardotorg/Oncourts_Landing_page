@@ -19,7 +19,7 @@ const Carousel: React.FC = () => {
           className="flex-1 flex items-center pl-6 rounded-[10px] border border-teal bg-white text-teal shadow-xl transition-colors duration-300 hover:bg-teal hover:text-white group"
           target="/"
         >
-          <div className="relative w-[40px] h-[40px] mr-6">
+          <div className="relative w-[50px] h-[50px] mr-6">
             <Image
               src="/images/order_teal.svg"
               alt="Logo"
@@ -38,7 +38,7 @@ const Carousel: React.FC = () => {
           <div className="flex-1 py-4">
             <span
               className="block font-semibold text-base group-hover:text-white"
-              style={{ fontSize: "18px" }}
+              style={{ fontSize: "22px" }}
             >
               Login as Litigant/Advocate/Clerk
             </span>
@@ -63,7 +63,7 @@ const Carousel: React.FC = () => {
           className="flex-1 flex items-center pl-6 rounded-[10px] border border-teal bg-white text-teal shadow-xl transition-colors duration-300 hover:bg-teal hover:text-white group"
           target="/"
         >
-          <div className="relative w-[40px] h-[40px] mr-6">
+          <div className="relative w-[50px] h-[50px] mr-6">
             <Image
               src="/images/order_teal.svg"
               alt="Logo"
@@ -81,7 +81,7 @@ const Carousel: React.FC = () => {
           <div className="flex-1 py-4">
             <span
               className="block font-semibold text-base group-hover:text-white"
-              style={{ fontSize: "18px" }}
+              style={{ fontSize: "22px" }}
             >
               Login as Judicial Officer/Court Staff
             </span>

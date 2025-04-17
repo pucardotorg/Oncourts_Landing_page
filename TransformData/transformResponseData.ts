@@ -58,6 +58,7 @@ export function transformCauseList(
     const options: Intl.DateTimeFormatOptions = {
       day: "numeric",
       month: "long",
+      year: "numeric",
     };
     const formattedDate = date.toLocaleDateString("en-IN", options);
     const title = `${formattedDate} Causelist - 24x7 ON Court`;

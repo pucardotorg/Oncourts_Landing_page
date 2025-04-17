@@ -35,85 +35,85 @@ export interface NoticeItem {
 // ];
 
 export const sampleNoticeItems: NoticeItem[] = [
-  {
-    id: "1",
-    title: "Practice Directions",
-    date: new Date("2024-11-03"),
-    description:
-      "Notification -Applications are invited for appointment to the post of Technical person for e-Sewa Kendra",
-    fileUrl: "/documents/notice-1.pdf",
-    isPriority: true,
-  },
-  {
-    id: "2",
-    title: "Practice Directions",
-    date: new Date("2024-11-03"),
-    description:
-      "Notification -Applications are invited for appointment to the post of Technical person for e-Sewa Kendra",
-    fileUrl: "/documents/notice-2.pdf",
-    isPriority: false,
-  },
-  {
-    id: "3",
-    title: "Practice Directions",
-    date: new Date("2024-11-03"),
-    description:
-      "Notification -Applications are invited for appointment to the post of Technical person for e-Sewa Kendra",
-    fileUrl: "/documents/notice-3.pdf",
-    isPriority: false,
-  },
-  {
-    id: "4",
-    title: "Practice Directions",
-    date: new Date("2024-11-03"),
-    description:
-      "Notification -Applications are invited for appointment to the post of Technical person for e-Sewa Kendra",
-    fileUrl: "/documents/notice-4.pdf",
-    isPriority: false,
-  },
-  {
-    id: "5",
-    title: "Practice Directions",
-    date: new Date("2024-11-03"),
-    description:
-      "Notification -Applications are invited for appointment to the post of Technical person for e-Sewa Kendra",
-    fileUrl: "/documents/notice-5.pdf",
-    isPriority: false,
-  },
-  {
-    id: "6",
-    title: "Practice Directions",
-    date: new Date("2024-11-03"),
-    description:
-      "Notification -Applications are invited for appointment to the post of Technical person for e-Sewa Kendra",
-    fileUrl: "/documents/notice-6.pdf",
-    isPriority: false,
-  },
-  {
-    id: "7",
-    title: "Practice Directions",
-    date: new Date("2024-11-03"),
-    description:
-      "Notification -Applications are invited for appointment to the post of Technical person for e-Sewa Kendra",
-    fileUrl: "/documents/notice-4.pdf",
-    isPriority: false,
-  },
-  {
-    id: "8",
-    title: "Practice Directions",
-    date: new Date("2024-11-03"),
-    description:
-      "Notification -Applications are invited for appointment to the post of Technical person for e-Sewa Kendra",
-    fileUrl: "/documents/notice-5.pdf",
-    isPriority: false,
-  },
-  {
-    id: "9",
-    title: "Practice Directions",
-    date: new Date("2024-11-03"),
-    description:
-      "Notification -Applications are invited for appointment to the post of Technical person for e-Sewa Kendra",
-    fileUrl: "/documents/notice-6.pdf",
-    isPriority: false,
-  },
+  // {
+  //   id: "1",
+  //   title: "Practice Directions",
+  //   date: new Date("2024-11-03"),
+  //   description:
+  //     "Notification -Applications are invited for appointment to the post of Technical person for e-Sewa Kendra",
+  //   fileUrl: "/documents/notice-1.pdf",
+  //   isPriority: true,
+  // },
+  // {
+  //   id: "2",
+  //   title: "Practice Directions",
+  //   date: new Date("2024-11-03"),
+  //   description:
+  //     "Notification -Applications are invited for appointment to the post of Technical person for e-Sewa Kendra",
+  //   fileUrl: "/documents/notice-2.pdf",
+  //   isPriority: false,
+  // },
+  // {
+  //   id: "3",
+  //   title: "Practice Directions",
+  //   date: new Date("2024-11-03"),
+  //   description:
+  //     "Notification -Applications are invited for appointment to the post of Technical person for e-Sewa Kendra",
+  //   fileUrl: "/documents/notice-3.pdf",
+  //   isPriority: false,
+  // },
+  // {
+  //   id: "4",
+  //   title: "Practice Directions",
+  //   date: new Date("2024-11-03"),
+  //   description:
+  //     "Notification -Applications are invited for appointment to the post of Technical person for e-Sewa Kendra",
+  //   fileUrl: "/documents/notice-4.pdf",
+  //   isPriority: false,
+  // },
+  // {
+  //   id: "5",
+  //   title: "Practice Directions",
+  //   date: new Date("2024-11-03"),
+  //   description:
+  //     "Notification -Applications are invited for appointment to the post of Technical person for e-Sewa Kendra",
+  //   fileUrl: "/documents/notice-5.pdf",
+  //   isPriority: false,
+  // },
+  // {
+  //   id: "6",
+  //   title: "Practice Directions",
+  //   date: new Date("2024-11-03"),
+  //   description:
+  //     "Notification -Applications are invited for appointment to the post of Technical person for e-Sewa Kendra",
+  //   fileUrl: "/documents/notice-6.pdf",
+  //   isPriority: false,
+  // },
+  // {
+  //   id: "7",
+  //   title: "Practice Directions",
+  //   date: new Date("2024-11-03"),
+  //   description:
+  //     "Notification -Applications are invited for appointment to the post of Technical person for e-Sewa Kendra",
+  //   fileUrl: "/documents/notice-4.pdf",
+  //   isPriority: false,
+  // },
+  // {
+  //   id: "8",
+  //   title: "Practice Directions",
+  //   date: new Date("2024-11-03"),
+  //   description:
+  //     "Notification -Applications are invited for appointment to the post of Technical person for e-Sewa Kendra",
+  //   fileUrl: "/documents/notice-5.pdf",
+  //   isPriority: false,
+  // },
+  // {
+  //   id: "9",
+  //   title: "Practice Directions",
+  //   date: new Date("2024-11-03"),
+  //   description:
+  //     "Notification -Applications are invited for appointment to the post of Technical person for e-Sewa Kendra",
+  //   fileUrl: "/documents/notice-6.pdf",
+  //   isPriority: false,
+  // },
 ];
