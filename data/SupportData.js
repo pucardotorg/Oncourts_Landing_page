@@ -6,7 +6,7 @@ export const SupportData = {
     header: "Resources",
     data: [
       {
-        link: "https://example.com/user-guide",
+        link: "https://drive.google.com/file/d/1j4mIw0K2F8m_urJE-zbu-oeluiOL-8Pg/view?usp=sharing",
         text: "24X7 ON Court User Guide for Advocates and Clerks",
         section: "user-guide",
       },
@@ -21,7 +21,7 @@ export const SupportData = {
     header: "Quick Links",
     data: [
       {
-        link: "https://example.com/user-guide",
+        link: "https://forms.gle/uCSgGiqGiMQYjjgeA",
         text: "Feedback form",
         section: "feedback",
       },
