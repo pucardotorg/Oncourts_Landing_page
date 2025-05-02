@@ -15,7 +15,7 @@ const Carousel: React.FC = () => {
 
       <div className="flex flex-wrap md:flex-nowrap gap-8 px-6 md:px-12 py-8 -mt-28 relative z-10">
         <a
-          href="https://oncourts.kerala.gov.in/digit-ui/citizen/dristi/home/login"
+          href="https://oncourts.kerala.gov.in/ui/citizen/dristi/home/login"
           className="flex-1 flex items-center pl-6 rounded-[10px] border border-teal bg-white text-teal shadow-xl transition-colors duration-300 hover:bg-teal hover:text-white group"
           target="/"
         >
@@ -59,7 +59,7 @@ const Carousel: React.FC = () => {
         </a>
 
         <a
-          href="https://oncourts.kerala.gov.in/digit-ui/employee/user/login"
+          href="https://oncourts.kerala.gov.in/ui/employee/user/login"
           className="flex-1 flex items-center pl-6 rounded-[10px] border border-teal bg-white text-teal shadow-xl transition-colors duration-300 hover:bg-teal hover:text-white group"
           target="/"
         >
