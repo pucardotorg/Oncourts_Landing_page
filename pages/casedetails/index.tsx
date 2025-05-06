@@ -7,6 +7,9 @@ function CaseDetails() {
   const [data, setData] = useState(null);
   const [cases, setCases] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(10);
+  const [totalCount, setTotalCount] = useState(0);
   const router = useRouter();
   const { caseNumber, selectedCaseType, selectedYear, selectedButton } = router.query;
 
@@ -21,6 +24,10 @@ function CaseDetails() {
   }
 
   useEffect(() => {
+    setOffset(0);
+  }, [selectedYear, selectedCaseType, selectedButton, caseNumber]);
+
+  useEffect(() => {
     async function searchCaseSummary() {
       setLoading(true);
 
@@ -33,7 +40,7 @@ function CaseDetails() {
           router.push("/search"); return;
         } else {
           if (!caseNumber) {
-            url = `/api/case/${selectedYear}/${selectedCaseType}`;
+            url = `/api/case/${selectedYear}/${selectedCaseType}?offset=${offset}&limit=${limit}`;
           } else {
             url = `/api/case/${selectedYear}/${selectedCaseType}/${caseNumber}`;
           }
@@ -46,13 +53,14 @@ function CaseDetails() {
           setData(res["caseSummary"]);
         } else {
           setCases(res["caseList"]);
+          setTotalCount(res?.pagination?.totalCount || 0);
         }
       }
       setLoading(false);
     }
 
     searchCaseSummary();
-  }, [caseNumber, router, selectedButton, selectedCaseType, selectedYear]);
+  }, [caseNumber, router, selectedButton, selectedCaseType, selectedYear, offset, limit]);
 
   useEffect(() => {
     if (!loading && !data && cases.length === 0) {
@@ -73,7 +81,44 @@ function CaseDetails() {
       {data ? (
         <SingleCase data={data} />
       ) : cases?.length > 0 ? (
-        <MultipleCase cases={cases} />
+        <>
+          <MultipleCase cases={cases} offset={offset} />
+          <div className="flex items-center justify-between px-2 pt-4">
+            <div className="flex items-center gap-2 text-sm">
+              <label htmlFor="limit" className="text-gray-600">Results per page:</label>
+              <select
+                id="limit"
+                value={limit}
+                onChange={e => setLimit(Number(e.target.value))}
+                className="border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {[5, 10, 15, 20].map(opt => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                disabled={offset === 0}
+                onClick={() => setOffset(prev => Math.max(0, prev - limit))}
+                className="px-3 py-1 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Previous
+              </button>
+
+              <button
+                disabled={offset + limit >= totalCount}
+                onClick={() => setOffset(prev => prev + limit)}
+                className="px-3 py-1 rounded-md bg-[#007E7E] text-white disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+
+        </>
+
       ) : null}
     </div>
   );

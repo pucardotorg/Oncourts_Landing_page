@@ -1,12 +1,11 @@
 import React from "react";
 import { useRouter } from "next/router";
 
-const MultipleCase = ({ cases }) => {
+const MultipleCase = ({ cases, offset }) => {
   const router = useRouter();
   if (!cases) return <div>No case data found.</div>;
 
   const handleViewClick = (caseItem) => {
-    console.log('caseItem', caseItem)
     const caseNumber = caseItem.caseNumber
 
     const queryParams: {
@@ -52,7 +51,7 @@ const MultipleCase = ({ cases }) => {
           {cases && cases.length > 0 ? (
             cases.map((caseItem, index) => (
               <tr key={index} className="border-b">
-                <td className="px-4 py-2">{index + 1}</td>
+                <td className="px-4 py-2">{offset + index + 1}</td>
                 <td className="px-4 py-2">{caseItem.caseNumber}</td>
                 <td className="px-4 py-2">{caseItem.caseTitle}</td>
                 <td className="px-4 py-2 text-center">
