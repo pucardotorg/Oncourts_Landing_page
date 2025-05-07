@@ -69,5 +69,5 @@ export function transformCauseList(
       date,
       fileStoreId: item.fileStoreId,
     };
-  });
+  }).sort((a, b) => b.date.getTime() - a.date.getTime());
 }

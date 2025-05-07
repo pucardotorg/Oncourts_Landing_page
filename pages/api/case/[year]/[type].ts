@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
-  const { year, type } = req.query;
-  const url = `https://oncourts.kerala.gov.in/openapi/v1/kl/case/${year}/${type}`;
+  const { year, type, offset = 0, limit = 10  } = req.query;
+  const url = `https://oncourts.kerala.gov.in/openapi/v1/kl/case/${year}/${type}?offset=${offset}&limit=${limit}`;
 
   try {
     const response = await fetch(url, {

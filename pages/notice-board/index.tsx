@@ -72,7 +72,6 @@ const NoticeBoard = () => {
       tag: tag,
       search: search,
     });
-    console.log('filtered', filtered)
     setFilteredData(filtered);
   }
 
