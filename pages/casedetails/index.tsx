@@ -96,6 +96,9 @@ function CaseDetails() {
                   <option key={opt} value={opt}>{opt}</option>
                 ))}
               </select>
+              <span className="ml-4 text-gray-600">
+                Page {Math.floor(offset / limit) + 1} of {Math.ceil(totalCount / limit)}
+              </span>
             </div>
 
             <div className="flex gap-3">
