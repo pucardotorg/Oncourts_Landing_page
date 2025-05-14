@@ -30,6 +30,13 @@ const SearchForCase = () => {
     setSelectedCaseType("");
   };
 
+  /**
+   * Navigates to the case details page with query parameters based on the provided case number, case type, and year.
+   *
+   * If {@link caseNumber} contains slashes ("/"), it is split into case type, number, and year components for the query. Otherwise, the provided {@link selectedCaseType} and {@link selectedYear} are used if available.
+   *
+   * @remark The function relies on the presence of a `router` and `selectedButton` in its closure scope.
+   */
   async function searchCaseSummary(caseNumber, selectedCaseType, selectedYear) {
     const queryParams: {
       caseNumber?: string;

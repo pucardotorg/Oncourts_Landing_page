@@ -3,6 +3,13 @@ import React, { useEffect, useState } from "react";
 import SingleCase from "./single_case";
 import MultipleCase from "./multiple_case";
 
+/**
+ * Displays legal case details or a paginated list of cases based on query parameters from the Next.js router.
+ *
+ * Depending on the user's search criteria, renders either a single case summary or a list of cases with pagination controls. Redirects to the search page if required query parameters are missing or if no case data is found.
+ *
+ * @remark Shows a loading spinner while fetching data and alerts the user if no case data is available before redirecting.
+ */
 function CaseDetails() {
   const [data, setData] = useState(null);
   const [cases, setCases] = useState([]);
