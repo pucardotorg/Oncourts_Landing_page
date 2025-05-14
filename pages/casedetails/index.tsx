@@ -24,12 +24,18 @@ function CaseDetails() {
   }
 
   useEffect(() => {
-    setOffset(0);
-  }, [selectedYear, selectedCaseType, selectedButton, caseNumber]);
+    if (router.isReady) {
+      setOffset(0);
+    }
+  }, [selectedYear, selectedCaseType, selectedButton, caseNumber, router.isReady]);
 
   useEffect(() => {
+    if (!router.isReady) return;
+    
     async function searchCaseSummary() {
       setLoading(true);
+      setCases([]);
+      setData(null);
 
       let url = "";
       if (selectedButton === "CNR") {
@@ -63,10 +69,11 @@ function CaseDetails() {
   }, [caseNumber, router, selectedButton, selectedCaseType, selectedYear, offset, limit]);
 
   useEffect(() => {
-    if (!loading && !data && cases.length === 0) {
-      router.push("/search");
+    if (router.isReady && !loading && !data && cases.length === 0) {
+      alert("No case data found.");
+      router.push(`/search?selectedButton=${selectedButton}&caseNumber=${caseNumber}&selectedCaseType=${selectedCaseType}&selectedYear=${selectedYear}`);
     }
-  }, [loading, data, cases, router]);
+  }, [loading, data, cases, router, router.isReady, selectedButton, caseNumber, selectedCaseType, selectedYear]);
 
   if (loading) {
     return (
@@ -119,9 +126,7 @@ function CaseDetails() {
               </button>
             </div>
           </div>
-
         </>
-
       ) : null}
     </div>
   );

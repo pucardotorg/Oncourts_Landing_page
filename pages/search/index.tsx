@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { caseSearchConfig } from "../../data/caseSearchConfig";
 import SubmitButtons from "../../components/CaseSearch/SubmitButtons";
@@ -20,6 +20,7 @@ const SearchForCase = () => {
   const isSubmitDisabled = !isValidCaseNumber;
 
   const handleButtonClick = (buttonType) => {
+    setCaseNumber("");
     setSelectedButton(buttonType);
   };
 
@@ -58,6 +59,28 @@ const SearchForCase = () => {
     });
   }
 
+  const handleSubmit = () => {
+    if (isSubmitDisabled) return;
+    searchCaseSummary(caseNumber, selectedCaseType, selectedYear);
+  };
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    const { selectedButton, caseNumber, selectedCaseType, selectedYear } = router.query;
+    if (!selectedButton || !caseNumber) return;
+
+    if (selectedButton) setSelectedButton(selectedButton as string);
+
+    if (selectedButton === "CNR") setCaseNumber(caseNumber as string);
+    else {
+      if (selectedCaseType && selectedYear) {
+        setSelectedCaseType(selectedCaseType as string);
+        setSelectedYear(selectedYear as string);
+        setCaseNumber(`${selectedCaseType}/${caseNumber}/${selectedYear}`);
+      }
+    }
+  }, [router]);
+
   return (
     <div className="max-w-xl mx-auto py-8">
       <h2 className="text-teal font-bold text-3xl mb-4 text-center">
@@ -80,7 +103,11 @@ const SearchForCase = () => {
         </div>
       </div>
 
-      <div className="p-6 rounded-2xl shadow-md">
+      <div className="p-6 rounded-2xl shadow-md" tabIndex={0} onKeyDown={(e) => {
+        if (e.key === 'Enter' && !isSubmitDisabled) {
+          handleSubmit();
+        }
+      }}>
         {selectedButton === "CNR" && (
           <CNRForm
             caseNumber={caseNumber}
@@ -101,9 +128,7 @@ const SearchForCase = () => {
         )}
         <SubmitButtons
           handleClear={handleClear}
-          handleSubmit={() =>
-            searchCaseSummary(caseNumber, selectedCaseType, selectedYear)
-          }
+          handleSubmit={handleSubmit}
           isSubmitDisabled={isSubmitDisabled}
           config={caseSearchConfig.buttons}
         />
