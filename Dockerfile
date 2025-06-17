@@ -6,7 +6,9 @@ FROM node:20-alpine
 # ENV ONCOURTS_API_ENDPOINT=https://oncourts.kerala.gov.in
 # ENV ONCOURTS_CITIZEN_APP_ENDPOINT=https://oncourts.kerala.gov.in/ui/citizen/login
 # ENV ONCOURTS_EMPLOYEE_APP_ENDPOINT=https://oncourts.kerala.gov.in/ui/employee/login
+ARG NEXT_PUBLIC_ONCOURTS_API_ENDPOINT
 
+ENV NEXT_PUBLIC_ONCOURTS_API_ENDPOINT=${NEXT_PUBLIC_ONCOURTS_API_ENDPOINT}
 # Set the working directory inside the container
 WORKDIR /app
 
@@ -17,7 +19,6 @@ COPY package.json package-lock.json ./
 RUN npm install 
 # Copy the rest of your application code
 COPY . .
-COPY .env.development .env
 # Build the Next.js application
 RUN npm run build
 
