@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { APP_URLS } from "../../lib/config";
 
 const Carousel: React.FC = () => {
   return (
@@ -15,7 +16,7 @@ const Carousel: React.FC = () => {
 
       <div className="flex flex-wrap md:flex-nowrap gap-8 px-6 md:px-12 py-8 -mt-28 relative z-10">
         <a
-          href="https://oncourts.kerala.gov.in/ui/citizen/dristi/home/login"
+          href={APP_URLS.CITIZEN_DRISTI}
           className="flex-1 flex items-center pl-6 rounded-[10px] border border-teal bg-white text-teal shadow-xl transition-colors duration-300 hover:bg-teal hover:text-white group"
           target="/"
         >
@@ -59,7 +60,7 @@ const Carousel: React.FC = () => {
         </a>
 
         <a
-          href="https://oncourts.kerala.gov.in/ui/employee/user/login"
+          href={APP_URLS.EMPLOYEE_USER}
           className="flex-1 flex items-center pl-6 rounded-[10px] border border-teal bg-white text-teal shadow-xl transition-colors duration-300 hover:bg-teal hover:text-white group"
           target="/"
         >
