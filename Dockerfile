@@ -17,7 +17,7 @@ COPY package.json package-lock.json ./
 RUN npm install 
 # Copy the rest of your application code
 COPY . .
-
+COPY .env.deployment .env
 # Build the Next.js application
 RUN npm run build
 
