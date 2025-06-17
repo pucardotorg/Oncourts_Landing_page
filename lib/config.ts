@@ -10,23 +10,23 @@ export const API_BASE_URL = process.env.NEXT_PUBLIC_ONCOURTS_API_ENDPOINT;
 export const API_ENDPOINTS = {
   // Scheduler endpoints
   SCHEDULER: {
-    RECENT_CAUSE_LIST: `/api/scheduler/causelist/v1/_recentCauseList`,
-    DOWNLOAD: `/api/scheduler/causelist/v1/_download`,
+    RECENT_CAUSE_LIST: `${API_BASE_URL}/scheduler/causelist/v1/_recentCauseList`,
+    DOWNLOAD: `${API_BASE_URL}/scheduler/causelist/v1/_download`,
   },
   
   // OpenAPI endpoints
   OPENAPI: {
-    CASE: `/api/openapi/v1/kl/case`,
-    CASE_BY_CNR: (caseNumber: string) => `/api/openapi/v1/kl/case/cnr/${caseNumber}`,
+    CASE: `${API_BASE_URL}/openapi/v1/kl/case`,
+    CASE_BY_CNR: (caseNumber: string) => `${API_BASE_URL}/openapi/v1/kl/case/cnr/${caseNumber}`,
     CASE_BY_TYPE: (year: string, type: string, offset: string, limit: string) => 
-      `/api/openapi/v1/kl/case/${year}/${type}?offset=${offset}&limit=${limit}`,
+      `${API_BASE_URL}/openapi/v1/kl/case/${year}/${type}?offset=${offset}&limit=${limit}`,
     CASE_BY_NUMBER: (year: string, type: string, caseNumber: string) => 
-      `/api/openapi/v1/kl/case/${year}/${type}/${caseNumber}`,
+      `${API_BASE_URL}/openapi/v1/kl/case/${year}/${type}/${caseNumber}`,
   },
   
   // MDMS endpoints
   MDMS: {
-    SEARCH: `/api/egov-mdms-service/v1/_search?tenantId=kl`,
+    SEARCH: `${API_BASE_URL}/egov-mdms-service/v1/_search?tenantId=kl`,
   },
 };
 
