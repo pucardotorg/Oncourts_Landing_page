@@ -3,9 +3,9 @@
 FROM node:20-alpine
 
 # Set environment variables
-ENV ONCOURTS_API_ENDPOINT=https://oncourts.kerala.gov.in
-ENV ONCOURTS_CITIZEN_APP_ENDPOINT=https://oncourts.kerala.gov.in/ui/citizen/login
-ENV ONCOURTS_EMPLOYEE_APP_ENDPOINT=https://oncourts.kerala.gov.in/ui/employee/login
+# ENV ONCOURTS_API_ENDPOINT=https://oncourts.kerala.gov.in
+# ENV ONCOURTS_CITIZEN_APP_ENDPOINT=https://oncourts.kerala.gov.in/ui/citizen/login
+# ENV ONCOURTS_EMPLOYEE_APP_ENDPOINT=https://oncourts.kerala.gov.in/ui/employee/login
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -14,8 +14,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Install dependencies
-RUN npm install --production
-
+RUN npm install 
 # Copy the rest of your application code
 COPY . .
 
