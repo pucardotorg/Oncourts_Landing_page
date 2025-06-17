@@ -1,10 +1,12 @@
+import { API_ENDPOINTS } from '../../lib/config';
+
 export default async function handler(req, res) {
 
   const { tenantId, Criteria } = req.body;
   if (!tenantId || !Criteria) {
     return res.status(400).json({ error: 'Missing required parameters: tenantId and Criteria are required' });
   }
-  const url = `https://oncourts.kerala.gov.in/scheduler/causelist/v1/_download`;
+  const url = API_ENDPOINTS.SCHEDULER.DOWNLOAD;
   try {
     const response = await fetch(url,
       {

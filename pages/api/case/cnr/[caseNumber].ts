@@ -1,10 +1,12 @@
+import { API_ENDPOINTS } from '../../../../lib/config';
+
 export default async function handler(req, res) {
   const { caseNumber } = req.query;
   if (!caseNumber) {
     return res.status(400).json("Bad Request");
   }
 
-  const url = `https://oncourts.kerala.gov.in/openapi/v1/kl/case/cnr/${caseNumber}`;
+  const url = API_ENDPOINTS.OPENAPI.CASE_BY_CNR(caseNumber as string);
 
   try {
     const response = await fetch(url, {
