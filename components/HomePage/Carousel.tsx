@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { trackEvent } from "../../lib/gtag";
 
 const Carousel: React.FC = () => {
   return (
@@ -17,6 +18,10 @@ const Carousel: React.FC = () => {
         <a
           href="https://oncourts.kerala.gov.in/ui/citizen/dristi/home/login"
           className="flex-1 flex items-center pl-6 rounded-[10px] border border-teal bg-white text-teal shadow-xl transition-colors duration-300 hover:bg-teal hover:text-white group"
+          onClick={() => {
+               trackEvent("login_as_advocate_or_litigant_click", undefined, "Homepage_Clicks")
+            }
+          }
           target="/"
         >
           <div className="relative w-[50px] h-[50px] mr-6">
@@ -61,6 +66,10 @@ const Carousel: React.FC = () => {
         <a
           href="https://oncourts.kerala.gov.in/ui/employee/user/login"
           className="flex-1 flex items-center pl-6 rounded-[10px] border border-teal bg-white text-teal shadow-xl transition-colors duration-300 hover:bg-teal hover:text-white group"
+          onClick={() => {
+            trackEvent("login_as_employee_click", undefined, "Homepage_Clicks", {})
+         }
+       }
           target="/"
         >
           <div className="relative w-[50px] h-[50px] mr-6">
