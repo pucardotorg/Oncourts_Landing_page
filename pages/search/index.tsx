@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import Head from "next/head";
 import SearchTabs from "../../components/search/SearchTabs";
 import SearchForm from "../../components/search/SearchForm";
 import AdditionalFilters from "../../components/search/AdditionalFilters";
 import CaseDetailsTable from "../../components/search/CaseDetailsTable";
+import { FormState, FilterState, CaseResult } from "../../types/search";
+import { isFormValid, searchCases } from "../../utils/searchUtils";
 import DetailedViewModal from "../../components/CaseSearch/DetailedViewModal";
+import { newCaseSearchConfig } from "../../data/newCaseSearchConfig";
+import { commonStyles, animations } from "../../styles/commonStyles";
 
 const SearchForCase = () => {
   const [selectedTab, setSelectedTab] = useState("Case Number");
   const [showViewDetailedModal, setShowViewDetailedModal] = useState(false);
+  
+  // Error notification state
+  const [errorNotification, setErrorNotification] = useState<{
+    show: boolean;
+    message: string;
+  }>({ show: false, message: "" });
 
   // Pagination state
   const [offset, setOffset] = useState(0);
@@ -16,9 +27,9 @@ const SearchForCase = () => {
   const [totalCount, setTotalCount] = useState(0);
 
   // Form state
-  const [formState, setFormState] = useState({
+  const [formState, setFormState] = useState<FormState>({
     caseNumber: "",
-    selectedYear: "", // Default year kept as current year
+    selectedYear: "",
     selectedCourt: "",
     selectedCaseType: "",
     code: "",
@@ -30,7 +41,7 @@ const SearchForCase = () => {
   });
 
   // Additional filters state
-  const [filterState, setFilterState] = useState({
+  const [filterState, setFilterState] = useState<FilterState>({
     courtName: "",
     caseType: "",
     hearingDateFrom: "",
@@ -40,77 +51,20 @@ const SearchForCase = () => {
     caseStatus: "",
   });
 
-  // Define case result type
-  interface CaseResult {
-    caseTitle: string;
-    caseNumber: string;
-    nextHearingDate: string;
-    purpose: string;
-  }
-
   const [searchResults, setSearchResults] = useState<CaseResult[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
-
-  // Format date from timestamp (milliseconds) to readable format
-  const formatDate = (timestamp: number | null | undefined) => {
-    if (!timestamp) return "Not Available";
-    return new Date(timestamp).toLocaleDateString("en-US", {
-      day: "numeric",
-      month: "short",
-      year: "2-digit",
-    });
-  };
-
-  // Fetch case data from API
-  const fetchCase = async (url: string) => {
-    try {
-      const response = await fetch(url);
-      return await response.json();
-    } catch (error) {
-      console.log("Error fetching case data:", (error as Error).message);
-      return null;
-    }
-  };
 
   // Handle tab change
   const handleTabChange = async (tab: string) => {
     setSelectedTab(tab);
-    if (tab === "All") {
-      // For All tab, use the case list endpoint with pagination
-      const res = await fetchCase(
-        `/api/case/2025/CMP?offset=${offset}&limit=${limit}`
-      );
-
-      if (res?.caseList) {
-        const caseList = res.caseList || [];
-        setTotalCount(res?.pagination?.totalCount || 0);
-
-        // Define type for case items to avoid 'any'
-        interface CaseItem {
-          caseTitle?: string;
-          caseNumber?: string;
-          nextHearingDate?: number;
-          purpose?: string;
-        }
-
-        // Map each case in the list to the table format
-        const mappedResults = caseList.map((caseItem: CaseItem) => ({
-          caseTitle: caseItem.caseTitle,
-          caseNumber: caseItem.caseNumber,
-          nextHearingDate: caseItem.nextHearingDate || "Not Available",
-          purpose: caseItem.purpose || "Not Available",
-        }));
-
-        setSearchResults(mappedResults);
-      }
-    }
+    
     // Reset form fields on tab change
     setFormState({
-      ...formState,
-      selectedCourt: "",
       caseNumber: "",
       selectedYear: "",
+      selectedCourt: "",
       selectedCaseType: "",
       advocateSearchMethod: "Bar Code",
       code: "",
@@ -118,8 +72,44 @@ const SearchForCase = () => {
       barCode: "",
       advocateName: "",
       litigantName: "",
-
     });
+    
+    // Reset search results and pagination
+    setOffset(0);
+    setSearchResults([]);
+    
+    // Load initial data for "All" tab
+    if (tab === "All") {
+      await fetchAllCases();
+    }
+  };
+  
+  // Fetch all cases for "All" tab
+  const fetchAllCases = async () => {
+    setIsLoading(true);
+    // Hide any previous errors
+    setErrorNotification({ show: false, message: "" });
+    
+    const { results, totalCount: count, error } = await searchCases("All", { offset, limit });
+    
+    if (error) {
+      setErrorNotification({ 
+        show: true, 
+        message: error.message || "An error occurred while loading cases. Please try again." 
+      });
+      setSearchResults([]);
+      setTotalCount(0);
+      
+      // Auto-hide error notification after 2 seconds
+      setTimeout(() => {
+        setErrorNotification({ show: false, message: "" });
+      }, 2000);
+    } else {
+      setSearchResults(results);
+      setTotalCount(count);
+    }
+    
+    setIsLoading(false);
   };
 
   // Handle form input changes
@@ -210,93 +200,41 @@ const SearchForCase = () => {
 
   // Submit form
   const handleSubmit = async () => {
-    let url = "";
-    switch (selectedTab) {
-      case "CNR Number":
-        if (formState.cnrNumber) {
-          url = `/api/case/cnr/${formState.cnrNumber}`;
-        }
-        break;
-
-      case "Case Number":
-        if (formState.selectedYear && formState.selectedCaseType) {
-          url = `/api/case/${formState.selectedYear}/${formState.selectedCaseType}/${formState.caseNumber.split("/")[1]}`;
-        }
-
-        break;
-
-      case "Filing Number":
-        if (
-          formState.selectedYear &&
-          formState.selectedCourt &&
-          formState.code
-        ) {
-          url = `/api/case/${formState.selectedYear}/${formState.selectedCourt}/${formState.code}`;
-        }
-        break;
-
-      case "Advocate":
-        if (formState.advocateSearchMethod === "Bar Code") {
-          url = `/api/case/advocate/barcode/${formState.barCode}`;
-        } else {
-          url = `/api/case/advocate/name/${formState.advocateName}`;
-        }
-        break;
-
-      case "Litigant":
-        url = `/api/case/litigant/${formState.litigantName}`;
-        break;
-
-      case "All":
-        url = `/api/case/2025/CMP?offset=${offset}&limit=${limit}`;
-        break;
+    // Check if form is valid before submission
+    if (!isFormValid(selectedTab, formState)) {
+      return;
     }
-
-    const res = await fetchCase(url);
-    console.log("API Response:", res);
-
-    if (selectedTab === "All" && res?.caseList) {
-      const caseList = res.caseList || [];
-      setTotalCount(res?.pagination?.totalCount || 0);
-
-      // Define type for case items to avoid 'any'
-      interface CaseItem {
-        caseTitle?: string;
-        caseNumber?: string;
-        nextHearingDate?: number;
-        purpose?: string;
-      }
-
-      // Map each case in the list to the table format
-      const mappedResults = caseList.map((caseItem: CaseItem) => ({
-        caseTitle: caseItem.caseTitle,
-        caseNumber: caseItem.caseNumber,
-        nextHearingDate: caseItem.nextHearingDate || "Not Available",
-        purpose: caseItem.purpose || "Not Available",
-      }));
-
-      setSearchResults(mappedResults);
-    } else if (res?.caseSummary) {
-      // Process single case response for CNR Number and Case Number tabs
-      const caseSummary = res.caseSummary;
-      const mappedResults = [
-        {
-          caseTitle: caseSummary.advocateComplainant || "Not Available",
-          caseNumber:
-            caseSummary.filingNumber ||
-            caseSummary.registrationNumber ||
-            "Not Available",
-          nextHearingDate: formatDate(caseSummary.registrationDate),
-          purpose: caseSummary.subStage || "Not Available",
-        },
-      ];
-
-      setSearchResults(mappedResults);
-    } else {
-      // Handle case when no results are found
+    
+    setIsLoading(true);
+    // Hide any previous errors
+    setErrorNotification({ show: false, message: "" });
+    
+    // Use the searchCases utility function which handles URL building, fetching, and transformation
+    const { results, totalCount: count, error } = await searchCases(selectedTab, {
+      ...formState,
+      offset,
+      limit
+    });
+    
+    // Handle API errors
+    if (error) {
+      setErrorNotification({ 
+        show: true, 
+        message: error.message || "An error occurred while searching. Please try again." 
+      });
       setSearchResults([]);
-      console.log("No results found or API error");
+      setTotalCount(0);
+      
+      // Auto-hide error notification after 2 seconds
+      setTimeout(() => {
+        setErrorNotification({ show: false, message: "" });
+      }, 2000);
+    } else {
+      setSearchResults(results);
+      setTotalCount(count);
     }
+    
+    setIsLoading(false);
   };
 
   // Handle view case details
@@ -329,21 +267,23 @@ const SearchForCase = () => {
   }, [router.isReady, router.query]);
 
   return (
-    <div className="max-w-screen mx-auto py-6 px-20">
-      <h1
-        className="text-center mb-6  text-6xl"
-        style={{
-          fontFamily: "Libre Baskerville",
-          fontWeight: 400,
-          color: "#3A3A3A",
-        }}
+    <div className={commonStyles.container}>
+      <Head>
+        <style dangerouslySetInnerHTML={{ __html: animations }} />
+      </Head>
+      <h1 
+        className={commonStyles.heading.primary}
+        style={{ color: commonStyles.colors.text }}
       >
-        Case Search
-      </h1>
+        {newCaseSearchConfig.heading}</h1>
       {/* Search Container */}
       <div>
         {/* Search Tabs */}
-        <SearchTabs selectedTab={selectedTab} onTabChange={handleTabChange} />
+        <SearchTabs 
+          selectedTab={selectedTab} 
+          onTabChange={handleTabChange} 
+          tabs={newCaseSearchConfig.tabs}
+        />
 
         {/* Search Form - Only show if not "All" tab */}
         {selectedTab !== "All" && (
@@ -358,9 +298,35 @@ const SearchForCase = () => {
           />
         )}
       </div>
-      {selectedTab === "All" && searchResults?.length > 0 && (
-        <div className="text-xl font-semibold text-[#EA580C] italic">
+      {selectedTab === "All" && (
+        <div className={commonStyles.heading.accent}>
           Choose from filter to search cases
+        </div>
+      )}
+      
+      {/* Loading indicator */}
+      {isLoading && (
+        <div className={commonStyles.loading.container}>
+          <div className={commonStyles.loading.spinner}></div>
+        </div>
+      )}
+      
+      {/* Error Notification - Bottom Center with Auto Close */}
+      {errorNotification.show && (
+        <div 
+          className={`${commonStyles.notification.container} ${commonStyles.notification.bottomCenter} ${commonStyles.notification.error}`}
+          style={{
+            minWidth: '300px',
+            maxWidth: '80%',
+            animation: 'fadeInUp 0.3s ease-out forwards',
+          }}
+        >
+          <div className="flex items-center justify-center w-full">
+            <svg className={commonStyles.notification.icon} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className={commonStyles.notification.message}>{errorNotification.message}</span>
+          </div>
         </div>
       )}
       {/* Additional Filters */}

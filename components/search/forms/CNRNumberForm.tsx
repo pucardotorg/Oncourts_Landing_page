@@ -1,5 +1,6 @@
 import React from 'react';
 import { TextField } from '../../ui/form';
+import { newCaseSearchConfig } from '../../../data/newCaseSearchConfig';
 
 interface CNRNumberFormProps {
   cnrNumber: string;
@@ -10,12 +11,12 @@ const CNRNumberForm: React.FC<CNRNumberFormProps> = ({ cnrNumber, onChange }) =>
   return (
     <div>
       <TextField
-        label="CNR Number"
+        label={newCaseSearchConfig.cnrNumber.label}
         value={cnrNumber}
         onChange={onChange}
-        placeholder="Ex: KLKL123456789123"
-        helperText="Format: CourtId + Number"
-        required
+        placeholder={newCaseSearchConfig.cnrNumber.placeholder}
+        helperText={newCaseSearchConfig.cnrNumber.errorMessage} // Use errorMessage as helperText
+        required={true} // CNR number is always required
         minLength={16}
         maxLength={16}
       />
