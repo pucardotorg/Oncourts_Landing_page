@@ -1,138 +1,391 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { caseSearchConfig } from "../../data/caseSearchConfig";
-import SubmitButtons from "../../components/CaseSearch/SubmitButtons";
-import CaseNumberForm from "../../components/CaseSearch/CaseNumberForm";
-import CNRForm from "../../components/CaseSearch/CNRForm";
+import SearchTabs from "../../components/search/SearchTabs";
+import SearchForm from "../../components/search/SearchForm";
+import AdditionalFilters from "../../components/search/AdditionalFilters";
+import CaseDetailsTable from "../../components/search/CaseDetailsTable";
 
 const SearchForCase = () => {
-  const [selectedButton, setSelectedButton] = useState("CNR");
-  // caseNumber is used for both CNR and Case Number -- can be seperated if needed
-  const [caseNumber, setCaseNumber] = useState("");
-  const [selectedYear, setSelectedYear] = useState("");
-  const [selectedCaseType, setSelectedCaseType] = useState("");
-  const router = useRouter();
+  const [selectedTab, setSelectedTab] = useState("Case Number");
 
-  const caseNumberPattern = /^[A-Z]+\/\d*\/\d{4}$/;
-  const isValidCaseNumber =
-    selectedButton === "CNR" ? caseNumber.trim() !== "" : caseNumber === "" || caseNumberPattern.test(caseNumber);
-  // const isSubmitDisabled = !isValidCaseNumber || (selectedButton === "CaseNumber" && (selectedCaseType === "" || selectedYear === ""));
-  const isSubmitDisabled = !isValidCaseNumber;
+  // Pagination state
+  const [offset, setOffset] = useState(0);
+  const limit = 10;
+  const [totalCount, setTotalCount] = useState(0);
 
-  const handleButtonClick = (buttonType) => {
-    setCaseNumber("");
-    setSelectedButton(buttonType);
-  };
+  // Form state
+  const [formState, setFormState] = useState({
+    caseNumber: "",
+    selectedYear: "", // Default year kept as current year
+    selectedCourt: "",
+    selectedCaseType: "",
+    code: "",
+    cnrNumber: "",
+    advocateSearchMethod: "Bar Code", // Default search method
+    barCode: "",
+    advocateName: "",
+    litigantName: "",
+  });
 
-  const handleClear = () => {
-    setCaseNumber("");
-    setSelectedYear("");
-    setSelectedCaseType("");
-  };
+  // Additional filters state
+  const [filterState, setFilterState] = useState({
+    courtName: "",
+    caseType: "",
+    hearingDateFrom: "",
+    hearingDateTo: "",
+    filingYear: "",
+    caseStage: "",
+    caseStatus: "",
+  });
 
-  async function searchCaseSummary(caseNumber, selectedCaseType, selectedYear) {
-    const queryParams: {
-      caseNumber?: string;
-      selectedCaseType?: string;
-      selectedYear?: string;
-      selectedButton?: string
-    } = {};
-
-    if (caseNumber) {
-      if (caseNumber.includes("/")) {
-        queryParams.caseNumber = caseNumber.split("/")[1];
-        queryParams.selectedCaseType = caseNumber.split("/")[0];
-        queryParams.selectedYear = caseNumber.split("/")[2];
-      } else {
-        queryParams.caseNumber = caseNumber;
-      }
-    } else {
-      if (selectedCaseType) queryParams.selectedCaseType = selectedCaseType;
-      if (selectedYear) queryParams.selectedYear = selectedYear;
-    }
-
-    if (selectedButton) queryParams.selectedButton = selectedButton;
-
-    router.push({
-      pathname: "/casedetails",
-      query: queryParams,
-    });
+  // Define case result type
+  interface CaseResult {
+    caseTitle: string;
+    caseNumber: string;
+    nextHearingDate: string;
+    purpose: string;
   }
 
-  const handleSubmit = () => {
-    if (isSubmitDisabled) return;
-    searchCaseSummary(caseNumber, selectedCaseType, selectedYear);
+  const [searchResults, setSearchResults] = useState<CaseResult[]>([]);
+
+  const router = useRouter();
+
+  // Format date from timestamp (milliseconds) to readable format
+  const formatDate = (timestamp: number | null | undefined) => {
+    if (!timestamp) return "Not Available";
+    return new Date(timestamp).toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "2-digit",
+    });
+  };
+
+  // Fetch case data from API
+  const fetchCase = async (url: string) => {
+    try {
+      const response = await fetch(url);
+      return await response.json();
+    } catch (error) {
+      console.log("Error fetching case data:", (error as Error).message);
+      return null;
+    }
+  };
+
+  // Handle tab change
+  const handleTabChange = async (tab: string) => {
+    setSelectedTab(tab);
+    if (tab === "All") {
+      // For All tab, use the case list endpoint with pagination
+      const res = await fetchCase(
+        `/api/case/2025/CMP?offset=${offset}&limit=${limit}`
+      );
+
+      if (res?.caseList) {
+        const caseList = res.caseList || [];
+        setTotalCount(res?.pagination?.totalCount || 0);
+
+        // Define type for case items to avoid 'any'
+        interface CaseItem {
+          caseTitle?: string;
+          caseNumber?: string;
+          nextHearingDate?: number;
+          purpose?: string;
+        }
+
+        // Map each case in the list to the table format
+        const mappedResults = caseList.map((caseItem: CaseItem) => ({
+          caseTitle: caseItem.caseTitle,
+          caseNumber: caseItem.caseNumber,
+          nextHearingDate: caseItem.nextHearingDate || "Not Available",
+          purpose: caseItem.purpose || "Not Available",
+        }));
+
+        setSearchResults(mappedResults);
+      }
+    }
+    // Reset form fields on tab change
+    setFormState({
+      ...formState,
+      selectedCourt: "",
+      caseNumber: "",
+      selectedYear: "",
+      selectedCaseType: "",
+      advocateSearchMethod: "Bar Code",
+      code: "",
+      cnrNumber: "",
+      barCode: "",
+      advocateName: "",
+      litigantName: "",
+
+    });
+  };
+
+  // Handle form input changes
+  const handleInputChange = (field: string, value: string) => {
+    if (field === "advocateSearchMethod") {
+      // When advocate search method changes, clear appropriate fields
+      if (value === "Bar Code") {
+        // If switching to Bar Code, clear advocate name
+        setFormState({
+          ...formState,
+          advocateSearchMethod: value,
+          advocateName: "",
+        });
+      } else if (value === "Advocate Name") {
+        // If switching to Advocate Name, clear bar code fields
+        setFormState({
+          ...formState,
+          advocateSearchMethod: value,
+          barCode: "",
+          code: "",
+          selectedYear: "", // Reset to default year
+        });
+      }
+    } else {
+      // Normal field update for other fields
+      setFormState({
+        ...formState,
+        [field]: value,
+      });
+    }
+  };
+
+  // Handle filter changes
+  const handleFilterChange = (field: string, value: string) => {
+    // Update the filter state
+    setFilterState({
+      ...filterState,
+      [field]: value,
+    });
+  };
+
+  // Reset filters
+  const handleResetFilters = () => {
+    setFilterState({
+      courtName: "",
+      caseType: "",
+      hearingDateFrom: "",
+      hearingDateTo: "",
+      filingYear: "",
+      caseStage: "",
+      caseStatus: "",
+    });
+  };
+
+  // Clear form
+  const handleClear = () => {
+    setFormState({
+      caseNumber: "",
+      selectedYear: "",
+      selectedCourt: "",
+      selectedCaseType: "",
+      code: "",
+      cnrNumber: "",
+      advocateSearchMethod: "Bar Code",
+      barCode: "",
+      advocateName: "",
+      litigantName: "",
+    });
+    // Reset pagination
+    setOffset(0);
+    setTotalCount(0);
+  };
+
+  // Pagination handlers
+  const handleNextPage = () => {
+    if (offset + limit < totalCount) {
+      setOffset(offset + limit);
+      handleSubmit(); // Re-fetch with new offset
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (offset - limit >= 0) {
+      setOffset(offset - limit);
+      handleSubmit(); // Re-fetch with new offset
+    }
+  };
+
+  // Submit form
+  const handleSubmit = async () => {
+    let url = "";
+    switch (selectedTab) {
+      case "CNR Number":
+        if (formState.cnrNumber) {
+          url = `/api/case/cnr/${formState.cnrNumber}`;
+        }
+        break;
+
+      case "Case Number":
+        if (formState.selectedYear && formState.selectedCaseType) {
+          url = `/api/case/${formState.selectedYear}/${formState.selectedCaseType}/${formState.caseNumber.split("/")[1]}`;
+        }
+
+        break;
+
+      case "Filing Number":
+        if (
+          formState.selectedYear &&
+          formState.selectedCourt &&
+          formState.code
+        ) {
+          url = `/api/case/${formState.selectedYear}/${formState.selectedCourt}/${formState.code}`;
+        }
+        break;
+
+      case "Advocate":
+        if (formState.advocateSearchMethod === "Bar Code") {
+          url = `/api/case/advocate/barcode/${formState.barCode}`;
+        } else {
+          url = `/api/case/advocate/name/${formState.advocateName}`;
+        }
+        break;
+
+      case "Litigant":
+        url = `/api/case/litigant/${formState.litigantName}`;
+        break;
+
+      case "All":
+        url = `/api/case/2025/CMP?offset=${offset}&limit=${limit}`;
+        break;
+    }
+
+    const res = await fetchCase(url);
+    console.log("API Response:", res);
+
+    if (selectedTab === "All" && res?.caseList) {
+      const caseList = res.caseList || [];
+      setTotalCount(res?.pagination?.totalCount || 0);
+
+      // Define type for case items to avoid 'any'
+      interface CaseItem {
+        caseTitle?: string;
+        caseNumber?: string;
+        nextHearingDate?: number;
+        purpose?: string;
+      }
+
+      // Map each case in the list to the table format
+      const mappedResults = caseList.map((caseItem: CaseItem) => ({
+        caseTitle: caseItem.caseTitle,
+        caseNumber: caseItem.caseNumber,
+        nextHearingDate: caseItem.nextHearingDate || "Not Available",
+        purpose: caseItem.purpose || "Not Available",
+      }));
+
+      setSearchResults(mappedResults);
+    } else if (res?.caseSummary) {
+      // Process single case response for CNR Number and Case Number tabs
+      const caseSummary = res.caseSummary;
+      const mappedResults = [
+        {
+          caseTitle: caseSummary.advocateComplainant || "Not Available",
+          caseNumber:
+            caseSummary.filingNumber ||
+            caseSummary.registrationNumber ||
+            "Not Available",
+          nextHearingDate: formatDate(caseSummary.registrationDate),
+          purpose: caseSummary.subStage || "Not Available",
+        },
+      ];
+
+      setSearchResults(mappedResults);
+    } else {
+      // Handle case when no results are found
+      setSearchResults([]);
+      console.log("No results found or API error");
+    }
+  };
+
+  // Handle view case details
+  const handleViewCaseDetails = (caseNumber: string) => {
+    // Navigate to case details page
+    // router.push(`/casedetails/${caseNumber}`);
+    console.log("Viewing details for case:", caseNumber);
   };
 
   useEffect(() => {
     if (!router.isReady) return;
-    const { selectedButton, caseNumber, selectedCaseType, selectedYear } = router.query;
-    if (!selectedButton || !caseNumber) return;
+    const {
+      selectedTab,
+      caseNumber,
+      selectedYear,
+      selectedCourt,
+      selectedCaseType,
+      code,
+    } = router.query;
 
-    if (selectedButton) setSelectedButton(selectedButton as string);
+    if (selectedTab) setSelectedTab(selectedTab as string);
 
-    if (selectedButton === "CNR") setCaseNumber(caseNumber as string);
-    else {
-      if (selectedCaseType && selectedYear) {
-        setSelectedCaseType(selectedCaseType as string);
-        setSelectedYear(selectedYear as string);
-        setCaseNumber(`${selectedCaseType}/${caseNumber}/${selectedYear}`);
-      }
-    }
-  }, [router]);
+    setFormState((prevState) => ({
+      ...prevState,
+      caseNumber: (caseNumber as string) || prevState.caseNumber,
+      selectedYear: (selectedYear as string) || prevState.selectedYear,
+      selectedCourt: (selectedCourt as string) || prevState.selectedCourt,
+      selectedCaseType:
+        (selectedCaseType as string) || prevState.selectedCaseType,
+      code: (code as string) || prevState.code,
+    }));
+  }, [router.isReady, router.query]);
 
   return (
-    <div className="max-w-xl mx-auto py-8">
-      <h2 className="text-teal font-bold text-3xl mb-4 text-center">
-        {caseSearchConfig.heading}
-      </h2>
-      <div className="mx-8">
-        <div className="flex border-2 border-teal rounded-xl mb-6 p-2">
-          <button
-            onClick={() => handleButtonClick("CNR")}
-            className={`flex-1 py-2 px-2 text-center rounded-sm ${selectedButton === "CNR" ? "bg-teal text-white" : "text-teal"} border-r-2 border-teal`}
-          >
-            {caseSearchConfig.buttonLabels.cnr}
-          </button>
-          <button
-            onClick={() => handleButtonClick("CaseNumber")}
-            className={`flex-1 py-2 text-center rounded-sm ${selectedButton === "CaseNumber" ? "bg-teal text-white" : "text-teal"}`}
-          >
-            {caseSearchConfig.buttonLabels.caseNumber}
-          </button>
-        </div>
-      </div>
+    <div className="max-w-screen mx-auto py-6 px-20">
+      <h1
+        className="text-center mb-6  text-6xl"
+        style={{
+          fontFamily: "Libre Baskerville",
+          fontWeight: 400,
+          color: "#3A3A3A",
+        }}
+      >
+        Case Search
+      </h1>
+      {/* Search Container */}
+      <div>
+        {/* Search Tabs */}
+        <SearchTabs selectedTab={selectedTab} onTabChange={handleTabChange} />
 
-      <div className="p-6 rounded-2xl shadow-md" tabIndex={0} onKeyDown={(e) => {
-        if (e.key === 'Enter' && !isSubmitDisabled) {
-          handleSubmit();
-        }
-      }}>
-        {selectedButton === "CNR" && (
-          <CNRForm
-            caseNumber={caseNumber}
-            setCaseNumber={setCaseNumber}
-            config={caseSearchConfig.cnrInput}
+        {/* Search Form - Only show if not "All" tab */}
+        {selectedTab !== "All" && (
+          <SearchForm
+            selectedTab={selectedTab}
+            formState={{
+              ...formState,
+              handleClear,
+              handleSubmit,
+            }}
+            handleInputChange={handleInputChange}
           />
         )}
-        {selectedButton === "CaseNumber" && (
-          <CaseNumberForm
-            caseNumber={caseNumber}
-            setCaseNumber={setCaseNumber}
-            selectedCaseType={selectedCaseType}
-            setSelectedCaseType={setSelectedCaseType}
-            selectedYear={selectedYear}
-            setSelectedYear={setSelectedYear}
-            config={caseSearchConfig.caseNumberSection}
-          />
-        )}
-        <SubmitButtons
-          handleClear={handleClear}
-          handleSubmit={handleSubmit}
-          isSubmitDisabled={isSubmitDisabled}
-          config={caseSearchConfig.buttons}
-        />
       </div>
+      {selectedTab === "All" && searchResults?.length > 0 && (
+        <div className="text-xl font-semibold text-[#EA580C] italic">
+          Choose from filter to search cases
+        </div>
+      )}
+      {/* Additional Filters */}
+      {searchResults?.length > 0 &&
+        ["All", "Advocate", "Litigant"].includes(selectedTab) && (
+          <AdditionalFilters
+            selectedTab={selectedTab}
+            filterState={filterState}
+            onFilterChange={handleFilterChange}
+            onResetFilters={handleResetFilters}
+          />
+        )}
+
+      {/* Case Details Table with built-in pagination */}
+      {searchResults?.length > 0 && (
+        <CaseDetailsTable
+          searchResults={searchResults}
+          onViewCaseDetails={handleViewCaseDetails}
+          totalCount={totalCount}
+          offset={offset}
+          limit={limit}
+          onNextPage={handleNextPage}
+          onPrevPage={handlePrevPage}
+        />
+      )}
     </div>
   );
 };
