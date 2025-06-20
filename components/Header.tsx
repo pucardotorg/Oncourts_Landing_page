@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { svgIcons } from "../data/svgIcons.js";
+import { trackEvent } from "../lib/gtag";
 
 interface NavLinkProps {
   href: string;
@@ -172,7 +173,10 @@ const Header = () => {
               />
             </div>
 
-            <div className="flex flex-row justify-center items-center p-[10px] gap-[10px] w-[200px] h-[50px] bg-white rounded-[8px]">
+            <div className="flex flex-row justify-center items-center p-[10px] gap-[10px] w-[200px] h-[50px] bg-white rounded-[8px]"
+              onClick={() =>{
+                trackEvent("search_case_button_click", undefined, "Homepage_Clicks")
+              }}>
               <Link href="/search" passHref>
                 <button className="flex items-center font-semibold text-[#007E7E]">
                   <svgIcons.SearchIcon />

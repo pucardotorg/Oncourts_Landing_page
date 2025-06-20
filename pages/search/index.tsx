@@ -4,6 +4,7 @@ import { caseSearchConfig } from "../../data/caseSearchConfig";
 import SubmitButtons from "../../components/CaseSearch/SubmitButtons";
 import CaseNumberForm from "../../components/CaseSearch/CaseNumberForm";
 import CNRForm from "../../components/CaseSearch/CNRForm";
+import { trackEvent } from "../../lib/gtag";
 
 const SearchForCase = () => {
   const [selectedButton, setSelectedButton] = useState("CNR");
@@ -61,6 +62,7 @@ const SearchForCase = () => {
 
   const handleSubmit = () => {
     if (isSubmitDisabled) return;
+    trackEvent("search_case_submit", undefined, "CaseSearchPage_Clicks",{case_search_param: selectedButton});
     searchCaseSummary(caseNumber, selectedCaseType, selectedYear);
   };
 

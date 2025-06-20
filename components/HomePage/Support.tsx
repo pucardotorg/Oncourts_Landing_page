@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { svgIcons } from "../../data/svgIcons";
 import { SupportData } from "../../data/SupportData";
+import { trackEvent } from "../../lib/gtag";
 
 const Support: React.FC = () => {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
@@ -23,7 +24,9 @@ const Support: React.FC = () => {
             {SupportData?.Resources?.header}
           </h3>
           {SupportData?.Resources?.data?.map((data, index) => (
-            <div key={index} className="mb-4">
+            <div key={index} className="mb-4" onClick={() => {
+              trackEvent(`section_resource_${data?.section}_click`, undefined, "Homepage_Clicks")
+            }}>
               <Link href={data?.link} className="block mb-4">
                 <div
                   className="flex items-center justify-between cursor-pointer"
@@ -59,7 +62,9 @@ const Support: React.FC = () => {
             {SupportData?.QuickLinks?.header}
           </h3>
           {SupportData?.QuickLinks?.data?.map((data, index) => (
-            <div key={index} className="mb-4">
+            <div key={index} className="mb-4" onClick={() => {
+              trackEvent(`section_quicklinks_${data?.section}_click`, undefined, "Homepage_Clicks")
+            }}>
               <Link href={data?.link} className="block mb-4">
                 <div
                   className="flex items-center justify-between cursor-pointer"

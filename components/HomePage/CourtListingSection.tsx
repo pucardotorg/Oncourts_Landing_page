@@ -5,6 +5,7 @@ import { svgIcons } from "../../data/svgIcons";
 import styles from "../../styles/WhatsNewCard.module.css";
 import { CauseListItem } from "./NoticeAndCauseListSection";
 import PDFViewer from "../PDFViewer";
+import { trackEvent } from "../../lib/gtag";
 
 interface NoticeItem {
   id: string;
@@ -200,7 +201,11 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
                   </div>
                 </div>
                 {item.fileStoreId && <div
-                  onClick={() => handlePreview(format(item.date, "yyyy-MM-dd"))} // assuming item.date exists
+                  onClick={() => {
+                    trackEvent("view_causelist_click", undefined, "Homepage_Clicks", {});
+                    handlePreview(format(item.date, "yyyy-MM-dd"))
+                  }
+                } // assuming item.date exists
                   className="bg-teal text-white px-3 py-2 rounded flex items-center text-sm underline w-[125px] justify-center cursor-pointer"
                 >
                   <span>View List</span>
@@ -215,7 +220,11 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
                   </div>
                 </div>
                 <div
-                  onClick={() => handlePreview(searchDate)}
+                  onClick={() => {
+                      trackEvent("view_causelist_click", undefined, "Homepage_Clicks", {});
+                      handlePreview(searchDate)
+                    }
+                  }
                   className="bg-teal text-white px-3 py-2 rounded flex items-center text-sm underline w-[125px] justify-center cursor-pointer"
                 >
                   <span>View List</span>
