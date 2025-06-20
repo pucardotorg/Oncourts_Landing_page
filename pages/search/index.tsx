@@ -4,9 +4,11 @@ import SearchTabs from "../../components/search/SearchTabs";
 import SearchForm from "../../components/search/SearchForm";
 import AdditionalFilters from "../../components/search/AdditionalFilters";
 import CaseDetailsTable from "../../components/search/CaseDetailsTable";
+import DetailedViewModal from "../../components/CaseSearch/DetailedViewModal";
 
 const SearchForCase = () => {
   const [selectedTab, setSelectedTab] = useState("Case Number");
+  const [showViewDetailedModal, setShowViewDetailedModal] = useState(false);
 
   // Pagination state
   const [offset, setOffset] = useState(0);
@@ -298,10 +300,8 @@ const SearchForCase = () => {
   };
 
   // Handle view case details
-  const handleViewCaseDetails = (caseNumber: string) => {
-    // Navigate to case details page
-    // router.push(`/casedetails/${caseNumber}`);
-    console.log("Viewing details for case:", caseNumber);
+  const handleViewCaseDetails = () => {
+    setShowViewDetailedModal(true);
   };
 
   useEffect(() => {
@@ -386,6 +386,10 @@ const SearchForCase = () => {
           onPrevPage={handlePrevPage}
         />
       )}
+      {showViewDetailedModal &&
+        <DetailedViewModal onClose={() => setShowViewDetailedModal(false)} />
+      }
+
     </div>
   );
 };
