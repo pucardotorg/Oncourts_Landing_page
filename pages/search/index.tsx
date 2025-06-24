@@ -14,6 +14,7 @@ import { commonStyles, animations } from "../../styles/commonStyles";
 const SearchForCase = () => {
   const [selectedTab, setSelectedTab] = useState("Case Number");
   const [showViewDetailedModal, setShowViewDetailedModal] = useState(false);
+  const [selectedCase, setSelectedCase] = useState<{ caseNumber: string; filingNumber?: string; courtId?: string }>({ caseNumber: '' });
   
   // Error notification state
   const [errorNotification, setErrorNotification] = useState<{
@@ -238,7 +239,18 @@ const SearchForCase = () => {
   };
 
   // Handle view case details
-  const handleViewCaseDetails = () => {
+  const handleViewCaseDetails = (caseNumber: string) => {
+    // Find the case in search results
+    const caseDetails = searchResults.find(result => result.caseNumber === caseNumber);
+    
+    // Set the selected case with filing number and court ID
+    // This is example code - you'll need to adjust based on your actual data structure
+    setSelectedCase({
+      caseNumber,
+      filingNumber: caseDetails?.filingNumber || '',
+      courtId: caseDetails?.courtId || 'KLKM52' // Default or from case details
+    });
+    
     setShowViewDetailedModal(true);
   };
 
@@ -298,7 +310,7 @@ const SearchForCase = () => {
           />
         )}
       </div>
-      {selectedTab === "All" && (
+      {selectedTab === "All" && searchResults?.length > 0 && (
         <div className={commonStyles.heading.accent}>
           Choose from filter to search cases
         </div>
@@ -353,7 +365,11 @@ const SearchForCase = () => {
         />
       )}
       {showViewDetailedModal &&
-        <DetailedViewModal onClose={() => setShowViewDetailedModal(false)} />
+        <DetailedViewModal 
+          onClose={() => setShowViewDetailedModal(false)}
+          filingNumber={selectedCase.filingNumber}
+          courtId={selectedCase.courtId}
+        />
       }
 
     </div>

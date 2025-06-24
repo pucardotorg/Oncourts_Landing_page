@@ -10,7 +10,14 @@ export const dummyData = {
   magistrate: "Mr. Ajay Singh",
   courtName: "ON Court, Kollam",
 
-  complainants: ["Sandesh Athreya", "Subarna Sadhu", "Sandesh Athreya", "Subarna Sadhu", "Sandesh Athreya", "Subarna Sadhu"],
+  complainants: [
+    "Sandesh Athreya",
+    "Subarna Sadhu",
+    "Sandesh Athreya",
+    "Subarna Sadhu",
+    "Sandesh Athreya",
+    "Subarna Sadhu",
+  ],
   complainantAdvocates: ["Sandesh Athreya", "Subarna Sadhu"],
   accused: ["Sandesh Athreya", "Subarna Sadhu"],
   accusedAdvocates: "NA",
@@ -18,19 +25,8 @@ export const dummyData = {
   nextHearingDate: "30-Jan-2026",
   purpose: "XYZ",
   lastHearingDate: "24-Jan-2026",
-  caseStage: "Process payment pending",
+  caseStage: "Appearance",
   appearance: "Yes",
-
-  orderHistory: [
-    {
-      date: "10 April 2022",
-      business: "Case has been registered",
-    },
-    {
-      date: "10 April 2022",
-      business: "Case has been registered",
-    },
-  ],
 
   pendingTasks: [
     {

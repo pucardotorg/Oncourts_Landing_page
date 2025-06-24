@@ -8,6 +8,8 @@ export interface CaseResult {
   caseNumber: string;
   nextHearingDate: string;
   purpose: string;
+  filingNumber?: string;
+  courtId?: string;
 }
 
 // Case item interface from API responses
@@ -68,4 +70,22 @@ export interface SearchResult {
   results: CaseResult[];
   totalCount: number;
   error: ApiError | null;
+}
+
+export interface OrderDetails {
+  date: number; // Unix timestamp
+  businessOfTheDay: string;
+}
+
+export interface PaymentTask {
+  id: string;
+  task: string;
+  dueDate: string;
+  daysRemaining: string;
+}
+
+export interface InboxSearchResponse {
+  paymentTasks: PaymentTask[];
+  orderDetailsList: OrderDetails[];
+  totalCount: number;
 }

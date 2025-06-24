@@ -1,13 +1,7 @@
 import React from "react";
 import { FiSearch } from "react-icons/fi";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-
-interface CaseResult {
-  caseTitle: string;
-  caseNumber: string;
-  nextHearingDate: string;
-  purpose: string;
-}
+import { CaseResult } from "../../types/search";
 
 interface CaseDetailsTableProps {
   searchResults: CaseResult[];
