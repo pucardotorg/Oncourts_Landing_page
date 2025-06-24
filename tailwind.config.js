@@ -24,7 +24,10 @@ module.exports = {
         footerBg: "#3A3A3A",
         tealBg: "#007E7E1A",
         tealShadow: "oklch(77.7% 0.152 181.912)",
-        sandBg: "#F7F5F3",
+        peach: "#FFEDD5",
+        darkBrown: "#9A3412",
+        pistachio: " #DCFCE7",
+        darkGreen: "#166534",
       },
       fontFamily: {
         raleway: ["Raleway", "sans-serif"],

@@ -170,6 +170,7 @@ const Header = () => {
                   { label: "FAQs & Contact Details", href: "/support/faqs" },
                 ]}
               />
+              <NavLink href="/display-board" label="Display Board" />
             </div>
 
             <div className="flex flex-row justify-center items-center p-[10px] gap-[10px] w-[200px] h-[50px] bg-white rounded-[8px]">
