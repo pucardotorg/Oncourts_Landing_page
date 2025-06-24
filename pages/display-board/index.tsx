@@ -43,6 +43,21 @@ export default function DisplayBoard() {
   const [refreshedAt, setRefreshedAt] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [showRefreshSection, setShowRefreshSection] = useState(false);
+  const [hearingLink, setHearingLink] = useState("");
+
+  useEffect(() => {
+    const fetchHearingLink = async () => {
+      try {
+        const response = await fetch('/api/hearingLink');
+        const data = await response.json();
+        setHearingLink(data.link);
+      } catch (error) {
+        console.error('Error fetching hearing link:', error);
+      }
+    };
+
+    fetchHearingLink();
+  }, []);
 
   const fetchCasesForDate = useCallback(
     async (dateStr: string, searchValue: string) => {
@@ -139,7 +154,7 @@ export default function DisplayBoard() {
               interval = null;
             }
           }
-        }, 1000 * 1000); // every 30 seconds
+        }, 10 * 1000); // every 30 seconds
       }
     };
 
@@ -503,6 +518,13 @@ export default function DisplayBoard() {
             <div className="join-onoine-hearing-section flex items-center gap-2">
               <div className="join-hearing-online-button">
                 <button
+                onClick={() => {
+                  if (hearingLink) {
+                    window.open(hearingLink, "_blank");
+                  } else {
+                    console.warn('Hearing link not available');
+                  }
+                }}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -536,7 +558,7 @@ export default function DisplayBoard() {
               alignItems: "center",
             }}
           >
-            <span>
+            <span style={{ marginRight: "5px" }}>
               <svgIcons.refreshIcon />
             </span>
             <span
