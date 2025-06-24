@@ -2,11 +2,9 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 import { svgIcons } from "../../data/svgIcons";
-import { API_ENDPOINTS } from "../../lib/config";
 
 const formatDate = (dateStr: string) => {
   const [year, month, day] = dateStr.split("-");
