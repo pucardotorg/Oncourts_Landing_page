@@ -380,6 +380,9 @@ export default function DisplayBoard() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
+                    boxShadow:
+                      "0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.06)",
+                    transition: "box-shadow 0.2s ease, transform 0.2s ease",
                   }}
                   onClick={handleDownloadCauseList}
                 >
@@ -460,7 +463,8 @@ export default function DisplayBoard() {
             <input
               type="text"
               placeholder="Search by case name, ID or advocate"
-              className="border pl-10 pr-3 py-1.5 rounded w-full"
+              style={{ backgroundColor: "#F8FAFC" }}
+              className="h-[30px] border border-gray-300 bg-[#f8fbfd] text-gray-700 placeholder-gray-500 placeholder:text-[14px] pl-10 pr-3 py-1.5 rounded-md w-full shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
               onChange={(e) => setSearchValue(e.target.value)}
               value={searchValue}
               onKeyDown={(e) => {
@@ -474,7 +478,15 @@ export default function DisplayBoard() {
       </div>
 
       {showRefreshSection && (
-        <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+        <div
+          className="flex items-center justify-between text-sm text-gray-600 mb-2"
+          style={{
+            borderTop: "solid 1px #CBD5E1",
+            borderBottom: "solid 1px #CBD5E1",
+            paddingTop: "7px",
+            paddingBottom: "7px",
+          }}
+        >
           {isInProgressHearing?.caseNumber && (
             <div className="join-onoine-hearing-section flex items-center gap-2">
               <div className="join-hearing-online-button">
