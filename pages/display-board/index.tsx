@@ -1,41 +1,27 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { svgIcons } from "../../data/svgIcons";
+import { commonStyles } from "../../styles/commonStyles";
 
 const formatDate = (dateStr: string) => {
   const [year, month, day] = dateStr.split("-");
-  if (!year || !month || !day) return dateStr; // fallback if invalid
+  if (!year || !month || !day) return dateStr;
   return `${day}/${month}/${year}`;
 };
 
 export default function DisplayBoard() {
   const [selectedDate, setSelectedDate] = useState(() => {
-    // const today = new Date();
-    // return today.toISOString().split("T")[0]; // 'YYYY-MM-DD'\
-
     const now = new Date();
 
-    // Convert current time to IST by adding 5.5 hours
-    const istOffsetMs = 5.5 * 60 * 60 * 1000;
-    const istNow = new Date(now.getTime() + istOffsetMs);
+    const hour = now.getHours();
+    const minutes = now.getMinutes();
 
-    // Create IST date for 5:00 PM
-    const istHour = istNow.getUTCHours();
-    const istMinutes = istNow.getUTCMinutes();
-
-    // If IST time is past 5:00 PM (17:00), move to next day
-    if (istHour > 20 || (istHour === 20 && istMinutes > 0)) {
-      istNow.setUTCDate(istNow.getUTCDate() + 1);
+    // If current time is after or at 5:00 PM IST, set to tomorrow
+    if (hour > 17 || (hour === 17 && minutes >= 0)) {
+      now.setDate(now.getDate() + 1);
     }
 
-    // Format date as 'YYYY-MM-DD'
-    const dateStr = istNow.toISOString().split("T")[0];
-
-    return dateStr;
+    // Format as 'YYYY-MM-DD'
+    return now.toISOString().split("T")[0];
   });
 
   const [hearingData, setHearingData] = useState([]);
@@ -48,11 +34,11 @@ export default function DisplayBoard() {
   useEffect(() => {
     const fetchHearingLink = async () => {
       try {
-        const response = await fetch('/api/hearingLink');
+        const response = await fetch("/api/hearingLink");
         const data = await response.json();
         setHearingLink(data.link);
       } catch (error) {
-        console.error('Error fetching hearing link:', error);
+        console.error("Error fetching hearing link:", error);
       }
     };
 
@@ -83,7 +69,7 @@ export default function DisplayBoard() {
 
         const data = await response.json();
         const hearings = data?.openHearings || [];
-        setHearingData(hearings); // Keep this to update the UI
+        setHearingData(hearings);
         return hearings;
       } catch (error) {
         console.error("Error fetching hearings:", error);
@@ -104,20 +90,15 @@ export default function DisplayBoard() {
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
     const init = async () => {
-      // For the fisrt time user comes to the page,
-      // we call the hearingDetails for the first time,
-      // const hearings = await fetchCasesForDate(selectedDate, searchValue);
-
       const now = new Date();
       const isToday = selectedDate === now.toISOString().split("T")[0];
       const currentMinutes = now.getHours() * 60 + now.getMinutes();
-      // const endMinutes = 17 * 60; // 5:00 PM
-      const endMinutes = 17 * 60 + 52;
+      const endMinutes = 17 * 60; // 5:00 PM
 
-      // If today's date is selected date from calendar is today's date and current time is in between 11 AM and 5 PM
+      // If selected date from calendar is today's date and current time is in between 11 AM and 5 PM
       // and If any single hearing is found in a stage except "COMPLETED",
       // then we keep refreshing the page every 30 seconds and keep calling the fetchCasesForDate API until ....
-      // ...until either it' 5PM or all hearings all in "COMPLETD" stage. which ever happens first.
+      // ...until either it's 5PM or all hearings all in "COMPLETED" stage, whichever happens first.
 
       const hasPendingHearings = hearingData?.some(
         (hearingItem: {
@@ -154,14 +135,14 @@ export default function DisplayBoard() {
               interval = null;
             }
           }
-        }, 10 * 1000); // every 30 seconds
+        }, 30 * 1000); // refresh every 30 seconds
       }
     };
 
     init();
 
     return () => {
-      if (interval) clearInterval(interval); // cleanup when component unmounts
+      if (interval) clearInterval(interval);
     };
   }, [selectedDate, fetchCasesForDate, hearingData]);
 
@@ -210,10 +191,6 @@ export default function DisplayBoard() {
                   <td className="px-4 py-2 border">{index + 1}</td>
                   <td className="px-4 py-2 border">{hearingItem?.caseTitle}</td>
                   <td className="px-4 py-2 border">
-                    {/* {hearingItem.advocate?.map((adv: string, i: number) => (
-                      <div key={i}>{adv}</div>
-                    ))} */}
-
                     <p data-tip data-for={`hearing-list`}>
                       {hearingItem?.advocate?.complainant?.length > 0 &&
                         `${hearingItem?.advocate?.complainant?.[0]}(C)${
@@ -249,13 +226,6 @@ export default function DisplayBoard() {
                 </tr>
               )
             )}
-            {/* {hearingData.length === 0 && (
-              <tr>
-                <td colSpan={6} className="text-center py-4 text-gray-500">
-                  No hearings found for selected date.
-                </td>
-              </tr>
-            )} */}
           </tbody>
         </table>
       </div>
@@ -298,8 +268,6 @@ export default function DisplayBoard() {
           error instanceof Error ? error.message : "Unknown error"
         }`
       );
-    } finally {
-      //
     }
   };
 
@@ -308,33 +276,26 @@ export default function DisplayBoard() {
 
     const now = new Date();
 
-    // Get IST time (UTC + 5:30)
-    const istOffsetMs = 5.5 * 60 * 60 * 1000;
-    const istNow = new Date(now.getTime() + istOffsetMs);
+    const selected = new Date(selectedDate + "T00:00:00");
 
-    // Convert selectedDate string (e.g. '2025-06-25') to a Date
-    const selected = new Date(selectedDate + "T00:00:00"); // Treat selected date as local midnight
-    const istToday = new Date(istNow.toISOString().split("T")[0] + "T00:00:00");
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    // Case 1: selectedDate is today or in the past
-    if (selected <= istToday) {
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const todayAt5 = new Date(today);
+    todayAt5.setHours(17, 0, 0, 0);
+
+    if (selected <= today) {
       return true;
     }
 
-    // Case 2: selectedDate is in the future
-    const oneDayBeforeSelected = new Date(selected);
-    oneDayBeforeSelected.setDate(oneDayBeforeSelected.getDate() - 1);
+    if (selected.getTime() === tomorrow.getTime() && now >= todayAt5) {
+      return true;
+    }
 
-    // Set to 5:15 PM IST on the day before selected date
-    const causelistReleaseTime = new Date(oneDayBeforeSelected);
-    causelistReleaseTime.setHours(5, 0, 0, 0); // 5:15 PM IST
-
-    // Convert 5:15 PM IST back to UTC
-    const causelistReleaseTimeUTC = new Date(
-      causelistReleaseTime.getTime() - istOffsetMs
-    );
-
-    return istNow >= causelistReleaseTimeUTC;
+    return false;
   }, [selectedDate]);
 
   const isInProgressHearing: {
@@ -518,13 +479,13 @@ export default function DisplayBoard() {
             <div className="join-onoine-hearing-section flex items-center gap-2">
               <div className="join-hearing-online-button">
                 <button
-                onClick={() => {
-                  if (hearingLink) {
-                    window.open(hearingLink, "_blank");
-                  } else {
-                    console.warn('Hearing link not available');
-                  }
-                }}
+                  onClick={() => {
+                    if (hearingLink) {
+                      window.open(hearingLink, "_blank");
+                    } else {
+                      console.warn("Hearing link not available");
+                    }
+                  }}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -574,7 +535,9 @@ export default function DisplayBoard() {
       )}
 
       {loading ? (
-        <p className="text-center text-gray-500 py-8">Loading hearings...</p>
+        <div className={commonStyles.loading.container}>
+          <div className={commonStyles.loading.spinner}></div>
+        </div>
       ) : (
         <React.Fragment>
           {" "}
