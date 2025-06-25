@@ -25,6 +25,14 @@ const nextConfig = {
         source: "/api/egov-mdms-service/:path*",
         destination: `${apiEndpoint}/egov-mdms-service/:path*`,
       },
+      {
+        source: "/egov-mdms-service/v1/_search/:path*",
+        destination: `${apiEndpoint}/egov-mdms-service/v1/_search/:path*`,
+      },
+      {
+        source: "/localization/messages/v1/_search/:path*",
+        destination: `${apiEndpoint}/localization/messages/v1/_search/:path*`,
+      },
     ];
   },
 };

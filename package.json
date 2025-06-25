@@ -23,6 +23,8 @@
     "framer-motion": "^10.0.0",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.3",
+    "i18next": "^19.9.2",
+    "i18next-react-postprocessor": "^3.0.7",
     "jspdf": "^3.0.1",
     "lucide-react": "^0.487.0",
     "next": "^15.0.3",
@@ -30,9 +32,11 @@
     "react-countup": "^6.5.3",
     "react-datepicker": "^7.5.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^11.16.2",
     "react-icons": "^4.7.1",
     "react-intersection-observer": "^9.16.0",
-    "react-pdf": "^7.0.0"
+    "react-pdf": "^7.0.0",
+    "react-query": "^3.39.3"
   },
   "devDependencies": {
     "@types/node": "18.8.4",
