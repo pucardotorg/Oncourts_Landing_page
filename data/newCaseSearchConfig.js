@@ -8,9 +8,9 @@ export const newCaseSearchConfig = {
 
   // Search tab configuration
   tabs: [
+    { id: "filing_number", label: "Filing Number" },
     { id: "case_number", label: "Case Number" },
     { id: "cnr_number", label: "CNR Number" },
-    { id: "filing_number", label: "Filing Number" },
     { id: "advocate", label: "Advocate" },
     { id: "litigant", label: "Litigant" },
     { id: "all", label: "All" },

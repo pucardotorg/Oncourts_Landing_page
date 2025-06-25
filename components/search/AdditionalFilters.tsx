@@ -1,27 +1,39 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Dropdown, DatePickerComponent } from "../ui/form";
+
+interface FilterState {
+  courtName: string;
+  caseType: string;
+  hearingDateFrom: string;
+  hearingDateTo: string;
+  filingYear: string;
+  caseStage: string;
+  caseStatus: string;
+}
 
 interface AdditionalFiltersProps {
   selectedTab: string;
-  filterState: {
-    courtName: string;
-    caseType: string;
-    hearingDateFrom: string;
-    hearingDateTo: string;
-    filingYear: string;
-    caseStage: string;
-    caseStatus: string;
-  };
-  onFilterChange: (field: string, value: string) => void;
+  filterState: FilterState;
+  setFilterState: (filters: FilterState) => void;
   onResetFilters: () => void;
 }
 
 const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
   selectedTab,
   filterState,
-  onFilterChange,
+  setFilterState,
   onResetFilters,
 }) => {
+  // Local state to track filter changes before applying them
+  const [localFilters, setLocalFilters] = useState<FilterState>(filterState);
+  
+  console.log("localFilters", localFilters);
+  
+  // Update local filters when parent filterState changes
+  useEffect(() => {
+    setLocalFilters(filterState);
+  }, [filterState]);
+  
   // Define options for dropdowns
   const courtOptions = ["ON Court Kollam", "ON Court Kochi"];
   const caseTypeOptions = ["CMP", "ST"];
@@ -42,6 +54,19 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
   };
 
   const yearOptions = generateYearOptions();
+  
+  // Handle local filter changes
+  const handleLocalFilterChange = (field: string, value: string) => {
+    setLocalFilters(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+  
+  // Apply all filters at once when search button is clicked
+  const applyFilters = () => {
+    setFilterState(localFilters);
+  };
 
   return (
     <div className="mt-6 bg-white rounded-lg shadow-sm overflow-hidden border border-[#E2E8F0]">
@@ -65,8 +90,8 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
             <Dropdown
               label="Court Name"
               placeHolder="Select Court"
-              value={filterState.courtName}
-              onChange={(value) => onFilterChange("courtName", value)}
+              value={localFilters.courtName}
+              onChange={(value) => handleLocalFilterChange("courtName", value)}
               options={courtOptions}
               className="bg-[#F8FAFC] border-[#94A3B8]"
             />
@@ -74,29 +99,29 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
             <Dropdown
               label="Case type"
               placeHolder="Select Case Type"
-              value={filterState.caseType}
-              onChange={(value) => onFilterChange("caseType", value)}
+              value={localFilters.caseType}
+              onChange={(value) => handleLocalFilterChange("caseType", value)}
               options={caseTypeOptions}
               className="bg-[#F8FAFC] border-[#94A3B8]"
             />
 
             <DatePickerComponent
               label="Next Hearing Date"
-              value={filterState.hearingDateFrom}
-              onChange={(value) => onFilterChange("hearingDateFrom", value)}
+              value={localFilters.hearingDateFrom}
+              onChange={(value) => handleLocalFilterChange("hearingDateFrom", value)}
             />
 
             <DatePickerComponent
               label="To"
-              value={filterState.hearingDateTo}
-              onChange={(value) => onFilterChange("hearingDateTo", value)}
+              value={localFilters.hearingDateTo}
+              onChange={(value) => handleLocalFilterChange("hearingDateTo", value)}
             />
 
             <Dropdown
               label="Year of Filing"
               placeHolder="Select Year"
-              value={filterState.filingYear}
-              onChange={(value) => onFilterChange("filingYear", value)}
+              value={localFilters.filingYear}
+              onChange={(value) => handleLocalFilterChange("filingYear", value)}
               options={yearOptions}
               className="bg-[#F8FAFC] border-[#94A3B8]"
             />
@@ -104,8 +129,8 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
             <Dropdown
               label="Case Stage"
               placeHolder="Select Case Stage"
-              value={filterState.caseStage}
-              onChange={(value) => onFilterChange("caseStage", value)}
+              value={localFilters.caseStage}
+              onChange={(value) => handleLocalFilterChange("caseStage", value)}
               options={caseStageOptions}
               className="bg-[#F8FAFC] border-[#94A3B8]"
             />
@@ -113,11 +138,21 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
             <Dropdown
               label="Case Status"
               placeHolder="Select Case Status"
-              value={filterState.caseStatus}
-              onChange={(value) => onFilterChange("caseStatus", value)}
+              value={localFilters.caseStatus}
+              onChange={(value) => handleLocalFilterChange("caseStatus", value)}
               options={caseStatusOptions}
               className="bg-[#F8FAFC] border-[#94A3B8]"
             />
+            
+            <div className="flex items-end justify-center">
+              <button
+                onClick={applyFilters}
+                className="h-10 px-16 py-2 bg-[#0F766E] text-white rounded-md font-medium hover:bg-teal-700 transition flex items-center justify-center gap-2"
+                type="button"
+              >
+                Search
+              </button>
+            </div>
           </div>
         )}
       </div>

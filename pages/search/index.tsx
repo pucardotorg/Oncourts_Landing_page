@@ -12,7 +12,7 @@ import { newCaseSearchConfig } from "../../data/newCaseSearchConfig";
 import { commonStyles, animations } from "../../styles/commonStyles";
 
 const SearchForCase = () => {
-  const [selectedTab, setSelectedTab] = useState("Case Number");
+  const [selectedTab, setSelectedTab] = useState("Filing Number");
   const [showViewDetailedModal, setShowViewDetailedModal] = useState(false);
   const [selectedCase, setSelectedCase] = useState<{ caseNumber: string; filingNumber?: string; courtId?: string }>({ caseNumber: '' });
   
@@ -57,6 +57,19 @@ const SearchForCase = () => {
 
   const router = useRouter();
 
+  // Reset filters
+  const handleResetFilters = () => {
+    setFilterState({
+      courtName: "",
+      caseType: "",
+      hearingDateFrom: "",
+      hearingDateTo: "",
+      filingYear: "",
+      caseStage: "",
+      caseStatus: "",
+    });
+  };
+
   // Handle tab change
   const handleTabChange = async (tab: string) => {
     setSelectedTab(tab);
@@ -74,6 +87,8 @@ const SearchForCase = () => {
       advocateName: "",
       litigantName: "",
     });
+    
+    handleResetFilters();
     
     // Reset search results and pagination
     setOffset(0);
@@ -141,28 +156,6 @@ const SearchForCase = () => {
         [field]: value,
       });
     }
-  };
-
-  // Handle filter changes
-  const handleFilterChange = (field: string, value: string) => {
-    // Update the filter state
-    setFilterState({
-      ...filterState,
-      [field]: value,
-    });
-  };
-
-  // Reset filters
-  const handleResetFilters = () => {
-    setFilterState({
-      courtName: "",
-      caseType: "",
-      hearingDateFrom: "",
-      hearingDateTo: "",
-      filingYear: "",
-      caseStage: "",
-      caseStatus: "",
-    });
   };
 
   // Clear form
@@ -347,7 +340,7 @@ const SearchForCase = () => {
           <AdditionalFilters
             selectedTab={selectedTab}
             filterState={filterState}
-            onFilterChange={handleFilterChange}
+            setFilterState={setFilterState}
             onResetFilters={handleResetFilters}
           />
         )}

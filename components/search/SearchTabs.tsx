@@ -13,7 +13,7 @@ const SearchTabs: React.FC<SearchTabsProps> = ({ selectedTab, onTabChange, tabs 
         <button
           key={tab.id}
           onClick={() => onTabChange(tab.label)}
-          className={`px-4 py-2 text-2xl font-['Raleway', 'Raleway Fallback'] font-medium transition-colors rounded-md ${selectedTab === tab.label 
+          className={`px-3 py-2 text-xl font-['Raleway', 'Raleway Fallback'] font-medium transition-colors rounded-md ${selectedTab === tab.label 
             ? 'bg-[#3A3A3A] text-white' 
             : 'text-[#64748B] hover:bg-gray-200'}`}
           style={{
