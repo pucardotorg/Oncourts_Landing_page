@@ -79,13 +79,12 @@ export default function DisplayBoard() {
         setRefreshedAt(new Date().toLocaleString());
         setLoading(false);
       }
-    },
-    [selectedDate]
+    },[]
   );
 
   useEffect(() => {
     fetchCasesForDate(selectedDate, searchValue);
-  }, [selectedDate]);
+  }, [fetchCasesForDate, searchValue, selectedDate]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -144,7 +143,7 @@ export default function DisplayBoard() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [selectedDate, fetchCasesForDate, hearingData]);
+  }, [selectedDate, fetchCasesForDate, hearingData, searchValue]);
 
   const getStatusStyle = (status: string) => {
     switch (status) {

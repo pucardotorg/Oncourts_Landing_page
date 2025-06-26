@@ -32,7 +32,7 @@ export const animations = `
 export const commonStyles = {
   // Layout
   container: "max-w-screen mx-auto py-6 px-20",
-  
+
   // Typography
   heading: {
     primary: "text-center mb-6 text-6xl font-libre text-gray-800",
@@ -46,18 +46,18 @@ export const commonStyles = {
     grid: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4",
     divider: "my-6 border-t border-gray-200",
   },
-  
+
   // Buttons
   button: {
     primary: "px-20 py-2 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-[#0F766E] hover:bg-teal-700 focus:outline-none",
     secondary: "px-28 py-2 border border-gray-300 rounded-md text-lg font-medium text-gray-700 hover:bg-gray-50 bg-white",
     disabled: "opacity-50 cursor-not-allowed pointer-events-none",
   },
-  
+
   // Loading state
   loading: {
-    container: "flex justify-center py-10",
-    spinner: "animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#0F766E]",
+    container: "fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/80",
+    spinner: "animate-spin rounded-full h-12 w-12 border-4 border-t-[#0F766E] border-b-[#0F766E] border-l-transparent border-r-transparent",
   },
   
   // Colors
@@ -70,12 +70,12 @@ export const commonStyles = {
     success: "#10B981",
     warning: "#F59E0B",
   },
-  
+
   // Fonts
   fonts: {
     libre: "font-family: 'Libre Baskerville', serif; font-weight: 400;",
   },
-  
+
   // Notifications
   notification: {
     container: "fixed left-1/2 transform -translate-x-1/2 z-50 p-4 rounded-md shadow-lg flex items-center",
