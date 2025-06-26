@@ -94,6 +94,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
               handleInputChange("caseNumber", value)
             }
             onYearChange={(value) => handleInputChange("selectedYear", value)}
+            courtOptions={courtOptions}
           />
         )}
 

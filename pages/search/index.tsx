@@ -28,8 +28,8 @@ const SearchForCase = () => {
     courtName: "",
     cnrNumber: "",
     caseStage: "",
-    advocate: [],
-    litigant: [],
+    advocates: [],
+    litigants: [],
   });
 
   // Error notification state
@@ -436,6 +436,7 @@ const SearchForCase = () => {
             filterState={filterState}
             setFilterState={setFilterState}
             onResetFilters={handleResetFilters}
+            courtOptions={courtOptions}
           />
         )}
 

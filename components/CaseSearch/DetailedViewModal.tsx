@@ -114,19 +114,35 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
     }
   }, [caseResult]);
 
-  const getCitizenDetails = useCallback(async () => {
-    const complainantAdvocateDetails = caseResult?.advocate?.filter(
-      (advocate) => advocate.entityType === "complainant"
-    );
-    const accusedAdvocateDetails = caseResult?.advocate?.filter(
-      (advocate) => advocate.entityType === "accused"
-    );
-    const complainantDetails = caseResult?.litigant?.filter(
-      (litigant) => litigant.entityType === "complainant"
-    );
-    const accusedDetails = caseResult?.litigant?.filter(
-      (litigant) => litigant.entityType === "accused"
-    );
+  const getCitizenDetails = useCallback(() => {
+    if (!caseResult) {
+      console.warn("caseResult is undefined in getCitizenDetails");
+      return;
+    }
+    const complainantAdvocateDetails = Array.isArray(caseResult.advocates)
+      ? caseResult.advocates.filter(
+          (advocate) => advocate.entityType === "complainant"
+        )
+      : [];
+
+    const accusedAdvocateDetails = Array.isArray(caseResult.advocates)
+      ? caseResult.advocates.filter(
+          (advocate) => advocate.entityType === "accused"
+        )
+      : [];
+
+    const complainantDetails = Array.isArray(caseResult.litigants)
+      ? caseResult.litigants.filter(
+          (litigant) => litigant.entityType === "complainant"
+        )
+      : [];
+
+    const accusedDetails = Array.isArray(caseResult.litigants)
+      ? caseResult.litigants.filter(
+          (litigant) => litigant.entityType === "accused"
+        )
+      : [];
+
     setComplainantAdvocates(complainantAdvocateDetails || []);
     setAccusedAdvocates(accusedAdvocateDetails || []);
     setComplainants(complainantDetails || []);

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown, DatePickerComponent } from "../ui/form";
-import { FilterState } from "../../types";
+import { CourtRoom, FilterState } from "../../types";
 
 interface AdditionalFiltersProps {
   selectedTab: string;
   filterState: FilterState;
   setFilterState: (filters: FilterState) => void;
   onResetFilters: () => void;
+  courtOptions: CourtRoom[];
 }
 
 const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
@@ -14,6 +15,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
   filterState,
   setFilterState,
   onResetFilters,
+  courtOptions,
 }) => {
   // Local state to track filter changes before applying them
   const [localFilters, setLocalFilters] = useState<FilterState>(filterState);
@@ -24,7 +26,6 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
   }, [filterState]);
 
   // Define options for dropdowns
-  const courtOptions = ["ON Court Kollam", "ON Court Kochi"];
   const caseTypeOptions = ["CMP", "ST"];
   const caseStageOptions = ["Cognizance", "Hearing", "Arguments"];
   const caseStatusOptions = ["Pending", "Disposed"];
@@ -92,7 +93,12 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
               placeHolder="Select Court"
               value={localFilters.courtName}
               onChange={(value) => handleLocalFilterChange("courtName", value)}
-              options={courtOptions}
+              options={
+                courtOptions?.map((court: CourtRoom) => ({
+                  label: court?.name || "",
+                  value: court?.code || "",
+                })) || []
+              }
               className="bg-[#F8FAFC] border-[#94A3B8]"
             />
 

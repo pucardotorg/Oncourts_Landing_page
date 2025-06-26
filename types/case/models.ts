@@ -21,8 +21,8 @@ export interface CaseResult {
   courtName?: string;
   cnrNumber?: string;
   caseStage?: string;
-  advocate?: PartyInfo[];
-  litigant?: PartyInfo[];
+  advocates?: PartyInfo[];
+  litigants?: PartyInfo[];
 }
 
 export interface CourtRoom {
