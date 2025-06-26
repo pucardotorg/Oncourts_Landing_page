@@ -69,7 +69,6 @@ export const Request = async ({
   multipartData = {},
   reqTimestamp = false,
 }) => {
-  debugger;
   if (typeof window === "undefined" || window?.Digit === "undefined") {
     // SSR guard
     console.warn("Request function should not be called during SSR");
@@ -94,7 +93,6 @@ export const Request = async ({
     if (noRequestInfo) {
       delete data.RequestInfo;
     }
-debugger;
     /* 
     Feature :: Privacy
     
@@ -199,7 +197,6 @@ export const ServiceRequest = async ({
   reqTimestamp,
   userService,
 }) => {
-  debugger;
   const preHookName = `${serviceName}Pre`;
   const postHookName = `${serviceName}Post`;
   let reqParams = params;

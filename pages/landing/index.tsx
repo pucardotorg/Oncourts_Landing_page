@@ -5,7 +5,7 @@ import Support from "../../components/HomePage/Support";
 import ImpactGlance from "../../components/HomePage/ImpactGlance";
 import TestimonialCarousel from "../../components/HomePage/TestimonialCarousel";
 import WhatsNewSections from "../../components/HomePage/WhatNewSections";
-import StickyHelpButton from "../../components/StickyHelpButton";
+import StickyHelpButton from "../../components/Utils/StickyHelpButton";
 
 const Hero = () => {
   return (

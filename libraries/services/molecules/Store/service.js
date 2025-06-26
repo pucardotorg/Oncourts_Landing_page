@@ -8,11 +8,7 @@ export const StoreService = {
     return Storage.get("initData");
   },
   digitInitData: async (stateCode, enabledModules) => {
-    debugger;
-    console.log('stateCode', stateCode)
     const { MdmsRes } = await MdmsService.init(stateCode);
-    console.log('MdmsRes', MdmsRes)
-    debugger;
     const stateInfo = MdmsRes["common-masters"]?.StateInfo?.[0]||{};
     const uiHomePage = MdmsRes["common-masters"]?.uiHomePage?.[0]||{};
     const localities = {};

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { svgIcons } from "../../data/svgIcons";
 import styles from "../../styles/WhatsNewCard.module.css";
 import { CauseListItem } from "./NoticeAndCauseListSection";
-import PDFViewer from "../PDFViewer";
+import PDFViewer from "../Utils/PDFViewer";
 
 interface NoticeItem {
   id: string;

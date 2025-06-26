@@ -17,6 +17,7 @@ interface LayoutProps {
 
 // In your page or parent component
 import dynamic from "next/dynamic";
+import { commonStyles } from "../styles/commonStyles";
 
 const DigitInitializer = dynamic(() => import("./DigitInitializer"), {
   ssr: false,
@@ -47,12 +48,15 @@ const Layout: React.FC<LayoutProps> = ({
 
   // Show loading until Digit is ready
   if (!digitReady || !stateCode) {
-    return <div>Loading Digit...</div>;
+    return (
+      <div className={commonStyles.loading.container}>
+        <div className={commonStyles.loading.spinner}></div>
+        <div className="mt-4 text-[#0F766E] text-sm font-medium">Loading, please wait...</div>
+      </div>
+    );
   }
   return (
     <DigitInitializer stateCode={stateCode} enabledModules={enabledModules}>
-
-
       <div className={raleway.className}>
         <Head>
           <title>24x7 OnCourts</title>

@@ -1,10 +1,10 @@
 import React from "react";
 import Image from "next/image";
 import { APP_URLS } from "../../lib/config";
-import { useTranslation } from "react-i18next";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 const Carousel: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useSafeTranslation();
   return (
     <div className="w-full relative">
       <Image
@@ -43,7 +43,7 @@ const Carousel: React.FC = () => {
               className="block font-semibold text-base group-hover:text-white"
               style={{ fontSize: "22px" }}
             >
-              {t("ABATED") as string}
+              {t("Login as Litigant/Advocate/Clerk")}
             </span>
             <span className="block text-sm group-hover:text-white">
               To perform case-related actions and access case details and

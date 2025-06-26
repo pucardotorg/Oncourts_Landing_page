@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import FeaturesTable from "../../components/FeaturesTable";
+import FeaturesTable from "../../components/Utils/FeaturesTable";
 import { transformWhatsNewResponse } from "../../TransformData/transformResponseData";
 import { WhatsNewSection } from "../../data/whatsNewConfig";
 

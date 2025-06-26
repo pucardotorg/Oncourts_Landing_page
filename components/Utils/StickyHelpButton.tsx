@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { svgIcons } from "../data/svgIcons";
+import { svgIcons } from "../../data/svgIcons";
 import ContactPopup from "./ContactPopUp";
 
 export default function StickyHelpButton() {

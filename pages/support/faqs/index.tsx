@@ -1,7 +1,7 @@
 import { useState } from "react";
-import AccordionItem from "../../../components/AccordionItem";
+import AccordionItem from "../../../components/Utils/AccordionItem";
 import { contactBoxItems, leftColumnItems, rightColumnItems } from "../../../data/faq";
-import ContactPopup from "../../../components/ContactPopUp";
+import ContactPopup from "../../../components/Utils/ContactPopUp";
 
 export default function Faq() {
     const [openIndices, setOpenIndices] = useState({ left: null, right: null });
