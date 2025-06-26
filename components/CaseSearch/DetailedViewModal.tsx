@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { dummyData } from "./DetailedViewData";
-import { InboxSearchResponse, OrderDetails } from "../../types/search";
 import { downloadAsPDF } from "../../utils/downloadPdf";
+import { InboxSearchResponse, OrderDetails, PaymentTask } from "../../types";
+import { FiInfo } from "react-icons/fi";
 
 interface DetailedViewModalProps {
   onClose: () => void;
@@ -17,17 +18,50 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
 }) => {
   const data = dummyData;
   const modalContentRef = useRef<HTMLDivElement>(null);
+  const tenantId = "kl";
 
   // State for order history data from API
   const [orderHistory, setOrderHistory] = useState<OrderDetails[]>([]);
+  const [paymentTasks, setPaymentTasks] = useState<PaymentTask[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [hoveredIconId, setHoveredIconId] = useState<string | null>(null);
 
   const [showAll, setShowAll] = useState({
     complainants: false,
     complainantAdvocates: false,
     accused: false,
   });
+
+  // State for orders pagination
+  const [showAllOrders, setShowAllOrders] = useState(false);
+  const [currentOrderPage, setCurrentOrderPage] = useState(0);
+  const [totalOrders, setTotalOrders] = useState(0);
+  const ordersPerPage = 10;
+  const initialOrdersToShow = 2;
+
+  // State for payment tasks pagination
+  const [showAllTasks, setShowAllTasks] = useState(false);
+  const [currentTaskPage, setCurrentTaskPage] = useState(0);
+  const [totalTasks, setTotalTasks] = useState(0);
+  const tasksPerPage = 10;
+
+  // Format date to readable format (DD Month YYYY)
+  const formatDate = (dateStr: string | number) => {
+    try {
+      const date = new Date(dateStr);
+      return (
+        date.getDate() +
+        " " +
+        date.toLocaleString("default", { month: "long" }) +
+        " " +
+        date.getFullYear()
+      );
+    } catch {
+      // Return the original value as string if date parsing fails
+      return String(dateStr);
+    }
+  };
 
   // Lock body scrolling when modal is open
   useEffect(() => {
@@ -56,30 +90,34 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
   };
 
   // Fetch order history data from API
-  useEffect(() => {
-    const fetchOrderHistory = async () => {
-      // Only fetch if we have the required parameters
+  const fetchOrderHistory = useCallback(
+    async (page = 0, initialLoad = false) => {
       if (!filingNumber || !courtId) return;
-
       try {
-        setLoading(true);
+        if (initialLoad) {
+          setLoading(true);
+        }
         setError(null);
 
-        // Use centralized API endpoint from config
-        const response = await fetch("/api/case/inbox-search", {
+        const offset = page * ordersPerPage;
+        const limit = initialLoad ? initialOrdersToShow : ordersPerPage;
+
+        const payload = {
+          filingNumber,
+          courtId,
+          forOrders: true,
+          forPaymentTask: false,
+          tenantId,
+          limit: Number(limit),
+          offset: Number(offset),
+        };
+
+        const response = await fetch("/api/case/orders-tasks", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            filingNumber,
-            courtId,
-            forOrders: true, // We want orders, not payment tasks
-            forPaymentTask: false,
-            tenantId: "kl",
-            limit: 10,
-            offset: 0,
-          }),
+          body: JSON.stringify(payload),
         });
 
         if (!response.ok) {
@@ -87,17 +125,92 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
         }
 
         const responseData: InboxSearchResponse = await response.json();
+
+        // When getting initial data or first page, save total count for pagination
+        if (initialLoad || page === 0) {
+          setTotalOrders(responseData.totalCount || 0);
+        }
+
+        // Update order history based on current state
         setOrderHistory(responseData.orderDetailsList || []);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
         console.error("Error fetching order history:", err);
       } finally {
-        setLoading(false);
+        if (initialLoad) {
+          setLoading(false);
+        }
       }
-    };
+    },
+    [filingNumber, courtId, ordersPerPage]
+  );
 
-    fetchOrderHistory();
-  }, [filingNumber, courtId]); // Dependency array - refetch when these values change
+  // Initial load of orders - just get first 2
+  useEffect(() => {
+    fetchOrderHistory(0, true);
+  }, [fetchOrderHistory]);
+
+  // Fetch payment tasks from API
+  const fetchPaymentTasks = useCallback(
+    async (page = 0, initialLoad = false) => {
+      if (!filingNumber || !courtId) return;
+
+      try {
+        if (initialLoad) {
+          setLoading(true);
+        }
+        setError(null);
+
+        const offset = page * tasksPerPage;
+        const limit = tasksPerPage;
+
+        const payload = {
+          filingNumber,
+          courtId,
+          forOrders: false,
+          forPaymentTask: true,
+          tenantId,
+          limit: Number(limit),
+          offset: Number(offset),
+        };
+
+        const response = await fetch("/api/case/orders-tasks", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch payment tasks");
+        }
+
+        const responseData: InboxSearchResponse = await response.json();
+
+        // When getting initial data or first page, save total count for pagination
+        if (initialLoad || page === 0) {
+          setTotalTasks(responseData.totalCount || 0);
+        }
+
+        // Update payment tasks based on current state
+        setPaymentTasks(responseData.paymentTasks || []);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An error occurred");
+        console.error("Error fetching payment tasks:", err);
+      } finally {
+        if (initialLoad) {
+          setLoading(false);
+        }
+      }
+    },
+    [filingNumber, courtId, tasksPerPage]
+  );
+
+  // Initial load of payment tasks - just get first 2
+  useEffect(() => {
+    fetchPaymentTasks(0, true);
+  }, [fetchPaymentTasks]);
 
   const renderList = (
     list: string[],
@@ -108,11 +221,13 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
     return (
       <>
         {visibleItems.map((item, idx) => (
-          <p key={idx}>{item}</p>
+          <p className="text-[16px] font-normal" key={idx}>
+            {item}
+          </p>
         ))}
         {list.length > 2 && (
           <button
-            className="text-blue-600 text-xs underline mt-1"
+            className="text-[#006FD5] text-sm underline mt-1"
             onClick={() =>
               setShowAll((prev) => ({ ...prev, [key]: !prev[key] }))
             }
@@ -124,11 +239,40 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
     );
   };
 
+  const openFileInNewTab = async (orderId: string): Promise<void> => {
+    if (!orderId) {
+      console.error("Order ID is required");
+      return;
+    }
+
+    try {
+      // Direct API call to get the file
+      const response = await fetch(
+        `/api/case/downloadFile?tenantId=${tenantId}&orderId=${orderId}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`File download failed with status: ${response.status}`);
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      window.open(url, "_blank");
+
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+      }, 5000);
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
+
   return (
     <div className="font-roboto fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div
         ref={modalContentRef}
-        className="bg-white rounded-lg w-[80%] relative overflow-hidden max-h-[90vh] flex flex-col"
+        className="bg-white rounded-lg w-[70%] relative overflow-hidden max-h-[90vh] flex flex-col"
       >
         <div className="sticky top-0 z-50 bg-white border-b-2 border-[#E2E8F0] px-6 py-4 flex justify-between items-center">
           <div className="text-xl font-bold text-[#0F172A]">
@@ -140,7 +284,6 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
             <button
               className="flex items-center gap-1 px-3 py-1 bg-teal-600 text-[#334155] border-2 border-[#E2E8F0] rounded-md text-sm hover:bg-teal-700 transition"
               onClick={() => downloadAsPDF(pdfConfig, modalContentRef)}
-              title="Download as PDF"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -167,55 +310,75 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
           </div>
         </div>
 
-        <div className="overflow-y-auto px-6 py-4 space-y-6">
-          <div className="grid grid-cols-2 md:grid-cols-7 gap-y-2 bg-sandBg p-4 rounded-md text-sm">
+        <div className="overflow-y-auto px-6 pt-4 pb-8 space-y-6">
+          <div className="grid grid-cols-2 md:grid-cols-7 gap-y-2 bg-[#F7F5F3] p-4 rounded-md text-sm">
             <div className="flex flex-col border-r pr-4">
-              <span className="text-sm font-base text-[#77787B]">Case Number</span>
+              <span className="text-sm font-base text-[#77787B]">
+                Case Number
+              </span>
               <span className="text-[16px] font-bold text-[#0B0C0C]">
                 {data.caseNumber}
               </span>
             </div>
             <div className="flex flex-col border-r pr-4 pl-2">
-              <span className="text-sm font-base text-[#77787B]">CNR Number</span>
-              <span className="text-[16px] font-bold text-[#0B0C0C] break-words whitespace-normal">{data.cnrNumber}</span>
+              <span className="text-sm font-base text-[#77787B]">
+                CNR Number
+              </span>
+              <span className="text-[16px] font-bold text-[#0B0C0C] break-words whitespace-normal">
+                {data.cnrNumber}
+              </span>
             </div>
             <div className="flex flex-col border-r pr-4 pl-2">
-              <span className="text-sm font-base text-[#77787B]">Filing Number</span>
+              <span className="text-sm font-base text-[#77787B]">
+                Filing Number
+              </span>
               <span className="text-[16px] font-bold text-[#0B0C0C] break-words whitespace-normal">
                 {data.filingNumber}
               </span>
             </div>
             <div className="flex flex-col border-r pr-4 pl-2">
-              <span className="text-sm font-base text-[#77787B]">Filing Date</span>
+              <span className="text-sm font-base text-[#77787B]">
+                Filing Date
+              </span>
               <span className="text-[16px] font-bold text-[#0B0C0C] break-words whitespace-normal">
                 {data.filingDate}
               </span>
             </div>
             <div className="flex flex-col border-r pr-4 pl-2">
-              <span className="text-sm font-base text-[#77787B]">Registration Date</span>
+              <span className="text-sm font-base text-[#77787B]">
+                Registration Date
+              </span>
               <span className="text-[16px] font-bold text-[#0B0C0C] break-words whitespace-normal">
                 {data.registrationDate}
               </span>
             </div>
             <div className="flex flex-col border-r pr-4 pl-2">
-              <span className="text-sm font-base text-[#77787B]">Magistrate</span>
+              <span className="text-sm font-base text-[#77787B]">
+                Magistrate
+              </span>
               <span className="text-[16px] font-bold text-[#0B0C0C] break-words whitespace-normal">
                 {data.magistrate}
               </span>
             </div>
             <div className="flex flex-col pl-2">
-              <span className="text-sm font-base text-[#77787B]">Court Name</span>
-              <span className="text-[16px] font-bold text-[#0B0C0C]">{data.courtName}</span>
+              <span className="text-sm font-base text-[#77787B]">
+                Court Name
+              </span>
+              <span className="text-[16px] font-bold text-[#0B0C0C]">
+                {data.courtName}
+              </span>
             </div>
           </div>
 
-          <div className="bg-sandBg p-4 rounded-md text-sm">
+          <div className="bg-[#F7F5F3] p-6 rounded-md text-sm">
             <h2 className="text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
               Litigant Details
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="pr-2 border-r">
-                <p className="text-[16px] font-bold">Complainant/s</p>
+                <p className="text-[16px] font-bold text-[#0A0A0A]">
+                  Complainant/s
+                </p>
                 {renderList(
                   data.complainants,
                   showAll.complainants,
@@ -223,7 +386,9 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 )}
               </div>
               <div className="pr-2 border-r">
-                <p className="font-semibold">Complainant advocate/s</p>
+                <p className="text-[16px] font-bold text-[#0A0A0A]">
+                  Complainant advocate/s
+                </p>
                 {renderList(
                   data.complainantAdvocates,
                   showAll.complainantAdvocates,
@@ -231,50 +396,56 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 )}
               </div>
               <div className="pr-2 border-r">
-                <p className="font-semibold">Accused</p>
+                <p className="text-[16px] font-bold text-[#0A0A0A]">Accused</p>
                 {renderList(data.accused, showAll.accused, "accused")}
               </div>
               <div>
-                <p className="font-semibold">Accused Advocate/s</p>
+                <p className="text-[16px] font-bold text-[#0A0A0A]">
+                  Accused Advocate/s
+                </p>
                 <p>{data.accusedAdvocates || "NA"}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-sandBg p-4 rounded-md text-sm">
+          <div className="bg-[#F7F5F3] p-6 rounded-md text-sm">
             <h2 className="text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
               Key Details
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2 pr-4 border-r">
-                <div className="flex justify-between">
-                  <span className="flex-1 font-semibold text-black">
+                <div className="flex justify-between gap-4">
+                  <span className="flex-1 text-[16px] font-bold text-[#0A0A0A]">
                     Next Hearing Date
                   </span>
-                  <span className="flex-1">{data.nextHearingDate}</span>
+                  <span className="flex-1 text-[16px]">
+                    {data.nextHearingDate}
+                  </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="flex-1 font-semibold text-black">
+                <div className="flex justify-between gap-4">
+                  <span className="flex-1 text-[16px] font-bold text-[#0A0A0A]">
                     Purpose
                   </span>
-                  <span className="flex-1">{data.purpose}</span>
+                  <span className="flex-1 text-[16px]">{data.purpose}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="flex-1 font-semibold text-black">
+                <div className="flex justify-between gap-4">
+                  <span className="flex-1 text-[16px] font-bold text-[#0A0A0A]">
                     Last Hearing on
                   </span>
-                  <span className="flex-1">{data.lastHearingDate}</span>
+                  <span className="flex-1 text-[16px]">
+                    {data.lastHearingDate}
+                  </span>
                 </div>
               </div>
               <div className="space-y-2 pl-4">
-                <div className="flex justify-between">
-                  <span className="flex-1 font-semibold text-black">
+                <div className="flex justify-between gap-4">
+                  <span className="flex-1 text-[16px] font-bold text-[#0A0A0A]">
                     Case Stage
                   </span>
-                  <span className="flex-1">{data.caseStage}</span>
+                  <span className="flex-1 text-[16px]">{data.caseStage}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="flex-1 font-semibold text-black">
+                <div className="flex justify-between gap-4">
+                  <span className="flex-1 text-[16px] font-bold text-[#0A0A0A]">
                     Process payment pending
                   </span>
                   <button
@@ -284,18 +455,18 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                       );
                       taskSection?.scrollIntoView({ behavior: "smooth" });
                     }}
-                    className="flex-1 text-left text-red-600 underline hover:text-red-700"
+                    className="flex-1 text-[16px] text-left text-[#DC2626] underline hover:text-red-700"
                   >
-                    {data.appearance}
+                    {data.processPaymentPending}
                   </button>{" "}
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="border rounded-md p-4 bg-white">
+          <div className="border rounded-md p-6 bg-white">
             {/* Order History Section */}
-            <h2 className="text-lg font-semibold mb-3">Order History</h2>
+            <h2 className="text-xl font-bold mb-3">Order History</h2>
             {loading ? (
               <div className="text-center py-4">Loading order history...</div>
             ) : error ? (
@@ -303,32 +474,85 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
             ) : (
               <>
                 {orderHistory.length > 0 ? (
-                  <table className="w-full text-sm text-left">
-                    <thead>
-                      <tr className="text-gray-600 border-b">
-                        <th className="px-2 py-1">S.no</th>
-                        <th className="px-2 py-1">Date</th>
-                        <th className="px-2 py-1">Business Of The Day</th>
-                        <th className="px-2 py-1 text-center">View Order</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {orderHistory.map((item, idx) => (
-                        <tr key={idx} className="border-b">
-                          <td className="px-2 py-2">{idx + 1}</td>
-                          <td className="px-2 py-2">
-                            {new Date(item.date).toLocaleDateString()}
-                          </td>
-                          <td className="px-2 py-2">{item.businessOfTheDay}</td>
-                          <td className="px-2 py-2 text-center">
-                            <button className="px-3 border text-sm rounded-md bg-white border-gray-300 hover:bg-gray-100">
-                              View
-                            </button>
-                          </td>
+                  <>
+                    <table className="w-full text-sm text-left">
+                      <thead>
+                        <tr className="text-sm font-bold text-[#0B0C0C] border-b border-[#BBBBBD]">
+                          <th className="px-2 py-1">S.no</th>
+                          <th className="px-2 py-1">Date</th>
+                          <th className="px-2 py-1">Business Of The Day</th>
+                          <th className="px-2 py-1 text-center">View Order</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {/* Show orders - either initial 2 or full paginated view */}
+                        {orderHistory.map((item, idx) => (
+                          <tr
+                            key={idx}
+                            className="text-sm font-normal text-[#0A0A0A] border-b border-[#E8E8E8]"
+                          >
+                            <td className="px-2 py-2">
+                              {showAllOrders
+                                ? currentOrderPage * ordersPerPage + idx + 1
+                                : idx + 1}
+                            </td>
+                            <td className="px-2 py-2">
+                              {formatDate(item.date)}
+                            </td>
+                            <td className="px-2 py-2">
+                              {item.businessOfTheDay}
+                            </td>
+                            <td className="px-2 py-2 text-center">
+                              <button
+                                className="px-2 py-1 border text-sm text-[#334155] font-medium rounded-md bg-[#F8FAFC] border-[#CBD5E1] hover:bg-gray-100"
+                                onClick={() => openFileInNewTab(item.orderId)}
+                              >
+                                View
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+
+                    {/* Pagination controls - only show if in expanded view */}
+                    {showAllOrders && totalOrders > ordersPerPage && (
+                      <div className="flex items-center justify-center mt-4 space-x-2">
+                        <button
+                          onClick={() => {
+                            const newPage = Math.max(0, currentOrderPage - 1);
+                            setCurrentOrderPage(newPage);
+                            fetchOrderHistory(newPage);
+                          }}
+                          disabled={currentOrderPage === 0}
+                          className={`px-2 py-1 border rounded ${currentOrderPage === 0 ? "text-gray-400" : "text-blue-600"}`}
+                        >
+                          Previous
+                        </button>
+                        <span className="text-sm">
+                          Page {currentOrderPage + 1} of{" "}
+                          {Math.ceil(totalOrders / ordersPerPage)}
+                        </span>
+                        <button
+                          onClick={() => {
+                            const newPage = Math.min(
+                              Math.ceil(totalOrders / ordersPerPage) - 1,
+                              currentOrderPage + 1
+                            );
+                            setCurrentOrderPage(newPage);
+                            fetchOrderHistory(newPage);
+                          }}
+                          disabled={
+                            currentOrderPage >=
+                            Math.ceil(totalOrders / ordersPerPage) - 1
+                          }
+                          className={`px-2 py-1 border rounded ${currentOrderPage >= Math.ceil(totalOrders / ordersPerPage) - 1 ? "text-gray-400" : "text-blue-600"}`}
+                        >
+                          Next
+                        </button>
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <div className="text-center py-4">
                     No order history available
@@ -337,41 +561,182 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
               </>
             )}
 
-            <div className="mt-2 mb-6">
-              <button className="text-blue-600 text-sm underline">
-                See more Orders
-              </button>
-            </div>
+            {/* Only show 'See more Orders' button if there are more than initial orders to show */}
+            {!showAllOrders && orderHistory.length > 0 && (
+              <div className="mt-2 mb-8">
+                <button
+                  onClick={() => {
+                    setShowAllOrders(true);
+                    setCurrentOrderPage(0);
+                    fetchOrderHistory(0);
+                  }}
+                  className="text-[#1D4ED8] text-sm underline"
+                >
+                  See more Orders
+                </button>
+              </div>
+            )}
+
+            {/* Show 'Show less' button when in expanded view */}
+            {showAllOrders && orderHistory.length > 0 && (
+              <div className="mt-2 mb-6">
+                <button
+                  onClick={() => {
+                    setShowAllOrders(false);
+                    setCurrentOrderPage(0);
+                  }}
+                  className="text-[#1D4ED8] text-sm underline"
+                >
+                  Show less
+                </button>
+              </div>
+            )}
 
             {/* Process Payment Pending Tasks Section */}
             <div id="pendingTasksSection">
-              <h2 className="text-lg font-semibold mb-3">
+              <h2 className="text-xl font-bold mb-3">
                 Process Payment Pending Tasks
               </h2>
-              <table className="w-full text-sm text-left">
-                <thead>
-                  <tr className="text-gray-600 border-b">
-                    <th className="px-2 py-1">S.no</th>
-                    <th className="px-2 py-1">Task</th>
-                    <th className="px-2 py-1">Due Date</th>
-                    <th className="px-2 py-1">Days Remaining</th>
-                    <th className="px-2 py-1"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.pendingTasks.map((task, idx) => (
-                    <tr key={idx} className="border-b last:border-0">
-                      <td className="px-2 py-2">{idx + 1}</td>
-                      <td className="px-2 py-2">{task.task}</td>
-                      <td className="px-2 py-2">{task.dueDate}</td>
-                      <td className="px-2 py-2 text-red-600">
-                        {task.daysRemaining}
-                      </td>
-                      <td className="px-2 py-2">i</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              {loading ? (
+                <div className="text-center py-4">Loading payment tasks...</div>
+              ) : error ? (
+                <div className="text-center py-4 text-red-500">{error}</div>
+              ) : (
+                <>
+                  {paymentTasks.length > 0 ? (
+                    <>
+                      <table className="w-full text-sm text-left">
+                        <thead>
+                          <tr className="text-gray-600 border-b border-[#BBBBBD]">
+                            <th className="px-2 py-1">S.no</th>
+                            <th className="px-2 py-1">Task</th>
+                            <th className="px-2 py-1">Due Date</th>
+                            <th className="px-2 py-1">Days Remaining</th>
+                            <th className="px-2 py-1"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {paymentTasks.map((task, idx) => (
+                            <tr key={idx} className="border-b border-[#E8E8E8]">
+                              <td className="px-2 py-2">
+                                {showAllTasks
+                                  ? currentTaskPage * tasksPerPage + idx + 1
+                                  : idx + 1}
+                              </td>
+                              <td className="px-2 py-2 font-medium">
+                                {task.task}
+                              </td>
+                              <td className="px-2 py-2">
+                                {formatDate(task.dueDate)}
+                              </td>
+                              <td className="px-2 py-2 text-red-600 font-medium">
+                                {`${task.daysRemaining} Days`}
+                              </td>
+                              <td className="px-2 py-2 text-right">
+                                <div className="relative">
+                                  <button
+                                    className="w-6 h-6 flex items-center justify-center"
+                                    onMouseEnter={() =>
+                                      setHoveredIconId(task.id)
+                                    }
+                                    onMouseLeave={() => setHoveredIconId(null)}
+                                  >
+                                    <FiInfo
+                                      className="text-[#334155]"
+                                      size={14}
+                                    />
+                                  </button>
+                                  {hoveredIconId === task.id && (
+                                    <div className="absolute bottom-full right-0 mb-2 p-2 bg-[#3A3A3A] text-white text-center text-sm rounded-md w-48 z-10">
+                                      Login to the portal to make the online
+                                      payment
+                                    </div>
+                                  )}
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+
+                      {/* Removed static login message, now shown on icon hover */}
+
+                      {/* Pagination controls - only show if in expanded view */}
+                      {showAllTasks && totalTasks > tasksPerPage && (
+                        <div className="flex items-center justify-center mt-4 space-x-2">
+                          <button
+                            onClick={() => {
+                              const newPage = Math.max(0, currentTaskPage - 1);
+                              setCurrentTaskPage(newPage);
+                              fetchPaymentTasks(newPage);
+                            }}
+                            disabled={currentTaskPage === 0}
+                            className={`px-2 py-1 border rounded ${currentTaskPage === 0 ? "text-gray-400" : "text-blue-600"}`}
+                          >
+                            Previous
+                          </button>
+                          <span className="text-sm">
+                            Page {currentTaskPage + 1} of{" "}
+                            {Math.ceil(totalTasks / tasksPerPage)}
+                          </span>
+                          <button
+                            onClick={() => {
+                              const newPage = Math.min(
+                                Math.ceil(totalTasks / tasksPerPage) - 1,
+                                currentTaskPage + 1
+                              );
+                              setCurrentTaskPage(newPage);
+                              fetchPaymentTasks(newPage);
+                            }}
+                            disabled={
+                              currentTaskPage >=
+                              Math.ceil(totalTasks / tasksPerPage) - 1
+                            }
+                            className={`px-2 py-1 border rounded ${currentTaskPage >= Math.ceil(totalTasks / tasksPerPage) - 1 ? "text-gray-400" : "text-blue-600"}`}
+                          >
+                            Next
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="text-center py-4">
+                      No payment tasks pending
+                    </div>
+                  )}
+
+                  {/* Only show 'See more Tasks' button if there are more than 2 tasks */}
+                  {!showAllTasks && totalTasks > 2 && (
+                    <div className="mt-2 mb-6">
+                      <button
+                        onClick={() => {
+                          setShowAllTasks(true);
+                          setCurrentTaskPage(0);
+                          fetchPaymentTasks(0);
+                        }}
+                        className="text-blue-600 text-sm underline hover:text-blue-800"
+                      >
+                        See more Tasks
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Show 'Show less' button when in expanded view */}
+                  {showAllTasks && (
+                    <div className="mt-2 mb-6">
+                      <button
+                        onClick={() => {
+                          setShowAllTasks(false);
+                          setCurrentTaskPage(0);
+                        }}
+                        className="text-blue-600 text-sm underline hover:text-blue-800"
+                      >
+                        Show less
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>

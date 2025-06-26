@@ -68,14 +68,12 @@ const AdvocateForm: React.FC<AdvocateFormProps> = ({
             onChange={onCodeChange}
             required
           />
-          
           <TextField
             label="Barcode"
             value={barCode}
             onChange={onBarCodeChange}
             required
           />
-
           <Dropdown
             label="Year"
             placeHolder="Select Year"
@@ -87,15 +85,17 @@ const AdvocateForm: React.FC<AdvocateFormProps> = ({
           />
         </div>
       ) : (
-        <div className="mt-4">
-          <TextField
-            label="Name"
-            value={advocateName}
-            onChange={onNameChange}
-            required
-            helperText="Minimum 3 characters needed"
-            error={advocateName.length > 0 && advocateName.length < 3}
-          />
+        <div className="grid grid-cols-3 gap-4 mt-4">
+          <div className="col-span-1">
+            <TextField
+              label="Name"
+              value={advocateName}
+              onChange={onNameChange}
+              required
+              helperText="Minimum 3 characters needed"
+              error={advocateName.length > 0 && advocateName.length < 3}
+            />
+          </div>
         </div>
       )}
     </div>

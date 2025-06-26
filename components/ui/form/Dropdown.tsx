@@ -63,31 +63,45 @@ const Dropdown: React.FC<DropdownProps> = ({
         </label>
       )}
 
-      <select
-        id={id || name}
-        name={name}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className={selectClass}
-        disabled={disabled}
-      >
-        {placeHolder && (
-          <option value="" disabled hidden>
-            {placeHolder}
-          </option>
-        )}
-        {isStringOptions
-          ? (options as string[]).map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))
-          : (options as DropdownOption[]).map((option, index) => (
-              <option key={index} value={option.value}>
-                {option.label || option.value}
-              </option>
-            ))}
-      </select>
+      {/* Wrapper div for custom arrow */}
+      <div className="relative">
+        <select
+          id={id || name}
+          name={name}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className={`${selectClass} pr-10 appearance-none`} // add pr-10 for arrow space, and appearance-none to hide native arrow
+          disabled={disabled}
+        >
+          {placeHolder && (
+            <option value="" disabled hidden>
+              {placeHolder}
+            </option>
+          )}
+          {isStringOptions
+            ? (options as string[]).map((option, index) => (
+                <option key={index} value={option}>
+                  {option}
+                </option>
+              ))
+            : (options as DropdownOption[]).map((option, index) => (
+                <option key={index} value={option.value}>
+                  {option.label || option.value}
+                </option>
+              ))}
+        </select>
+
+        {/* Custom arrow */}
+        <div className="absolute bottom-0 right-1 flex items-center text-[#3D3C3C]">
+          <svg
+            className="h-8 w-8 fill-current"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M7 7l3 3 3-3z" />
+          </svg>
+        </div>
+      </div>
 
       {helperText && (
         <p

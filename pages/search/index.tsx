@@ -5,7 +5,7 @@ import SearchTabs from "../../components/search/SearchTabs";
 import SearchForm from "../../components/search/SearchForm";
 import AdditionalFilters from "../../components/search/AdditionalFilters";
 import CaseDetailsTable from "../../components/search/CaseDetailsTable";
-import { FormState, FilterState, CaseResult } from "../../types/search";
+import { FormState, FilterState, CaseResult } from "../../types";
 import { isFormValid, searchCases } from "../../utils/searchUtils";
 import DetailedViewModal from "../../components/CaseSearch/DetailedViewModal";
 import { newCaseSearchConfig } from "../../data/newCaseSearchConfig";
@@ -14,8 +14,12 @@ import { commonStyles, animations } from "../../styles/commonStyles";
 const SearchForCase = () => {
   const [selectedTab, setSelectedTab] = useState("Filing Number");
   const [showViewDetailedModal, setShowViewDetailedModal] = useState(false);
-  const [selectedCase, setSelectedCase] = useState<{ caseNumber: string; filingNumber?: string; courtId?: string }>({ caseNumber: '' });
-  
+  const [selectedCase, setSelectedCase] = useState<{
+    caseNumber: string;
+    filingNumber?: string;
+    courtId?: string;
+  }>({ caseNumber: "" });
+
   // Error notification state
   const [errorNotification, setErrorNotification] = useState<{
     show: boolean;
@@ -24,7 +28,7 @@ const SearchForCase = () => {
 
   // Pagination state
   const [offset, setOffset] = useState(0);
-  const limit = 10;
+  const limit = 50;
   const [totalCount, setTotalCount] = useState(0);
 
   // Form state
@@ -47,9 +51,10 @@ const SearchForCase = () => {
     caseType: "",
     hearingDateFrom: "",
     hearingDateTo: "",
-    filingYear: "",
     caseStage: "",
     caseStatus: "",
+    yearOfFiling: "",
+    caseTitle: "",
   });
 
   const [searchResults, setSearchResults] = useState<CaseResult[]>([]);
@@ -64,16 +69,17 @@ const SearchForCase = () => {
       caseType: "",
       hearingDateFrom: "",
       hearingDateTo: "",
-      filingYear: "",
       caseStage: "",
       caseStatus: "",
+      yearOfFiling: "",
+      caseTitle: "",
     });
   };
 
   // Handle tab change
   const handleTabChange = async (tab: string) => {
     setSelectedTab(tab);
-    
+
     // Reset form fields on tab change
     setFormState({
       caseNumber: "",
@@ -87,35 +93,41 @@ const SearchForCase = () => {
       advocateName: "",
       litigantName: "",
     });
-    
+
     handleResetFilters();
-    
+
     // Reset search results and pagination
     setOffset(0);
     setSearchResults([]);
-    
+
     // Load initial data for "All" tab
     if (tab === "All") {
       await fetchAllCases();
     }
   };
-  
+
   // Fetch all cases for "All" tab
   const fetchAllCases = async () => {
     setIsLoading(true);
     // Hide any previous errors
     setErrorNotification({ show: false, message: "" });
-    
-    const { results, totalCount: count, error } = await searchCases("All", { offset, limit });
-    
+
+    const {
+      results,
+      totalCount: count,
+      error,
+    } = await searchCases("All", { offset, limit });
+
     if (error) {
-      setErrorNotification({ 
-        show: true, 
-        message: error.message || "An error occurred while loading cases. Please try again." 
+      setErrorNotification({
+        show: true,
+        message:
+          error.message ||
+          "An error occurred while loading cases. Please try again.",
       });
       setSearchResults([]);
       setTotalCount(0);
-      
+
       // Auto-hide error notification after 2 seconds
       setTimeout(() => {
         setErrorNotification({ show: false, message: "" });
@@ -124,7 +136,7 @@ const SearchForCase = () => {
       setSearchResults(results);
       setTotalCount(count);
     }
-    
+
     setIsLoading(false);
   };
 
@@ -198,27 +210,37 @@ const SearchForCase = () => {
     if (!isFormValid(selectedTab, formState)) {
       return;
     }
-    
+
     setIsLoading(true);
     // Hide any previous errors
     setErrorNotification({ show: false, message: "" });
-    
+
     // Use the searchCases utility function which handles URL building, fetching, and transformation
-    const { results, totalCount: count, error } = await searchCases(selectedTab, {
-      ...formState,
-      offset,
-      limit
-    });
-    
+    const {
+      results,
+      totalCount: count,
+      error,
+    } = await searchCases(
+      selectedTab,
+      {
+        ...formState,
+        offset,
+        limit,
+      },
+      filterState
+    );
+
     // Handle API errors
     if (error) {
-      setErrorNotification({ 
-        show: true, 
-        message: error.message || "An error occurred while searching. Please try again." 
+      setErrorNotification({
+        show: true,
+        message:
+          error.message ||
+          "An error occurred while searching. Please try again.",
       });
       setSearchResults([]);
       setTotalCount(0);
-      
+
       // Auto-hide error notification after 2 seconds
       setTimeout(() => {
         setErrorNotification({ show: false, message: "" });
@@ -227,23 +249,25 @@ const SearchForCase = () => {
       setSearchResults(results);
       setTotalCount(count);
     }
-    
+
     setIsLoading(false);
   };
 
   // Handle view case details
   const handleViewCaseDetails = (caseNumber: string) => {
     // Find the case in search results
-    const caseDetails = searchResults.find(result => result.caseNumber === caseNumber);
-    
+    const caseDetails = searchResults.find(
+      (result) => result.caseNumber === caseNumber
+    );
+
     // Set the selected case with filing number and court ID
     // This is example code - you'll need to adjust based on your actual data structure
     setSelectedCase({
       caseNumber,
-      filingNumber: caseDetails?.filingNumber || '',
-      courtId: caseDetails?.courtId || 'KLKM52' // Default or from case details
+      filingNumber: caseDetails?.filingNumber || "",
+      courtId: caseDetails?.courtId || "KLKM52", // Default or from case details
     });
-    
+
     setShowViewDetailedModal(true);
   };
 
@@ -276,17 +300,18 @@ const SearchForCase = () => {
       <Head>
         <style dangerouslySetInnerHTML={{ __html: animations }} />
       </Head>
-      <h1 
+      <h1
         className={commonStyles.heading.primary}
         style={{ color: commonStyles.colors.text }}
       >
-        {newCaseSearchConfig.heading}</h1>
+        {newCaseSearchConfig.heading}
+      </h1>
       {/* Search Container */}
       <div>
         {/* Search Tabs */}
-        <SearchTabs 
-          selectedTab={selectedTab} 
-          onTabChange={handleTabChange} 
+        <SearchTabs
+          selectedTab={selectedTab}
+          onTabChange={handleTabChange}
           tabs={newCaseSearchConfig.tabs}
         />
 
@@ -308,29 +333,42 @@ const SearchForCase = () => {
           Choose from filter to search cases
         </div>
       )}
-      
+
       {/* Loading indicator */}
       {isLoading && (
         <div className={commonStyles.loading.container}>
           <div className={commonStyles.loading.spinner}></div>
         </div>
       )}
-      
+
       {/* Error Notification - Bottom Center with Auto Close */}
       {errorNotification.show && (
-        <div 
+        <div
           className={`${commonStyles.notification.container} ${commonStyles.notification.bottomCenter} ${commonStyles.notification.error}`}
           style={{
-            minWidth: '300px',
-            maxWidth: '80%',
-            animation: 'fadeInUp 0.3s ease-out forwards',
+            minWidth: "300px",
+            maxWidth: "80%",
+            animation: "fadeInUp 0.3s ease-out forwards",
           }}
         >
           <div className="flex items-center justify-center w-full">
-            <svg className={commonStyles.notification.icon} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg
+              className={commonStyles.notification.icon}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
-            <span className={commonStyles.notification.message}>{errorNotification.message}</span>
+            <span className={commonStyles.notification.message}>
+              {errorNotification.message}
+            </span>
           </div>
         </div>
       )}
@@ -348,6 +386,7 @@ const SearchForCase = () => {
       {/* Case Details Table with built-in pagination */}
       {searchResults?.length > 0 && (
         <CaseDetailsTable
+          selectedTab={selectedTab}
           searchResults={searchResults}
           onViewCaseDetails={handleViewCaseDetails}
           totalCount={totalCount}
@@ -355,16 +394,17 @@ const SearchForCase = () => {
           limit={limit}
           onNextPage={handleNextPage}
           onPrevPage={handlePrevPage}
+          filterState={filterState}
+          setFilterState={setFilterState}
         />
       )}
-      {showViewDetailedModal &&
-        <DetailedViewModal 
+      {showViewDetailedModal && (
+        <DetailedViewModal
           onClose={() => setShowViewDetailedModal(false)}
-          filingNumber={selectedCase.filingNumber}
+          // filingNumber={selectedCase.filingNumber}
           courtId={selectedCase.courtId}
         />
-      }
-
+      )}
     </div>
   );
 };

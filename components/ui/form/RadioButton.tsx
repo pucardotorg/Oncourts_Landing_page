@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface RadioOption {
   value: string;
@@ -28,10 +28,10 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   options,
   required = false,
   inline = true,
-  className = '',
+  className = "",
   error = false,
   disabled = false,
-  helperText
+  helperText,
 }) => {
   return (
     <div className={`mb-0 ${className}`}>
@@ -41,8 +41,8 @@ const RadioButton: React.FC<RadioButtonProps> = ({
           {required && <span className="text-red-500">*</span>}
         </label>
       )}
-      
-      <div className={`flex ${inline ? 'space-x-6' : 'flex-col space-y-2'}`}>
+
+      <div className={`flex ${inline ? "space-x-6" : "flex-col space-y-2"}`}>
         {options.map((option, index) => (
           <label key={index} className="text-lg inline-flex items-center">
             <input
@@ -52,19 +52,23 @@ const RadioButton: React.FC<RadioButtonProps> = ({
               checked={value === option.value}
               onChange={() => onChange(option.value)}
               className={`form-radio h-4 w-4 text-teal-600 ${
-                error ? 'border-red-500' : 'border-gray-300'
+                error ? "border-red-500" : "border-gray-300"
               }`}
               disabled={disabled}
             />
-            <span className={`ml-2 text-base font-medium ${disabled ? 'text-gray-500' : 'text-[#334155]'}`}>
+            <span
+              className={`ml-2 text-base font-medium ${disabled ? "text-gray-500" : "text-[#334155]"}`}
+            >
               {option.label}
             </span>
           </label>
         ))}
       </div>
-      
+
       {helperText && (
-        <p className={`text-xs mt-1 ${error ? 'text-red-500' : 'text-gray-500'}`}>
+        <p
+          className={`text-xs mt-1 ${error ? "text-red-500" : "text-gray-500"}`}
+        >
           {helperText}
         </p>
       )}

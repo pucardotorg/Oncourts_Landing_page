@@ -1,5 +1,5 @@
-import React from 'react';
-import { TextField, Dropdown } from '../../ui/form';
+import React from "react";
+import { TextField, Dropdown } from "../../ui/form";
 
 interface CaseNumberFormProps {
   selectedCourt: string;
@@ -20,7 +20,7 @@ const CaseNumberForm: React.FC<CaseNumberFormProps> = ({
   onCourtChange,
   onCaseTypeChange,
   onCaseNumberChange,
-  onYearChange
+  onYearChange,
 }) => {
   const courtOptions = ["ON Court Kollam"];
   const caseTypeOptions = ["ST", "CMP"];
@@ -30,14 +30,14 @@ const CaseNumberForm: React.FC<CaseNumberFormProps> = ({
     const startYear = 2024;
     const currentYear = new Date().getFullYear();
     const years: string[] = [];
-    
+
     for (let year = startYear; year <= currentYear; year++) {
       years.push(year.toString());
     }
-    
+
     return years;
   };
-  
+
   const yearOptions = generateYearOptions();
 
   return (
@@ -51,7 +51,7 @@ const CaseNumberForm: React.FC<CaseNumberFormProps> = ({
         required
         className="bg-white"
       />
-      
+
       <Dropdown
         label="Case type"
         placeHolder="Select Case Type"
@@ -61,16 +61,20 @@ const CaseNumberForm: React.FC<CaseNumberFormProps> = ({
         required
         className="bg-white"
       />
-      
+
       <TextField
         label="Case Number"
         value={caseNumber}
         onChange={onCaseNumberChange}
-        placeholder={selectedCaseType && selectedCaseType === "CMP" ? "Ex: CMP/123/2025" : "Ex: ST/1223/2025"}
+        placeholder={
+          selectedCaseType && selectedCaseType === "CMP"
+            ? "Ex: CMP/123/2025"
+            : "Ex: ST/1223/2025"
+        }
         helperText="Format: Type/Number/Year"
         required
       />
-      
+
       <Dropdown
         label="Year"
         placeHolder="Select Year"

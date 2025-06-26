@@ -8,8 +8,7 @@ import AllForm from "./forms/AllForm";
 import { newCaseSearchConfig } from "../../data/newCaseSearchConfig";
 import { commonStyles } from "../../styles/commonStyles";
 import { isFormValid } from "../../utils/searchUtils";
-
-import { FormState } from "../../types/search";
+import { FormState } from "../../types";
 
 interface FormStateWithHandlers extends FormState {
   handleClear: () => void;

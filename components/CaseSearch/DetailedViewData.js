@@ -26,7 +26,7 @@ export const dummyData = {
   purpose: "XYZ",
   lastHearingDate: "24-Jan-2026",
   caseStage: "Appearance",
-  appearance: "Yes",
+  processPaymentPending: "Yes",
 
   pendingTasks: [
     {

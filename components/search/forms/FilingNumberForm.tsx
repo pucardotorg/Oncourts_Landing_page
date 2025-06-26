@@ -1,5 +1,5 @@
-import React from 'react';
-import { TextField, Dropdown } from '../../ui/form';
+import React from "react";
+import { TextField, Dropdown } from "../../ui/form";
 
 interface FilingNumberFormProps {
   selectedCourt: string;
@@ -20,25 +20,25 @@ const FilingNumberForm: React.FC<FilingNumberFormProps> = ({
   onCourtChange,
   onCodeChange,
   onCaseNumberChange,
-  onYearChange
+  onYearChange,
 }) => {
   const courtOptions = ["ON Court Kollam"];
-  
+
   // Generate years from 2024 to current year
   const generateYearOptions = (): string[] => {
     const startYear = 2024;
     const currentYear = new Date().getFullYear();
     const years: string[] = [];
-    
+
     for (let year = startYear; year <= currentYear; year++) {
       years.push(year.toString());
     }
-    
+
     return years;
   };
-  
+
   const yearOptions = generateYearOptions();
-  
+
   return (
     <>
       <Dropdown
@@ -50,21 +50,16 @@ const FilingNumberForm: React.FC<FilingNumberFormProps> = ({
         required
         className="bg-white"
       />
-      
-      <TextField
-        label="Code"
-        value={code}
-        onChange={onCodeChange}
-        required
-      />
-      
+
+      <TextField label="Code" value={code} onChange={onCodeChange} required />
+
       <TextField
         label="Filing Number"
         value={caseNumber}
         onChange={onCaseNumberChange}
         required
       />
-      
+
       <Dropdown
         label="Year"
         placeHolder="Select Year"

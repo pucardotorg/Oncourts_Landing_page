@@ -1,5 +1,5 @@
-  import React from 'react';
-import { TextField, Dropdown } from '../../ui/form';
+import React from "react";
+import { TextField, Dropdown } from "../../ui/form";
 
 interface AllFormProps {
   selectedCourt: string;
@@ -20,26 +20,26 @@ const AllForm: React.FC<AllFormProps> = ({
   onCourtChange,
   onCaseTypeChange,
   onCaseNumberChange,
-  onYearChange
+  onYearChange,
 }) => {
   const courtOptions = ["ON Court Kollam"];
   const caseTypeOptions = ["ST"];
-  
+
   // Generate years from 2024 to current year
   const generateYearOptions = (): string[] => {
     const startYear = 2024;
     const currentYear = new Date().getFullYear();
     const years: string[] = [];
-    
+
     for (let year = startYear; year <= currentYear; year++) {
       years.push(year.toString());
     }
-    
+
     return years;
   };
-  
+
   const yearOptions = generateYearOptions();
-  
+
   return (
     <>
       <Dropdown
@@ -50,7 +50,7 @@ const AllForm: React.FC<AllFormProps> = ({
         options={courtOptions}
         required
       />
-      
+
       <Dropdown
         label="Case type"
         placeHolder="Select Case Type"
@@ -59,7 +59,7 @@ const AllForm: React.FC<AllFormProps> = ({
         options={caseTypeOptions}
         required
       />
-      
+
       <TextField
         label="Case Number"
         value={caseNumber}
@@ -67,7 +67,7 @@ const AllForm: React.FC<AllFormProps> = ({
         placeholder="12134"
         required
       />
-      
+
       <Dropdown
         label="Year"
         placeHolder="Select Year"

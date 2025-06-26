@@ -1,7 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { API_ENDPOINTS } from '../../../lib/config';
+import type { NextApiRequest, NextApiResponse } from "next";
+import { API_ENDPOINTS } from "../../../lib/config";
 
-type InboxSearchParams = {
+type OrdersTasksParams = {
   limit?: number;
   offset?: number;
   tenantId?: string;
@@ -12,8 +12,8 @@ type InboxSearchParams = {
 };
 
 /**
- * API handler for searching in the inbox
- * Based on the curl request provided, this endpoint forwards the search request
+ * API handler for fetching orders and payment tasks
+ * Based on the curl request provided, this endpoint forwards the request
  * to the backend API with proper parameters
  */
 export default async function handler(
@@ -21,25 +21,31 @@ export default async function handler(
   res: NextApiResponse
 ) {
   // Only allow POST requests for this endpoint
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed. Use POST instead.' });
+  if (req.method !== "POST") {
+    return res
+      .status(405)
+      .json({ error: "Method not allowed. Use POST instead." });
   }
 
   try {
-    // Extract search parameters from the request body
+    // Extract parameters from the request body
     const {
       limit = 10,
       offset = 0,
-      tenantId = 'kl',
+      tenantId = "kl",
       courtId,
       forOrders = false,
-      forPaymentTask = false,
+      forPaymentTask = true,
       filingNumber,
-    }: InboxSearchParams = req.body;
+    }: OrdersTasksParams = req.body;
 
     // Validate required parameters
     if (!courtId) {
-      return res.status(400).json({ error: 'courtId is required' });
+      return res.status(400).json({ error: "courtId is required" });
+    }
+
+    if (!filingNumber) {
+      return res.status(400).json({ error: "filingNumber is required" });
     }
 
     // Prepare the request payload
@@ -50,15 +56,15 @@ export default async function handler(
       courtId,
       forOrders,
       forPaymentTask,
-      ...(filingNumber && { filingNumber })
+      filingNumber,
     };
 
     // Make the request to the backend API
-    const response = await fetch(API_ENDPOINTS.INBOX.SEARCH, {
-      method: 'POST',
+    const response = await fetch(API_ENDPOINTS.OPENAPI.ORDER_TASKS, {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Accept': 'application/json',
+        "Content-Type": "application/json;charset=UTF-8",
+        Accept: "application/json",
       },
       body: JSON.stringify(payload),
     });
@@ -67,8 +73,8 @@ export default async function handler(
     if (!response.ok) {
       const errorData = await response.json();
       return res.status(response.status).json({
-        error: 'Error fetching inbox data',
-        details: errorData
+        error: "Error fetching orders and tasks data",
+        details: errorData,
       });
     }
 
@@ -76,7 +82,7 @@ export default async function handler(
     const data = await response.json();
     return res.status(200).json(data);
   } catch (error) {
-    console.error('Inbox search error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    console.error("Orders and tasks fetch error:", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 }

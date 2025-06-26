@@ -1,13 +1,16 @@
-import React from 'react';
-import { TextField } from '../../ui/form';
-import { newCaseSearchConfig } from '../../../data/newCaseSearchConfig';
+import React from "react";
+import { TextField } from "../../ui/form";
+import { newCaseSearchConfig } from "../../../data/newCaseSearchConfig";
 
 interface CNRNumberFormProps {
   cnrNumber: string;
   onChange: (value: string) => void;
 }
 
-const CNRNumberForm: React.FC<CNRNumberFormProps> = ({ cnrNumber, onChange }) => {
+const CNRNumberForm: React.FC<CNRNumberFormProps> = ({
+  cnrNumber,
+  onChange,
+}) => {
   return (
     <div>
       <TextField

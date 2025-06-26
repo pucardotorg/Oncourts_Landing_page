@@ -1,4 +1,10 @@
-import { ApiResponse, FormState } from "../types/search";
+import {
+  ApiResponse,
+  ApiRequestPayload,
+  SortOrder,
+  FormState,
+  FilterState,
+} from "../types";
 import { newCaseSearchConfig } from "../data/newCaseSearchConfig";
 import { transformSearchResponse } from "../TransformData/transformSearchData";
 
@@ -17,13 +23,29 @@ export const formatDate = (timestamp: number | null | undefined): string => {
 /**
  * Fetch case data from API with error handling
  */
-export const fetchCase = async (url: string): Promise<ApiResponse | null> => {
+export const fetchCase = async (
+  payload?: ApiRequestPayload
+): Promise<ApiResponse | null> => {
   try {
     // Show messages in development but not in production
     const isDev = process.env.NODE_ENV === "development";
-    if (isDev) console.log(`Fetching data from: ${url}`);
+    if (isDev) {
+      console.log("Fetching data from case API");
+      if (payload) console.log("Payload:", JSON.stringify(payload, null, 2));
+    }
 
-    const response = await fetch(url);
+    // Use the API proxy endpoint to avoid CORS issues
+    const url = "/api/case/openapi-index";
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    };
+
+    const response = await fetch(url, options);
     if (!response.ok) {
       throw new Error(`API response error: ${response.status}`);
     }
@@ -36,12 +58,17 @@ export const fetchCase = async (url: string): Promise<ApiResponse | null> => {
 };
 
 /**
- * Build API URL based on search parameters and selected tab
+ * Build API payload based on search parameters and selected tab
  */
-export const buildApiUrl = (
+export const buildApiPayload = (
   selectedTab: string,
-  params: Partial<FormState> & { offset?: number; limit?: number }
-): string => {
+  formState: Partial<FormState> & {
+    offset?: number;
+    limit?: number;
+    sortOrder?: SortOrder[];
+  },
+  filterState?: FilterState
+): ApiRequestPayload | undefined => {
   const {
     cnrNumber,
     selectedYear,
@@ -55,85 +82,201 @@ export const buildApiUrl = (
     litigantName,
     offset = 0,
     limit = 10,
-  } = params;
+    sortOrder = [],
+  } = formState;
 
-  const baseUrl = "/api/case";
+  // Process filter criteria from filterState
+  const filterCriteria = filterState
+    ? {
+        // Only include non-empty filter values
+        courtName: filterState.courtName || undefined,
+        caseType: filterState.caseType || undefined,
+        yearOfFiling: filterState.yearOfFiling || undefined,
+        hearingDateFrom: filterState.hearingDateFrom || undefined,
+        hearingDateTo: filterState.hearingDateTo || undefined,
+        caseStage: filterState.caseStage || undefined,
+        caseStatus: filterState.caseStatus || undefined,
+      }
+    : {};
 
-  // Use a more modern approach with a map of URL builders for each tab
-  const urlBuilders = {
-    "CNR Number": () => (cnrNumber ? `${baseUrl}/cnr/${cnrNumber}` : ""),
-    "Case Number": () => {
-      if (selectedYear && selectedCaseType && caseNumber) {
-        const caseNumberParts = caseNumber.split("/");
-        if (caseNumberParts.length > 1) {
-          return `${baseUrl}/${selectedYear}/${selectedCaseType}/${caseNumberParts[1]}`;
-        }
-      }
-      return "";
-    },
-    "Filing Number": () =>
-      selectedYear && selectedCourt && code
-        ? `${baseUrl}/${selectedYear}/${selectedCourt}/${code}`
-        : "",
-    Advocate: () => {
-      if (advocateSearchMethod === "Bar Code" && barCode) {
-        return `${baseUrl}/advocate/barcode/${barCode}`;
-      } else if (advocateSearchMethod === "Advocate Name" && advocateName) {
-        return `${baseUrl}/advocate/name/${advocateName}`;
-      }
-      return "";
-    },
-    Litigant: () => (litigantName ? `${baseUrl}/litigant/${litigantName}` : ""),
-    All: () =>
-      `${baseUrl}/${selectedYear || "2025"}/${selectedCaseType || "CMP"}?offset=${offset}&limit=${limit}`,
+  // Remove undefined properties from filterCriteria
+  Object.keys(filterCriteria).forEach((key) => {
+    if (filterCriteria[key as keyof typeof filterCriteria] === undefined) {
+      delete filterCriteria[key as keyof typeof filterCriteria];
+    }
+  });
+
+  // Base payload for all requests
+  const basePayload = {
+    offset,
+    limit,
+    ...(sortOrder.length > 0 && { sortOrder }),
   };
 
-  // Get the appropriate URL builder function for the selected tab
-  const builderFn = urlBuilders[selectedTab as keyof typeof urlBuilders];
-  return builderFn ? builderFn() : "";
+  // Add filter criteria only if it has properties
+  const filterProps =
+    Object.keys(filterCriteria).length > 0 ? { filterCriteria } : {};
+
+  // Build payloads for each tab
+  const payloadBuilders = {
+    "CNR Number": () => ({
+      searchCaseCriteria: {
+        searchType: "cnr_number" as const,
+        cnrNumberCriteria: {
+          cnrNumber: cnrNumber || "",
+        },
+      },
+      ...filterProps,
+      ...basePayload,
+    }),
+
+    "Case Number": () => ({
+      searchCaseCriteria: {
+        searchType: "case_number" as const,
+        caseNumberCriteria: {
+          courtName: selectedCourt || "",
+          caseType: selectedCaseType || "",
+          caseNumber: caseNumber?.split("/")?.[1] || caseNumber || "",
+          year: selectedYear || "",
+        },
+      },
+      ...filterProps,
+      ...basePayload,
+    }),
+
+    "Filing Number": () => ({
+      searchCaseCriteria: {
+        searchType: "filing_number" as const,
+        filingNumberCriteria: {
+          courtName: selectedCourt || "",
+          code: code || "",
+          caseNumber: caseNumber || "",
+          year: selectedYear || "",
+        },
+      },
+      ...filterProps,
+      ...basePayload,
+    }),
+
+    Advocate: () => {
+      if (advocateSearchMethod === "Bar Code" && barCode) {
+        return {
+          searchCaseCriteria: {
+            searchType: "advocate" as const,
+            advocateCriteria: {
+              advocateSearchType: "barcode" as const,
+              barCodeDetails: {
+                stateCode: "KL", // Default state code, adjust if needed
+                barCode: barCode || "",
+                year: selectedYear || "",
+              },
+            },
+          },
+          ...filterProps,
+          ...basePayload,
+        };
+      } else if (advocateSearchMethod === "Advocate Name" && advocateName) {
+        return {
+          searchCaseCriteria: {
+            searchType: "advocate" as const,
+            advocateCriteria: {
+              advocateSearchType: "advocate_name" as const,
+              advocateName: advocateName || "",
+            },
+          },
+          ...filterProps,
+          ...basePayload,
+        };
+      }
+      return undefined;
+    },
+
+    Litigant: () => ({
+      searchCaseCriteria: {
+        searchType: "litigant" as const,
+        litigantCriteria: {
+          litigantName: litigantName || "",
+        },
+      },
+      ...filterProps,
+      ...basePayload,
+    }),
+
+    All: () => ({
+      searchCaseCriteria: {
+        searchType: "all" as const,
+      },
+      ...filterProps,
+      ...basePayload,
+    }),
+  };
+
+  // Get the appropriate payload builder function for the selected tab
+  const builderFn =
+    payloadBuilders[selectedTab as keyof typeof payloadBuilders];
+  return builderFn ? builderFn() : undefined;
 };
 
 /**
- * Search for cases with the given parameters
+ * Search for cases with the given parameters using the new API structure
+ * Now also accepts filterState to include advanced filtering options
  */
 export const searchCases = async (
   selectedTab: string,
-  params: Partial<FormState> & { offset?: number; limit?: number }
+  formState: Partial<FormState> & {
+    offset?: number;
+    limit?: number;
+    sortOrder?: SortOrder[];
+  },
+  filterState?: FilterState
 ) => {
   try {
-    const url = buildApiUrl(selectedTab, params);
-    if (!url) return { results: [], totalCount: 0, error: null };
+    // Get the constructed payload based on tab, formState, and filterState
+    const payload = buildApiPayload(selectedTab, formState, filterState);
 
-    const response = await fetchCase(url);
-    
+    // Validate that we have a valid payload
+    if (!payload) {
+      return {
+        results: [],
+        totalCount: 0,
+        error: {
+          message: "Invalid search parameters.",
+          code: "VALIDATION_ERROR",
+        },
+      };
+    }
+
+    // Call the API with the constructed payload
+    const response = await fetchCase(payload);
+
     if (!response) {
       return {
         results: [],
         totalCount: 0,
         error: {
           message: "Failed to fetch data. Please try again.",
-          code: "API_ERROR"
-        }
+          code: "API_ERROR",
+        },
       };
     }
-    
+
+    // Transform the response to the expected format
     const transformedData = transformSearchResponse(response, selectedTab);
-    
+
     // Return successful response with null error
-    return { 
+    return {
       ...transformedData,
-      error: null 
+      error: null,
     };
-    
   } catch (error) {
-    console.error('Error in searchCases:', error);
-    return { 
+    console.error("Error in searchCases:", error);
+    return {
       results: [],
       totalCount: 0,
       error: {
         message: (error as Error).message || "An unexpected error occurred",
-        code: "UNEXPECTED_ERROR"
-      }
+        code: "UNEXPECTED_ERROR",
+      },
     };
   }
 };

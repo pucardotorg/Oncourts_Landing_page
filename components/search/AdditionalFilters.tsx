@@ -1,15 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown, DatePickerComponent } from "../ui/form";
-
-interface FilterState {
-  courtName: string;
-  caseType: string;
-  hearingDateFrom: string;
-  hearingDateTo: string;
-  filingYear: string;
-  caseStage: string;
-  caseStatus: string;
-}
+import { FilterState } from "../../types";
 
 interface AdditionalFiltersProps {
   selectedTab: string;
@@ -26,14 +17,12 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
 }) => {
   // Local state to track filter changes before applying them
   const [localFilters, setLocalFilters] = useState<FilterState>(filterState);
-  
-  console.log("localFilters", localFilters);
-  
+
   // Update local filters when parent filterState changes
   useEffect(() => {
     setLocalFilters(filterState);
   }, [filterState]);
-  
+
   // Define options for dropdowns
   const courtOptions = ["ON Court Kollam", "ON Court Kochi"];
   const caseTypeOptions = ["CMP", "ST"];
@@ -54,15 +43,15 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
   };
 
   const yearOptions = generateYearOptions();
-  
+
   // Handle local filter changes
   const handleLocalFilterChange = (field: string, value: string) => {
-    setLocalFilters(prev => ({
+    setLocalFilters((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
-  
+
   // Apply all filters at once when search button is clicked
   const applyFilters = () => {
     setFilterState(localFilters);
@@ -72,13 +61,24 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
     <div className="mt-6 bg-white rounded-lg shadow-sm overflow-hidden border border-[#E2E8F0]">
       <div className="p-4 bg-[#F8FAFC]">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-[Roboto] font-semibold text-[#0F172A]">Filter</h2>
-          <button
-            onClick={onResetFilters}
-            className="text-xl font-[Roboto] font-medium text-[#2563EB] hover:text-blue-800"
-          >
-            Reset all
-          </button>
+          <h2 className="text-2xl font-[Roboto] font-semibold text-[#0F172A]">
+            Filter
+          </h2>
+
+          <div className="flex gap-2">
+            <button
+              onClick={applyFilters}
+              className="px-2 text-lg font-[Inter] font-medium text-[#2563EB] hover:text-blue-800 bg-white rounded-lg border border-[#E2E8F0]"
+            >
+              Apply Filter
+            </button>
+            <button
+              onClick={onResetFilters}
+              className="text-lg font-[Inter] font-medium text-[#64748B] hover:text-gray-800"
+            >
+              Reset all
+            </button>
+          </div>
         </div>
 
         <hr className="my-2 border-t border-[#CBD5E1]" />
@@ -108,24 +108,29 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
             <DatePickerComponent
               label="Next Hearing Date"
               value={localFilters.hearingDateFrom}
-              onChange={(value) => handleLocalFilterChange("hearingDateFrom", value)}
+              onChange={(value) =>
+                handleLocalFilterChange("hearingDateFrom", value)
+              }
             />
 
             <DatePickerComponent
               label="To"
               value={localFilters.hearingDateTo}
-              onChange={(value) => handleLocalFilterChange("hearingDateTo", value)}
+              onChange={(value) =>
+                handleLocalFilterChange("hearingDateTo", value)
+              }
             />
 
             <Dropdown
               label="Year of Filing"
               placeHolder="Select Year"
-              value={localFilters.filingYear}
-              onChange={(value) => handleLocalFilterChange("filingYear", value)}
+              value={localFilters.yearOfFiling}
+              onChange={(value) =>
+                handleLocalFilterChange("yearOfFiling", value)
+              }
               options={yearOptions}
               className="bg-[#F8FAFC] border-[#94A3B8]"
             />
-
             <Dropdown
               label="Case Stage"
               placeHolder="Select Case Stage"
@@ -143,16 +148,6 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
               options={caseStatusOptions}
               className="bg-[#F8FAFC] border-[#94A3B8]"
             />
-            
-            <div className="flex items-end justify-center">
-              <button
-                onClick={applyFilters}
-                className="h-10 px-16 py-2 bg-[#0F766E] text-white rounded-md font-medium hover:bg-teal-700 transition flex items-center justify-center gap-2"
-                type="button"
-              >
-                Search
-              </button>
-            </div>
           </div>
         )}
       </div>
