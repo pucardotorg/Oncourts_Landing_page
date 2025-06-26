@@ -2,12 +2,31 @@
  * Case model interfaces representing court case data
  */
 
-// Case result interface for consistent typing in frontend displays
+export interface PartyInfo {
+  id?: string;
+  name?: string;
+  entityType?: string;
+}
 export interface CaseResult {
-  caseTitle: string;
-  caseNumber: string;
-  nextHearingDate: string;
-  purpose: string;
+  caseTitle?: string;
+  cmpNumber?: string;
+  stNumber?: string;
+  purpose?: string;
+  nextHearingDate?: string;
+  lastHearingDate?: string;
+  filingDate?: string;
+  registrationDate?: string;
   filingNumber?: string;
   courtId?: string;
+  courtName?: string;
+  cnrNumber?: string;
+  caseStage?: string;
+  advocate?: PartyInfo[];
+  litigant?: PartyInfo[];
+}
+
+export interface CourtRoom {
+  code?: string;
+  name?: string;
+  establishment?: string;
 }

@@ -1,22 +1,23 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { dummyData } from "./DetailedViewData";
 import { downloadAsPDF } from "../../utils/downloadPdf";
-import { InboxSearchResponse, OrderDetails, PaymentTask } from "../../types";
+import {
+  CaseResult,
+  InboxSearchResponse,
+  OrderDetails,
+  PartyInfo,
+  PaymentTask,
+} from "../../types";
 import { FiInfo } from "react-icons/fi";
 
 interface DetailedViewModalProps {
   onClose: () => void;
-  caseId?: string;
-  filingNumber?: string;
-  courtId?: string;
+  caseResult: CaseResult;
 }
 
 const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
   onClose,
-  filingNumber,
-  courtId,
+  caseResult,
 }) => {
-  const data = dummyData;
   const modalContentRef = useRef<HTMLDivElement>(null);
   const tenantId = "kl";
 
@@ -30,7 +31,8 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
   const [showAll, setShowAll] = useState({
     complainants: false,
     complainantAdvocates: false,
-    accused: false,
+    accuseds: false,
+    accusedAdvocates: false,
   });
 
   // State for orders pagination
@@ -45,27 +47,30 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
   const [currentTaskPage, setCurrentTaskPage] = useState(0);
   const [totalTasks, setTotalTasks] = useState(0);
   const tasksPerPage = 10;
+  const [magistrateName, setMagistrateName] = useState("");
+  const [complainants, setComplainants] = useState<PartyInfo[]>([]);
+  const [complainantAdvocates, setComplainantAdvocates] = useState<PartyInfo[]>(
+    []
+  );
+  const [accuseds, setAccuseds] = useState<PartyInfo[]>([]);
+  const [accusedAdvocates, setAccusedAdvocates] = useState<PartyInfo[]>([]);
 
-  // Format date to readable format (DD Month YYYY)
-  const formatDate = (dateStr: string | number) => {
+  const formatDate = (dateStr?: string | number) => {
     try {
-      const date = new Date(dateStr);
+      const date = new Date(dateStr || "");
       return (
         date.getDate() +
-        " " +
+        "-" +
         date.toLocaleString("default", { month: "long" }) +
-        " " +
+        "-" +
         date.getFullYear()
       );
     } catch {
-      // Return the original value as string if date parsing fails
       return String(dateStr);
     }
   };
 
-  // Lock body scrolling when modal is open
   useEffect(() => {
-    // Save the current overflow value
     const originalOverflow = document.body.style.overflow;
 
     // Disable scrolling on the body
@@ -82,17 +87,56 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
     scale: 2,
     format: "a4",
     quality: 0.95,
-    filename: `Case_Details_${data.caseNumber || "Report"}.pdf`,
+    filename: `Case_Details_Report"}.pdf`,
     loading: {
       text: "Generating PDF...",
       subtext: "This may take a moment",
     },
   };
 
+  // Fetch magistrate/judge name from API
+  const getMagistrateName = useCallback(async () => {
+    if (!caseResult.courtId) return;
+
+    try {
+      const response = await fetch(
+        `/api/case/magistrate?tenantId=${tenantId}&courtId=${caseResult.courtId}`
+      );
+
+      if (!response.ok) {
+        console.error("Failed to fetch magistrate data:", response.statusText);
+      }
+
+      const data = await response.json();
+      setMagistrateName(data.name || "");
+    } catch (error) {
+      console.error("Error fetching magistrate name:", error);
+    }
+  }, [caseResult]);
+
+  const getCitizenDetails = useCallback(async () => {
+    const complainantAdvocateDetails = caseResult?.advocate?.filter(
+      (advocate) => advocate.entityType === "complainant"
+    );
+    const accusedAdvocateDetails = caseResult?.advocate?.filter(
+      (advocate) => advocate.entityType === "accused"
+    );
+    const complainantDetails = caseResult?.litigant?.filter(
+      (litigant) => litigant.entityType === "complainant"
+    );
+    const accusedDetails = caseResult?.litigant?.filter(
+      (litigant) => litigant.entityType === "accused"
+    );
+    setComplainantAdvocates(complainantAdvocateDetails || []);
+    setAccusedAdvocates(accusedAdvocateDetails || []);
+    setComplainants(complainantDetails || []);
+    setAccuseds(accusedDetails || []);
+  }, [caseResult]);
+
   // Fetch order history data from API
   const fetchOrderHistory = useCallback(
     async (page = 0, initialLoad = false) => {
-      if (!filingNumber || !courtId) return;
+      if (!caseResult.filingNumber || !caseResult.courtId) return;
       try {
         if (initialLoad) {
           setLoading(true);
@@ -103,8 +147,8 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
         const limit = initialLoad ? initialOrdersToShow : ordersPerPage;
 
         const payload = {
-          filingNumber,
-          courtId,
+          filingNumber: caseResult.filingNumber,
+          courtId: caseResult.courtId,
           forOrders: true,
           forPaymentTask: false,
           tenantId,
@@ -142,18 +186,13 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
         }
       }
     },
-    [filingNumber, courtId, ordersPerPage]
+    [caseResult, ordersPerPage]
   );
-
-  // Initial load of orders - just get first 2
-  useEffect(() => {
-    fetchOrderHistory(0, true);
-  }, [fetchOrderHistory]);
 
   // Fetch payment tasks from API
   const fetchPaymentTasks = useCallback(
     async (page = 0, initialLoad = false) => {
-      if (!filingNumber || !courtId) return;
+      if (!caseResult.filingNumber || !caseResult.courtId) return;
 
       try {
         if (initialLoad) {
@@ -165,8 +204,8 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
         const limit = tasksPerPage;
 
         const payload = {
-          filingNumber,
-          courtId,
+          filingNumber: caseResult.filingNumber,
+          courtId: caseResult.courtId,
           forOrders: false,
           forPaymentTask: true,
           tenantId,
@@ -204,25 +243,36 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
         }
       }
     },
-    [filingNumber, courtId, tasksPerPage]
+    [caseResult, tasksPerPage]
   );
 
-  // Initial load of payment tasks - just get first 2
   useEffect(() => {
+    fetchOrderHistory(0, true);
     fetchPaymentTasks(0, true);
-  }, [fetchPaymentTasks]);
+    getMagistrateName();
+    getCitizenDetails();
+  }, [
+    fetchOrderHistory,
+    getMagistrateName,
+    getCitizenDetails,
+    fetchPaymentTasks,
+  ]);
 
   const renderList = (
-    list: string[],
+    list: PartyInfo[],
     show: boolean,
-    key: "complainants" | "complainantAdvocates" | "accused"
+    key:
+      | "complainants"
+      | "complainantAdvocates"
+      | "accuseds"
+      | "accusedAdvocates"
   ) => {
     const visibleItems = show ? list : list.slice(0, 2);
     return (
       <>
         {visibleItems.map((item, idx) => (
           <p className="text-[16px] font-normal" key={idx}>
-            {item}
+            {item.name}
           </p>
         ))}
         {list.length > 2 && (
@@ -277,7 +327,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
         <div className="sticky top-0 z-50 bg-white border-b-2 border-[#E2E8F0] px-6 py-4 flex justify-between items-center">
           <div className="text-xl font-bold text-[#0F172A]">
             Detailed View |{" "}
-            <span className="text-[#0F766E]">{data.caseTitle}</span>
+            <span className="text-[#0F766E]">{caseResult.caseTitle}</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -317,7 +367,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 Case Number
               </span>
               <span className="text-[16px] font-bold text-[#0B0C0C]">
-                {data.caseNumber}
+                {caseResult.stNumber || caseResult.cmpNumber}
               </span>
             </div>
             <div className="flex flex-col border-r pr-4 pl-2">
@@ -325,7 +375,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 CNR Number
               </span>
               <span className="text-[16px] font-bold text-[#0B0C0C] break-words whitespace-normal">
-                {data.cnrNumber}
+                {caseResult.cnrNumber}
               </span>
             </div>
             <div className="flex flex-col border-r pr-4 pl-2">
@@ -333,7 +383,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 Filing Number
               </span>
               <span className="text-[16px] font-bold text-[#0B0C0C] break-words whitespace-normal">
-                {data.filingNumber}
+                {caseResult.filingNumber}
               </span>
             </div>
             <div className="flex flex-col border-r pr-4 pl-2">
@@ -341,7 +391,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 Filing Date
               </span>
               <span className="text-[16px] font-bold text-[#0B0C0C] break-words whitespace-normal">
-                {data.filingDate}
+                {formatDate(caseResult.filingDate)}
               </span>
             </div>
             <div className="flex flex-col border-r pr-4 pl-2">
@@ -349,7 +399,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 Registration Date
               </span>
               <span className="text-[16px] font-bold text-[#0B0C0C] break-words whitespace-normal">
-                {data.registrationDate}
+                {formatDate(caseResult.registrationDate)}
               </span>
             </div>
             <div className="flex flex-col border-r pr-4 pl-2">
@@ -357,7 +407,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 Magistrate
               </span>
               <span className="text-[16px] font-bold text-[#0B0C0C] break-words whitespace-normal">
-                {data.magistrate}
+                {magistrateName}
               </span>
             </div>
             <div className="flex flex-col pl-2">
@@ -365,7 +415,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 Court Name
               </span>
               <span className="text-[16px] font-bold text-[#0B0C0C]">
-                {data.courtName}
+                {caseResult.courtName}
               </span>
             </div>
           </div>
@@ -379,31 +429,31 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 <p className="text-[16px] font-bold text-[#0A0A0A]">
                   Complainant/s
                 </p>
-                {renderList(
-                  data.complainants,
-                  showAll.complainants,
-                  "complainants"
-                )}
+                {renderList(complainants, showAll.complainants, "complainants")}
               </div>
               <div className="pr-2 border-r">
                 <p className="text-[16px] font-bold text-[#0A0A0A]">
                   Complainant advocate/s
                 </p>
                 {renderList(
-                  data.complainantAdvocates,
+                  complainantAdvocates,
                   showAll.complainantAdvocates,
                   "complainantAdvocates"
                 )}
               </div>
               <div className="pr-2 border-r">
                 <p className="text-[16px] font-bold text-[#0A0A0A]">Accused</p>
-                {renderList(data.accused, showAll.accused, "accused")}
+                {renderList(accuseds, showAll.accuseds, "accuseds")}
               </div>
               <div>
                 <p className="text-[16px] font-bold text-[#0A0A0A]">
                   Accused Advocate/s
                 </p>
-                <p>{data.accusedAdvocates || "NA"}</p>
+                {renderList(
+                  accusedAdvocates,
+                  showAll.accusedAdvocates,
+                  "accusedAdvocates"
+                )}
               </div>
             </div>
           </div>
@@ -419,21 +469,23 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     Next Hearing Date
                   </span>
                   <span className="flex-1 text-[16px]">
-                    {data.nextHearingDate}
+                    {formatDate(caseResult.nextHearingDate)}
                   </span>
                 </div>
                 <div className="flex justify-between gap-4">
                   <span className="flex-1 text-[16px] font-bold text-[#0A0A0A]">
                     Purpose
                   </span>
-                  <span className="flex-1 text-[16px]">{data.purpose}</span>
+                  <span className="flex-1 text-[16px]">
+                    {caseResult.purpose}
+                  </span>
                 </div>
                 <div className="flex justify-between gap-4">
                   <span className="flex-1 text-[16px] font-bold text-[#0A0A0A]">
                     Last Hearing on
                   </span>
                   <span className="flex-1 text-[16px]">
-                    {data.lastHearingDate}
+                    {formatDate(caseResult.lastHearingDate)}
                   </span>
                 </div>
               </div>
@@ -442,7 +494,9 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                   <span className="flex-1 text-[16px] font-bold text-[#0A0A0A]">
                     Case Stage
                   </span>
-                  <span className="flex-1 text-[16px]">{data.caseStage}</span>
+                  <span className="flex-1 text-[16px]">
+                    {caseResult.caseStage}
+                  </span>
                 </div>
                 <div className="flex justify-between gap-4">
                   <span className="flex-1 text-[16px] font-bold text-[#0A0A0A]">
@@ -457,8 +511,8 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     }}
                     className="flex-1 text-[16px] text-left text-[#DC2626] underline hover:text-red-700"
                   >
-                    {data.processPaymentPending}
-                  </button>{" "}
+                    Yes
+                  </button>
                 </div>
               </div>
             </div>

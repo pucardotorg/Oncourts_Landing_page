@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { API_ENDPOINTS } from "../../../lib/config";
 
 type MagistrateNameParams = {
-  tenantId?: string;
+  tenantId: string;
   courtId: string;
 };
 
@@ -23,7 +23,7 @@ export default async function handler(
 
   try {
     // Extract query parameters
-    const { tenantId = "kl", courtId } = req.query as MagistrateNameParams;
+    const { tenantId, courtId } = req.query as MagistrateNameParams;
 
     // Validate required parameters
     if (!courtId) {
@@ -31,13 +31,16 @@ export default async function handler(
     }
 
     // Make the request to the backend API
-    const response = await fetch(API_ENDPOINTS.OPENAPI.MAGISTRATE(tenantId, courtId), {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json;charset=UTF-8",
-        Accept: "application/json",
-      },
-    });
+    const response = await fetch(
+      API_ENDPOINTS.OPENAPI.MAGISTRATE(tenantId, courtId),
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          Accept: "application/json",
+        },
+      }
+    );
 
     // Check if the request was successful
     if (!response.ok) {

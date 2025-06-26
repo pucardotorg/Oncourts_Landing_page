@@ -66,12 +66,6 @@ const CaseNumberForm: React.FC<CaseNumberFormProps> = ({
         label="Case Number"
         value={caseNumber}
         onChange={onCaseNumberChange}
-        placeholder={
-          selectedCaseType && selectedCaseType === "CMP"
-            ? "Ex: CMP/123/2025"
-            : "Ex: ST/1223/2025"
-        }
-        helperText="Format: Type/Number/Year"
         required
       />
 

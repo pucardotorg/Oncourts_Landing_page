@@ -1,5 +1,6 @@
 import React from "react";
 import { TextField, Dropdown } from "../../ui/form";
+import { CourtRoom } from "../../../types";
 
 interface FilingNumberFormProps {
   selectedCourt: string;
@@ -10,6 +11,7 @@ interface FilingNumberFormProps {
   onCodeChange: (value: string) => void;
   onCaseNumberChange: (value: string) => void;
   onYearChange: (value: string) => void;
+  courtOptions: CourtRoom[];
 }
 
 const FilingNumberForm: React.FC<FilingNumberFormProps> = ({
@@ -21,9 +23,8 @@ const FilingNumberForm: React.FC<FilingNumberFormProps> = ({
   onCodeChange,
   onCaseNumberChange,
   onYearChange,
+  courtOptions,
 }) => {
-  const courtOptions = ["ON Court Kollam"];
-
   // Generate years from 2024 to current year
   const generateYearOptions = (): string[] => {
     const startYear = 2024;
@@ -46,7 +47,12 @@ const FilingNumberForm: React.FC<FilingNumberFormProps> = ({
         placeHolder="Select Court"
         value={selectedCourt}
         onChange={onCourtChange}
-        options={courtOptions}
+        options={
+          courtOptions?.map((court: CourtRoom) => ({
+            label: court?.name || "",
+            value: court?.code || "",
+          })) || []
+        }
         required
         className="bg-white"
       />

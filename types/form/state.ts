@@ -11,6 +11,7 @@ export interface FormState {
   code: string;
   cnrNumber: string;
   advocateSearchMethod: string;
+  stateCode: string;
   barCode: string;
   advocateName: string;
   litigantName: string;

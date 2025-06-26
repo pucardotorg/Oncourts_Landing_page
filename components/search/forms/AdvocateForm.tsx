@@ -4,12 +4,12 @@ import { TextField, Dropdown, RadioButton } from "../../ui/form";
 interface AdvocateFormProps {
   advocateSearchMethod: string;
   barCode: string;
-  code: string;
+  stateCode: string;
   selectedYear: string;
   advocateName: string;
   onMethodChange: (value: string) => void;
   onBarCodeChange: (value: string) => void;
-  onCodeChange: (value: string) => void;
+  onStateCodeChange: (value: string) => void;
   onYearChange: (value: string) => void;
   onNameChange: (value: string) => void;
 }
@@ -17,12 +17,12 @@ interface AdvocateFormProps {
 const AdvocateForm: React.FC<AdvocateFormProps> = ({
   advocateSearchMethod,
   barCode,
-  code,
+  stateCode,
   selectedYear,
   advocateName,
   onMethodChange,
   onBarCodeChange,
-  onCodeChange,
+  onStateCodeChange,
   onYearChange,
   onNameChange,
 }) => {
@@ -64,8 +64,8 @@ const AdvocateForm: React.FC<AdvocateFormProps> = ({
         <div className="grid grid-cols-3 gap-4 mt-4">
           <TextField
             label="State Code"
-            value={code}
-            onChange={onCodeChange}
+            value={stateCode}
+            onChange={onStateCodeChange}
             required
           />
           <TextField

@@ -2,7 +2,7 @@ import React from "react";
 
 interface DropdownOption {
   value: string;
-  label?: string;
+  label: string;
 }
 
 interface DropdownProps {
@@ -80,12 +80,32 @@ const Dropdown: React.FC<DropdownProps> = ({
           )}
           {isStringOptions
             ? (options as string[]).map((option, index) => (
-                <option key={index} value={option}>
+                <option
+                  key={index}
+                  value={option}
+                  className="whitespace-normal break-words w-full"
+                  style={{
+                    width: "100%",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "normal",
+                    wordWrap: "break-word",
+                  }}
+                >
                   {option}
                 </option>
               ))
             : (options as DropdownOption[]).map((option, index) => (
-                <option key={index} value={option.value}>
+                <option
+                  key={index}
+                  value={option.label}
+                  className="whitespace-normal break-words w-full"
+                  style={{
+                    width: "100%",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "normal",
+                    wordWrap: "break-word",
+                  }}
+                >
                   {option.label || option.value}
                 </option>
               ))}

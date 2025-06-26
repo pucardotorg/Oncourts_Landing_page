@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import SearchTabs from "../../components/search/SearchTabs";
 import SearchForm from "../../components/search/SearchForm";
 import AdditionalFilters from "../../components/search/AdditionalFilters";
 import CaseDetailsTable from "../../components/search/CaseDetailsTable";
-import { FormState, FilterState, CaseResult } from "../../types";
+import { FormState, FilterState, CaseResult, CourtRoom } from "../../types";
 import { isFormValid, searchCases } from "../../utils/searchUtils";
 import DetailedViewModal from "../../components/CaseSearch/DetailedViewModal";
 import { newCaseSearchConfig } from "../../data/newCaseSearchConfig";
@@ -14,11 +14,23 @@ import { commonStyles, animations } from "../../styles/commonStyles";
 const SearchForCase = () => {
   const [selectedTab, setSelectedTab] = useState("Filing Number");
   const [showViewDetailedModal, setShowViewDetailedModal] = useState(false);
-  const [selectedCase, setSelectedCase] = useState<{
-    caseNumber: string;
-    filingNumber?: string;
-    courtId?: string;
-  }>({ caseNumber: "" });
+  const [selectedCase, setSelectedCase] = useState<CaseResult>({
+    caseTitle: "",
+    cmpNumber: "",
+    stNumber: "",
+    purpose: "",
+    nextHearingDate: "",
+    lastHearingDate: "",
+    filingDate: "",
+    registrationDate: "",
+    filingNumber: "",
+    courtId: "",
+    courtName: "",
+    cnrNumber: "",
+    caseStage: "",
+    advocate: [],
+    litigant: [],
+  });
 
   // Error notification state
   const [errorNotification, setErrorNotification] = useState<{
@@ -30,6 +42,8 @@ const SearchForCase = () => {
   const [offset, setOffset] = useState(0);
   const limit = 50;
   const [totalCount, setTotalCount] = useState(0);
+  const tenantId = "kl";
+  const [courtOptions, setCourtOptions] = useState<CourtRoom[]>([]);
 
   // Form state
   const [formState, setFormState] = useState<FormState>({
@@ -41,6 +55,7 @@ const SearchForCase = () => {
     cnrNumber: "",
     advocateSearchMethod: "Bar Code", // Default search method
     barCode: "",
+    stateCode: "",
     advocateName: "",
     litigantName: "",
   });
@@ -61,6 +76,55 @@ const SearchForCase = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
+
+  const getCourtOptions = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `/egov-mdms-service/v1/_search?tenantId=${tenantId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            MdmsCriteria: {
+              tenantId: tenantId,
+              moduleDetails: [
+                {
+                  moduleName: "common-masters",
+                  masterDetails: [{ name: "Court_Rooms" }],
+                },
+              ],
+            },
+            RequestInfo: {
+              apiId: "Rainmaker",
+              msgId: `${Date.now()}|en_IN`,
+            },
+          }),
+        }
+      );
+      const data = await response.json();
+
+      // Extract the Court_Rooms array from response
+      if (
+        data &&
+        data.MdmsRes &&
+        data.MdmsRes["common-masters"] &&
+        data.MdmsRes["common-masters"].Court_Rooms
+      ) {
+        const courtRooms: CourtRoom[] =
+          data.MdmsRes["common-masters"].Court_Rooms;
+        setCourtOptions(courtRooms);
+      } else {
+        console.error("Court_Rooms data not found in MDMS response:", data);
+        setCourtOptions([]);
+      }
+    } catch (error) {
+      console.error("Error fetching court options:", error);
+      setCourtOptions([]);
+    }
+  }, [tenantId]);
 
   // Reset filters
   const handleResetFilters = () => {
@@ -89,6 +153,7 @@ const SearchForCase = () => {
       advocateSearchMethod: "Bar Code",
       code: "",
       cnrNumber: "",
+      stateCode: "",
       barCode: "",
       advocateName: "",
       litigantName: "",
@@ -177,6 +242,7 @@ const SearchForCase = () => {
       selectedYear: "",
       selectedCourt: "",
       selectedCaseType: "",
+      stateCode: "",
       code: "",
       cnrNumber: "",
       advocateSearchMethod: "Bar Code",
@@ -254,20 +320,8 @@ const SearchForCase = () => {
   };
 
   // Handle view case details
-  const handleViewCaseDetails = (caseNumber: string) => {
-    // Find the case in search results
-    const caseDetails = searchResults.find(
-      (result) => result.caseNumber === caseNumber
-    );
-
-    // Set the selected case with filing number and court ID
-    // This is example code - you'll need to adjust based on your actual data structure
-    setSelectedCase({
-      caseNumber,
-      filingNumber: caseDetails?.filingNumber || "",
-      courtId: caseDetails?.courtId || "KLKM52", // Default or from case details
-    });
-
+  const handleViewCaseDetails = (caseResult: CaseResult) => {
+    setSelectedCase(caseResult);
     setShowViewDetailedModal(true);
   };
 
@@ -293,7 +347,8 @@ const SearchForCase = () => {
         (selectedCaseType as string) || prevState.selectedCaseType,
       code: (code as string) || prevState.code,
     }));
-  }, [router.isReady, router.query]);
+    getCourtOptions();
+  }, [router.isReady, router.query, getCourtOptions]);
 
   return (
     <div className={commonStyles.container}>
@@ -325,6 +380,7 @@ const SearchForCase = () => {
               handleSubmit,
             }}
             handleInputChange={handleInputChange}
+            courtOptions={courtOptions}
           />
         )}
       </div>
@@ -401,8 +457,7 @@ const SearchForCase = () => {
       {showViewDetailedModal && (
         <DetailedViewModal
           onClose={() => setShowViewDetailedModal(false)}
-          // filingNumber={selectedCase.filingNumber}
-          courtId={selectedCase.courtId}
+          caseResult={selectedCase}
         />
       )}
     </div>

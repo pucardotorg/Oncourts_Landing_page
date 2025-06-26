@@ -6,7 +6,7 @@ import { CaseResult, FilterState } from "../../types";
 interface CaseDetailsTableProps {
   selectedTab: string;
   searchResults: CaseResult[];
-  onViewCaseDetails: (caseNumber: string) => void;
+  onViewCaseDetails: (caseResult: CaseResult) => void;
   totalCount?: number;
   offset?: number;
   limit?: number;
@@ -130,7 +130,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
                     {result.caseTitle}
                   </td>
                   <td className="p-4 font-['Inter'] font-medium text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
-                    {result.caseNumber}
+                    {result.stNumber || result.cmpNumber}
                   </td>
                   <td className="p-4 font-['Inter'] font-medium text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
                     {result.nextHearingDate}
@@ -140,7 +140,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
                   </td>
                   <td className="p-2 font-['Inter'] font-semibold text-[16px] leading-[18px] text-[#334155]">
                     <button
-                      onClick={() => onViewCaseDetails(result.caseNumber)}
+                      onClick={() => onViewCaseDetails(result)}
                       className="p-2 rounded-md border-2 text-teal-600 hover:text-teal-900"
                     >
                       View Details

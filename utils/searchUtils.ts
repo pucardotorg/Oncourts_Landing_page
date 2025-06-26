@@ -1,6 +1,12 @@
 import {
   ApiResponse,
   ApiRequestPayload,
+  CaseNumberCriteria,
+  FilingNumberCriteria,
+  AdvocateBarcodeCriteria,
+  AdvocateNameCriteria,
+  LitigantCriteria,
+  AllCriteria,
   SortOrder,
   FormState,
   FilterState,
@@ -76,6 +82,7 @@ export const buildApiPayload = (
     caseNumber,
     selectedCourt,
     code,
+    stateCode,
     barCode,
     advocateSearchMethod,
     advocateName,
@@ -119,71 +126,110 @@ export const buildApiPayload = (
 
   // Build payloads for each tab
   const payloadBuilders = {
-    "CNR Number": () => ({
-      searchCaseCriteria: {
-        searchType: "cnr_number" as const,
-        cnrNumberCriteria: {
-          cnrNumber: cnrNumber || "",
-        },
-      },
-      ...filterProps,
-      ...basePayload,
-    }),
+    "CNR Number": () => {
+      // Skip if CNR number is empty
+      if (!cnrNumber) return undefined;
 
-    "Case Number": () => ({
-      searchCaseCriteria: {
-        searchType: "case_number" as const,
-        caseNumberCriteria: {
-          courtName: selectedCourt || "",
-          caseType: selectedCaseType || "",
-          caseNumber: caseNumber?.split("/")?.[1] || caseNumber || "",
-          year: selectedYear || "",
+      return {
+        searchCaseCriteria: {
+          searchType: "cnr_number" as const,
+          cnrNumberCriteria: {
+            cnrNumber,
+          },
         },
-      },
-      ...filterProps,
-      ...basePayload,
-    }),
+        ...filterProps,
+        ...basePayload,
+      };
+    },
 
-    "Filing Number": () => ({
-      searchCaseCriteria: {
-        searchType: "filing_number" as const,
-        filingNumberCriteria: {
-          courtName: selectedCourt || "",
-          code: code || "",
-          caseNumber: caseNumber || "",
-          year: selectedYear || "",
-        },
-      },
-      ...filterProps,
-      ...basePayload,
-    }),
+    "Case Number": () => {
+      // Process caseNumber to get the actual number part if it contains a slash
+      const processedCaseNumber = caseNumber?.split("/")?.[1] || caseNumber;
+
+      // Skip if there are no valid search fields
+      if (
+        !selectedCourt &&
+        !selectedCaseType &&
+        !processedCaseNumber &&
+        !selectedYear
+      ) {
+        return undefined;
+      }
+
+      // For API compatibility, we need to have some values for required fields
+      // while still skipping empty fields in the actual request
+      return {
+        searchCaseCriteria: {
+          searchType: "case_number" as const,
+          caseNumberCriteria: {
+            // courtName: selectedCourt || "",
+            caseType: selectedCaseType,
+            caseNumber: processedCaseNumber,
+            year: selectedYear,
+          },
+        } as CaseNumberCriteria,
+        ...filterProps,
+        ...basePayload,
+      };
+    },
+
+    "Filing Number": () => {
+      // Skip if there are no valid search fields
+      if (!selectedCourt && !code && !caseNumber && !selectedYear) {
+        return undefined;
+      }
+
+      // For API compatibility, we need to have some values for required fields
+      // while still skipping empty fields in the actual request
+      return {
+        searchCaseCriteria: {
+          searchType: "filing_number" as const,
+          filingNumberCriteria: {
+            // courtName: selectedCourt || "",
+            code: code,
+            caseNumber: caseNumber,
+            year: selectedYear,
+          },
+        } as FilingNumberCriteria,
+        ...filterProps,
+        ...basePayload,
+      };
+    },
 
     Advocate: () => {
-      if (advocateSearchMethod === "Bar Code" && barCode) {
+      if (advocateSearchMethod === "Bar Code") {
+        // Skip if barCode is empty (required)
+        if (!barCode) return undefined;
+
+        // For API compatibility, we need to have some values for required fields
+        // while still skipping empty fields in the actual request
         return {
           searchCaseCriteria: {
             searchType: "advocate" as const,
             advocateCriteria: {
               advocateSearchType: "barcode" as const,
               barCodeDetails: {
-                stateCode: "KL", // Default state code, adjust if needed
-                barCode: barCode || "",
-                year: selectedYear || "",
+                stateCode: stateCode,
+                barCode: barCode, // This is required and verified above
+                year: selectedYear,
               },
             },
-          },
+          } as AdvocateBarcodeCriteria,
           ...filterProps,
           ...basePayload,
         };
-      } else if (advocateSearchMethod === "Advocate Name" && advocateName) {
+      } else if (advocateSearchMethod === "Advocate Name") {
+        // Skip if advocateName is empty (required)
+        if (!advocateName) return undefined;
+
         return {
           searchCaseCriteria: {
             searchType: "advocate" as const,
             advocateCriteria: {
               advocateSearchType: "advocate_name" as const,
-              advocateName: advocateName || "",
+              advocateName,
             },
-          },
+          } as AdvocateNameCriteria,
           ...filterProps,
           ...basePayload,
         };
@@ -191,21 +237,26 @@ export const buildApiPayload = (
       return undefined;
     },
 
-    Litigant: () => ({
-      searchCaseCriteria: {
-        searchType: "litigant" as const,
-        litigantCriteria: {
-          litigantName: litigantName || "",
-        },
-      },
-      ...filterProps,
-      ...basePayload,
-    }),
+    Litigant: () => {
+      // Skip if litigant name is empty
+      if (!litigantName) return undefined;
+
+      return {
+        searchCaseCriteria: {
+          searchType: "litigant" as const,
+          litigantCriteria: {
+            litigantName,
+          },
+        } as LitigantCriteria,
+        ...filterProps,
+        ...basePayload,
+      };
+    },
 
     All: () => ({
       searchCaseCriteria: {
         searchType: "all" as const,
-      },
+      } as AllCriteria,
       ...filterProps,
       ...basePayload,
     }),
@@ -260,10 +311,8 @@ export const searchCases = async (
       };
     }
 
-    // Transform the response to the expected format
-    const transformedData = transformSearchResponse(response, selectedTab);
+    const transformedData = transformSearchResponse(response);
 
-    // Return successful response with null error
     return {
       ...transformedData,
       error: null,
@@ -311,6 +360,7 @@ export const isFormValid = (
     selectedCourt,
     selectedCaseType,
     code,
+    stateCode,
     advocateSearchMethod,
     advocateName,
     barCode,
@@ -318,26 +368,19 @@ export const isFormValid = (
   } = formState;
 
   const cnrNumberPattern = new RegExp(newCaseSearchConfig.cnrNumber.pattern);
-  const caseNumberPattern = new RegExp(newCaseSearchConfig.caseNumber.pattern);
 
   switch (selectedTab) {
     case "CNR Number":
       return cnrNumberPattern.test(cnrNumber || "");
     case "Case Number":
       return (
-        !!caseNumber &&
-        caseNumberPattern.test(caseNumber) &&
-        !!selectedCourt &&
-        !!selectedCaseType &&
-        !!selectedYear &&
-        caseNumber?.includes(selectedCaseType) &&
-        caseNumber?.includes(selectedYear)
+        !!caseNumber && !!selectedCourt && !!selectedCaseType && !!selectedYear
       );
     case "Filing Number":
       return !!selectedCourt && !!code && !!selectedYear;
     case "Advocate":
       return advocateSearchMethod === "Bar Code"
-        ? !!barCode && !!code && !!selectedYear
+        ? !!barCode && !!stateCode && !!selectedYear
         : !!advocateName;
     case "Litigant":
       return !!litigantName;

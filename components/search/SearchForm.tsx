@@ -8,7 +8,7 @@ import AllForm from "./forms/AllForm";
 import { newCaseSearchConfig } from "../../data/newCaseSearchConfig";
 import { commonStyles } from "../../styles/commonStyles";
 import { isFormValid } from "../../utils/searchUtils";
-import { FormState } from "../../types";
+import { CourtRoom, FormState } from "../../types";
 
 interface FormStateWithHandlers extends FormState {
   handleClear: () => void;
@@ -19,12 +19,14 @@ interface SearchFormProps {
   selectedTab: string;
   formState: FormStateWithHandlers;
   handleInputChange: (field: string, value: string) => void;
+  courtOptions: CourtRoom[];
 }
 
 const SearchForm: React.FC<SearchFormProps> = ({
   selectedTab,
   formState,
   handleInputChange,
+  courtOptions,
 }) => {
   // Get form validation from our utility function
   const formValid = isFormValid(selectedTab, formState);
@@ -42,14 +44,14 @@ const SearchForm: React.FC<SearchFormProps> = ({
           <AdvocateForm
             advocateSearchMethod={formState.advocateSearchMethod}
             barCode={formState.barCode}
-            code={formState.code}
             selectedYear={formState.selectedYear}
+            stateCode={formState.stateCode}
             advocateName={formState.advocateName}
             onMethodChange={(value) =>
               handleInputChange("advocateSearchMethod", value)
             }
             onBarCodeChange={(value) => handleInputChange("barCode", value)}
-            onCodeChange={(value) => handleInputChange("code", value)}
+            onStateCodeChange={(value) => handleInputChange("stateCode", value)}
             onYearChange={(value) => handleInputChange("selectedYear", value)}
             onNameChange={(value) => handleInputChange("advocateName", value)}
           />
@@ -74,6 +76,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
               handleInputChange("caseNumber", value)
             }
             onYearChange={(value) => handleInputChange("selectedYear", value)}
+            courtOptions={courtOptions}
           />
         )}
 
