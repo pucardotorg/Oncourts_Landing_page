@@ -567,8 +567,8 @@ const DownloadIcon = () => (
 
 const videoCallIcon = () => (
   <svg
-    width="27"
-    height="26"
+    width="18"
+    height="18"
     viewBox="0 0 27 26"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -584,8 +584,8 @@ const videoCallIcon = () => (
 
 const refreshIcon = () => (
   <svg
-    width="18"
-    height="18"
+    width="22"
+    height="22"
     viewBox="0 0 26 26"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
