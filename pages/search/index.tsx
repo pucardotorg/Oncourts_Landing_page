@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import SearchTabs from "../../components/search/SearchTabs";
@@ -50,7 +50,7 @@ const SearchForCase = () => {
   const [offset, setOffset] = useState(0);
   const limit = 50;
   const [totalCount, setTotalCount] = useState(0);
-  const tenantId = "kl";
+  const tenantId = localStorage.getItem("tenant-id") || "";
   const [courtOptions, setCourtOptions] = useState<CourtRoom[]>([]);
   const [caseStageOptions, setCaseStageOptions] = useState<CaseStage[]>([]);
   const [caseStatusOptions, setCaseStatusOptions] = useState<CaseStatus[]>([]);
@@ -91,6 +91,9 @@ const SearchForCase = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
+
+  // Ref to track initial API calls and prevent duplicate calls
+  const initialLoadRef = useRef<boolean>(false);
 
   const getCourtOptions = useCallback(async () => {
     try {
@@ -384,7 +387,11 @@ const SearchForCase = () => {
         (selectedCaseType as string) || prevState.selectedCaseType,
       code: (code as string) || prevState.code,
     }));
-    getCourtOptions();
+
+    if (!initialLoadRef.current) {
+      initialLoadRef.current = true;
+      getCourtOptions();
+    }
   }, [router.isReady, router.query, getCourtOptions]);
 
   return (
@@ -498,6 +505,7 @@ const SearchForCase = () => {
       )}
       {showViewDetailedModal && (
         <DetailedViewModal
+          tenantId={tenantId}
           onClose={() => setShowViewDetailedModal(false)}
           caseResult={selectedCase}
         />

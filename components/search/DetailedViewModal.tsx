@@ -13,21 +13,26 @@ import { commonStyles } from "../../styles/commonStyles";
 import { formatDate } from "../../utils/formatDate";
 
 interface DetailedViewModalProps {
+  tenantId: string;
   onClose: () => void;
   caseResult: CaseResult;
 }
 
 const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
+  tenantId,
   onClose,
   caseResult,
 }) => {
   const modalContentRef = useRef<HTMLDivElement>(null);
-  const tenantId = "kl";
+
+  // Ref to track initial API calls and prevent duplicate calls
+  const initialLoadRef = useRef<boolean>(false);
 
   // State for order history data from API
   const [orderHistory, setOrderHistory] = useState<OrderDetails[]>([]);
   const [paymentTasks, setPaymentTasks] = useState<PaymentTask[]>([]);
   const [loading, setLoading] = useState<boolean>(true); // Start with loading true
+  const [internalLoading, setInternalLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [hoveredIconId, setHoveredIconId] = useState<number | null>(null);
 
@@ -114,7 +119,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
     } finally {
       setLoadingStates((prev) => ({ ...prev, magistrate: false }));
     }
-  }, [caseResult]);
+  }, [caseResult, tenantId]);
 
   const getCitizenDetails = useCallback(() => {
     if (!caseResult) {
@@ -164,6 +169,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
         if (initialLoad) {
           setLoadingStates((prev) => ({ ...prev, orders: true }));
         }
+        setInternalLoading(true);
         setError(null);
 
         const offset = page * ordersPerPage;
@@ -206,9 +212,10 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
         if (initialLoad) {
           setLoadingStates((prev) => ({ ...prev, orders: false }));
         }
+        setInternalLoading(false);
       }
     },
-    [caseResult, ordersPerPage]
+    [caseResult, ordersPerPage, tenantId]
   );
 
   // Fetch payment tasks from API
@@ -224,6 +231,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
         if (initialLoad) {
           setLoadingStates((prev) => ({ ...prev, paymentTasks: true }));
         }
+        setInternalLoading(true);
         setError(null);
 
         const offset = page * tasksPerPage;
@@ -262,9 +270,10 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
         if (initialLoad) {
           setLoadingStates((prev) => ({ ...prev, paymentTasks: false }));
         }
+        setInternalLoading(false);
       }
     },
-    [caseResult, tasksPerPage]
+    [caseResult, tasksPerPage, tenantId]
   );
 
   // Check if all data is loaded
@@ -274,12 +283,16 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
     setLoading(magistrate || orders || paymentTasks);
   }, [loadingStates]);
 
-  // Load all data when component mounts
+  // Load all data when component mounts, using ref to prevent duplicate calls
   useEffect(() => {
-    fetchOrderHistory(0, true);
-    fetchPaymentTasks(0, true);
-    getMagistrateName();
-    getCitizenDetails();
+    // Only run initialization once
+    if (!initialLoadRef.current) {
+      initialLoadRef.current = true;
+      fetchOrderHistory(0, true);
+      fetchPaymentTasks(0, true);
+      getMagistrateName();
+      getCitizenDetails();
+    }
   }, [
     fetchOrderHistory,
     getMagistrateName,
@@ -565,7 +578,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 <h2 className="font-[Baskerville] text-xl font-bold mb-3">
                   Order History
                 </h2>
-                {loading ? (
+                {internalLoading ? (
                   <div className="font-[Roboto] text-center py-4">
                     Loading order history...
                   </div>
@@ -693,7 +706,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                   <h2 className="font-[Baskerville] text-xl font-bold mt-6 mb-3">
                     Process Payment Pending Tasks
                   </h2>
-                  {loading ? (
+                  {internalLoading ? (
                     <div className="font-[Roboto] text-center py-4">
                       Loading payment tasks...
                     </div>

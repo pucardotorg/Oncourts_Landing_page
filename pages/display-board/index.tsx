@@ -38,6 +38,7 @@ export default function DisplayBoard() {
   const [hearingLink, setHearingLink] = useState("");
   const [error, setError] = useState("");
   const { t } = useSafeTranslation();
+  const tenantId = localStorage.getItem("tenant-id") || "";
 
   useEffect(() => {
     const fetchHearingLink = async () => {
@@ -59,7 +60,7 @@ export default function DisplayBoard() {
       const toDate = new Date(dateStr).setHours(23, 59, 59, 999);
 
       const payload = {
-        tenantId: "kl",
+        tenantId,
         fromDate,
         toDate,
         searchText: searchValue || "",
@@ -366,7 +367,7 @@ export default function DisplayBoard() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          tenantId: "kl",
+          tenantId,
           Criteria: {
             courtId: "KLKM52",
             searchDate: selectedDate,
