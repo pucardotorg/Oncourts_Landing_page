@@ -50,7 +50,7 @@ const SearchForCase = () => {
   const [offset, setOffset] = useState(0);
   const limit = 50;
   const [totalCount, setTotalCount] = useState(0);
-  const tenantId = localStorage.getItem("tenant-id") || "";
+  const tenantId = localStorage.getItem("tenant-id") || "kl";
   const [courtOptions, setCourtOptions] = useState<CourtRoom[]>([]);
   const [caseStageOptions, setCaseStageOptions] = useState<CaseStage[]>([]);
   const [caseStatusOptions, setCaseStatusOptions] = useState<CaseStatus[]>([]);

@@ -38,7 +38,7 @@ export default function DisplayBoard() {
   const [hearingLink, setHearingLink] = useState("");
   const [error, setError] = useState("");
   const { t } = useSafeTranslation();
-  const tenantId = localStorage.getItem("tenant-id") || "";
+  const tenantId = localStorage.getItem("tenant-id") || "kl";
 
   useEffect(() => {
     const fetchHearingLink = async () => {
