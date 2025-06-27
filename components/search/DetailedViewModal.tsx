@@ -29,7 +29,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
   const [paymentTasks, setPaymentTasks] = useState<PaymentTask[]>([]);
   const [loading, setLoading] = useState<boolean>(true); // Start with loading true
   const [error, setError] = useState<string | null>(null);
-  const [hoveredIconId, setHoveredIconId] = useState<string | null>(null);
+  const [hoveredIconId, setHoveredIconId] = useState<number | null>(null);
 
   // Track loading state for different data sources
   const [loadingStates, setLoadingStates] = useState({
@@ -78,10 +78,10 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
 
   // PDF configuration options
   const pdfConfig = {
-    scale: 2,
+    scale: 1.5, // Reduced scale for better fitting
     format: "a4",
     quality: 0.95,
-    filename: `Case_Details_Report"}.pdf`,
+    filename: `Case_Details_${caseResult.cnrNumber || caseResult.stNumber || caseResult.cmpNumber || 'Report'}.pdf`,
     loading: {
       text: "Generating PDF...",
       subtext: "This may take a moment",
@@ -732,7 +732,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                                       <button
                                         className="w-6 h-6 flex items-center justify-center"
                                         onMouseEnter={() =>
-                                          setHoveredIconId(task.id)
+                                          setHoveredIconId(idx)
                                         }
                                         onMouseLeave={() =>
                                           setHoveredIconId(null)
@@ -743,7 +743,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                                           size={14}
                                         />
                                       </button>
-                                      {hoveredIconId === task.id && (
+                                      {hoveredIconId === idx && (
                                         <div className="absolute bottom-full right-0 mb-2 p-2 bg-[#3A3A3A] text-white text-center text-sm rounded-md w-48 z-10">
                                           Login to the portal to make the online
                                           payment

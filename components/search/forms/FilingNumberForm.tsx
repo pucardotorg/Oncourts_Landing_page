@@ -64,6 +64,7 @@ const FilingNumberForm: React.FC<FilingNumberFormProps> = ({
         label="Filing Number"
         value={caseNumber}
         onChange={onCaseNumberChange}
+        maxLength={6}
         required
       />
 
