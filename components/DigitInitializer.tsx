@@ -9,7 +9,7 @@ interface Props {
 
 const DigitInitializer: React.FC<Props> = ({ stateCode, enabledModules, children }) => {
   const { isLoading: isLoadingStore } = window.Digit.Hooks.useInitStore(stateCode, enabledModules);
-  const moduleCode = ["case"];
+  const moduleCode = ["landing"];
   const language = window.Digit.StoreData.getCurrentLanguage();
   const { isLoading: isLoadingLocalisation } = window.Digit.Services.useStore({
     stateCode,

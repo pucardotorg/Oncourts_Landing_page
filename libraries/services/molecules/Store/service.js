@@ -44,7 +44,6 @@ export const StoreService = {
 
     await LocalizationService.getLocale({
       modules: [
-        `rainmaker-common`,
         `rainmaker-${stateCode.toLowerCase()}`
       ],
       locale: initData.selectedLanguage,

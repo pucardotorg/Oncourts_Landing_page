@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { svgIcons } from "../../data/svgIcons";
 import { commonStyles } from "../../styles/commonStyles";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 const formatDate = (dateStr: string) => {
   const [year, month, day] = dateStr.split("-");
@@ -19,7 +20,6 @@ const formattedDateV2 = (selectedDate: string) => {
 export default function DisplayBoard() {
   const [selectedDate, setSelectedDate] = useState(() => {
     const now = new Date();
-
     const hour = now.getHours();
     const minutes = now.getMinutes();
 
@@ -37,6 +37,7 @@ export default function DisplayBoard() {
   const [searchValue, setSearchValue] = useState("");
   const [hearingLink, setHearingLink] = useState("");
   const [error, setError] = useState("");
+  const { t } = useSafeTranslation();
 
   useEffect(() => {
     const fetchHearingLink = async () => {
@@ -84,7 +85,7 @@ export default function DisplayBoard() {
             errorText
           );
           setError(
-            "Something went wrong! Please wait for some time or refresh."
+            "SOMETHING_WENT_WRONG_TRY_LATER_OR_REFRESH"
           );
           setHearingData([]);
           return [];
@@ -99,14 +100,14 @@ export default function DisplayBoard() {
           const text = await response.text();
           console.error("Unexpected non-JSON response from API:", text);
           setError(
-            "Something went wrong! Please wait for some time or refresh."
+            "SOMETHING_WENT_WRONG_TRY_LATER_OR_REFRESH"
           );
           setHearingData([]);
           return [];
         }
       } catch (error) {
         console.error("Error fetching hearings:", error);
-        setError("Something went wrong! Please wait for some time or refresh.");
+        setError("SOMETHING_WENT_WRONG_TRY_LATER_OR_REFRESH");
         setHearingData([]);
         return [];
       } finally {
@@ -119,7 +120,7 @@ export default function DisplayBoard() {
 
   useEffect(() => {
     fetchCasesForDate(selectedDate, searchValue);
-  }, [fetchCasesForDate, searchValue, selectedDate]);
+  }, [fetchCasesForDate, selectedDate]);
 
   useEffect(() => {
     // If selected date from calendar is today's date and current time is in between 11 AM and 5 PM
@@ -148,7 +149,7 @@ export default function DisplayBoard() {
             (hearing) => hearing.status !== "COMPLETED"
           );
 
-          if (isPastFivePM || !stillHasPending) {
+          if ((isPastFivePM || (!stillHasPending && (searchValue === "")))) { // stop interval only when there is no data without search filter
             if (interval) {
               clearInterval(interval);
               interval = null;
@@ -184,12 +185,12 @@ export default function DisplayBoard() {
       if (!isToday) return;
 
       if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
-        if (shouldStartAutoRefresh() || Boolean(error)) {
+        if (shouldStartAutoRefresh() || Boolean(error) || (searchValue !== "")) {
           startAutoRefresh();
         }
       } else if (
         currentMinutes < startMinutes &&
-        (hearingData?.length > 0 || Boolean(error))
+        (hearingData?.length > 0 || Boolean(error) || (searchValue !== ""))
       ) {
         const diffMs = (startMinutes - currentMinutes) * 60 * 1000;
 
@@ -252,12 +253,12 @@ export default function DisplayBoard() {
       isToday &&
       currentMinutes >= startMinutes &&
       currentMinutes < endMinutes &&
-      isAllHearingsNotCompleted()
+      (isAllHearingsNotCompleted() || Boolean(error) || (searchValue !== ""))
     ) {
       return true;
     }
     return false;
-  }, [selectedDate, hearingData]);
+  }, [selectedDate, hearingData, error, searchValue]);
 
   const hearingsTable = useMemo(() => {
     return (
@@ -272,22 +273,22 @@ export default function DisplayBoard() {
           >
             <tr>
               <th className="px-4 py-2 border-t border-b border-slate-200">
-                Sl.No
+                {t("SL_NO")}
               </th>
               <th className="px-4 py-2 border-t border-b border-slate-200">
-                Case Name
+                {t("CASE_NAME")}
               </th>
               <th className="px-4 py-2 border-t border-b border-slate-200">
-                Advocates
+                {t("ADVOCATES")}
               </th>
               <th className="px-4 py-2 border-t border-b border-slate-200">
-                Case Number
+                {t("CASE_NUMBER")}
               </th>
               <th className="px-4 py-2 border-t border-b border-slate-200">
-                Purpose
+                {t("PURPOSE")}
               </th>
               <th className="px-4 py-2 border-t border-b border-slate-200">
-                Status
+                {t("HEARING_STATUS")}
               </th>
             </tr>
           </thead>
@@ -313,7 +314,7 @@ export default function DisplayBoard() {
                     {index + 1}
                   </td>
                   <td className="px-4 py-2 border-b border-slate-200">
-                    {hearingItem?.caseTitle}
+                    {t(hearingItem?.caseTitle)}
                   </td>
                   <td className="px-4 py-2 border-b border-slate-200">
                     <p data-tip data-for={`hearing-list`}>
@@ -338,16 +339,16 @@ export default function DisplayBoard() {
                     </p>
                   </td>
                   <td className="px-4 py-2 border-b border-slate-200">
-                    {hearingItem.caseNumber}
+                    {t(hearingItem?.caseNumber)}
                   </td>
                   <td className="px-4 py-2 border-b border-slate-200">
-                    {hearingItem.hearingType}
+                    {t(hearingItem?.hearingType)}
                   </td>
                   <td className="px-4 py-2 border-b border-slate-200">
                     <span
-                      className={`px-2 py-1 rounded text-sm font-medium ${getStatusStyle(hearingItem.status)}`}
+                      className={`px-2 py-1 rounded text-sm font-medium ${getStatusStyle(hearingItem?.status)}`}
                     >
-                      {hearingItem.status}
+                      {t("COMPLETED")}
                     </span>
                   </td>
                 </tr>
@@ -357,7 +358,7 @@ export default function DisplayBoard() {
         </table>
       </div>
     );
-  }, [hearingData]);
+  }, [hearingData, t]);
 
   const handleDownloadCauseList = async () => {
     try {
@@ -445,7 +446,7 @@ export default function DisplayBoard() {
           fontSize: "40px",
         }}
       >
-        Display Board
+       {t("DISPLAY_BOARD")}
       </h1>
       <p
         className="text-center text-gray-600 mb-6"
@@ -455,8 +456,7 @@ export default function DisplayBoard() {
           fontWeight: "500",
         }}
       >
-        Track the real-time status of cases listed for hearing today, and search
-        for case schedules on any past or upcoming date
+        {t("DISPLAY_BOARD_SUB_HEADING")}
       </p>
 
       <div
@@ -470,7 +470,7 @@ export default function DisplayBoard() {
               fontWeight: "700",
             }}
           >
-            View Case Schedule by Date
+            {t("VIEW_CASE_SCHEDULE_BY_DATE")}
           </label>
           <input
             type="date"
@@ -521,7 +521,7 @@ export default function DisplayBoard() {
                       opacity: 0.9,
                     }}
                   >
-                    {"Download CauseList"}
+                    {t("DOWNLOAD_CAUSELIST")}
                   </div>
                 </button>
               </React.Fragment>
@@ -537,10 +537,10 @@ export default function DisplayBoard() {
               >
                 <svgIcons.infoIcon />
                 <span style={{ maxWidth: "290px", fontSize: "14px" }}>
-                  The cause list for this day will be available after
+                {t("THE_CAUSE_LIST_FOR_THIS_DAY_WILL_BE_AVAILABLE_AFTER")}
                   <span style={{ color: "#334155", fontWeight: "bold" }}>
                     {" "}
-                    5:00 PM on the previous day
+                    {t("5_PM_ON_PREVIOUS_DAY")}
                   </span>
                 </span>
               </div>
@@ -554,7 +554,7 @@ export default function DisplayBoard() {
         style={{ height: "51px" }}
       >
         <h2 className="text-lg font-semibold" style={{ fontSize: "22px" }}>
-          Case Schedule |{" "}
+        {t("CASE_SCHEDULE_HEADING")} |{" "}
           <span
             className=""
             style={{
@@ -623,7 +623,7 @@ export default function DisplayBoard() {
             }}
             onClick={() => fetchCasesForDate(selectedDate, searchValue)}
           >
-            Search
+            {t("COMMON_SEARCH")}
           </button>
           <button
             style={{
@@ -644,7 +644,7 @@ export default function DisplayBoard() {
               fetchCasesForDate(selectedDate, "");
             }}
           >
-            Reset
+            {t("RESET")}
           </button>
         </div>
       </div>
@@ -669,7 +669,7 @@ export default function DisplayBoard() {
                       if (hearingLink) {
                         window.open(hearingLink, "_blank");
                       } else {
-                        console.warn("Hearing link not available");
+                        console.warn(t("HEARING_LINK_NOT_AVAILABLE"));
                       }
                     }}
                     style={{
@@ -687,7 +687,7 @@ export default function DisplayBoard() {
                       <svgIcons.videoCallIcon />
                     </span>
                     <span style={{ fontWeight: "500", fontSize: "13px" }}>
-                      Join Hearing Online
+                      {t("JOIN_HEARING_ONLINE")}
                     </span>
                   </button>
                 </div>
@@ -731,7 +731,7 @@ export default function DisplayBoard() {
                   fontFamily: "Inter, sans-serif",
                 }}
               >
-                {`Last refreshed on ${refreshedAt}`}
+                {`${t("LAST_REFRESHED_ON")} ${refreshedAt}`}
               </span>
             )}
           </div>
@@ -756,7 +756,7 @@ export default function DisplayBoard() {
               }}
               className=""
             >
-              {error}
+              {t(error)}
             </p>
           ) : hearingData?.length === 0 ? (
             <p
@@ -769,7 +769,7 @@ export default function DisplayBoard() {
               }}
               className=""
             >
-              No cases scheduled for this date
+              {t("NO_CASE_SCHEDULED_FOR_THIS_DATE")}
             </p>
           ) : (
             hearingsTable
