@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FiSearch } from "react-icons/fi";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { CaseResult, FilterState } from "../../types";
+import Pagination from "../Utils/Pagination";
 
 interface CaseDetailsTableProps {
   selectedTab: string;
@@ -161,30 +161,15 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
 
       {/* Pagination controls */}
       {totalCount > 0 && (
-        <div className="flex items-center justify-end mt-4">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={onPrevPage}
-              disabled={offset === 0}
-              className={`flex items-center justify-center w-8 h-8 rounded border border-[#CBD5E1] bg-[#F8FAFC] ${offset === 0 ? "text-gray-300 cursor-not-allowed" : "text-gray-700 hover:bg-gray-100"}`}
-            >
-              <FiChevronLeft size={18} />
-            </button>
-
-            <div className="font-['Inter'] font-medium text-base text-gray-700">
-              {offset + 1}-{Math.min(offset + limit, totalCount)} of{" "}
-              {totalCount}
-            </div>
-
-            <button
-              onClick={onNextPage}
-              disabled={offset + limit >= totalCount}
-              className={`flex items-center justify-center w-8 h-8 rounded border border-[#CBD5E1] bg-[#F8FAFC] ${offset + limit >= totalCount ? "text-gray-300 cursor-not-allowed" : "text-gray-700 hover:bg-gray-100"}`}
-            >
-              <FiChevronRight size={18} />
-            </button>
-          </div>
-        </div>
+        <Pagination
+          currentStartIndex={offset + 1}
+          totalItems={totalCount}
+          itemsPerPage={limit}
+          onPrevPage={onPrevPage || (() => {})}
+          onNextPage={onNextPage || (() => {})}
+          isFirstPage={offset === 0}
+          isLastPage={offset + limit >= totalCount}
+        />
       )}
     </div>
   );

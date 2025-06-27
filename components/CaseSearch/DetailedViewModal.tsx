@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { downloadAsPDF } from "../../utils/downloadPdf";
+import Pagination from "../Utils/Pagination";
 import {
   CaseResult,
   InboxSearchResponse,
@@ -48,7 +49,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
   const [currentOrderPage, setCurrentOrderPage] = useState(0);
   const [totalOrders, setTotalOrders] = useState(0);
   const ordersPerPage = 10;
-  const initialOrdersToShow = 2;
+  const initialOrdersToShow = 5;
 
   // State for payment tasks pagination
   const [showAllTasks, setShowAllTasks] = useState(false);
@@ -189,6 +190,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
           forOrders: true,
           forPaymentTask: false,
           tenantId,
+          latestOrder: initialLoad ? true : false,
           limit: Number(limit),
           offset: Number(offset),
         };
@@ -637,45 +639,27 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                           </tbody>
                         </table>
 
-                        {/* Pagination controls - only show if in expanded view */}
                         {showAllOrders && totalOrders > ordersPerPage && (
-                          <div className="flex items-center justify-center mt-4 space-x-2">
-                            <button
-                              onClick={() => {
-                                const newPage = Math.max(
-                                  0,
-                                  currentOrderPage - 1
-                                );
-                                setCurrentOrderPage(newPage);
-                                fetchOrderHistory(newPage);
-                              }}
-                              disabled={currentOrderPage === 0}
-                              className={`px-2 py-1 border rounded ${currentOrderPage === 0 ? "text-gray-400" : "text-blue-600"}`}
-                            >
-                              Previous
-                            </button>
-                            <span className="text-sm">
-                              Page {currentOrderPage + 1} of{" "}
-                              {Math.ceil(totalOrders / ordersPerPage)}
-                            </span>
-                            <button
-                              onClick={() => {
-                                const newPage = Math.min(
-                                  Math.ceil(totalOrders / ordersPerPage) - 1,
-                                  currentOrderPage + 1
-                                );
-                                setCurrentOrderPage(newPage);
-                                fetchOrderHistory(newPage);
-                              }}
-                              disabled={
-                                currentOrderPage >=
-                                Math.ceil(totalOrders / ordersPerPage) - 1
-                              }
-                              className={`px-2 py-1 border rounded ${currentOrderPage >= Math.ceil(totalOrders / ordersPerPage) - 1 ? "text-gray-400" : "text-blue-600"}`}
-                            >
-                              Next
-                            </button>
-                          </div>
+                          <Pagination
+                            currentStartIndex={currentOrderPage * ordersPerPage + 1}
+                            totalItems={totalOrders}
+                            itemsPerPage={ordersPerPage}
+                            onPrevPage={() => {
+                              const newPage = Math.max(0, currentOrderPage - 1);
+                              setCurrentOrderPage(newPage);
+                              fetchOrderHistory(newPage);
+                            }}
+                            onNextPage={() => {
+                              const newPage = Math.min(
+                                Math.ceil(totalOrders / ordersPerPage) - 1,
+                                currentOrderPage + 1
+                              );
+                              setCurrentOrderPage(newPage);
+                              fetchOrderHistory(newPage);
+                            }}
+                            isFirstPage={currentOrderPage === 0}
+                            isLastPage={currentOrderPage >= Math.ceil(totalOrders / ordersPerPage) - 1}
+                          />
                         )}
                       </>
                     ) : (
@@ -693,7 +677,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                       onClick={() => {
                         setShowAllOrders(true);
                         setCurrentOrderPage(0);
-                        fetchOrderHistory(0);
+                        fetchOrderHistory(0, false);
                       }}
                       className="text-[#1D4ED8] text-sm underline"
                     >
@@ -703,7 +687,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 )}
 
                 {/* Show 'Show less' button when in expanded view */}
-                {showAllOrders && orderHistory.length > 0 && (
+                {/* {showAllOrders && orderHistory.length > 0 && (
                   <div className="mt-2 mb-6">
                     <button
                       onClick={() => {
@@ -715,7 +699,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                       Show less
                     </button>
                   </div>
-                )}
+                )} */}
 
                 {/* Process Payment Pending Tasks Section */}
                 <div id="pendingTasksSection">
