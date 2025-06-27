@@ -1,6 +1,7 @@
 import React from "react";
-import { TextField, Dropdown } from "../../ui/form";
+import { TextField } from "../../ui/form";
 import { CourtRoom } from "../../../types";
+import CustomDropdown from "../../ui/form/CustomDropdown";
 
 interface CaseNumberFormProps {
   selectedCourt: string;
@@ -44,7 +45,7 @@ const CaseNumberForm: React.FC<CaseNumberFormProps> = ({
 
   return (
     <>
-      <Dropdown
+      <CustomDropdown
         label="Court"
         placeHolder="Select Court"
         value={selectedCourt}
@@ -59,7 +60,7 @@ const CaseNumberForm: React.FC<CaseNumberFormProps> = ({
         className="bg-white"
       />
 
-      <Dropdown
+      <CustomDropdown
         label="Case type"
         placeHolder="Select Case Type"
         value={selectedCaseType}
@@ -76,7 +77,7 @@ const CaseNumberForm: React.FC<CaseNumberFormProps> = ({
         required
       />
 
-      <Dropdown
+      <CustomDropdown
         label="Year"
         placeHolder="Select Year"
         value={selectedYear}

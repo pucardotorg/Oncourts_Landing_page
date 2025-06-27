@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown, DatePickerComponent } from "../ui/form";
+import {DatePickerComponent } from "../ui/form";
 import { CourtRoom, FilterState } from "../../types";
+import CustomDropdown from "../ui/form/CustomDropdown";
 
 interface AdditionalFiltersProps {
   selectedTab: string;
@@ -59,7 +60,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
   };
 
   return (
-    <div className="mt-6 bg-white rounded-lg shadow-sm overflow-hidden border border-[#E2E8F0]">
+    <div className="mt-6 bg-white rounded-lg shadow-sm overflow-visible border border-[#E2E8F0]">
       <div className="p-4 bg-[#F8FAFC]">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-[Roboto] font-semibold text-[#0F172A]">
@@ -82,13 +83,13 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
           </div>
         </div>
 
-        <hr className="my-2 border-t border-[#CBD5E1]" />
+        <hr className="my-2 border-t border-[#CBD5E1]" />     
 
         {(selectedTab === "Advocate" ||
           selectedTab === "Litigant" ||
           selectedTab === "All") && (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-            <Dropdown
+            <CustomDropdown
               label="Court Name"
               placeHolder="Select Court"
               value={localFilters.courtName}
@@ -102,7 +103,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
               className="bg-[#F8FAFC] border-[#94A3B8]"
             />
 
-            <Dropdown
+            <CustomDropdown
               label="Case type"
               placeHolder="Select Case Type"
               value={localFilters.caseType}
@@ -127,7 +128,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
               }
             />
 
-            <Dropdown
+            <CustomDropdown
               label="Year of Filing"
               placeHolder="Select Year"
               value={localFilters.yearOfFiling}
@@ -137,7 +138,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
               options={yearOptions}
               className="bg-[#F8FAFC] border-[#94A3B8]"
             />
-            <Dropdown
+            <CustomDropdown
               label="Case Stage"
               placeHolder="Select Case Stage"
               value={localFilters.caseStage}
@@ -146,7 +147,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
               className="bg-[#F8FAFC] border-[#94A3B8]"
             />
 
-            <Dropdown
+            <CustomDropdown
               label="Case Status"
               placeHolder="Select Case Status"
               value={localFilters.caseStatus}

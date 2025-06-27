@@ -1,5 +1,6 @@
 import React from "react";
-import { TextField, Dropdown } from "../../ui/form";
+import { TextField } from "../../ui/form";
+import CustomDropdown from "../../ui/form/CustomDropdown";
 
 interface AllFormProps {
   selectedCourt: string;
@@ -42,7 +43,7 @@ const AllForm: React.FC<AllFormProps> = ({
 
   return (
     <>
-      <Dropdown
+      <CustomDropdown
         label="Court"
         placeHolder="Select Court"
         value={selectedCourt}
@@ -51,7 +52,7 @@ const AllForm: React.FC<AllFormProps> = ({
         required
       />
 
-      <Dropdown
+      <CustomDropdown
         label="Case type"
         placeHolder="Select Case Type"
         value={selectedCaseType}
@@ -68,7 +69,7 @@ const AllForm: React.FC<AllFormProps> = ({
         required
       />
 
-      <Dropdown
+      <CustomDropdown
         label="Year"
         placeHolder="Select Year"
         value={selectedYear}

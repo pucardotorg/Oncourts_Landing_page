@@ -1,5 +1,6 @@
 import React from "react";
-import { TextField, Dropdown, RadioButton } from "../../ui/form";
+import { TextField, RadioButton } from "../../ui/form";
+import CustomDropdown from "../../ui/form/CustomDropdown";
 
 interface AdvocateFormProps {
   advocateSearchMethod: string;
@@ -74,7 +75,7 @@ const AdvocateForm: React.FC<AdvocateFormProps> = ({
             onChange={onBarCodeChange}
             required
           />
-          <Dropdown
+          <CustomDropdown
             label="Year"
             placeHolder="Select Year"
             value={selectedYear}

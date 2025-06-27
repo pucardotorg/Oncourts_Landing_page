@@ -86,7 +86,7 @@ const CustomDropdown: React.FC<DropdownProps> = ({
           name={name}
           onClick={toggleDropdown}
           disabled={disabled}
-          className={`w-full h-10 px-3 pr-2 py-2 text-base text-left border-[1.5px] rounded-md appearance-none flex items-center justify-between
+          className={`w-full h-10 px-3 pr-10 py-2 text-base text-left border-[1.5px] rounded-md appearance-none flex items-center justify-between
             ${error ? "border-red-500 focus:ring-red-500" : "border-[#3D3C3C] focus:ring-teal-500 focus:border-teal-500"}
             ${disabled ? "bg-gray-100 cursor-not-allowed text-gray-400" : "bg-white"}
           `}
@@ -96,11 +96,11 @@ const CustomDropdown: React.FC<DropdownProps> = ({
           >
             {selectedOption ? selectedOption.label : placeHolder}
           </span>
-          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
+          <span className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2">
             <svg
-              className="h-6 w-6 text-gray-500"
+              className="h-8 w-8 text-gray-500 mt-2.5"
               viewBox="0 0 20 20"
-              fill="currentColor"
+              fill="#3D3C3C"
             >
               <path d="M7 7l3 3 3-3" />
             </svg>
@@ -108,7 +108,7 @@ const CustomDropdown: React.FC<DropdownProps> = ({
         </button>
 
         {isOpen && !disabled && (
-          <ul className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <ul className="absolute z-[9999] mt-1 w-full max-h-[200px] overflow-y-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5">
             {normalizedOptions.map((option) => (
               <li
                 key={option.value}
