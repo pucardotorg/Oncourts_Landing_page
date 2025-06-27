@@ -7,9 +7,9 @@ import AdditionalFilters from "../../components/search/AdditionalFilters";
 import CaseDetailsTable from "../../components/search/CaseDetailsTable";
 import { FormState, FilterState, CaseResult, CourtRoom } from "../../types";
 import { isFormValid, searchCases } from "../../utils/searchUtils";
-import DetailedViewModal from "../../components/CaseSearch/DetailedViewModal";
 import { newCaseSearchConfig } from "../../data/newCaseSearchConfig";
 import { commonStyles, animations } from "../../styles/commonStyles";
+import DetailedViewModal from "../../components/search/DetailedViewModal";
 
 const SearchForCase = () => {
   const [selectedTab, setSelectedTab] = useState("Filing Number");

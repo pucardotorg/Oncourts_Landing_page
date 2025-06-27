@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { CaseResult, FilterState } from "../../types";
 import Pagination from "../Utils/Pagination";
+import { formatDate } from "../../utils/formatDate";
 
 interface CaseDetailsTableProps {
   selectedTab: string;
@@ -133,7 +134,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
                     {result.stNumber || result.cmpNumber}
                   </td>
                   <td className="p-4 font-['Inter'] font-medium text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
-                    {result.nextHearingDate}
+                    {formatDate(result.nextHearingDate)}
                   </td>
                   <td className="p-4 font-['Inter'] font-medium text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
                     {result.purpose}

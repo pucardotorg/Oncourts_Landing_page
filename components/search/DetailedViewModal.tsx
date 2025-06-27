@@ -10,6 +10,7 @@ import {
 } from "../../types";
 import { FiInfo } from "react-icons/fi";
 import { commonStyles } from "../../styles/commonStyles";
+import { formatDate } from "../../utils/formatDate";
 
 interface DetailedViewModalProps {
   onClose: () => void;
@@ -63,21 +64,6 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
   );
   const [accuseds, setAccuseds] = useState<PartyInfo[]>([]);
   const [accusedAdvocates, setAccusedAdvocates] = useState<PartyInfo[]>([]);
-
-  const formatDate = (dateStr?: string | number) => {
-    try {
-      const date = new Date(dateStr || "");
-      return (
-        date.getDate() +
-        "-" +
-        date.toLocaleString("default", { month: "long" }) +
-        "-" +
-        date.getFullYear()
-      );
-    } catch {
-      return String(dateStr);
-    }
-  };
 
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
@@ -641,7 +627,9 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
 
                         {showAllOrders && totalOrders > ordersPerPage && (
                           <Pagination
-                            currentStartIndex={currentOrderPage * ordersPerPage + 1}
+                            currentStartIndex={
+                              currentOrderPage * ordersPerPage + 1
+                            }
                             totalItems={totalOrders}
                             itemsPerPage={ordersPerPage}
                             onPrevPage={() => {
@@ -658,7 +646,10 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                               fetchOrderHistory(newPage);
                             }}
                             isFirstPage={currentOrderPage === 0}
-                            isLastPage={currentOrderPage >= Math.ceil(totalOrders / ordersPerPage) - 1}
+                            isLastPage={
+                              currentOrderPage >=
+                              Math.ceil(totalOrders / ordersPerPage) - 1
+                            }
                           />
                         )}
                       </>
