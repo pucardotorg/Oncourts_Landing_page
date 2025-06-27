@@ -27,10 +27,7 @@ class MyDocument extends Document {
               `,
             }}
           />
-          <script
-            src={process.env.NEXT_PUBLIC_GLOBAL}
-            defer
-          ></script>
+          <script src={process.env.NEXT_PUBLIC_GLOBAL} defer></script>
         </Head>
         <body>
           <Main />

@@ -8,6 +8,7 @@ const nextConfig = {
     NEXT_PUBLIC_ONCOURTS_EMPLOYEE_APP_ENDPOINT: `${process.env.NEXT_PUBLIC_ONCOURTS_API_ENDPOINT}/ui/employee/login`,
     NEXT_PUBLIC_ONCOURTS_CITIZEN_DRISTI_ENDPOINT: `${process.env.NEXT_PUBLIC_ONCOURTS_API_ENDPOINT}/ui/citizen/dristi/home/login`,
     NEXT_PUBLIC_ONCOURTS_EMPLOYEE_USER_ENDPOINT: `${process.env.NEXT_PUBLIC_ONCOURTS_API_ENDPOINT}/ui/employee/user/login`,
+    NEXT_PUBLIC_GLOBAL: process.env.NEXT_PUBLIC_GLOBAL,
   },
   async rewrites() {
     const apiEndpoint = process.env.NEXT_PUBLIC_ONCOURTS_API_ENDPOINT;
