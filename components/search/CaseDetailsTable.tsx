@@ -87,7 +87,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
       </div>
 
       <div className="overflow-x-auto border border-[#E2E8F0] rounded-lg">
-        {searchResults.length > 0 && (
+        {searchResults.length > 0 ? (
           <table className="min-w-full font-['Inter']">
             <thead className="bg-[#F8FAFC]">
               <tr className="font-['Inter'] font-semibold text-[#0F172A]">
@@ -150,6 +150,12 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
               ))}
             </tbody>
           </table>
+        ) : (
+          <div className="flex justify-center items-center p-8">
+            <div className="text-xl font-medium text-gray-500">
+              No Results Found
+            </div>
+          </div>
         )}
       </div>
 

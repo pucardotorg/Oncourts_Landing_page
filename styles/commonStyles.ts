@@ -49,17 +49,21 @@ export const commonStyles = {
 
   // Buttons
   button: {
-    primary: "px-20 py-2 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-[#0F766E] hover:bg-teal-700 focus:outline-none",
-    secondary: "px-28 py-2 border border-gray-300 rounded-md text-lg font-medium text-gray-700 hover:bg-gray-50 bg-white",
+    primary:
+      "px-20 py-2 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-[#0F766E] hover:bg-teal-700 focus:outline-none",
+    secondary:
+      "px-28 py-2 border border-gray-300 rounded-md text-lg font-medium text-gray-700 hover:bg-gray-50 bg-white",
     disabled: "opacity-50 cursor-not-allowed pointer-events-none",
   },
 
   // Loading state
   loading: {
-    container: "fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/80",
-    spinner: "animate-spin rounded-full h-12 w-12 border-4 border-t-[#0F766E] border-b-[#0F766E] border-l-transparent border-r-transparent",
+    container:
+      "fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/50",
+    spinner:
+      "animate-spin rounded-full h-12 w-12 border-4 border-t-[#0F766E] border-b-[#0F766E] border-l-transparent border-r-transparent",
   },
-  
+
   // Colors
   colors: {
     primary: "#0F766E",
@@ -78,7 +82,8 @@ export const commonStyles = {
 
   // Notifications
   notification: {
-    container: "fixed left-1/2 transform -translate-x-1/2 z-50 p-4 rounded-md shadow-lg flex items-center",
+    container:
+      "fixed left-1/2 transform -translate-x-1/2 z-50 p-4 rounded-md shadow-lg flex items-center",
     bottomCenter: "bottom-10",
     error: "bg-red-500 text-white",
     success: "bg-green-500 text-white",

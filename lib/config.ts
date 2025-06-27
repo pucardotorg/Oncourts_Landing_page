@@ -30,8 +30,8 @@ export const API_ENDPOINTS = {
       `${API_BASE_URL}/openapi/v1/kl/case/${year}/${type}/${caseNumber}`,
     HEARING: `${API_BASE_URL}/openapi/v1/hearings`,
     ORDER_TASKS: `${API_BASE_URL}/openapi/v1/orders_tasks`,
-    MAGISTRATE: (tenantId: string, courtId: string) =>
-      `${API_BASE_URL}/openapi/v1/magistrate_name/${tenantId}/${courtId}`,
+    MAGISTRATE: (courtId: string, tenantId: string) =>
+      `${API_BASE_URL}/openapi/v1/magistrate_name/${courtId}/${tenantId}`,
     DOWNLOAD_FILE: (tenantId: string, orderId: string) =>
       `${API_BASE_URL}/openapi/v1/file/${tenantId}/${orderId}`,
   },

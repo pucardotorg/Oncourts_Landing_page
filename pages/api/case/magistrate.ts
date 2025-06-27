@@ -23,7 +23,7 @@ export default async function handler(
 
   try {
     // Extract query parameters
-    const { tenantId, courtId } = req.query as MagistrateNameParams;
+    const { courtId, tenantId } = req.query as MagistrateNameParams;
 
     // Validate required parameters
     if (!courtId) {
@@ -32,7 +32,7 @@ export default async function handler(
 
     // Make the request to the backend API
     const response = await fetch(
-      API_ENDPOINTS.OPENAPI.MAGISTRATE(tenantId, courtId),
+      API_ENDPOINTS.OPENAPI.MAGISTRATE(courtId, tenantId),
       {
         method: "GET",
         headers: {
@@ -51,9 +51,9 @@ export default async function handler(
       });
     }
 
-    // Return the response from the backend API
-    const data = await response.json();
-    return res.status(200).json(data);
+    // Handle text response (API returns magistrate name as plain text)
+    const name = await response.text();
+    return res.status(200).json({ name });
   } catch (error) {
     console.error("Magistrate fetch error:", error);
     return res.status(500).json({ error: "Internal server error" });

@@ -103,6 +103,7 @@ export const buildApiPayload = (
         hearingDateTo: filterState.hearingDateTo || undefined,
         caseStage: filterState.caseStage || undefined,
         caseStatus: filterState.caseStatus || undefined,
+        caseTitle: filterState.caseTitle || undefined,
       }
     : {};
 

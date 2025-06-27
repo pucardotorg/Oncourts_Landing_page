@@ -45,8 +45,7 @@ const SearchForCase = () => {
   const tenantId = "kl";
   const [courtOptions, setCourtOptions] = useState<CourtRoom[]>([]);
 
-  // Form state
-  const [formState, setFormState] = useState<FormState>({
+  const defaultFormState = {
     caseNumber: "",
     selectedYear: "",
     selectedCourt: "",
@@ -58,10 +57,11 @@ const SearchForCase = () => {
     stateCode: "",
     advocateName: "",
     litigantName: "",
-  });
+  };
+  // Form state
+  const [formState, setFormState] = useState<FormState>(defaultFormState);
 
-  // Additional filters state
-  const [filterState, setFilterState] = useState<FilterState>({
+  const defaultFilterState = {
     courtName: "",
     caseType: "",
     hearingDateFrom: "",
@@ -70,7 +70,11 @@ const SearchForCase = () => {
     caseStatus: "",
     yearOfFiling: "",
     caseTitle: "",
-  });
+  };
+
+  // Additional filters state
+  const [filterState, setFilterState] =
+    useState<FilterState>(defaultFilterState);
 
   const [searchResults, setSearchResults] = useState<CaseResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -128,52 +132,27 @@ const SearchForCase = () => {
 
   // Reset filters
   const handleResetFilters = () => {
-    setFilterState({
-      courtName: "",
-      caseType: "",
-      hearingDateFrom: "",
-      hearingDateTo: "",
-      caseStage: "",
-      caseStatus: "",
-      yearOfFiling: "",
-      caseTitle: "",
-    });
+    setFilterState(defaultFilterState);
   };
 
-    // Centralized handler to update filter state and trigger search
-    const handleFilterChangeAndSearch = (newFilterState: FilterState) => {
-      setFilterState(newFilterState);
-      setTimeout(() => {
-        handleSubmit();
-      }, 0);
-    };
-  
-    // Centralized handler to reset filter state and trigger search
-    const handleResetFiltersAndSearch = () => {
-      handleResetFilters();
-      setTimeout(() => {
-        handleSubmit();
-      }, 0);
-    };
-    
+  // Centralized handler to update filter state and trigger search
+  const handleFilterChangeAndSearch = (newFilterState: FilterState) => {
+    setFilterState(newFilterState);
+    handleSubmit(newFilterState);
+  };
+
+  // Centralized handler to reset filter state and trigger search
+  const handleResetFiltersAndSearch = () => {
+    handleResetFilters();
+    handleSubmit(defaultFilterState);
+  };
+
   // Handle tab change
   const handleTabChange = async (tab: string) => {
     setSelectedTab(tab);
 
     // Reset form fields on tab change
-    setFormState({
-      caseNumber: "",
-      selectedYear: "",
-      selectedCourt: "",
-      selectedCaseType: "",
-      advocateSearchMethod: "Bar Code",
-      code: "",
-      cnrNumber: "",
-      stateCode: "",
-      barCode: "",
-      advocateName: "",
-      litigantName: "",
-    });
+    setFormState(defaultFormState);
 
     handleResetFilters();
 
@@ -287,7 +266,7 @@ const SearchForCase = () => {
   };
 
   // Submit form
-  const handleSubmit = async () => {
+  const handleSubmit = async (filterStateOverride?: FilterState) => {
     // Check if form is valid before submission
     if (!isFormValid(selectedTab, formState)) {
       return;
@@ -309,7 +288,7 @@ const SearchForCase = () => {
         offset,
         limit,
       },
-      filterState
+      filterStateOverride || filterState
     );
 
     // Handle API errors
@@ -330,6 +309,19 @@ const SearchForCase = () => {
     } else {
       setSearchResults(results);
       setTotalCount(count);
+
+      // Show toast if no results found for Advocate/Litigant tabs
+      if (results.length === 0 && !["All"].includes(selectedTab)) {
+        setErrorNotification({
+          show: true,
+          message: "No Results Found",
+        });
+
+        // Auto-hide error notification after 2 seconds
+        setTimeout(() => {
+          setErrorNotification({ show: false, message: "" });
+        }, 2000);
+      }
     }
 
     setIsLoading(false);
@@ -445,19 +437,22 @@ const SearchForCase = () => {
         </div>
       )}
       {/* Additional Filters */}
-      {searchResults?.length > 0 &&
-        ["All", "Advocate", "Litigant"].includes(selectedTab) && (
-          <AdditionalFilters
-            selectedTab={selectedTab}
-            filterState={filterState}
-            onApplyFilters={handleFilterChangeAndSearch}
-            onResetFilters={handleResetFiltersAndSearch}
-            courtOptions={courtOptions}
-          />
-        )}
+      {(selectedTab === "All" ||
+        (searchResults?.length > 0 &&
+          ["Advocate", "Litigant"].includes(selectedTab))) && (
+        <AdditionalFilters
+          selectedTab={selectedTab}
+          filterState={filterState}
+          onApplyFilters={handleFilterChangeAndSearch}
+          onResetFilters={handleResetFiltersAndSearch}
+          courtOptions={courtOptions}
+        />
+      )}
 
       {/* Case Details Table with built-in pagination */}
-      {searchResults?.length > 0 && (
+      {(selectedTab === "All" ||
+        (searchResults?.length > 0 &&
+          ["Advocate", "Litigant"].includes(selectedTab))) && (
         <CaseDetailsTable
           selectedTab={selectedTab}
           searchResults={searchResults}
