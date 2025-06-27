@@ -5,7 +5,7 @@ import { CourtRoom, FilterState } from "../../types";
 interface AdditionalFiltersProps {
   selectedTab: string;
   filterState: FilterState;
-  setFilterState: (filters: FilterState) => void;
+  onApplyFilters: (filters: FilterState) => void;
   onResetFilters: () => void;
   courtOptions: CourtRoom[];
 }
@@ -13,7 +13,7 @@ interface AdditionalFiltersProps {
 const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
   selectedTab,
   filterState,
-  setFilterState,
+  onApplyFilters,
   onResetFilters,
   courtOptions,
 }) => {
@@ -55,7 +55,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
 
   // Apply all filters at once when search button is clicked
   const applyFilters = () => {
-    setFilterState(localFilters);
+    onApplyFilters(localFilters);
   };
 
   return (

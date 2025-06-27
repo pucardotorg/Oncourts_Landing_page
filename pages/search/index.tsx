@@ -140,6 +140,22 @@ const SearchForCase = () => {
     });
   };
 
+    // Centralized handler to update filter state and trigger search
+    const handleFilterChangeAndSearch = (newFilterState: FilterState) => {
+      setFilterState(newFilterState);
+      setTimeout(() => {
+        handleSubmit();
+      }, 0);
+    };
+  
+    // Centralized handler to reset filter state and trigger search
+    const handleResetFiltersAndSearch = () => {
+      handleResetFilters();
+      setTimeout(() => {
+        handleSubmit();
+      }, 0);
+    };
+    
   // Handle tab change
   const handleTabChange = async (tab: string) => {
     setSelectedTab(tab);
@@ -434,8 +450,8 @@ const SearchForCase = () => {
           <AdditionalFilters
             selectedTab={selectedTab}
             filterState={filterState}
-            setFilterState={setFilterState}
-            onResetFilters={handleResetFilters}
+            onApplyFilters={handleFilterChangeAndSearch}
+            onResetFilters={handleResetFiltersAndSearch}
             courtOptions={courtOptions}
           />
         )}
@@ -452,7 +468,7 @@ const SearchForCase = () => {
           onNextPage={handleNextPage}
           onPrevPage={handlePrevPage}
           filterState={filterState}
-          setFilterState={setFilterState}
+          onSearch={handleFilterChangeAndSearch}
         />
       )}
       {showViewDetailedModal && (

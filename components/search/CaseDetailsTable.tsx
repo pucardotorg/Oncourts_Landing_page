@@ -13,7 +13,7 @@ interface CaseDetailsTableProps {
   onNextPage?: () => void;
   onPrevPage?: () => void;
   filterState: FilterState;
-  setFilterState: React.Dispatch<React.SetStateAction<FilterState>>;
+  onSearch: (filters: FilterState) => void;
 }
 
 const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
@@ -26,7 +26,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
   onNextPage,
   onPrevPage,
   filterState,
-  setFilterState,
+  onSearch,
 }) => {
   // State for the case title search input
   const [caseTitleInput, setCaseTitleInput] = useState(
@@ -40,7 +40,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
 
   // Handle search button click
   const handleSearch = () => {
-    setFilterState({
+    onSearch({
       ...filterState,
       caseTitle: caseTitleInput,
     });
@@ -49,7 +49,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
   // Handle reset button click
   const handleReset = () => {
     setCaseTitleInput("");
-    setFilterState({
+    onSearch({
       ...filterState,
       caseTitle: "",
     });
