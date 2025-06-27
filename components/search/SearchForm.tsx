@@ -4,7 +4,6 @@ import CaseNumberForm from "./forms/CaseNumberForm";
 import AdvocateForm from "./forms/AdvocateForm";
 import LitigantForm from "./forms/LitigantForm";
 import FilingNumberForm from "./forms/FilingNumberForm";
-import AllForm from "./forms/AllForm";
 import { newCaseSearchConfig } from "../../data/newCaseSearchConfig";
 import { commonStyles } from "../../styles/commonStyles";
 import { isFormValid } from "../../utils/searchUtils";
@@ -95,23 +94,6 @@ const SearchForm: React.FC<SearchFormProps> = ({
             }
             onYearChange={(value) => handleInputChange("selectedYear", value)}
             courtOptions={courtOptions}
-          />
-        )}
-
-        {selectedTab === "All" && (
-          <AllForm
-            selectedCourt={formState.selectedCourt}
-            selectedCaseType={formState.selectedCaseType}
-            caseNumber={formState.caseNumber}
-            selectedYear={formState.selectedYear}
-            onCourtChange={(value) => handleInputChange("selectedCourt", value)}
-            onCaseTypeChange={(value) =>
-              handleInputChange("selectedCaseType", value)
-            }
-            onCaseNumberChange={(value) =>
-              handleInputChange("caseNumber", value)
-            }
-            onYearChange={(value) => handleInputChange("selectedYear", value)}
           />
         )}
       </div>

@@ -19,8 +19,8 @@ export const newCaseSearchConfig = {
   // CNR Number form
   cnrNumber: {
     label: "Enter CNR Number",
-    placeholder: "Example: KLKM520000452024",
-    pattern: "^[A-Z]{4}\\d{12}$",
+    placeholder: "Ex: KLKM520000452024",
+    pattern: "^[A-Z]{4}\\d+$",
     errorMessage: "Please enter a valid CNR number (e.g., KLKM520000452024)",
   },
 

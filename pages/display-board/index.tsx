@@ -84,9 +84,7 @@ export default function DisplayBoard() {
             response.status,
             errorText
           );
-          setError(
-            "SOMETHING_WENT_WRONG_TRY_LATER_OR_REFRESH"
-          );
+          setError("SOMETHING_WENT_WRONG_TRY_LATER_OR_REFRESH");
           setHearingData([]);
           return [];
         }
@@ -99,9 +97,7 @@ export default function DisplayBoard() {
         } else {
           const text = await response.text();
           console.error("Unexpected non-JSON response from API:", text);
-          setError(
-            "SOMETHING_WENT_WRONG_TRY_LATER_OR_REFRESH"
-          );
+          setError("SOMETHING_WENT_WRONG_TRY_LATER_OR_REFRESH");
           setHearingData([]);
           return [];
         }
@@ -149,7 +145,8 @@ export default function DisplayBoard() {
             (hearing) => hearing.status !== "COMPLETED"
           );
 
-          if ((isPastFivePM || (!stillHasPending && (searchValue === "")))) { // stop interval only when there is no data without search filter
+          if (isPastFivePM || (!stillHasPending && searchValue === "")) {
+            // stop interval only when there is no data without search filter
             if (interval) {
               clearInterval(interval);
               interval = null;
@@ -185,12 +182,12 @@ export default function DisplayBoard() {
       if (!isToday) return;
 
       if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
-        if (shouldStartAutoRefresh() || Boolean(error) || (searchValue !== "")) {
+        if (shouldStartAutoRefresh() || Boolean(error) || searchValue !== "") {
           startAutoRefresh();
         }
       } else if (
         currentMinutes < startMinutes &&
-        (hearingData?.length > 0 || Boolean(error) || (searchValue !== ""))
+        (hearingData?.length > 0 || Boolean(error) || searchValue !== "")
       ) {
         const diffMs = (startMinutes - currentMinutes) * 60 * 1000;
 
@@ -253,7 +250,7 @@ export default function DisplayBoard() {
       isToday &&
       currentMinutes >= startMinutes &&
       currentMinutes < endMinutes &&
-      (isAllHearingsNotCompleted() || Boolean(error) || (searchValue !== ""))
+      (isAllHearingsNotCompleted() || Boolean(error) || searchValue !== "")
     ) {
       return true;
     }
@@ -348,7 +345,7 @@ export default function DisplayBoard() {
                     <span
                       className={`px-2 py-1 rounded text-sm font-medium ${getStatusStyle(hearingItem?.status)}`}
                     >
-                      {t("COMPLETED")}
+                      {t(hearingItem?.status)}
                     </span>
                   </td>
                 </tr>
@@ -446,7 +443,7 @@ export default function DisplayBoard() {
           fontSize: "40px",
         }}
       >
-       {t("DISPLAY_BOARD")}
+        {t("DISPLAY_BOARD")}
       </h1>
       <p
         className="text-center text-gray-600 mb-6"
@@ -537,7 +534,7 @@ export default function DisplayBoard() {
               >
                 <svgIcons.infoIcon />
                 <span style={{ maxWidth: "290px", fontSize: "14px" }}>
-                {t("THE_CAUSE_LIST_FOR_THIS_DAY_WILL_BE_AVAILABLE_AFTER")}
+                  {t("THE_CAUSE_LIST_FOR_THIS_DAY_WILL_BE_AVAILABLE_AFTER")}
                   <span style={{ color: "#334155", fontWeight: "bold" }}>
                     {" "}
                     {t("5_PM_ON_PREVIOUS_DAY")}
@@ -554,7 +551,7 @@ export default function DisplayBoard() {
         style={{ height: "51px" }}
       >
         <h2 className="text-lg font-semibold" style={{ fontSize: "22px" }}>
-        {t("CASE_SCHEDULE_HEADING")} |{" "}
+          {t("CASE_SCHEDULE_HEADING")} |{" "}
           <span
             className=""
             style={{

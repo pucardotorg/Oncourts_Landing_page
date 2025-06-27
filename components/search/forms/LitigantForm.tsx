@@ -18,7 +18,8 @@ const LitigantForm: React.FC<LitigantFormProps> = ({
             label="Litigant Name"
             value={litigantName}
             onChange={onChange}
-            placeholder="Enter litigant name"
+            helperText="Minimum 3 characters needed"
+            error={litigantName.length > 0 && litigantName.length < 3}
             required
           />
         </div>

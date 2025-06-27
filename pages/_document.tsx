@@ -1,5 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
-import { GA_MEASUREMENT_ID } from "../lib/constants";
+import { GA_MEASUREMENT_ID, GLOBAL_CONFIG_URL } from "../lib/constants";
 
 class MyDocument extends Document {
   render() {
@@ -28,9 +28,48 @@ class MyDocument extends Document {
             }}
           />
           <script
-            src={process.env.NEXT_PUBLIC_GLOBAL}
+            src={GLOBAL_CONFIG_URL}
             defer
-          ></script>
+            onError={() => {
+              console.warn("External globalconfig.js failed, falling back to local config");
+            }}
+          />
+          {/* Inline fallback script */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+              window.addEventListener('load', function () {
+                // If external script didn't load globalConfigs, define fallback
+                if (typeof globalConfigs === 'undefined') {
+                  window.globalConfigs = (function () {
+                    var stateTenantId = "kl";
+                    var centralInstanceEnabled = false;
+                    var localeRegion = "IN";
+                    var localeDefault = "en";
+                    var mdmsContext = "mdms-v2";
+                    
+                    var getConfig = function (key) {
+                      if (key === "STATE_LEVEL_TENANT_ID") {
+                        return stateTenantId;
+                      } else if (key === "ENABLE_SINGLEINSTANCE") {
+                        return centralInstanceEnabled;
+                      } else if (key === "LOCALE_REGION") {
+                        return localeRegion;
+                      } else if (key === "LOCALE_DEFAULT") {
+                        return localeDefault;
+                      } else if (key === "MDMS_CONTEXT_PATH") {
+                        return mdmsContext;
+                      }
+                    };
+                    return {
+                      getConfig,
+                    };
+                  })();
+                }
+              });
+            `,
+            }}
+          />
         </Head>
         <body>
           <Main />

@@ -67,7 +67,7 @@ const CustomDropdown: React.FC<DropdownProps> = ({
   }, []);
 
   return (
-    <div className={`mb-0 ${className}`} ref={dropdownRef}>
+    <div className="mb-0" ref={dropdownRef}>
       {label && (
         <label
           htmlFor={id || name}
@@ -86,10 +86,7 @@ const CustomDropdown: React.FC<DropdownProps> = ({
           name={name}
           onClick={toggleDropdown}
           disabled={disabled}
-          className={`w-full h-10 px-3 pr-10 py-2 text-base text-left border-[1.5px] rounded-md appearance-none flex items-center justify-between
-            ${error ? "border-red-500 focus:ring-red-500" : "border-[#3D3C3C] focus:ring-teal-500 focus:border-teal-500"}
-            ${disabled ? "bg-gray-100 cursor-not-allowed text-gray-400" : "bg-white"}
-          `}
+          className={`w-full h-10 px-3 pr-10 py-2 text-base text-left border-[1.5px] rounded-md appearance-none flex items-center justify-between ${error ? "border-red-500 focus:ring-red-500" : "border-[#3D3C3C] focus:ring-teal-500 focus:border-teal-500"} ${disabled ? "bg-gray-100 cursor-not-allowed text-gray-400" : className ? className : "bg-white"}`}
         >
           <span
             className={`block truncate ${!selectedOption ? "text-gray-400" : ""}`}

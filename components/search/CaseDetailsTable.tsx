@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { CaseResult, FilterState } from "../../types";
 import Pagination from "../Utils/Pagination";
+import { formatDate } from "../../utils/formatDate";
 
 interface CaseDetailsTableProps {
   selectedTab: string;
@@ -133,7 +134,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
                     {result.stNumber || result.cmpNumber}
                   </td>
                   <td className="p-4 font-['Inter'] font-medium text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
-                    {result.nextHearingDate}
+                    {formatDate(result.nextHearingDate)}
                   </td>
                   <td className="p-4 font-['Inter'] font-medium text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
                     {result.purpose}
@@ -160,17 +161,18 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
       </div>
 
       {/* Pagination controls */}
-      {totalCount > 0 && (
-        <Pagination
-          currentStartIndex={offset + 1}
-          totalItems={totalCount}
-          itemsPerPage={limit}
-          onPrevPage={onPrevPage || (() => {})}
-          onNextPage={onNextPage || (() => {})}
-          isFirstPage={offset === 0}
-          isLastPage={offset + limit >= totalCount}
-        />
-      )}
+      {totalCount > 0 &&
+        ["All", "Advocate", "Litigant"].includes(selectedTab) && (
+          <Pagination
+            currentStartIndex={offset + 1}
+            totalItems={totalCount}
+            itemsPerPage={limit}
+            onPrevPage={onPrevPage || (() => {})}
+            onNextPage={onNextPage || (() => {})}
+            isFirstPage={offset === 0}
+            isLastPage={offset + limit >= totalCount}
+          />
+        )}
     </div>
   );
 };

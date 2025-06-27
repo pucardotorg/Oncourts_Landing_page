@@ -18,10 +18,8 @@ const CNRNumberForm: React.FC<CNRNumberFormProps> = ({
         value={cnrNumber}
         onChange={onChange}
         placeholder={newCaseSearchConfig.cnrNumber.placeholder}
-        helperText={newCaseSearchConfig.cnrNumber.errorMessage} // Use errorMessage as helperText
-        required={true} // CNR number is always required
-        minLength={16}
-        maxLength={16}
+        required={true}
+        minLength={4}
       />
     </div>
   );

@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {DatePickerComponent } from "../ui/form";
-import { CourtRoom, FilterState } from "../../types";
+import { DatePickerComponent } from "../ui/form";
+import {
+  CaseStage,
+  CaseStatus,
+  CaseType,
+  CourtRoom,
+  FilterState,
+} from "../../types";
 import CustomDropdown from "../ui/form/CustomDropdown";
 
 interface AdditionalFiltersProps {
@@ -9,6 +15,9 @@ interface AdditionalFiltersProps {
   onApplyFilters: (filters: FilterState) => void;
   onResetFilters: () => void;
   courtOptions: CourtRoom[];
+  caseStageOptions: CaseStage[];
+  caseTypeOptions: CaseType[];
+  caseStatusOptions: CaseStatus[];
 }
 
 const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
@@ -17,6 +26,9 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
   onApplyFilters,
   onResetFilters,
   courtOptions,
+  caseStageOptions,
+  caseTypeOptions,
+  caseStatusOptions,
 }) => {
   // Local state to track filter changes before applying them
   const [localFilters, setLocalFilters] = useState<FilterState>(filterState);
@@ -25,11 +37,6 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
   useEffect(() => {
     setLocalFilters(filterState);
   }, [filterState]);
-
-  // Define options for dropdowns
-  const caseTypeOptions = ["CMP", "ST"];
-  const caseStageOptions = ["Cognizance", "Hearing", "Arguments"];
-  const caseStatusOptions = ["Pending", "Disposed"];
 
   // Generate years from 2024 to current year
   const generateYearOptions = (): string[] => {
@@ -83,7 +90,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
           </div>
         </div>
 
-        <hr className="my-2 border-t border-[#CBD5E1]" />     
+        <hr className="my-2 border-t border-[#CBD5E1]" />
 
         {(selectedTab === "Advocate" ||
           selectedTab === "Litigant" ||
@@ -108,7 +115,12 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
               placeHolder="Select Case Type"
               value={localFilters.caseType}
               onChange={(value) => handleLocalFilterChange("caseType", value)}
-              options={caseTypeOptions}
+              options={
+                caseTypeOptions?.map((type: CaseType) => ({
+                  label: type?.name || "",
+                  value: type?.code || "",
+                })) || []
+              }
               className="bg-[#F8FAFC] border-[#94A3B8]"
             />
 
@@ -143,7 +155,12 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
               placeHolder="Select Case Stage"
               value={localFilters.caseStage}
               onChange={(value) => handleLocalFilterChange("caseStage", value)}
-              options={caseStageOptions}
+              options={
+                caseStageOptions?.map((stage: CaseStage) => ({
+                  label: stage?.subStage || "",
+                  value: stage?.code || "",
+                })) || []
+              }
               className="bg-[#F8FAFC] border-[#94A3B8]"
             />
 
@@ -152,7 +169,12 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
               placeHolder="Select Case Status"
               value={localFilters.caseStatus}
               onChange={(value) => handleLocalFilterChange("caseStatus", value)}
-              options={caseStatusOptions}
+              options={
+                caseStatusOptions?.map((status: CaseStatus) => ({
+                  label: status?.name || "",
+                  value: status?.code || "",
+                })) || []
+              }
               className="bg-[#F8FAFC] border-[#94A3B8]"
             />
           </div>

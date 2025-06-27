@@ -13,19 +13,6 @@ import {
 } from "../types";
 import { newCaseSearchConfig } from "../data/newCaseSearchConfig";
 import { transformSearchResponse } from "../TransformData/transformSearchData";
-
-/**
- * Format date from timestamp to readable format
- */
-export const formatDate = (timestamp: number | null | undefined): string => {
-  if (!timestamp) return "Not Available";
-  return new Date(timestamp).toLocaleDateString("en-US", {
-    day: "numeric",
-    month: "short",
-    year: "2-digit",
-  });
-};
-
 /**
  * Fetch case data from API with error handling
  */
