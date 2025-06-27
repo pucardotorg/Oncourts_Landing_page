@@ -161,17 +161,18 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
       </div>
 
       {/* Pagination controls */}
-      {totalCount > 0 && (
-        <Pagination
-          currentStartIndex={offset + 1}
-          totalItems={totalCount}
-          itemsPerPage={limit}
-          onPrevPage={onPrevPage || (() => {})}
-          onNextPage={onNextPage || (() => {})}
-          isFirstPage={offset === 0}
-          isLastPage={offset + limit >= totalCount}
-        />
-      )}
+      {totalCount > 0 &&
+        ["All", "Advocate", "Litigant"].includes(selectedTab) && (
+          <Pagination
+            currentStartIndex={offset + 1}
+            totalItems={totalCount}
+            itemsPerPage={limit}
+            onPrevPage={onPrevPage || (() => {})}
+            onNextPage={onNextPage || (() => {})}
+            isFirstPage={offset === 0}
+            isLastPage={offset + limit >= totalCount}
+          />
+        )}
     </div>
   );
 };

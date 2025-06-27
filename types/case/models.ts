@@ -30,3 +30,18 @@ export interface CourtRoom {
   name?: string;
   establishment?: string;
 }
+
+export interface CaseStage {
+  code?: string;
+  subStage?: string;
+}
+
+export interface CaseType {
+  code?: string;
+  name?: string;
+}
+
+export interface CaseStatus {
+  code?: string;
+  name?: string;
+}

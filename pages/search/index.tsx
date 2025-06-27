@@ -5,7 +5,15 @@ import SearchTabs from "../../components/search/SearchTabs";
 import SearchForm from "../../components/search/SearchForm";
 import AdditionalFilters from "../../components/search/AdditionalFilters";
 import CaseDetailsTable from "../../components/search/CaseDetailsTable";
-import { FormState, FilterState, CaseResult, CourtRoom } from "../../types";
+import {
+  FormState,
+  FilterState,
+  CaseResult,
+  CourtRoom,
+  CaseStage,
+  CaseType,
+  CaseStatus,
+} from "../../types";
 import { isFormValid, searchCases } from "../../utils/searchUtils";
 import { newCaseSearchConfig } from "../../data/newCaseSearchConfig";
 import { commonStyles, animations } from "../../styles/commonStyles";
@@ -44,6 +52,9 @@ const SearchForCase = () => {
   const [totalCount, setTotalCount] = useState(0);
   const tenantId = "kl";
   const [courtOptions, setCourtOptions] = useState<CourtRoom[]>([]);
+  const [caseStageOptions, setCaseStageOptions] = useState<CaseStage[]>([]);
+  const [caseStatusOptions, setCaseStatusOptions] = useState<CaseStatus[]>([]);
+  const [caseTypeOptions, setCaseTypeOptions] = useState<CaseType[]>([]);
 
   const defaultFormState = {
     caseNumber: "",
@@ -99,6 +110,14 @@ const SearchForCase = () => {
                   moduleName: "common-masters",
                   masterDetails: [{ name: "Court_Rooms" }],
                 },
+                {
+                  moduleName: "case",
+                  masterDetails: [
+                    { name: "SubStage" },
+                    { name: "casetype" },
+                    { name: "casestatus" },
+                  ],
+                },
               ],
             },
             RequestInfo: {
@@ -109,7 +128,6 @@ const SearchForCase = () => {
         }
       );
       const data = await response.json();
-
       // Extract the Court_Rooms array from response
       if (
         data &&
@@ -120,9 +138,20 @@ const SearchForCase = () => {
         const courtRooms: CourtRoom[] =
           data.MdmsRes["common-masters"].Court_Rooms;
         setCourtOptions(courtRooms);
-      } else {
-        console.error("Court_Rooms data not found in MDMS response:", data);
-        setCourtOptions([]);
+      }
+      if (data && data.MdmsRes && data.MdmsRes["case"]) {
+        if (data.MdmsRes["case"].SubStage) {
+          const caseStages: CaseStage[] = data.MdmsRes["case"].SubStage;
+          setCaseStageOptions(caseStages);
+        }
+        if (data.MdmsRes["case"].casetype) {
+          const caseTypes: CaseType[] = data.MdmsRes["case"].casetype;
+          setCaseTypeOptions(caseTypes);
+        }
+        if (data.MdmsRes["case"].casestatus) {
+          const caseStatuses: CaseStatus[] = data.MdmsRes["case"].casestatus;
+          setCaseStatusOptions(caseStatuses);
+        }
       }
     } catch (error) {
       console.error("Error fetching court options:", error);
@@ -446,13 +475,14 @@ const SearchForCase = () => {
           onApplyFilters={handleFilterChangeAndSearch}
           onResetFilters={handleResetFiltersAndSearch}
           courtOptions={courtOptions}
+          caseStageOptions={caseStageOptions}
+          caseTypeOptions={caseTypeOptions}
+          caseStatusOptions={caseStatusOptions}
         />
       )}
 
       {/* Case Details Table with built-in pagination */}
-      {(selectedTab === "All" ||
-        (searchResults?.length > 0 &&
-          ["Advocate", "Litigant"].includes(selectedTab))) && (
+      {(selectedTab === "All" || searchResults?.length > 0) && (
         <CaseDetailsTable
           selectedTab={selectedTab}
           searchResults={searchResults}

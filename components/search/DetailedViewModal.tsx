@@ -53,7 +53,6 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
   const initialOrdersToShow = 5;
 
   // State for payment tasks pagination
-  const [showAllTasks, setShowAllTasks] = useState(false);
   const [currentTaskPage, setCurrentTaskPage] = useState(0);
   const [totalTasks, setTotalTasks] = useState(0);
   const tasksPerPage = 10;
@@ -199,8 +198,6 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
         if (initialLoad || page === 0) {
           setTotalOrders(responseData.totalCount || 0);
         }
-
-        // Update order history based on current state
         setOrderHistory(responseData.orderDetailsList || []);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
@@ -256,12 +253,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
 
         const responseData: InboxSearchResponse = await response.json();
 
-        // When getting initial data or first page, save total count for pagination
-        if (initialLoad || page === 0) {
-          setTotalTasks(responseData.totalCount || 0);
-        }
-
-        // Update payment tasks based on current state
+        setTotalTasks(responseData.totalCount);
         setPaymentTasks(responseData.paymentTasks || []);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
@@ -662,7 +654,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 )}
 
                 {/* Only show 'See more Orders' button if there are more than initial orders to show */}
-                {!showAllOrders && orderHistory.length > 0 && (
+                {!showAllOrders && orderHistory.length > 4 && (
                   <div className="mt-2 mb-8">
                     <button
                       onClick={() => {
@@ -694,7 +686,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
 
                 {/* Process Payment Pending Tasks Section */}
                 <div id="pendingTasksSection">
-                  <h2 className="text-xl font-bold mb-3">
+                  <h2 className="text-xl font-bold mt-6 mb-3">
                     Process Payment Pending Tasks
                   </h2>
                   {loading ? (
@@ -724,9 +716,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                                   className="border-b border-[#E8E8E8]"
                                 >
                                   <td className="px-2 py-2">
-                                    {showAllTasks
-                                      ? currentTaskPage * tasksPerPage + idx + 1
-                                      : idx + 1}
+                                    {currentTaskPage * tasksPerPage + idx + 1}
                                   </td>
                                   <td className="px-2 py-2 font-medium">
                                     {task.task}
@@ -766,83 +756,40 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                             </tbody>
                           </table>
 
-                          {/* Removed static login message, now shown on icon hover */}
-
-                          {/* Pagination controls - only show if in expanded view */}
-                          {showAllTasks && totalTasks > tasksPerPage && (
-                            <div className="flex items-center justify-center mt-4 space-x-2">
-                              <button
-                                onClick={() => {
-                                  const newPage = Math.max(
-                                    0,
-                                    currentTaskPage - 1
-                                  );
-                                  setCurrentTaskPage(newPage);
-                                  fetchPaymentTasks(newPage);
-                                }}
-                                disabled={currentTaskPage === 0}
-                                className={`px-2 py-1 border rounded ${currentTaskPage === 0 ? "text-gray-400" : "text-blue-600"}`}
-                              >
-                                Previous
-                              </button>
-                              <span className="text-sm">
-                                Page {currentTaskPage + 1} of{" "}
-                                {Math.ceil(totalTasks / tasksPerPage)}
-                              </span>
-                              <button
-                                onClick={() => {
-                                  const newPage = Math.min(
-                                    Math.ceil(totalTasks / tasksPerPage) - 1,
-                                    currentTaskPage + 1
-                                  );
-                                  setCurrentTaskPage(newPage);
-                                  fetchPaymentTasks(newPage);
-                                }}
-                                disabled={
-                                  currentTaskPage >=
-                                  Math.ceil(totalTasks / tasksPerPage) - 1
-                                }
-                                className={`px-2 py-1 border rounded ${currentTaskPage >= Math.ceil(totalTasks / tasksPerPage) - 1 ? "text-gray-400" : "text-blue-600"}`}
-                              >
-                                Next
-                              </button>
-                            </div>
+                          {totalTasks > tasksPerPage && (
+                            <Pagination
+                              currentStartIndex={
+                                currentTaskPage * tasksPerPage + 1
+                              }
+                              totalItems={totalTasks}
+                              itemsPerPage={tasksPerPage}
+                              onPrevPage={() => {
+                                const newPage = Math.max(
+                                  0,
+                                  currentTaskPage - 1
+                                );
+                                setCurrentTaskPage(newPage);
+                                fetchPaymentTasks(newPage);
+                              }}
+                              onNextPage={() => {
+                                const newPage = Math.min(
+                                  Math.ceil(totalTasks / tasksPerPage) - 1,
+                                  currentTaskPage + 1
+                                );
+                                setCurrentTaskPage(newPage);
+                                fetchPaymentTasks(newPage);
+                              }}
+                              isFirstPage={currentTaskPage === 0}
+                              isLastPage={
+                                currentTaskPage >=
+                                Math.ceil(totalTasks / tasksPerPage) - 1
+                              }
+                            />
                           )}
                         </>
                       ) : (
                         <div className="text-center py-4">
                           No payment tasks pending
-                        </div>
-                      )}
-
-                      {/* Only show 'See more Tasks' button if there are more than 2 tasks */}
-                      {!showAllTasks && totalTasks > 2 && (
-                        <div className="mt-2 mb-6">
-                          <button
-                            onClick={() => {
-                              setShowAllTasks(true);
-                              setCurrentTaskPage(0);
-                              fetchPaymentTasks(0);
-                            }}
-                            className="text-blue-600 text-sm underline hover:text-blue-800"
-                          >
-                            See more Tasks
-                          </button>
-                        </div>
-                      )}
-
-                      {/* Show 'Show less' button when in expanded view */}
-                      {showAllTasks && (
-                        <div className="mt-2 mb-6">
-                          <button
-                            onClick={() => {
-                              setShowAllTasks(false);
-                              setCurrentTaskPage(0);
-                            }}
-                            className="text-blue-600 text-sm underline hover:text-blue-800"
-                          >
-                            Show less
-                          </button>
                         </div>
                       )}
                     </>
