@@ -18,8 +18,10 @@ import { isFormValid, searchCases } from "../../utils/searchUtils";
 import { newCaseSearchConfig } from "../../data/newCaseSearchConfig";
 import { commonStyles, animations } from "../../styles/commonStyles";
 import DetailedViewModal from "../../components/search/DetailedViewModal";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 const SearchForCase = () => {
+  const { t } = useSafeTranslation();
   const [selectedTab, setSelectedTab] = useState("Filing Number");
   const [showViewDetailedModal, setShowViewDetailedModal] = useState(false);
   const [selectedCase, setSelectedCase] = useState<CaseResult>({
@@ -346,7 +348,7 @@ const SearchForCase = () => {
       if (results.length === 0 && !["All"].includes(selectedTab)) {
         setErrorNotification({
           show: true,
-          message: "No Results Found",
+          message: t("NO_RESULTS_FOUND"),
         });
 
         // Auto-hide error notification after 2 seconds
@@ -403,7 +405,7 @@ const SearchForCase = () => {
         className={commonStyles.heading.primary}
         style={{ color: commonStyles.colors.text, fontFamily: "Baskerville" }}
       >
-        {newCaseSearchConfig.heading}
+        {t(newCaseSearchConfig?.heading)}
       </h1>
       {/* Search Container */}
       <div>
@@ -430,7 +432,7 @@ const SearchForCase = () => {
       </div>
       {selectedTab === "All" && searchResults?.length > 0 && (
         <div className={commonStyles.heading.accent}>
-          Choose from filter to search cases
+          {t("CHOOSE_FROM_FILTER_TO_SEARCH_CASES")}
         </div>
       )}
 

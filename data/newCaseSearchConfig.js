@@ -4,7 +4,7 @@
 
 export const newCaseSearchConfig = {
   // Page header
-  heading: "Case Search",
+  heading: "CASE_SEARCH",
 
   // Search tab configuration
   tabs: [
@@ -18,10 +18,10 @@ export const newCaseSearchConfig = {
 
   // CNR Number form
   cnrNumber: {
-    label: "Enter CNR Number",
-    placeholder: "Ex: KLKM520000452024",
+    label: "ENTER_CNR_NUMBER",
+    placeholder: "EXAMPLE_CNR_NUMBER",
     pattern: "^[A-Z]{4}\\d+$",
-    errorMessage: "Please enter a valid CNR number (e.g., KLKM520000452024)",
+    errorMessage: "CNR_NUMBER_ERR_MSG",
   },
 
   // Case Number form
@@ -93,9 +93,9 @@ export const newCaseSearchConfig = {
 
   // Button labels
   buttons: {
-    clear: "Clear",
-    search: "Search Case",
-    reset: "Reset Filters",
+    clear: "CLEAR",
+    search: "SEARCH_CASE",
+    reset: "RESET_FILTERS",
   },
 
   // Additional filters
