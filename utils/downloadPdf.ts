@@ -41,19 +41,54 @@ export const downloadAsPDF = async (
 
     // Save original styles to restore later
     const originalStyles = {
+      width: modalContent.style.width,
       height: modalContent.style.height,
       maxHeight: modalContent.style.maxHeight,
       overflow: modalContent.style.overflow,
       position: modalContent.style.position,
       documentOverflow: document.body.style.overflow,
+      padding: modalContent.style.padding,
+      margin: modalContent.style.margin,
+      borderRadius: modalContent.style.borderRadius,
     };
+
+    // Store original header style
+    const headerElement = modalContent.querySelector('div[class*="sticky top-0"]');
+    const originalHeaderStyles = headerElement 
+      ? {
+          position: (headerElement as HTMLElement).style.position,
+          top: (headerElement as HTMLElement).style.top,
+          zIndex: (headerElement as HTMLElement).style.zIndex,
+        }
+      : null;
+      
+    // Find the download button so we can hide it during PDF generation
+    const downloadButton = modalContent.querySelector('button[class*="bg-teal"]');
+    const downloadButtonVisible = downloadButton ? (downloadButton as HTMLElement).style.display : '';
 
     try {
       // Modify styles to capture full content
       document.body.style.overflow = "hidden";
+      modalContent.style.width = "100%";
+      modalContent.style.maxWidth = "1024px"; // Set maximum width for PDF
       modalContent.style.height = "auto";
       modalContent.style.maxHeight = "none";
       modalContent.style.overflow = "visible";
+      modalContent.style.padding = "20px";
+      modalContent.style.margin = "0 auto";
+      modalContent.style.borderRadius = "0";
+      
+      // Ensure header isn't sticky for PDF generation
+      if (headerElement) {
+        (headerElement as HTMLElement).style.position = "relative";
+        (headerElement as HTMLElement).style.top = "0";
+        (headerElement as HTMLElement).style.zIndex = "1";
+      }
+      
+      // Hide the download button for PDF generation
+      if (downloadButton) {
+        (downloadButton as HTMLElement).style.display = "none";
+      }
 
       // Get content dimensions
       const scrollHeight = modalContent.scrollHeight;
@@ -83,7 +118,9 @@ export const downloadAsPDF = async (
 
       // Calculate dimensions
       const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const pdfHeight = pdf.internal.pageSize.getHeight() - 20; // Add margin to avoid cutting content at edges
+      
+      // Use the full width of the PDF page, adjusting the height to maintain aspect ratio
       const ratio = pdfWidth / canvas.width;
       const totalPdfHeight = canvas.height * ratio;
       const pageCount = Math.ceil(totalPdfHeight / pdfHeight);
@@ -138,11 +175,27 @@ export const downloadAsPDF = async (
       pdf.save(pdfConfig.filename);
     } finally {
       // Always restore original styles
+      modalContent.style.width = originalStyles.width;
       modalContent.style.height = originalStyles.height;
       modalContent.style.maxHeight = originalStyles.maxHeight;
       modalContent.style.overflow = originalStyles.overflow;
       modalContent.style.position = originalStyles.position;
+      modalContent.style.padding = originalStyles.padding;
+      modalContent.style.margin = originalStyles.margin;
+      modalContent.style.borderRadius = originalStyles.borderRadius;
       document.body.style.overflow = originalStyles.documentOverflow;
+      
+      // Restore header styles
+      if (headerElement && originalHeaderStyles) {
+        (headerElement as HTMLElement).style.position = originalHeaderStyles.position;
+        (headerElement as HTMLElement).style.top = originalHeaderStyles.top;
+        (headerElement as HTMLElement).style.zIndex = originalHeaderStyles.zIndex;
+      }
+      
+      // Restore the download button visibility
+      if (downloadButton) {
+        (downloadButton as HTMLElement).style.display = downloadButtonVisible;
+      }
     }
   } catch (error) {
     console.error("Error generating PDF:", error);
