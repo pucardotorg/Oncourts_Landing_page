@@ -31,7 +31,7 @@ const DatePickerComponent: React.FC<DatePickerProps> = ({
 }) => {
   // Common class for all form input elements for consistent styling
   const baseInputClass =
-    "block w-full px-3 py-2 h-10 text-base bg-[#F8FAFC] border-[1.5px] border-[#94A3B8] rounded-md focus:outline-none focus:ring-teal-500 focus:border-teal-500";
+    "block w-full px-3 py-2 h-10 font-[Roboto] text-base bg-[#F8FAFC] border-[1.5px] border-[#94A3B8] rounded-md focus:outline-none focus:ring-teal-500 focus:border-teal-500";
   const errorClass = error
     ? "border-red-500 focus:ring-red-500 focus:border-red-500"
     : "";
@@ -44,7 +44,7 @@ const DatePickerComponent: React.FC<DatePickerProps> = ({
       {label && (
         <label
           htmlFor={id || name}
-          className="block text-lg font-medium text-[#0A0A0A] mb-1"
+          className="block text-lg font-[Roboto] font-medium text-[#0A0A0A] mb-1"
         >
           {label}
           {required && <span className="text-2xl text-red-500">*</span>}

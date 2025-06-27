@@ -58,7 +58,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
   return (
     <div className="mt-8">
       <div className="flex justify-between items-center mb-2">
-        <h2 className="font-['Inter'] font-semibold text-[22.2px] leading-[31.72px] tracking-[0%] text-[#0F172A]">
+        <h2 className="font-['Baskerville'] font-semibold text-2xl leading-[31.72px] tracking-[0%] text-[#0F172A]">
           Case Details
         </h2>
         {["Advocate", "Litigant", "All"].includes(selectedTab) && (
@@ -68,18 +68,18 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
               placeholder="Search by case title"
               value={caseTitleInput}
               onChange={handleCaseTitleChange}
-              className="pl-10 pr-4 py-2 font-medium text-[#64748B] bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="pl-10 pr-4 py-2 font-[Roboto] font-medium text-[#64748B] bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#334155]" />
             <button
               onClick={handleSearch}
-              className="px-3 py-1.5 text-lg font-[Roboto] font-semibold text-[#0F766E] hover:text-green-800 bg-white rounded-lg border border-[#0F766E]"
+              className="px-3 py-1.5 text-lg font-[Inter] font-medium text-[#0F766E] hover:text-green-800 bg-white rounded-lg border border-[#0F766E]"
             >
               Search
             </button>
             <button
               onClick={handleReset}
-              className="px-3 py-1.5 text-lg font-[Roboto] font-semibold text-[#64748B] hover:text-green-800 bg-white rounded-lg border border-[#64748B]"
+              className="px-3 py-1.5 text-lg font-[Inter] font-medium text-[#64748B] hover:text-green-800 bg-white rounded-lg border border-[#64748B]"
             >
               Reset
             </button>
@@ -89,57 +89,45 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
 
       <div className="overflow-x-auto border border-[#E2E8F0] rounded-lg">
         {searchResults.length > 0 ? (
-          <table className="min-w-full font-['Inter']">
+          <table className="min-w-full">
             <thead className="bg-[#F8FAFC]">
-              <tr className="font-['Inter'] font-semibold text-[#0F172A]">
-                <th
-                  scope="col"
-                  className="p-4 text-left text-[18px] font-semibold text-[#0F172A] w-2/6 border-[#E2E8F0]"
-                >
+              <tr className="font-[Baskerville] font-semibold text-[18px] text-left text-[#0F172A]">
+                <th scope="col" className="p-3 w-2/6">
                   Case Title
                 </th>
-                <th
-                  scope="col"
-                  className="p-4 text-left text-[18px] font-semibold text-[#0F172A] w-1/6 border-[#E2E8F0]"
-                >
+                <th scope="col" className="p-3 w-1/6">
                   Case Number
                 </th>
-                <th
-                  scope="col"
-                  className="p-4 text-left text-[18px] font-semibold text-[#0F172A] w-1/6 border-[#E2E8F0]"
-                >
+                <th scope="col" className="p-3 w-1/6">
                   Next Hearing Date
                 </th>
-                <th
-                  scope="col"
-                  className="p-4 text-left text-[18px] font-semibold text-[#0F172A] w-1/6 border-[#E2E8F0]"
-                >
+                <th scope="col" className="p-3 w-1/6">
                   Purpose
                 </th>
-                <th
-                  scope="col"
-                  className="p-4 text-left text-[18px] font-semibold text-[#0F172A] w-1/6"
-                >
+                <th scope="col" className="p-3 w-1/6">
                   Action
                 </th>
               </tr>
             </thead>
             <tbody>
               {searchResults.map((result, index) => (
-                <tr key={index} className="bg-white border-t border-[#E2E8F0]">
-                  <td className="p-4 font-['Inter'] font-medium text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
+                <tr
+                  key={index}
+                  className="font-[Roboto] bg-white border-t border-[#E2E8F0]"
+                >
+                  <td className="p-4 font-base text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
                     {result.caseTitle}
                   </td>
-                  <td className="p-4 font-['Inter'] font-medium text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
+                  <td className="p-4 font-base text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
                     {result.stNumber || result.cmpNumber}
                   </td>
-                  <td className="p-4 font-['Inter'] font-medium text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
+                  <td className="p-4 font-base text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
                     {formatDate(result.nextHearingDate)}
                   </td>
-                  <td className="p-4 font-['Inter'] font-medium text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
+                  <td className="p-4 font-base text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
                     {result.purpose}
                   </td>
-                  <td className="p-2 font-['Inter'] font-semibold text-[16px] leading-[18px] text-[#334155]">
+                  <td className="p-2 font-medium text-[16px] leading-[18px] text-[#334155]">
                     <button
                       onClick={() => onViewCaseDetails(result)}
                       className="p-2 rounded-md border-2 text-teal-600 hover:text-teal-900"
@@ -153,7 +141,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
           </table>
         ) : (
           <div className="flex justify-center items-center p-8">
-            <div className="text-xl font-medium text-gray-500">
+            <div className="text-xl font-[Roboto] font-medium text-gray-500">
               No Results Found
             </div>
           </div>

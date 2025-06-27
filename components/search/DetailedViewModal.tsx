@@ -81,7 +81,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
     scale: 1.5, // Reduced scale for better fitting
     format: "a4",
     quality: 0.95,
-    filename: `Case_Details_${caseResult.cnrNumber || caseResult.stNumber || caseResult.cmpNumber || 'Report'}.pdf`,
+    filename: `Case_Details_${caseResult.cnrNumber || caseResult.stNumber || caseResult.cmpNumber || "Report"}.pdf`,
     loading: {
       text: "Generating PDF...",
       subtext: "This may take a moment",
@@ -355,18 +355,18 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
           <div className={commonStyles.loading.spinner}></div>
         </div>
       ) : (
-        <div className="font-roboto fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div
             ref={modalContentRef}
             className="bg-white rounded-lg w-[70%] relative overflow-hidden max-h-[90vh] flex flex-col"
           >
             <div className="sticky top-0 z-50 bg-white border-b-2 border-[#E2E8F0] px-6 py-4 flex justify-between items-center">
-              <div className="text-xl font-bold text-[#0F172A]">
+              <div className="font-[Roboto] text-xl font-bold text-[#0F172A]">
                 Detailed View |{" "}
                 <span className="text-[#0F766E]">{caseResult.caseTitle}</span>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="font-[Inter] flex items-center gap-2">
                 <button
                   className="flex items-center gap-1 px-3 py-1 bg-teal-600 text-[#334155] border-2 border-[#E2E8F0] rounded-md text-sm hover:bg-teal-700 transition"
                   onClick={() => downloadAsPDF(pdfConfig, modalContentRef)}
@@ -397,7 +397,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
             </div>
 
             <div className="overflow-y-auto px-6 pt-4 pb-8 space-y-6">
-              <div className="grid grid-cols-2 md:grid-cols-7 gap-y-2 bg-[#F7F5F3] p-4 rounded-md text-sm">
+              <div className="font-[Roboto] grid grid-cols-2 md:grid-cols-7 gap-y-2 bg-[#F7F5F3] p-4 rounded-md text-sm">
                 <div className="flex flex-col border-r pr-4">
                   <span className="text-sm font-base text-[#77787B]">
                     Case Number
@@ -457,10 +457,10 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
               </div>
 
               <div className="bg-[#F7F5F3] p-6 rounded-md text-sm">
-                <h2 className="text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
+                <h2 className="font-[Baskerville] text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
                   Litigant Details
                 </h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="font-[Roboto] grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="pr-2 border-r">
                     <p className="text-[16px] font-bold text-[#0A0A0A]">
                       Complainant/s
@@ -501,10 +501,10 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
               </div>
 
               <div className="bg-[#F7F5F3] p-6 rounded-md text-sm">
-                <h2 className="text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
+                <h2 className="font-[Baskerville] text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
                   Key Details
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="font-[Roboto] grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2 pr-4 border-r">
                     <div className="flex justify-between gap-4">
                       <span className="flex-1 text-[16px] font-bold text-[#0A0A0A]">
@@ -553,7 +553,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                         }}
                         className="flex-1 text-[16px] text-left text-[#DC2626] underline hover:text-red-700"
                       >
-                        Yes
+                        {paymentTasks.length > 0 ? "Yes" : "No"}
                       </button>
                     </div>
                   </div>
@@ -562,20 +562,24 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
 
               <div className="border rounded-md p-6 bg-white">
                 {/* Order History Section */}
-                <h2 className="text-xl font-bold mb-3">Order History</h2>
+                <h2 className="font-[Baskerville] text-xl font-bold mb-3">
+                  Order History
+                </h2>
                 {loading ? (
-                  <div className="text-center py-4">
+                  <div className="font-[Roboto] text-center py-4">
                     Loading order history...
                   </div>
                 ) : error ? (
-                  <div className="text-center py-4 text-red-500">{error}</div>
+                  <div className="font-[Roboto] text-center py-4 text-red-500">
+                    {error}
+                  </div>
                 ) : (
                   <>
                     {orderHistory.length > 0 ? (
                       <>
-                        <table className="w-full text-sm text-left">
+                        <table className="w-full text-[16px] text-left">
                           <thead>
-                            <tr className="text-sm font-bold text-[#0B0C0C] border-b border-[#BBBBBD]">
+                            <tr className="font-[Baskerville] font-bold text-[#0B0C0C] border-b border-[#BBBBBD]">
                               <th className="px-2 py-1">S.no</th>
                               <th className="px-2 py-1">Date</th>
                               <th className="px-2 py-1">Business Of The Day</th>
@@ -589,7 +593,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                             {orderHistory.map((item, idx) => (
                               <tr
                                 key={idx}
-                                className="text-sm font-normal text-[#0A0A0A] border-b border-[#E8E8E8]"
+                                className="font-[Roboto] font-normal text-[#0A0A0A] border-b border-[#E8E8E8]"
                               >
                                 <td className="px-2 py-2">
                                   {showAllOrders
@@ -646,7 +650,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                         )}
                       </>
                     ) : (
-                      <div className="text-center py-4">
+                      <div className="font-[Roboto] text-center py-4">
                         No order history available
                       </div>
                     )}
@@ -655,7 +659,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
 
                 {/* Only show 'See more Orders' button if there are more than initial orders to show */}
                 {!showAllOrders && orderHistory.length > 4 && (
-                  <div className="mt-2 mb-8">
+                  <div className="font-[Roboto] mt-2 mb-8">
                     <button
                       onClick={() => {
                         setShowAllOrders(true);
@@ -686,22 +690,24 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
 
                 {/* Process Payment Pending Tasks Section */}
                 <div id="pendingTasksSection">
-                  <h2 className="text-xl font-bold mt-6 mb-3">
+                  <h2 className="font-[Baskerville] text-xl font-bold mt-6 mb-3">
                     Process Payment Pending Tasks
                   </h2>
                   {loading ? (
-                    <div className="text-center py-4">
+                    <div className="font-[Roboto] text-center py-4">
                       Loading payment tasks...
                     </div>
                   ) : error ? (
-                    <div className="text-center py-4 text-red-500">{error}</div>
+                    <div className="font-[Roboto] text-center py-4 text-red-500">
+                      {error}
+                    </div>
                   ) : (
                     <>
                       {paymentTasks.length > 0 ? (
                         <>
-                          <table className="w-full text-sm text-left">
+                          <table className="w-full text-[16px] text-left">
                             <thead>
-                              <tr className="text-gray-600 border-b border-[#BBBBBD]">
+                              <tr className="font-[Baskerville] text-[#0B0C0C] border-b border-[#BBBBBD]">
                                 <th className="px-2 py-1">S.no</th>
                                 <th className="px-2 py-1">Task</th>
                                 <th className="px-2 py-1">Due Date</th>
@@ -713,7 +719,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                               {paymentTasks.map((task, idx) => (
                                 <tr
                                   key={idx}
-                                  className="border-b border-[#E8E8E8]"
+                                  className="font-[Roboto] border-b border-[#E8E8E8]"
                                 >
                                   <td className="px-2 py-2">
                                     {currentTaskPage * tasksPerPage + idx + 1}
