@@ -102,7 +102,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
       <hr className="my-6 border-t border-gray-200" />
 
       {/* Action Buttons */}
-      <div className="flex justify-end col-span-full md:col-span-2 lg:col-span-4 gap-4">
+      <div className="font-[Baskerville] font-medium flex justify-end col-span-full md:col-span-2 lg:col-span-4 gap-4">
         <button
           onClick={formState.handleClear}
           className={commonStyles.button.secondary}

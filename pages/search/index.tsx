@@ -394,7 +394,7 @@ const SearchForCase = () => {
       </Head>
       <h1
         className={commonStyles.heading.primary}
-        style={{ color: commonStyles.colors.text }}
+        style={{ color: commonStyles.colors.text, fontFamily: "Baskerville" }}
       >
         {newCaseSearchConfig.heading}
       </h1>

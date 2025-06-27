@@ -37,7 +37,7 @@ export const commonStyles = {
   heading: {
     primary: "text-center mb-6 text-6xl font-libre text-gray-800",
     secondary: "text-2xl font-semibold mb-4",
-    accent: "text-xl font-semibold text-[#EA580C] italic",
+    accent: "text-xl font-medium text-[#EA580C] italic font-[Roboto]",
   },
 
   // Form elements
@@ -50,9 +50,9 @@ export const commonStyles = {
   // Buttons
   button: {
     primary:
-      "px-20 py-2 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-[#0F766E] hover:bg-teal-700 focus:outline-none",
+      "px-16 py-2 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-[#0F766E] hover:bg-teal-700 focus:outline-none",
     secondary:
-      "px-28 py-2 border border-gray-300 rounded-md text-lg font-medium text-gray-700 hover:bg-gray-50 bg-white",
+      "px-20 py-2 border border-gray-300 rounded-md text-lg font-medium text-gray-700 hover:bg-gray-50 bg-white",
     disabled: "opacity-50 cursor-not-allowed pointer-events-none",
   },
 
