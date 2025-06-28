@@ -11,6 +11,7 @@ import {
 import { FiInfo } from "react-icons/fi";
 import { commonStyles } from "../../styles/commonStyles";
 import { formatDate } from "../../utils/formatDate";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 interface DetailedViewModalProps {
   tenantId: string;
@@ -27,6 +28,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
 
   // Ref to track initial API calls and prevent duplicate calls
   const initialLoadRef = useRef<boolean>(false);
+  const { t } = useSafeTranslation();
 
   // State for order history data from API
   const [orderHistory, setOrderHistory] = useState<OrderDetails[]>([]);
@@ -375,7 +377,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
           >
             <div className="sticky top-0 z-50 bg-white border-b-2 border-[#E2E8F0] px-6 py-4 flex justify-between items-center">
               <div className="font-[Roboto] text-xl font-bold text-[#0F172A]">
-                Detailed View |{" "}
+                {t("DETAILED_VIEW")} |{" "}
                 <span className="text-[#0F766E]">{caseResult.caseTitle}</span>
               </div>
 
@@ -398,7 +400,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                       d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                     />
                   </svg>
-                  Download PDF
+                  {t("DOWNLOAD_PDF")}
                 </button>
                 <button
                   className="text-3xl font-medium text-gray-700 w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-full transition"
@@ -413,7 +415,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
               <div className="font-[Roboto] grid grid-cols-2 md:grid-cols-7 gap-y-2 bg-[#F7F5F3] p-4 rounded-md text-sm">
                 <div className="flex flex-col border-r pr-4">
                   <span className="text-sm font-base text-[#77787B]">
-                    Case Number
+                    {t("CASE_NUMBER")}
                   </span>
                   <span className="text-[16px] font-bold text-[#0B0C0C]">
                     {caseResult.stNumber || caseResult.cmpNumber}
@@ -421,7 +423,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 </div>
                 <div className="flex flex-col border-r pr-4 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
-                    CNR Number
+                    {t("CNR_NUMBER")}
                   </span>
                   <span className="text-[16px] font-bold text-[#0B0C0C] break-words whitespace-normal">
                     {caseResult.cnrNumber}
@@ -429,7 +431,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 </div>
                 <div className="flex flex-col border-r pr-4 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
-                    Filing Number
+                    {t("FILING_NUMBER")}
                   </span>
                   <span className="text-[16px] font-bold text-[#0B0C0C] break-words whitespace-normal">
                     {caseResult.filingNumber}
@@ -437,7 +439,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 </div>
                 <div className="flex flex-col border-r pr-4 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
-                    Filing Date
+                    {t("FILING_DATE")}
                   </span>
                   <span className="text-[16px] font-bold text-[#0B0C0C] break-words whitespace-normal">
                     {formatDate(caseResult.filingDate)}
@@ -445,7 +447,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 </div>
                 <div className="flex flex-col border-r pr-4 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
-                    Registration Date
+                    {t("REGISTRATION_DATE")}
                   </span>
                   <span className="text-[16px] font-bold text-[#0B0C0C] break-words whitespace-normal">
                     {formatDate(caseResult.registrationDate)}
@@ -453,7 +455,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 </div>
                 <div className="flex flex-col border-r pr-4 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
-                    Magistrate
+                    {t("MAGISTRATE")}
                   </span>
                   <span className="text-[16px] font-bold text-[#0B0C0C] break-words whitespace-normal">
                     {magistrateName}
@@ -461,7 +463,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 </div>
                 <div className="flex flex-col pl-2">
                   <span className="text-sm font-base text-[#77787B]">
-                    Court Name
+                    {t("COURT_NAME")}
                   </span>
                   <span className="text-[16px] font-bold text-[#0B0C0C]">
                     {caseResult.courtName}
@@ -471,12 +473,12 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
 
               <div className="bg-[#F7F5F3] p-6 rounded-md text-sm">
                 <h2 className="font-[Baskerville] text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
-                  Litigant Details
+                  {t("LITIGANT_DETAILS")}
                 </h2>
                 <div className="font-[Roboto] grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="pr-2 border-r">
                     <p className="text-[16px] font-bold text-[#0A0A0A]">
-                      Complainant/s
+                      {t("COMPLAINANTS")}
                     </p>
                     {renderList(
                       complainants,
@@ -486,7 +488,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                   </div>
                   <div className="pr-2 border-r">
                     <p className="text-[16px] font-bold text-[#0A0A0A]">
-                      Complainant advocate/s
+                      {t("COMPLAINANT_ADVOCATES")}
                     </p>
                     {renderList(
                       complainantAdvocates,
@@ -496,13 +498,13 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                   </div>
                   <div className="pr-2 border-r">
                     <p className="text-[16px] font-bold text-[#0A0A0A]">
-                      Accused
+                      {t("ACCUSED")}
                     </p>
                     {renderList(accuseds, showAll.accuseds, "accuseds")}
                   </div>
                   <div>
                     <p className="text-[16px] font-bold text-[#0A0A0A]">
-                      Accused Advocate/s
+                      {t("ACCUSED_ADVOCATES")}
                     </p>
                     {renderList(
                       accusedAdvocates,
@@ -515,13 +517,13 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
 
               <div className="bg-[#F7F5F3] p-6 rounded-md text-sm">
                 <h2 className="font-[Baskerville] text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
-                  Key Details
+                  {t("KEY_DETAILS")}
                 </h2>
                 <div className="font-[Roboto] grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2 pr-4 border-r">
                     <div className="flex justify-between gap-4">
                       <span className="flex-1 text-[16px] font-bold text-[#0A0A0A]">
-                        Next Hearing Date
+                        {t("NEXT_HEARING_DATE")}
                       </span>
                       <span className="flex-1 text-[16px]">
                         {formatDate(caseResult.nextHearingDate)}
@@ -529,7 +531,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     </div>
                     <div className="flex justify-between gap-4">
                       <span className="flex-1 text-[16px] font-bold text-[#0A0A0A]">
-                        Purpose
+                        {t("PURPOSE")}
                       </span>
                       <span className="flex-1 text-[16px]">
                         {caseResult.purpose}
@@ -537,7 +539,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     </div>
                     <div className="flex justify-between gap-4">
                       <span className="flex-1 text-[16px] font-bold text-[#0A0A0A]">
-                        Last Hearing on
+                        {t("LAST_HEARING_ON")}
                       </span>
                       <span className="flex-1 text-[16px]">
                         {formatDate(caseResult.lastHearingDate)}
@@ -547,7 +549,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                   <div className="space-y-2 pl-4">
                     <div className="flex justify-between gap-4">
                       <span className="flex-1 text-[16px] font-bold text-[#0A0A0A]">
-                        Case Stage
+                        {t("CASE_STAGE")}
                       </span>
                       <span className="flex-1 text-[16px]">
                         {caseResult.caseStage}
@@ -555,7 +557,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     </div>
                     <div className="flex justify-between gap-4">
                       <span className="flex-1 text-[16px] font-bold text-[#0A0A0A]">
-                        Process payment pending
+                        {t("PROCESS_PAYMENT_PENDING")}
                       </span>
                       <button
                         onClick={() => {
@@ -576,15 +578,15 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
               <div className="border rounded-md p-6 bg-white">
                 {/* Order History Section */}
                 <h2 className="font-[Baskerville] text-xl font-bold mb-3">
-                  Order History
+                  {t("ORDER_HISTORY")}
                 </h2>
                 {internalLoading ? (
                   <div className="font-[Roboto] text-center py-4">
-                    Loading order history...
+                    {t("LOADING_ORDER_HISTORY")}
                   </div>
                 ) : error ? (
                   <div className="font-[Roboto] text-center py-4 text-red-500">
-                    {error}
+                    {t(error)}
                   </div>
                 ) : (
                   <>
@@ -593,11 +595,13 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                         <table className="w-full text-[16px] text-left">
                           <thead>
                             <tr className="font-[Baskerville] font-bold text-[#0B0C0C] border-b border-[#BBBBBD]">
-                              <th className="px-2 py-1">S.no</th>
-                              <th className="px-2 py-1">Date</th>
-                              <th className="px-2 py-1">Business Of The Day</th>
+                              <th className="px-2 py-1">{t("S_NO")}</th>
+                              <th className="px-2 py-1">{t("DATE")}</th>
+                              <th className="px-2 py-1">
+                                {t("BUSINESS_OF_THE_DAY")}
+                              </th>
                               <th className="px-2 py-1 text-center">
-                                View Order
+                                {t("VIEW_ORDER")}
                               </th>
                             </tr>
                           </thead>
@@ -626,7 +630,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                                       openFileInNewTab(item.orderId)
                                     }
                                   >
-                                    View
+                                    {t("VIEW")}
                                   </button>
                                 </td>
                               </tr>
@@ -664,7 +668,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                       </>
                     ) : (
                       <div className="font-[Roboto] text-center py-4">
-                        No order history available
+                        {t("NO_ORDER_HISTORY_AVAILABLE")}
                       </div>
                     )}
                   </>
@@ -681,7 +685,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                       }}
                       className="text-[#1D4ED8] text-sm underline"
                     >
-                      See more Orders
+                      {t("SEE_MORE_ORDERS")}
                     </button>
                   </div>
                 )}
@@ -704,15 +708,15 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 {/* Process Payment Pending Tasks Section */}
                 <div id="pendingTasksSection">
                   <h2 className="font-[Baskerville] text-xl font-bold mt-6 mb-3">
-                    Process Payment Pending Tasks
+                    {t("PROCESS_PAYMENT_PENDING_TASKS")}
                   </h2>
                   {internalLoading ? (
                     <div className="font-[Roboto] text-center py-4">
-                      Loading payment tasks...
+                      {t("LOADING_PAYMENT_TASKS")}
                     </div>
                   ) : error ? (
                     <div className="font-[Roboto] text-center py-4 text-red-500">
-                      {error}
+                      {t(error)}
                     </div>
                   ) : (
                     <>
@@ -721,10 +725,12 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                           <table className="w-full text-[16px] text-left">
                             <thead>
                               <tr className="font-[Baskerville] text-[#0B0C0C] border-b border-[#BBBBBD]">
-                                <th className="px-2 py-1">S.no</th>
-                                <th className="px-2 py-1">Task</th>
-                                <th className="px-2 py-1">Due Date</th>
-                                <th className="px-2 py-1">Days Remaining</th>
+                                <th className="px-2 py-1">{t("S_NO")}</th>
+                                <th className="px-2 py-1">{t("TASK")}</th>
+                                <th className="px-2 py-1">{t("DUE_DATE")}</th>
+                                <th className="px-2 py-1">
+                                  {t("DAYS_REMAINING")}
+                                </th>
                                 <th className="px-2 py-1"></th>
                               </tr>
                             </thead>
@@ -738,13 +744,13 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                                     {currentTaskPage * tasksPerPage + idx + 1}
                                   </td>
                                   <td className="px-2 py-2 font-medium">
-                                    {task.task}
+                                    {t(task?.task)}
                                   </td>
                                   <td className="px-2 py-2">
-                                    {formatDate(task.dueDate)}
+                                    {formatDate(task?.dueDate)}
                                   </td>
                                   <td className="px-2 py-2 text-red-600 font-medium">
-                                    {`${task.daysRemaining} Days`}
+                                    {`${task?.daysRemaining} Days`}
                                   </td>
                                   <td className="px-2 py-2 text-right">
                                     <div className="relative">
@@ -764,8 +770,9 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                                       </button>
                                       {hoveredIconId === idx && (
                                         <div className="absolute bottom-full right-0 mb-2 p-2 bg-[#3A3A3A] text-white text-center text-sm rounded-md w-48 z-10">
-                                          Login to the portal to make the online
-                                          payment
+                                          {t(
+                                            "LOGIN_TO_THE_PORTAL_TO_MAKE_THE_ONLINE_PAYMENT"
+                                          )}
                                         </div>
                                       )}
                                     </div>
@@ -808,7 +815,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                         </>
                       ) : (
                         <div className="text-center py-4">
-                          No payment tasks pending
+                          {t("NO_PAYMENT_TASKS_PENDING")}
                         </div>
                       )}
                     </>

@@ -1,4 +1,5 @@
 import React from "react";
+import { useSafeTranslation } from "../../../hooks/useSafeTranslation";
 
 interface DatePickerProps {
   id?: string;
@@ -29,6 +30,7 @@ const DatePickerComponent: React.FC<DatePickerProps> = ({
   min,
   max,
 }) => {
+  const { t } = useSafeTranslation();
   // Common class for all form input elements for consistent styling
   const baseInputClass =
     "block w-full px-3 py-2 h-10 font-[Roboto] text-base bg-[#F8FAFC] border-[1.5px] border-[#94A3B8] rounded-md focus:outline-none focus:ring-teal-500 focus:border-teal-500";
@@ -46,7 +48,7 @@ const DatePickerComponent: React.FC<DatePickerProps> = ({
           htmlFor={id || name}
           className="block text-lg font-[Roboto] font-medium text-[#0A0A0A] mb-1"
         >
-          {label}
+          {t(label)}
           {required && <span className="text-2xl text-red-500">*</span>}
         </label>
       )}

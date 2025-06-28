@@ -3,6 +3,7 @@ import { FiSearch } from "react-icons/fi";
 import { CaseResult, FilterState } from "../../types";
 import Pagination from "../Utils/Pagination";
 import { formatDate } from "../../utils/formatDate";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 interface CaseDetailsTableProps {
   selectedTab: string;
@@ -29,6 +30,8 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
   filterState,
   onSearch,
 }) => {
+  const {t} = useSafeTranslation();
+  
   // State for the case title search input
   const [caseTitleInput, setCaseTitleInput] = useState(
     filterState?.caseTitle || ""
@@ -59,13 +62,13 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
     <div className="mt-8">
       <div className="flex justify-between items-center mb-2">
         <h2 className="font-['Baskerville'] font-semibold text-2xl leading-[31.72px] tracking-[0%] text-[#0F172A]">
-          Case Details
+        {t("CASE_DETAILS")}
         </h2>
         {["Advocate", "Litigant", "All"].includes(selectedTab) && (
           <div className="relative text-base flex gap-2">
             <input
               type="text"
-              placeholder="Search by case title"
+              placeholder={t("SEARCH_BY_CASE_TITLE")}
               value={caseTitleInput}
               onChange={handleCaseTitleChange}
               className="pl-10 pr-4 py-2 font-[Roboto] font-medium text-[#64748B] bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
@@ -75,13 +78,13 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
               onClick={handleSearch}
               className="px-3 py-1.5 text-lg font-[Inter] font-medium text-[#0F766E] hover:text-green-800 bg-white rounded-lg border border-[#0F766E]"
             >
-              Search
+              {t("SEARCH")}
             </button>
             <button
               onClick={handleReset}
               className="px-3 py-1.5 text-lg font-[Inter] font-medium text-[#64748B] hover:text-green-800 bg-white rounded-lg border border-[#64748B]"
             >
-              Reset
+              {t("RESET")}
             </button>
           </div>
         )}
@@ -93,19 +96,19 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
             <thead className="bg-[#F8FAFC]">
               <tr className="font-[Baskerville] font-semibold text-[18px] text-left text-[#0F172A]">
                 <th scope="col" className="p-3 w-2/6">
-                  Case Title
+                  {t("CASE_TITLE")}
                 </th>
                 <th scope="col" className="p-3 w-1/6">
-                  Case Number
+                  {t("CASE_NUMBER")}
                 </th>
                 <th scope="col" className="p-3 w-1/6">
-                  Next Hearing Date
+                  {t("NEXT_HEARING_DATE")}
                 </th>
                 <th scope="col" className="p-3 w-1/6">
-                  Purpose
+                  {t("PURPOSE")}
                 </th>
                 <th scope="col" className="p-3 w-1/6">
-                  Action
+                  {t("ACTION")}
                 </th>
               </tr>
             </thead>
@@ -116,7 +119,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
                   className="font-[Roboto] bg-white border-t border-[#E2E8F0]"
                 >
                   <td className="p-4 font-base text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
-                    {result.caseTitle}
+                    {t(result?.caseTitle || "")}
                   </td>
                   <td className="p-4 font-base text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
                     {result.stNumber || result.cmpNumber}
@@ -125,14 +128,14 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
                     {formatDate(result.nextHearingDate)}
                   </td>
                   <td className="p-4 font-base text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
-                    {result.purpose}
+                    {t(result?.purpose || "")}
                   </td>
                   <td className="p-2 font-medium text-[16px] leading-[18px] text-[#334155]">
                     <button
                       onClick={() => onViewCaseDetails(result)}
                       className="p-2 rounded-md border-2 text-teal-600 hover:text-teal-900"
                     >
-                      View Details
+                      {t("VIEW_DETAILS")}
                     </button>
                   </td>
                 </tr>
@@ -142,7 +145,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
         ) : (
           <div className="flex justify-center items-center p-8">
             <div className="text-xl font-[Roboto] font-medium text-gray-500">
-              No Results Found
+            {t("NO_RESULTS_FOUND")}
             </div>
           </div>
         )}

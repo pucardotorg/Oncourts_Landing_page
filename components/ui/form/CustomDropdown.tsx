@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useSafeTranslation } from "../../../hooks/useSafeTranslation";
 
 interface DropdownOption {
   value: string;
@@ -34,6 +35,7 @@ const CustomDropdown: React.FC<DropdownProps> = ({
   helperText,
   placeHolder = "Select an option",
 }) => {
+  const { t } = useSafeTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -73,7 +75,7 @@ const CustomDropdown: React.FC<DropdownProps> = ({
           htmlFor={id || name}
           className="block text-lg font-medium text-[#0A0A0A] mb-1 font-[Roboto]"
         >
-          {label}
+          {t(label)}
           {required && (
             <span className="text-red-500 text-2xl leading-none ml-1">*</span>
           )}
@@ -91,7 +93,7 @@ const CustomDropdown: React.FC<DropdownProps> = ({
           <span
             className={`block truncate ${!selectedOption ? "text-gray-400" : ""}`}
           >
-            {selectedOption ? selectedOption.label : placeHolder}
+            {selectedOption ? selectedOption.label : t(placeHolder)}
           </span>
           <span className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2">
             <svg
@@ -117,7 +119,7 @@ const CustomDropdown: React.FC<DropdownProps> = ({
                 }`}
               >
                 <span className="block whitespace-normal break-words">
-                  {option.label}
+                  {t(option.label)}
                 </span>
               </li>
             ))}

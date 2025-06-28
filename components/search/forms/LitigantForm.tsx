@@ -15,10 +15,10 @@ const LitigantForm: React.FC<LitigantFormProps> = ({
       <div className="grid grid-cols-3 gap-4">
         <div className="col-span-1">
           <TextField
-            label="Litigant Name"
+            label="LITIGANT_NAME"
             value={litigantName}
             onChange={onChange}
-            helperText="Minimum 3 characters needed"
+            helperText="LITIGANT_FORM_HELPER_TEXT"
             error={litigantName.length > 0 && litigantName.length < 3}
             required
           />

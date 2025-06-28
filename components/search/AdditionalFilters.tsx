@@ -8,6 +8,7 @@ import {
   FilterState,
 } from "../../types";
 import CustomDropdown from "../ui/form/CustomDropdown";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 interface AdditionalFiltersProps {
   selectedTab: string;
@@ -30,6 +31,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
   caseTypeOptions,
   caseStatusOptions,
 }) => {
+  const { t } = useSafeTranslation();
   // Local state to track filter changes before applying them
   const [localFilters, setLocalFilters] = useState<FilterState>(filterState);
 
@@ -71,7 +73,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
       <div className="p-4 bg-[#F8FAFC]">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-[Baskerville] font-semibold text-[#0F172A]">
-            Filter
+            {t("FILTER")}
           </h2>
 
           <div className="flex gap-2">
@@ -79,13 +81,13 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
               onClick={applyFilters}
               className="px-2 text-lg font-[Inter] font-medium text-[#2563EB] hover:text-blue-800 bg-white rounded-lg border border-[#E2E8F0]"
             >
-              Apply Filter
+              {t("APPLY_FILTER")}
             </button>
             <button
               onClick={onResetFilters}
               className="text-lg font-[Inter] font-medium text-[#64748B] hover:text-gray-800"
             >
-              Reset all
+              {t("RESET_ALL")}
             </button>
           </div>
         </div>
@@ -97,8 +99,8 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
           selectedTab === "All") && (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
             <CustomDropdown
-              label="Court Name"
-              placeHolder="Select Court"
+              label={"COURT_NAME"}
+              placeHolder={"SELECT_COURT"}
               value={localFilters.courtName}
               onChange={(value) => handleLocalFilterChange("courtName", value)}
               options={
@@ -111,8 +113,8 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
             />
 
             <CustomDropdown
-              label="Case type"
-              placeHolder="Select Case Type"
+              label={t("CASE_TYPE")}
+              placeHolder={t("SELECT_CASE_TYPE")}
               value={localFilters.caseType}
               onChange={(value) => handleLocalFilterChange("caseType", value)}
               options={
@@ -125,7 +127,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
             />
 
             <DatePickerComponent
-              label="Next Hearing Date"
+              label="NEXT_HEARING_DATE"
               value={localFilters.hearingDateFrom}
               onChange={(value) =>
                 handleLocalFilterChange("hearingDateFrom", value)
@@ -133,7 +135,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
             />
 
             <DatePickerComponent
-              label="To"
+              label="TO"
               value={localFilters.hearingDateTo}
               onChange={(value) =>
                 handleLocalFilterChange("hearingDateTo", value)
@@ -141,8 +143,8 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
             />
 
             <CustomDropdown
-              label="Year of Filing"
-              placeHolder="Select Year"
+              label="YEAR_OF_FILING"
+              placeHolder="SELECT_YEAR"
               value={localFilters.yearOfFiling}
               onChange={(value) =>
                 handleLocalFilterChange("yearOfFiling", value)
@@ -151,8 +153,8 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
               className="bg-[#F8FAFC] border-[#94A3B8]"
             />
             <CustomDropdown
-              label="Case Stage"
-              placeHolder="Select Case Stage"
+              label="CASE_STAGE"
+              placeHolder="SELECT_CASE_STAGE"
               value={localFilters.caseStage}
               onChange={(value) => handleLocalFilterChange("caseStage", value)}
               options={
@@ -165,8 +167,8 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
             />
 
             <CustomDropdown
-              label="Case Status"
-              placeHolder="Select Case Status"
+              label="CASE_STATUS"
+              placeHolder="SELECT_CASE_STATUS"
               value={localFilters.caseStatus}
               onChange={(value) => handleLocalFilterChange("caseStatus", value)}
               options={

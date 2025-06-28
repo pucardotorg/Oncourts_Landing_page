@@ -1,4 +1,5 @@
 import React from "react";
+import { useSafeTranslation } from "../../../hooks/useSafeTranslation";
 
 interface RadioOption {
   value: string;
@@ -33,11 +34,12 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   disabled = false,
   helperText,
 }) => {
+  const { t } = useSafeTranslation();
   return (
     <div className={`font-[Roboto] mb-0 ${className}`}>
       {label && (
         <label className="block text-lg font-medium text-[#334155]">
-          {label}
+          {t(label)}
           {required && <span className="text-red-500">*</span>}
         </label>
       )}
@@ -61,7 +63,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
             <span
               className={`ml-2 text-base font-medium ${disabled ? "text-gray-500" : "text-[#334155]"}`}
             >
-              {option.label}
+              {t(option.label)}
             </span>
           </label>
         ))}

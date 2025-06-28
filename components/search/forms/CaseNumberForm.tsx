@@ -46,8 +46,8 @@ const CaseNumberForm: React.FC<CaseNumberFormProps> = ({
   return (
     <>
       <CustomDropdown
-        label="Court"
-        placeHolder="Select Court"
+        label="COURT"
+        placeHolder="SELECT_COURT"
         value={selectedCourt}
         onChange={onCourtChange}
         options={
@@ -61,8 +61,8 @@ const CaseNumberForm: React.FC<CaseNumberFormProps> = ({
       />
 
       <CustomDropdown
-        label="Case type"
-        placeHolder="Select Case Type"
+        label="CASE_TYPE"
+        placeHolder="SELECT_CASE_TYPE"
         value={selectedCaseType}
         onChange={onCaseTypeChange}
         options={caseTypeOptions}
@@ -71,15 +71,15 @@ const CaseNumberForm: React.FC<CaseNumberFormProps> = ({
       />
 
       <TextField
-        label="Case Number"
+        label="CASE_NUMBER"
         value={caseNumber}
         onChange={onCaseNumberChange}
         required
       />
 
       <CustomDropdown
-        label="Year"
-        placeHolder="Select Year"
+        label="YEAR"
+        placeHolder="SELECT_YEAR"
         value={selectedYear}
         onChange={onYearChange}
         options={yearOptions}

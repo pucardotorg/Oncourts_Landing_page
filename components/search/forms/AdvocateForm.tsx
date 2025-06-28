@@ -28,8 +28,8 @@ const AdvocateForm: React.FC<AdvocateFormProps> = ({
   onNameChange,
 }) => {
   const radioOptions = [
-    { value: "Bar Code", label: "Bar Code" },
-    { value: "Advocate Name", label: "Advocate Name" },
+    { value: "Bar Code", label: "BAR_CODE" },
+    { value: "Advocate Name", label: "ADVOCATE_NAME" },
   ];
 
   // Removed dropdown options for state code and barcode - using TextField instead
@@ -64,20 +64,20 @@ const AdvocateForm: React.FC<AdvocateFormProps> = ({
       {advocateSearchMethod === "Bar Code" ? (
         <div className="grid grid-cols-3 gap-4 mt-4">
           <TextField
-            label="State Code"
+            label="STATE_CODE"
             value={stateCode}
             onChange={onStateCodeChange}
             required
           />
           <TextField
-            label="Barcode"
+            label="BARCODE"
             value={barCode}
             onChange={onBarCodeChange}
             required
           />
           <CustomDropdown
-            label="Year"
-            placeHolder="Select Year"
+            label="YEAR"
+            placeHolder="SELECT_YEAR"
             value={selectedYear}
             onChange={onYearChange}
             options={yearOptions}
@@ -89,11 +89,11 @@ const AdvocateForm: React.FC<AdvocateFormProps> = ({
         <div className="grid grid-cols-3 gap-4 mt-4">
           <div className="col-span-1">
             <TextField
-              label="Name"
+              label="NAME"
               value={advocateName}
               onChange={onNameChange}
               required
-              helperText="Minimum 3 characters needed"
+              helperText="ADVOCATE_FORM_NAME_FIELD_HELPER_TEXT"
               error={advocateName.length > 0 && advocateName.length < 3}
             />
           </div>
