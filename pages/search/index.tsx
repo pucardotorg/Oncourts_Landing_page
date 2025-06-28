@@ -282,6 +282,7 @@ const SearchForCase = () => {
     // Reset pagination
     setOffset(0);
     setTotalCount(0);
+    setSearchResults([]);
   };
 
   // Pagination handlers
@@ -419,11 +420,12 @@ const SearchForCase = () => {
         {/* Search Form - Only show if not "All" tab */}
         {selectedTab !== "All" && (
           <SearchForm
+            t={t}
             selectedTab={selectedTab}
             formState={{
               ...formState,
               handleClear,
-              handleSubmit,
+              handleSubmit: handleResetFiltersAndSearch,
             }}
             handleInputChange={handleInputChange}
             courtOptions={courtOptions}
