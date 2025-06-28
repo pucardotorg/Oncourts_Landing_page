@@ -15,6 +15,7 @@ interface FormStateWithHandlers extends FormState {
 }
 
 interface SearchFormProps {
+  t: (key: string) => string;
   selectedTab: string;
   formState: FormStateWithHandlers;
   handleInputChange: (field: string, value: string) => void;
@@ -22,6 +23,7 @@ interface SearchFormProps {
 }
 
 const SearchForm: React.FC<SearchFormProps> = ({
+  t,
   selectedTab,
   formState,
   handleInputChange,
@@ -107,14 +109,14 @@ const SearchForm: React.FC<SearchFormProps> = ({
           onClick={formState.handleClear}
           className={commonStyles.button.secondary}
         >
-          {newCaseSearchConfig.buttons.clear}
+          {t(newCaseSearchConfig.buttons.clear)}
         </button>
         <button
           onClick={formState.handleSubmit}
           disabled={!formValid}
           className={`${commonStyles.button.primary} ${!formValid && commonStyles.button.disabled}`}
         >
-          {newCaseSearchConfig.buttons.search}
+          {t(newCaseSearchConfig.buttons.search)}
         </button>
       </div>
     </div>

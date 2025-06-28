@@ -534,7 +534,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                         {t("PURPOSE")}
                       </span>
                       <span className="flex-1 text-[16px]">
-                        {caseResult.purpose}
+                        {t(caseResult.purpose || "")}
                       </span>
                     </div>
                     <div className="flex justify-between gap-4">
@@ -552,7 +552,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                         {t("CASE_STAGE")}
                       </span>
                       <span className="flex-1 text-[16px]">
-                        {caseResult.caseStage}
+                        {t(caseResult.caseStage || "")}
                       </span>
                     </div>
                     <div className="flex justify-between gap-4">
