@@ -369,9 +369,9 @@ export const isFormValid = (
     case "Advocate":
       return advocateSearchMethod === "Bar Code"
         ? !!barCode && !!stateCode && !!selectedYear
-        : !!advocateName;
+        : !!advocateName && advocateName.length > 2;
     case "Litigant":
-      return !!litigantName;
+      return !!litigantName && litigantName.length > 2;
     case "All":
       return true;
     default:
