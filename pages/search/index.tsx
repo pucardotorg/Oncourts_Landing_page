@@ -22,7 +22,7 @@ import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 const SearchForCase = () => {
   const { t } = useSafeTranslation();
-  const [selectedTab, setSelectedTab] = useState("Filing Number");
+  const [selectedTab, setSelectedTab] = useState("filing_number");
   const [showViewDetailedModal, setShowViewDetailedModal] = useState(false);
   const [selectedCase, setSelectedCase] = useState<CaseResult>({
     caseTitle: "",
@@ -66,7 +66,7 @@ const SearchForCase = () => {
     selectedCaseType: "",
     code: "",
     cnrNumber: "",
-    advocateSearchMethod: "Bar Code", // Default search method
+    advocateSearchMethod: "bar_code", // Default search method
     barCode: "",
     stateCode: "",
     advocateName: "",
@@ -196,7 +196,7 @@ const SearchForCase = () => {
     setSearchResults([]);
 
     // Load initial data for "All" tab
-    if (tab === "All") {
+    if (tab === "all") {
       await fetchAllCases();
     }
   };
@@ -211,7 +211,7 @@ const SearchForCase = () => {
       results,
       totalCount: count,
       error,
-    } = await searchCases("All", { offset, limit });
+    } = await searchCases("all", { offset, limit });
 
     if (error) {
       setErrorNotification({
@@ -239,14 +239,14 @@ const SearchForCase = () => {
   const handleInputChange = (field: string, value: string) => {
     if (field === "advocateSearchMethod") {
       // When advocate search method changes, clear appropriate fields
-      if (value === "Bar Code") {
+      if (value === "bar_code") {
         // If switching to Bar Code, clear advocate name
         setFormState({
           ...formState,
           advocateSearchMethod: value,
           advocateName: "",
         });
-      } else if (value === "Advocate Name") {
+      } else if (value === "advocate_name") {
         // If switching to Advocate Name, clear bar code fields
         setFormState({
           ...formState,
@@ -267,19 +267,7 @@ const SearchForCase = () => {
 
   // Clear form
   const handleClear = () => {
-    setFormState({
-      caseNumber: "",
-      selectedYear: "",
-      selectedCourt: "",
-      selectedCaseType: "",
-      stateCode: "",
-      code: "",
-      cnrNumber: "",
-      advocateSearchMethod: "Bar Code",
-      barCode: "",
-      advocateName: "",
-      litigantName: "",
-    });
+    setFormState(defaultFormState);
     // Reset pagination
     setOffset(0);
     setTotalCount(0);
@@ -347,7 +335,7 @@ const SearchForCase = () => {
       setTotalCount(count);
 
       // Show toast if no results found for Advocate/Litigant tabs
-      if (results.length === 0 && !["All"].includes(selectedTab)) {
+      if (results.length === 0 && !["all"].includes(selectedTab)) {
         setErrorNotification({
           show: true,
           message: t("NO_RESULTS_FOUND"),
@@ -413,13 +401,14 @@ const SearchForCase = () => {
       <div>
         {/* Search Tabs */}
         <SearchTabs
+          t={t}
           selectedTab={selectedTab}
           onTabChange={handleTabChange}
           tabs={newCaseSearchConfig.tabs}
         />
 
         {/* Search Form - Only show if not "All" tab */}
-        {selectedTab !== "All" && (
+        {selectedTab !== "all" && (
           <SearchForm
             t={t}
             selectedTab={selectedTab}
@@ -433,7 +422,7 @@ const SearchForCase = () => {
           />
         )}
       </div>
-      {selectedTab === "All" && searchResults?.length > 0 && (
+      {selectedTab === "all" && searchResults?.length > 0 && (
         <div className={commonStyles.heading.accent}>
           {t("CHOOSE_FROM_FILTER_TO_SEARCH_CASES")}
         </div>
@@ -478,9 +467,9 @@ const SearchForCase = () => {
         </div>
       )}
       {/* Additional Filters */}
-      {(selectedTab === "All" ||
+      {(selectedTab === "all" ||
         (searchResults?.length > 0 &&
-          ["Advocate", "Litigant"].includes(selectedTab))) && (
+          ["advocate", "litigant"].includes(selectedTab))) && (
         <AdditionalFilters
           selectedTab={selectedTab}
           filterState={filterState}
@@ -494,7 +483,7 @@ const SearchForCase = () => {
       )}
 
       {/* Case Details Table with built-in pagination */}
-      {(selectedTab === "All" || searchResults?.length > 0) && (
+      {(selectedTab === "all" || searchResults?.length > 0) && (
         <CaseDetailsTable
           selectedTab={selectedTab}
           searchResults={searchResults}

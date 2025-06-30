@@ -28,8 +28,8 @@ const AdvocateForm: React.FC<AdvocateFormProps> = ({
   onNameChange,
 }) => {
   const radioOptions = [
-    { value: "Bar Code", label: "BAR_CODE" },
-    { value: "Advocate Name", label: "ADVOCATE_NAME" },
+    { id: "bar_code", label: "BAR_CODE" },
+    { id: "advocate_name", label: "ADVOCATE_NAME" },
   ];
 
   // Removed dropdown options for state code and barcode - using TextField instead
@@ -61,7 +61,7 @@ const AdvocateForm: React.FC<AdvocateFormProps> = ({
         inline={true}
       />
 
-      {advocateSearchMethod === "Bar Code" ? (
+      {advocateSearchMethod === "bar_code" ? (
         <div className="grid grid-cols-3 gap-4 mt-4">
           <TextField
             label="STATE_CODE"
