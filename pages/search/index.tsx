@@ -38,6 +38,7 @@ const SearchForCase = () => {
     courtName: "",
     cnrNumber: "",
     caseStage: "",
+    caseSubStage: "",
     advocates: [],
     litigants: [],
   });
@@ -79,7 +80,7 @@ const SearchForCase = () => {
     caseType: "",
     hearingDateFrom: "",
     hearingDateTo: "",
-    caseStage: "",
+    caseSubStage: "",
     caseStatus: "",
     yearOfFiling: "",
     caseTitle: "",

@@ -88,7 +88,7 @@ export const buildApiPayload = (
         yearOfFiling: filterState.yearOfFiling || undefined,
         hearingDateFrom: filterState.hearingDateFrom || undefined,
         hearingDateTo: filterState.hearingDateTo || undefined,
-        caseStage: filterState.caseStage || undefined,
+        caseSubStage: filterState.caseSubStage || undefined,
         caseStatus: filterState.caseStatus || undefined,
         caseTitle: filterState.caseTitle || undefined,
       }

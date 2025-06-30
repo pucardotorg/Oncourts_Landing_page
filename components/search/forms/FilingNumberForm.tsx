@@ -45,8 +45,8 @@ const FilingNumberForm: React.FC<FilingNumberFormProps> = ({
   return (
     <>
       <CustomDropdown
-        label="Court"
-        placeHolder="Select Court"
+        label="COURT"
+        placeHolder="SELECT_COURT"
         value={selectedCourt}
         onChange={onCourtChange}
         options={
@@ -59,10 +59,10 @@ const FilingNumberForm: React.FC<FilingNumberFormProps> = ({
         className="bg-white"
       />
 
-      <TextField label="Code" value={code} onChange={onCodeChange} required />
+      <TextField label="CODE" value={code} onChange={onCodeChange} required />
 
       <TextField
-        label="Filing Number"
+        label="FILING_NUMBER"
         value={caseNumber}
         onChange={onCaseNumberChange}
         maxLength={6}
@@ -70,8 +70,8 @@ const FilingNumberForm: React.FC<FilingNumberFormProps> = ({
       />
 
       <CustomDropdown
-        label="Year"
-        placeHolder="Select Year"
+        label="YEAR"
+        placeHolder="SELECT_YEAR"
         value={selectedYear}
         onChange={onYearChange}
         options={yearOptions}

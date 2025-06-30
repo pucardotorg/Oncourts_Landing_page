@@ -21,6 +21,7 @@ export interface CaseResult {
   courtName?: string;
   cnrNumber?: string;
   caseStage?: string;
+  caseSubStage?: string;
   advocates?: PartyInfo[];
   litigants?: PartyInfo[];
 }

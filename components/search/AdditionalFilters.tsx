@@ -155,8 +155,10 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
             <CustomDropdown
               label="CASE_STAGE"
               placeHolder="SELECT_CASE_STAGE"
-              value={localFilters.caseStage}
-              onChange={(value) => handleLocalFilterChange("caseStage", value)}
+              value={localFilters.caseSubStage}
+              onChange={(value) =>
+                handleLocalFilterChange("caseSubStage", value)
+              }
               options={
                 caseStageOptions?.map((stage: CaseStage) => ({
                   label: stage?.subStage || "",

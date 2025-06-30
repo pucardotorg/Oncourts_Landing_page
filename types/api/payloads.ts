@@ -8,7 +8,7 @@ export interface FilterCriteria {
   caseType?: string;
   hearingDateFrom?: string;
   hearingDateTo?: string;
-  caseStage?: string;
+  caseSubStage?: string;
   caseStatus?: string;
   yearOfFiling?: string;
 }
