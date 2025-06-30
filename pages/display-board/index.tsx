@@ -285,7 +285,7 @@ export default function DisplayBoard() {
               <th className="px-4 py-2 border-t border-b border-slate-200">
                 {t("PURPOSE")}
               </th>
-              <th className="px-4 py-2 border-t border-b border-slate-200">
+              <th className="px-6 py-2 border-t border-b border-slate-200">
                 {t("HEARING_STATUS")}
               </th>
             </tr>
@@ -342,7 +342,7 @@ export default function DisplayBoard() {
                   <td className="px-4 py-2 border-b border-slate-200">
                     {t(hearingItem?.hearingType)}
                   </td>
-                  <td className="px-4 py-2 border-b border-slate-200">
+                  <td className="min-w-[150px] px-4 py-2 border-b border-slate-200">
                     <span
                       className={`px-2 py-1 rounded text-sm font-medium ${getStatusStyle(hearingItem?.status)}`}
                     >
