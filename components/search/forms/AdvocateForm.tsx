@@ -53,7 +53,7 @@ const AdvocateForm: React.FC<AdvocateFormProps> = ({
     <div className="col-span-4">
       <RadioButton
         name="advocateSearchMethod"
-        label="Select Method :"
+        label="SELECT_METHOD"
         value={advocateSearchMethod}
         onChange={onMethodChange}
         options={radioOptions}
