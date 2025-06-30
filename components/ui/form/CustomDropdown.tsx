@@ -93,7 +93,7 @@ const CustomDropdown: React.FC<DropdownProps> = ({
           <span
             className={`block truncate ${!selectedOption ? "text-gray-400" : ""}`}
           >
-            {selectedOption ? selectedOption.label : t(placeHolder)}
+            {selectedOption ? t(selectedOption?.label) : t(placeHolder)}
           </span>
           <span className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2">
             <svg

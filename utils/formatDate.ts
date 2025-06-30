@@ -1,4 +1,6 @@
 export const formatDate = (dateStr?: string | number) => {
+  if (!dateStr) return "";
+
   try {
     const date = new Date(dateStr || "");
     return (
