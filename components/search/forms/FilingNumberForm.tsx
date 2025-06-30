@@ -52,7 +52,7 @@ const FilingNumberForm: React.FC<FilingNumberFormProps> = ({
         options={
           courtOptions?.map((court: CourtRoom) => ({
             label: court?.name || "",
-            value: court?.code || "",
+            value: court?.name || "",
           })) || []
         }
         required
