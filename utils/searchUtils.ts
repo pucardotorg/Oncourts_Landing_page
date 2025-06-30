@@ -150,7 +150,7 @@ export const buildApiPayload = (
         searchCaseCriteria: {
           searchType: "case_number" as const,
           caseNumberCriteria: {
-            // courtName: selectedCourt || "",
+            courtName: selectedCourt || "",
             caseType: selectedCaseType,
             caseNumber: processedCaseNumber,
             year: selectedYear,

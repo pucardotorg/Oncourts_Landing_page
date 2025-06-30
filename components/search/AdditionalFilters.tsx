@@ -106,7 +106,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
               options={
                 courtOptions?.map((court: CourtRoom) => ({
                   label: court?.name || "",
-                  value: court?.code || "",
+                  value: court?.name || "",
                 })) || []
               }
               className="bg-[#F8FAFC] border-[#94A3B8]"
