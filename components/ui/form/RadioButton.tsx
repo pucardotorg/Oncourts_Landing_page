@@ -2,7 +2,7 @@ import React from "react";
 import { useSafeTranslation } from "../../../hooks/useSafeTranslation";
 
 interface RadioOption {
-  value: string;
+  id: string;
   label: string;
 }
 
@@ -52,9 +52,9 @@ const RadioButton: React.FC<RadioButtonProps> = ({
             <input
               type="radio"
               name={name}
-              value={option.value}
-              checked={value === option.value}
-              onChange={() => onChange(option.value)}
+              value={option.id}
+              checked={value === option.id}
+              onChange={() => onChange(option.id)}
               className={`form-radio h-4 w-4 text-teal-600 ${
                 error ? "border-red-500" : "border-gray-300"
               }`}

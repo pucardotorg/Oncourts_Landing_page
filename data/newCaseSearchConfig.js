@@ -8,12 +8,12 @@ export const newCaseSearchConfig = {
 
   // Search tab configuration
   tabs: [
-    { id: "filing_number", label: "Filing Number" },
-    { id: "case_number", label: "Case Number" },
-    { id: "cnr_number", label: "CNR Number" },
-    { id: "advocate", label: "Advocate" },
-    { id: "litigant", label: "Litigant" },
-    { id: "all", label: "All" },
+    { id: "filing_number", label: "FILING_NUMBER" },
+    { id: "case_number", label: "CASE_NUMBER" },
+    { id: "cnr_number", label: "CNR_NUMBER" },
+    { id: "advocate", label: "ADVOCATE" },
+    { id: "litigant", label: "LITIGANT" },
+    { id: "all", label: "ALL" },
   ],
 
   // CNR Number form

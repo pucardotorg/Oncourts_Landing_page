@@ -94,9 +94,9 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
 
         <hr className="my-2 border-t border-[#CBD5E1]" />
 
-        {(selectedTab === "Advocate" ||
-          selectedTab === "Litigant" ||
-          selectedTab === "All") && (
+        {(selectedTab === "advocate" ||
+          selectedTab === "litigant" ||
+          selectedTab === "all") && (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
             <CustomDropdown
               label={"COURT_NAME"}

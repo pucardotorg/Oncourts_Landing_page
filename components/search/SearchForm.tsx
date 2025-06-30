@@ -34,14 +34,14 @@ const SearchForm: React.FC<SearchFormProps> = ({
   return (
     <div className={commonStyles.form.container}>
       <div className={commonStyles.form.grid}>
-        {selectedTab === "CNR Number" && (
+        {selectedTab === "cnr_number" && (
           <CNRNumberForm
             cnrNumber={formState.cnrNumber}
             onChange={(value) => handleInputChange("cnrNumber", value)}
           />
         )}
 
-        {selectedTab === "Advocate" && (
+        {selectedTab === "advocate" && (
           <AdvocateForm
             advocateSearchMethod={formState.advocateSearchMethod}
             barCode={formState.barCode}
@@ -58,14 +58,14 @@ const SearchForm: React.FC<SearchFormProps> = ({
           />
         )}
 
-        {selectedTab === "Litigant" && (
+        {selectedTab === "litigant" && (
           <LitigantForm
             litigantName={formState.litigantName}
             onChange={(value) => handleInputChange("litigantName", value)}
           />
         )}
 
-        {selectedTab === "Filing Number" && (
+        {selectedTab === "filing_number" && (
           <FilingNumberForm
             selectedCourt={formState.selectedCourt}
             code={formState.code}
@@ -81,7 +81,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
           />
         )}
 
-        {selectedTab === "Case Number" && (
+        {selectedTab === "case_number" && (
           <CaseNumberForm
             selectedCourt={formState.selectedCourt}
             selectedCaseType={formState.selectedCaseType}

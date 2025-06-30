@@ -114,7 +114,7 @@ export const buildApiPayload = (
 
   // Build payloads for each tab
   const payloadBuilders = {
-    "CNR Number": () => {
+    "cnr_number": () => {
       // Skip if CNR number is empty
       if (!cnrNumber) return undefined;
 
@@ -130,7 +130,7 @@ export const buildApiPayload = (
       };
     },
 
-    "Case Number": () => {
+    "case_number": () => {
       // Process caseNumber to get the actual number part if it contains a slash
       const processedCaseNumber = caseNumber?.split("/")?.[1] || caseNumber;
 
@@ -161,7 +161,7 @@ export const buildApiPayload = (
       };
     },
 
-    "Filing Number": () => {
+    "filing_number": () => {
       // Skip if there are no valid search fields
       if (!selectedCourt && !code && !caseNumber && !selectedYear) {
         return undefined;
@@ -184,8 +184,8 @@ export const buildApiPayload = (
       };
     },
 
-    Advocate: () => {
-      if (advocateSearchMethod === "Bar Code") {
+    "advocate": () => {
+      if (advocateSearchMethod === "bar_code") {
         // Skip if barCode is empty (required)
         if (!barCode) return undefined;
 
@@ -206,7 +206,7 @@ export const buildApiPayload = (
           ...filterProps,
           ...basePayload,
         };
-      } else if (advocateSearchMethod === "Advocate Name") {
+      } else if (advocateSearchMethod === "advocate_name") {
         // Skip if advocateName is empty (required)
         if (!advocateName) return undefined;
 
@@ -225,7 +225,7 @@ export const buildApiPayload = (
       return undefined;
     },
 
-    Litigant: () => {
+    "litigant": () => {
       // Skip if litigant name is empty
       if (!litigantName) return undefined;
 
@@ -241,7 +241,7 @@ export const buildApiPayload = (
       };
     },
 
-    All: () => ({
+    "all": () => ({
       searchCaseCriteria: {
         searchType: "all" as const,
       } as AllCriteria,
@@ -323,12 +323,12 @@ export const searchCases = async (
  */
 export const getTabConfig = (selectedTab: string) => {
   const tabConfigs = {
-    "CNR Number": newCaseSearchConfig.cnrNumber,
-    "Case Number": newCaseSearchConfig.caseNumber,
-    "Filing Number": newCaseSearchConfig.filingNumber,
-    Advocate: newCaseSearchConfig.advocate,
-    Litigant: newCaseSearchConfig.litigant,
-    All: newCaseSearchConfig.all,
+    "cnr_number": newCaseSearchConfig.cnrNumber,
+    "case_number": newCaseSearchConfig.caseNumber,
+    "filing_number": newCaseSearchConfig.filingNumber,
+    "advocate": newCaseSearchConfig.advocate,
+    "litigant": newCaseSearchConfig.litigant,
+    "all": newCaseSearchConfig.all,
   };
 
   return tabConfigs[selectedTab as keyof typeof tabConfigs] || {};
@@ -358,21 +358,21 @@ export const isFormValid = (
   const cnrNumberPattern = new RegExp(newCaseSearchConfig.cnrNumber.pattern);
 
   switch (selectedTab) {
-    case "CNR Number":
+    case "cnr_number":
       return cnrNumberPattern.test(cnrNumber || "");
-    case "Case Number":
+    case "case_number":
       return (
         !!caseNumber && !!selectedCourt && !!selectedCaseType && !!selectedYear
       );
-    case "Filing Number":
+    case "filing_number":
       return !!selectedCourt && !!code && !!selectedYear;
-    case "Advocate":
-      return advocateSearchMethod === "Bar Code"
+    case "advocate":
+      return advocateSearchMethod === "bar_code"
         ? !!barCode && !!stateCode && !!selectedYear
         : !!advocateName && advocateName.length > 2;
-    case "Litigant":
+    case "litigant":
       return !!litigantName && litigantName.length > 2;
-    case "All":
+    case "all":
       return true;
     default:
       return false;

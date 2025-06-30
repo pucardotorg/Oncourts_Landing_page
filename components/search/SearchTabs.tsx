@@ -1,12 +1,14 @@
 import React from "react";
 
 interface SearchTabsProps {
+  t: (key: string) => string;
   selectedTab: string;
   onTabChange: (tab: string) => void;
   tabs: { id: string; label: string }[];
 }
 
 const SearchTabs: React.FC<SearchTabsProps> = ({
+  t,
   selectedTab,
   onTabChange,
   tabs,
@@ -16,9 +18,9 @@ const SearchTabs: React.FC<SearchTabsProps> = ({
       {tabs.map((tab) => (
         <button
           key={tab.id}
-          onClick={() => onTabChange(tab.label)}
+          onClick={() => onTabChange(tab.id)}
           className={`px-3 py-1 text-xl font-[Roboto] font-medium transition-colors rounded-md ${
-            selectedTab === tab.label
+            selectedTab === tab.id
               ? "bg-[#3A3A3A] text-white"
               : "text-[#64748B] hover:bg-gray-200"
           }`}
@@ -26,7 +28,7 @@ const SearchTabs: React.FC<SearchTabsProps> = ({
             minWidth: "100px",
           }}
         >
-          {tab.label}
+          {t(tab.label)}
         </button>
       ))}
     </div>

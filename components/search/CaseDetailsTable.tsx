@@ -64,7 +64,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
         <h2 className="font-['Baskerville'] font-semibold text-2xl leading-[31.72px] tracking-[0%] text-[#0F172A]">
         {t("CASE_DETAILS")}
         </h2>
-        {["Advocate", "Litigant", "All"].includes(selectedTab) && (
+        {["advocate", "litigant", "all"].includes(selectedTab) && (
           <div className="relative text-base flex gap-2">
             <input
               type="text"
@@ -153,7 +153,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
 
       {/* Pagination controls */}
       {totalCount > 0 &&
-        ["All", "Advocate", "Litigant"].includes(selectedTab) && (
+        ["all", "advocate", "litigant"].includes(selectedTab) && (
           <Pagination
             currentStartIndex={offset + 1}
             totalItems={totalCount}
