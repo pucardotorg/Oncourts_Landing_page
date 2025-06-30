@@ -1,11 +1,10 @@
 import { useMemo, useState } from "react";
-import FeaturesTable from "../../components/FeaturesTable";
+import FeaturesTable from "../../components/Utils/FeaturesTable";
 import { noticeBoardData } from "../../data/noticeBoard";
 import { noticeBoardConfig } from "../../data/noticeBoardConfig";
 import { Calendar, ListFilter, Search } from "lucide-react";
 
 const filterNoticeBoardData = (filters) => {
-  debugger;
   const now = new Date();
   let startDate: Date;
 

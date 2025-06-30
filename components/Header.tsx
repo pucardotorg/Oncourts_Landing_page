@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { svgIcons } from "../data/svgIcons.js";
+import LanguageSelector from "./Utils/ChangeLanguage";
 
 interface NavLinkProps {
   href: string;
@@ -170,7 +171,9 @@ const Header = () => {
                   { label: "FAQs & Contact Details", href: "/support/faqs" },
                 ]}
               />
+              <NavLink href="/display-board" label="Display Board" />
             </div>
+            <LanguageSelector className="ml-auto mr-2" />
 
             <div className="flex flex-row justify-center items-center p-[10px] gap-[10px] w-[200px] h-[50px] bg-white rounded-[8px]">
               <Link href="/search" passHref>

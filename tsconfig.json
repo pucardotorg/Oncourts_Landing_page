@@ -21,7 +21,8 @@
     "**/*.ts",
     "**/*.tsx",
     "pages/_document.js",
-    "pages/about/data.js"
+    "pages/about/data.js",
+    "data/newCaseSearchConfig.js"
   ],
   "exclude": ["node_modules"]
 }
