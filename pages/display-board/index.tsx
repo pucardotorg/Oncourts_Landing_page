@@ -1,7 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+
+interface HearingItem {
+  hearingNumber?: string;
+  caseTitle?: string;
+  advocate?: {
+    complainant?: string[];
+    accused?: string[];
+  };
+  hearingType?: string;
+  status?: string;
+  caseNumber?: string;
+}
 import { svgIcons } from "../../data/svgIcons";
 import { commonStyles } from "../../styles/commonStyles";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
+import { transformToCardData } from "../../components/Utils";
+import TableRowCard from "../../components/TableRow/TableRowCard";
+import { useMediaQuery } from "@mui/material";
 
 const formatDate = (dateStr: string) => {
   const [year, month, day] = dateStr.split("-");
@@ -18,6 +33,7 @@ const formattedDateV2 = (selectedDate: string) => {
 };
 
 export default function DisplayBoard() {
+  const isMobile = useMediaQuery("(max-width:640px)");
   const [selectedDate, setSelectedDate] = useState(() => {
     const now = new Date();
     const hour = now.getHours();
@@ -31,7 +47,7 @@ export default function DisplayBoard() {
     return now.toISOString().split("T")[0];
   });
 
-  const [hearingData, setHearingData] = useState([]);
+  const [hearingData, setHearingData] = useState<HearingItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [refreshedAt, setRefreshedAt] = useState("");
   const [searchValue, setSearchValue] = useState("");
@@ -169,14 +185,7 @@ export default function DisplayBoard() {
 
       const shouldStartAutoRefresh = () => {
         return hearingData?.some(
-          (hearingItem: {
-            hearingNumber: string;
-            caseTitle: string;
-            advocate: { complainant: string[]; accused: string[] };
-            hearingType: string;
-            status: string;
-            caseNumber: string;
-          }) => hearingItem.status !== "COMPLETED"
+          (hearingItem) => hearingItem.status !== "COMPLETED"
         );
       };
 
@@ -236,14 +245,7 @@ export default function DisplayBoard() {
 
     const isAllHearingsNotCompleted = () => {
       return hearingData?.some(
-        (hearingItem: {
-          hearingNumber: string;
-          caseTitle: string;
-          advocate: { complainant: string[]; accused: string[] };
-          hearingType: string;
-          status: string;
-          caseNumber: string;
-        }) => hearingItem.status !== "COMPLETED"
+        (hearingItem) => hearingItem.status !== "COMPLETED"
       );
     };
 
@@ -258,105 +260,129 @@ export default function DisplayBoard() {
     return false;
   }, [selectedDate, hearingData, error, searchValue]);
 
+  const advocates = useCallback((hearingItem) => {
+    return (
+      <React.Fragment>
+        <p data-tip data-for={`hearing-list`}>
+          {hearingItem?.advocate?.complainant?.length > 0 &&
+            `${hearingItem?.advocate?.complainant?.[0]} (C)${
+              hearingItem?.advocate?.complainant?.length === 2
+                ? " + 1 Other"
+                : hearingItem?.advocate?.complainant?.length > 2
+                  ? ` + ${hearingItem?.advocate?.complainant?.length - 1} others`
+                  : ""
+            }`}
+        </p>
+        <p data-tip data-for={`hearing-list`}>
+          {hearingItem?.advocate?.accused?.length > 0 &&
+            `${hearingItem?.advocate?.accused?.[0]} (A)${
+              hearingItem?.advocate?.accused?.length === 2
+                ? " + 1 Other"
+                : hearingItem?.advocate?.accused?.length > 2
+                  ? ` + ${hearingItem?.advocate?.accused?.length - 1} others`
+                  : ""
+            }`}
+        </p>
+      </React.Fragment>
+    );
+  }, []);
+
   const hearingsTable = useMemo(() => {
     return (
-      <div
-        className="overflow-auto rounded border"
-        style={{ maxHeight: "70vh" }}
-      >
-        <table className="min-w-full bg-white text-sm text-left">
-          <thead
-            className="bg-gray-100 text-gray-700"
-            style={{ position: "sticky", top: 0, color: " #0F172A" }}
-          >
-            <tr>
-              <th className="px-4 py-2 border-t border-b border-slate-200">
-                {t("SL_NO")}
-              </th>
-              <th className="px-4 py-2 border-t border-b border-slate-200">
-                {t("CASE_NAME")}
-              </th>
-              <th className="px-4 py-2 border-t border-b border-slate-200">
-                {t("ADVOCATES")}
-              </th>
-              <th className="px-4 py-2 border-t border-b border-slate-200">
-                {t("CASE_NUMBER")}
-              </th>
-              <th className="px-4 py-2 border-t border-b border-slate-200">
-                {t("PURPOSE")}
-              </th>
-              <th className="px-6 py-2 border-t border-b border-slate-200">
-                {t("HEARING_STATUS")}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {hearingData.map(
-              (
-                hearingItem: {
-                  hearingNumber: string;
-                  caseTitle: string;
-                  advocate: { complainant: string[]; accused: string[] };
-                  hearingType: string;
-                  status: string;
-                  caseNumber: string;
-                },
-                index
-              ) => (
+      <>
+        {/* Desktop/tablet view */}
+        <div
+          className="hidden sm:block overflow-auto rounded border"
+          style={{ maxHeight: "70vh" }}
+        >
+          <table className="min-w-full bg-white text-sm text-left">
+            <thead
+              className="bg-gray-100 text-gray-700"
+              style={{ position: "sticky", top: 0, color: "#0F172A" }}
+            >
+              <tr>
+                <th className="px-4 py-2 border-t border-b border-slate-200">
+                  {t("SL_NO")}
+                </th>
+                <th className="px-4 py-2 border-t border-b border-slate-200">
+                  {t("CASE_NAME")}
+                </th>
+                <th className="px-4 py-2 border-t border-b border-slate-200">
+                  {t("ADVOCATES")}
+                </th>
+                <th className="px-4 py-2 border-t border-b border-slate-200">
+                  {t("CASE_NUMBER")}
+                </th>
+                <th className="px-4 py-2 border-t border-b border-slate-200">
+                  {t("PURPOSE")}
+                </th>
+                <th className="px-6 py-2 border-t border-b border-slate-200">
+                  {t("HEARING_STATUS")}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {hearingData.map((hearingItem, index) => (
                 <tr
                   key={hearingItem?.hearingNumber || index}
-                  className="border-b"
-                  style={{ color: "#334155" }}
+                  className="border-b text-slate-700"
                 >
                   <td className="px-4 py-2 border-b border-slate-200">
                     {index + 1}
                   </td>
                   <td className="px-4 py-2 border-b border-slate-200">
-                    {t(hearingItem?.caseTitle)}
+                    {t(hearingItem.caseTitle || "")}
                   </td>
                   <td className="px-4 py-2 border-b border-slate-200">
-                    <p data-tip data-for={`hearing-list`}>
-                      {hearingItem?.advocate?.complainant?.length > 0 &&
-                        `${hearingItem?.advocate?.complainant?.[0]} (C)${
-                          hearingItem?.advocate?.complainant?.length === 2
-                            ? " + 1 Other"
-                            : hearingItem?.advocate?.complainant?.length > 2
-                              ? ` + ${hearingItem?.advocate?.complainant?.length - 1} others`
-                              : ""
-                        }`}
-                    </p>
-                    <p data-tip data-for={`hearing-list`}>
-                      {hearingItem?.advocate?.accused?.length > 0 &&
-                        `${hearingItem?.advocate?.accused?.[0]} (A)${
-                          hearingItem?.advocate?.accused?.length === 2
-                            ? " + 1 Other"
-                            : hearingItem?.advocate?.accused?.length > 2
-                              ? ` + ${hearingItem?.advocate?.accused?.length - 1} others`
-                              : ""
-                        }`}
-                    </p>
+                    {advocates(hearingItem)}
                   </td>
                   <td className="px-4 py-2 border-b border-slate-200">
-                    {t(hearingItem?.caseNumber)}
+                    {t(hearingItem.caseNumber || "")}
                   </td>
                   <td className="px-4 py-2 border-b border-slate-200">
-                    {t(hearingItem?.hearingType)}
+                    {t(hearingItem.hearingType || "")}
                   </td>
                   <td className="min-w-[150px] px-4 py-2 border-b border-slate-200">
                     <span
-                      className={`px-2 py-1 rounded text-sm font-medium ${getStatusStyle(hearingItem?.status)}`}
+                      className={`px-2 py-1 rounded text-sm font-medium ${getStatusStyle(hearingItem.status || "")}`}
                     >
-                      {t(hearingItem?.status)}
+                      {t(hearingItem.status || "")}
                     </span>
                   </td>
                 </tr>
-              )
-            )}
-          </tbody>
-        </table>
-      </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Mobile view */}
+        <div className="sm:hidden">
+          {hearingData.map((row, index) => {
+            const labelMap = {
+              hearingNumber: "Sl. No",
+              caseTitle: "Case Name",
+              advocates: "Advocates",
+              caseNumber: "Case Number",
+              hearingType: "Purpose",
+              status: "Status",
+            };
+
+            const flatRow: Record<string, string | JSX.Element> = {
+              hearingNumber: String(index + 1),
+              caseTitle: row.caseTitle || "",
+              advocates: advocates(row),
+              caseNumber: row.caseNumber || "",
+              hearingType: row.hearingType || "",
+              status: row.status || "",
+            };
+
+            const cardData = transformToCardData(flatRow, labelMap);
+            return <TableRowCard key={index} data={cardData} t={t} />;
+          })}
+        </div>
+      </>
     );
-  }, [hearingData, t]);
+  }, [hearingData, t, advocates]);
 
   const handleDownloadCauseList = async () => {
     try {
@@ -420,359 +446,530 @@ export default function DisplayBoard() {
     return false;
   }, [selectedDate]);
 
-  const isInProgressHearing: {
-    caseTitle: string | null;
-    caseNumber: string | null;
-  } = useMemo(() => {
+  const isInProgressHearing = useMemo(() => {
     const onGoingHearing = hearingData?.find(
-      (hearing: { status: string }) => hearing?.status === "IN_PROGRESS"
+      (hearing) => hearing.status === "IN_PROGRESS"
     );
     if (onGoingHearing) {
-      return onGoingHearing;
+      return {
+        caseTitle: onGoingHearing.caseTitle || null,
+        caseNumber: onGoingHearing.caseNumber || null,
+      };
     }
     return { caseTitle: null, caseNumber: null };
   }, [hearingData]);
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <h1
-        className="text-3xl font-bold text-center mb-2"
-        style={{
-          color: "#3A3A3A",
-          fontFamily: "Libre Baskerville, serif",
-          fontWeight: "500",
-          fontSize: "40px",
-        }}
-      >
-        {t("DISPLAY_BOARD")}
-      </h1>
-      <p
-        className="text-center text-gray-600 mb-6"
-        style={{
-          lineHeight: "40px",
-          color: "#334155",
-          fontWeight: "500",
-        }}
-      >
-        {t("DISPLAY_BOARD_SUB_HEADING")}
-      </p>
-
-      <div
-        className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gray-50 p-4 rounded-md border mb-6"
-        style={{ justifyContent: "center" }}
-      >
-        <div className="flex items-center gap-2">
-          <label
-            style={{
-              color: "#0F172A",
-              fontWeight: "700",
-            }}
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
+      {isMobile ? (
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
+          <h1
+            className="text-2xl sm:text-3xl font-bold text-center text-[#3A3A3A] mb-2"
+            style={{ fontFamily: "Libre Baskerville, serif" }}
           >
-            {t("VIEW_CASE_SCHEDULE_BY_DATE")}
-          </label>
-          <input
-            type="date"
-            className="border px-2 py-1 rounded"
-            value={selectedDate}
-            onChange={(e) => {
-              setSelectedDate(e.target.value);
-              setSearchValue("");
-            }}
-            style={{
-              width: "220px",
-              height: "32px",
-              borderRadius: "4px",
-              border: "1.44px solid #334155",
-              fontFamily: "Inter, sans-serif",
-              fontSize: "14px",
-              color: "#334155",
-            }}
-          />
-        </div>
-        {hearingData?.length > 0 && (
-          <div>
-            {showDownloadCauseListButton ? (
-              <React.Fragment>
-                <button
-                  style={{
-                    width: "190px",
-                    height: "34px",
-                    borderRadius: "4px",
-                    border: "1px solid #CBD5E1",
-                    backgroundColor: "rgb(243 244 246 / var(--tw-bg-opacity))",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    boxShadow:
-                      "0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.06)",
-                    transition: "box-shadow 0.2s ease, transform 0.2s ease",
-                  }}
-                  onClick={handleDownloadCauseList}
-                >
-                  <svgIcons.downloadIcon2 />
-                  <div
-                    style={{
-                      fontWeight: 700,
-                      fontSize: "13px",
-                      marginLeft: "5px",
-                      color: "#334155",
-                      opacity: 0.9,
-                    }}
-                  >
-                    {t("DOWNLOAD_CAUSELIST")}
-                  </div>
-                </button>
-              </React.Fragment>
-            ) : (
-              <div
-                className="cause-list-not-generated-message-section"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "5px",
-                  justifyContent: "center",
+            {t("DISPLAY_BOARD")}
+          </h1>
+          <p className="text-center text-gray-600 mb-6 text-sm sm:text-base font-medium leading-6 sm:leading-10">
+            {t("DISPLAY_BOARD_SUB_HEADING")}
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-4 bg-gray-50 p-4 rounded-md border mb-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full">
+              <div className="sm:hidden w-full flex justify-center mb-2">
+                <label className="font-bold text-slate-900 text-center">
+                  {t("VIEW_CASE_SCHEDULE_BY_DATE")}
+                </label>
+              </div>
+
+              <input
+                type="date"
+                className="border px-2 py-1 rounded w-full sm:w-[220px] text-sm text-slate-700"
+                value={selectedDate}
+                onChange={(e) => {
+                  setSelectedDate(e.target.value);
+                  setSearchValue("");
                 }}
-              >
-                <svgIcons.infoIcon />
-                <span style={{ maxWidth: "290px", fontSize: "14px" }}>
-                  {t("THE_CAUSE_LIST_FOR_THIS_DAY_WILL_BE_AVAILABLE_AFTER")}
-                  <span style={{ color: "#334155", fontWeight: "bold" }}>
-                    {" "}
-                    {t("5_PM_ON_PREVIOUS_DAY")}
-                  </span>
-                </span>
+              />
+            </div>
+
+            {hearingData?.length > 0 && (
+              <div className="w-full sm:w-auto flex justify-center">
+                {showDownloadCauseListButton ? (
+                  <button
+                    className="w-full sm:w-[190px] h-[34px] rounded border border-slate-300 bg-gray-100 shadow flex items-center justify-center"
+                    onClick={handleDownloadCauseList}
+                  >
+                    <svgIcons.downloadIcon2 />
+                    <span className="font-bold text-sm text-slate-700 ml-2">
+                      {t("DOWNLOAD_CAUSELIST")}
+                    </span>
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-2 text-sm text-slate-700 text-center max-w-xs mx-auto">
+                    <svgIcons.infoIcon />
+                    <span>
+                      {t("THE_CAUSE_LIST_FOR_THIS_DAY_WILL_BE_AVAILABLE_AFTER")}{" "}
+                      <span className="font-bold text-slate-800">
+                        {t("5_PM_ON_PREVIOUS_DAY")}
+                      </span>
+                    </span>
+                  </div>
+                )}
               </div>
             )}
           </div>
-        )}
-      </div>
 
-      <div
-        className="case-search-filter-section flex justify-between items-center mb-2"
-        style={{ height: "51px" }}
-      >
-        <h2 className="text-lg font-semibold" style={{ fontSize: "22px" }}>
-          {t("CASE_SCHEDULE_HEADING")} |{" "}
-          <span
-            className=""
-            style={{
-              color: "#0F766E",
-              fontFamily: "Inter, sans-serif",
-              fontSize: "22px",
-              fontWeight: 700,
-            }}
-          >
-            {formattedDateV2(selectedDate)}
-          </span>
-        </h2>
-        <div
-          className="search-section-main"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: "10px",
-          }}
-        >
-          <div
-            className="search-case-filter-input-section relative w-72"
-            style={{
-              width: "310px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <span
-              className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500"
-              style={{ paddingLeft: "20px" }}
-            >
-              <svgIcons.SearchIcon2 />
-            </span>
-            <span style={{ width: "100%", paddingLeft: "10px" }}>
-              <input
-                type="text"
-                placeholder="Search by case name, ID or advocate"
-                style={{ backgroundColor: "#F8FAFC" }}
-                className="h-[30px] border border-gray-300 bg-[#f8fbfd] text-gray-700 placeholder-gray-500 placeholder:text-[14px] text-slate-500 font-medium pl-10 pr-3 py-1.5 rounded-md w-full shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
-                onChange={(e) => setSearchValue(e.target.value)}
-                value={searchValue}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    fetchCasesForDate(selectedDate, searchValue);
-                  }
-                }}
-              />
-            </span>
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-4">
+            <h2 className="text-lg font-semibold text-center sm:text-left">
+              {t("CASE_SCHEDULE_HEADING")} |{" "}
+              <span className="text-teal-700 font-bold">
+                {formattedDateV2(selectedDate)}
+              </span>
+            </h2>
+
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+              <div className="relative w-full sm:w-[310px]">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                  <svgIcons.SearchIcon2 />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Search by case name, ID or advocate"
+                  className="h-[34px] border border-gray-300 bg-[#f8fbfd] text-slate-700 placeholder-gray-500 text-sm font-medium pl-10 pr-3 py-1.5 rounded-md w-full shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  style={{ backgroundColor: "#F8FAFC" }}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  value={searchValue}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      fetchCasesForDate(selectedDate, searchValue);
+                    }
+                  }}
+                />
+              </div>
+              {/* Mobile Search + Reset buttons */}
+              <div className="flex justify-between items-center gap-2 mt-3 sm:hidden">
+                <button
+                  className="w-[48%] h-[32px] text-sm font-bold border border-teal-700 text-teal-700 rounded"
+                  onClick={() => fetchCasesForDate(selectedDate, searchValue)}
+                >
+                  {t("COMMON_SEARCH")}
+                </button>
+                <button
+                  className="w-[48%] h-[32px] text-sm font-bold border border-slate-500 text-slate-500 rounded"
+                  onClick={() => {
+                    setSearchValue("");
+                    fetchCasesForDate(selectedDate, "");
+                  }}
+                >
+                  {t("RESET")}
+                </button>
+              </div>
+            </div>
           </div>
-          <button
-            style={{
-              border: "solid 1px #0F766E",
-              color: "#0F766E",
-              fontSize: "13px",
-              borderRadius: "5px",
-              height: "30px",
-              fontWeight: "700",
-              display: "flex",
-              alignItems: "center",
-              width: "60px",
-              justifyContent: "center",
-              cursor: "pointer",
-            }}
-            onClick={() => fetchCasesForDate(selectedDate, searchValue)}
-          >
-            {t("COMMON_SEARCH")}
-          </button>
-          <button
-            style={{
-              border: "solid 1px #64748B",
-              color: "#64748B",
-              fontSize: "13px",
-              borderRadius: "5px",
-              height: "30px",
-              fontWeight: "700",
-              display: "flex",
-              alignItems: "center",
-              width: "60px",
-              justifyContent: "center",
-              cursor: "pointer",
-            }}
-            onClick={() => {
-              setSearchValue("");
-              fetchCasesForDate(selectedDate, "");
-            }}
-          >
-            {t("RESET")}
-          </button>
-        </div>
-      </div>
-      {showRefreshSection && (
-        <div
-          className="flex items-center justify-between text-sm text-gray-600 mb-2"
-          style={{
-            borderTop: "solid 1px #CBD5E1",
-            borderBottom: "solid 1px #CBD5E1",
-            paddingTop: "7px",
-            paddingBottom: "7px",
-          }}
-        >
-          <div className="join-onoine-hearing-section flex items-center gap-2">
-            {isInProgressHearing?.caseNumber && (
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "5px" }}
-              >
-                <div className="join-hearing-online-button">
+
+          {showRefreshSection && (
+            <div className="flex flex-col sm:flex-row justify-between items-center text-sm text-gray-600 border-y border-slate-300 py-2 gap-2">
+              {isInProgressHearing?.caseNumber && (
+                <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
                   <button
-                    onClick={() => {
-                      if (hearingLink) {
-                        window.open(hearingLink, "_blank");
-                      } else {
-                        console.warn(t("HEARING_LINK_NOT_AVAILABLE"));
-                      }
-                    }}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      background: "#3A3A3A",
-                      color: "white",
-                      width: "175px",
-                      height: "32px",
-                      borderRadius: "3px",
-                    }}
+                    className="flex items-center justify-center bg-slate-800 text-white w-full sm:w-[175px] h-[32px] rounded text-sm font-medium"
+                    onClick={() =>
+                      hearingLink
+                        ? window.open(hearingLink, "_blank")
+                        : console.warn(t("HEARING_LINK_NOT_AVAILABLE"))
+                    }
                   >
-                    <span style={{ marginRight: "5px" }}>
+                    <span className="mr-2">
                       <svgIcons.videoCallIcon />
                     </span>
-                    <span style={{ fontWeight: "500", fontSize: "13px" }}>
-                      {t("JOIN_HEARING_ONLINE")}
-                    </span>
+                    {t("JOIN_HEARING_ONLINE")}
                   </button>
-                </div>
-
-                <div className="going-hearing-details">
-                  <span
-                    style={{
-                      color: "#334155",
-                      fontWeight: "700",
-                      fontFamily: "Inter, sans-serif",
-                    }}
-                  >
+                  <span className="text-slate-800 font-bold">
                     {`${isInProgressHearing?.caseTitle} ${isInProgressHearing?.caseNumber} hearing is on-going`}
                   </span>
                 </div>
+              )}
+              <div className="flex items-center gap-2">
+                <span
+                  className="cursor-pointer"
+                  onClick={() => fetchCasesForDate(selectedDate, searchValue)}
+                >
+                  {svgIcons.refreshIcon()}
+                </span>
+                {showRefreshTime && (
+                  <span className="text-blue-600 font-bold">{`${t("LAST_REFRESHED_ON")} ${refreshedAt}`}</span>
+                )}
+              </div>
+            </div>
+          )}
+
+          {loading ? (
+            <div className={commonStyles.loading.container}>
+              <div className={commonStyles.loading.spinner}></div>
+            </div>
+          ) : (
+            <>
+              {Boolean(error) ? (
+                <p className="text-red-600 font-bold text-sm p-2 border-t border-slate-300">
+                  {t(error)}
+                </p>
+              ) : hearingData?.length === 0 ? (
+                <p className="text-red-600 font-bold text-sm p-2 border-t border-slate-300">
+                  {t("NO_CASE_SCHEDULED_FOR_THIS_DATE")}
+                </p>
+              ) : (
+                hearingsTable
+              )}
+            </>
+          )}
+        </div>
+      ) : (
+        <div className="max-w-6xl mx-auto p-6">
+          <h1
+            className="text-3xl font-bold text-center mb-2"
+            style={{
+              color: "#3A3A3A",
+              fontFamily: "Libre Baskerville, serif",
+              fontWeight: "500",
+              fontSize: "40px",
+            }}
+          >
+            {t("DISPLAY_BOARD")}
+          </h1>
+          <p
+            className="text-center text-gray-600 mb-6"
+            style={{
+              lineHeight: "40px",
+              color: "#334155",
+              fontWeight: "500",
+            }}
+          >
+            {t("DISPLAY_BOARD_SUB_HEADING")}
+          </p>
+
+          <div
+            className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gray-50 p-4 rounded-md border mb-6"
+            style={{ justifyContent: "center" }}
+          >
+            <div className="flex items-center gap-2">
+              <label
+                style={{
+                  color: "#0F172A",
+                  fontWeight: "700",
+                }}
+              >
+                {t("VIEW_CASE_SCHEDULE_BY_DATE")}
+              </label>
+              <input
+                type="date"
+                className="border px-2 py-1 rounded"
+                value={selectedDate}
+                onChange={(e) => {
+                  setSelectedDate(e.target.value);
+                  setSearchValue("");
+                }}
+                style={{
+                  width: "220px",
+                  height: "32px",
+                  borderRadius: "4px",
+                  border: "1.44px solid #334155",
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: "14px",
+                  color: "#334155",
+                }}
+              />
+            </div>
+            {hearingData?.length > 0 && (
+              <div>
+                {showDownloadCauseListButton ? (
+                  <React.Fragment>
+                    <button
+                      style={{
+                        width: "190px",
+                        height: "34px",
+                        borderRadius: "4px",
+                        border: "1px solid #CBD5E1",
+                        backgroundColor:
+                          "rgb(243 244 246 / var(--tw-bg-opacity))",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        boxShadow:
+                          "0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.06)",
+                        transition: "box-shadow 0.2s ease, transform 0.2s ease",
+                      }}
+                      onClick={handleDownloadCauseList}
+                    >
+                      <svgIcons.downloadIcon2 />
+                      <div
+                        style={{
+                          fontWeight: 700,
+                          fontSize: "13px",
+                          marginLeft: "5px",
+                          color: "#334155",
+                          opacity: 0.9,
+                        }}
+                      >
+                        {t("DOWNLOAD_CAUSELIST")}
+                      </div>
+                    </button>
+                  </React.Fragment>
+                ) : (
+                  <div
+                    className="cause-list-not-generated-message-section"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <svgIcons.infoIcon />
+                    <span style={{ maxWidth: "290px", fontSize: "14px" }}>
+                      {t("THE_CAUSE_LIST_FOR_THIS_DAY_WILL_BE_AVAILABLE_AFTER")}
+                      <span style={{ color: "#334155", fontWeight: "bold" }}>
+                        {" "}
+                        {t("5_PM_ON_PREVIOUS_DAY")}
+                      </span>
+                    </span>
+                  </div>
+                )}
               </div>
             )}
           </div>
+
           <div
-            className="last-refreshed-time-section"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              opacity: "0.9",
-            }}
+            className="case-search-filter-section flex justify-between items-center mb-2"
+            style={{ height: "51px" }}
           >
-            <span
-              style={{ cursor: "pointer" }}
-              onClick={() => {
-                fetchCasesForDate(selectedDate, searchValue);
-              }}
-            >
-              {svgIcons.refreshIcon()}
-            </span>
-            {showRefreshTime && (
+            <h2 className="text-lg font-semibold" style={{ fontSize: "22px" }}>
+              {t("CASE_SCHEDULE_HEADING")} |{" "}
               <span
+                className=""
                 style={{
-                  color: "#2563EB",
-                  fontWeight: "700",
-                  marginLeft: "10px",
+                  color: "#0F766E",
                   fontFamily: "Inter, sans-serif",
+                  fontSize: "22px",
+                  fontWeight: 700,
                 }}
               >
-                {`${t("LAST_REFRESHED_ON")} ${refreshedAt}`}
+                {formattedDateV2(selectedDate)}
               </span>
-            )}
+            </h2>
+            <div
+              className="search-section-main"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "10px",
+              }}
+            >
+              <div
+                className="search-case-filter-input-section relative w-72"
+                style={{
+                  width: "310px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <span
+                  className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500"
+                  style={{ paddingLeft: "20px" }}
+                >
+                  <svgIcons.SearchIcon2 />
+                </span>
+                <span style={{ width: "100%", paddingLeft: "10px" }}>
+                  <input
+                    type="text"
+                    placeholder="Search by case name, ID or advocate"
+                    style={{ backgroundColor: "#F8FAFC" }}
+                    className="h-[30px] border border-gray-300 bg-[#f8fbfd] text-gray-700 placeholder-gray-500 placeholder:text-[14px] text-slate-500 font-medium pl-10 pr-3 py-1.5 rounded-md w-full shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    value={searchValue}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        fetchCasesForDate(selectedDate, searchValue);
+                      }
+                    }}
+                  />
+                </span>
+              </div>
+              <button
+                style={{
+                  border: "solid 1px #0F766E",
+                  color: "#0F766E",
+                  fontSize: "13px",
+                  borderRadius: "5px",
+                  height: "30px",
+                  fontWeight: "700",
+                  display: "flex",
+                  alignItems: "center",
+                  width: "60px",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                }}
+                onClick={() => fetchCasesForDate(selectedDate, searchValue)}
+              >
+                {t("COMMON_SEARCH")}
+              </button>
+              <button
+                style={{
+                  border: "solid 1px #64748B",
+                  color: "#64748B",
+                  fontSize: "13px",
+                  borderRadius: "5px",
+                  height: "30px",
+                  fontWeight: "700",
+                  display: "flex",
+                  alignItems: "center",
+                  width: "60px",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  setSearchValue("");
+                  fetchCasesForDate(selectedDate, "");
+                }}
+              >
+                {t("RESET")}
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+          {showRefreshSection && (
+            <div
+              className="flex items-center justify-between text-sm text-gray-600 mb-2"
+              style={{
+                borderTop: "solid 1px #CBD5E1",
+                borderBottom: "solid 1px #CBD5E1",
+                paddingTop: "7px",
+                paddingBottom: "7px",
+              }}
+            >
+              <div className="join-onoine-hearing-section flex items-center gap-2">
+                {isInProgressHearing?.caseNumber && (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                    }}
+                  >
+                    <div className="join-hearing-online-button">
+                      <button
+                        onClick={() => {
+                          if (hearingLink) {
+                            window.open(hearingLink, "_blank");
+                          } else {
+                            console.warn(t("HEARING_LINK_NOT_AVAILABLE"));
+                          }
+                        }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          background: "#3A3A3A",
+                          color: "white",
+                          width: "175px",
+                          height: "32px",
+                          borderRadius: "3px",
+                        }}
+                      >
+                        <span style={{ marginRight: "5px" }}>
+                          <svgIcons.videoCallIcon />
+                        </span>
+                        <span style={{ fontWeight: "500", fontSize: "13px" }}>
+                          {t("JOIN_HEARING_ONLINE")}
+                        </span>
+                      </button>
+                    </div>
 
-      {loading ? (
-        <div className={commonStyles.loading.container}>
-          <div className={commonStyles.loading.spinner}></div>
-        </div>
-      ) : (
-        <React.Fragment>
-          {" "}
-          {Boolean(error) ? (
-            <p
-              style={{
-                fontSize: "15px",
-                color: "#DC2626",
-                fontWeight: "700",
-                padding: "10px",
-                borderTop: "solid 1px  #CBD5E1",
-              }}
-              className=""
-            >
-              {t(error)}
-            </p>
-          ) : hearingData?.length === 0 ? (
-            <p
-              style={{
-                fontSize: "15px",
-                color: "#DC2626",
-                fontWeight: "700",
-                padding: "10px",
-                borderTop: "solid 1px  #CBD5E1",
-              }}
-              className=""
-            >
-              {t("NO_CASE_SCHEDULED_FOR_THIS_DATE")}
-            </p>
-          ) : (
-            hearingsTable
+                    <div className="going-hearing-details">
+                      <span
+                        style={{
+                          color: "#334155",
+                          fontWeight: "700",
+                          fontFamily: "Inter, sans-serif",
+                        }}
+                      >
+                        {`${isInProgressHearing?.caseTitle} ${isInProgressHearing?.caseNumber} hearing is on-going`}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div
+                className="last-refreshed-time-section"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  opacity: "0.9",
+                }}
+              >
+                <span
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    fetchCasesForDate(selectedDate, searchValue);
+                  }}
+                >
+                  {svgIcons.refreshIcon()}
+                </span>
+                {showRefreshTime && (
+                  <span
+                    style={{
+                      color: "#2563EB",
+                      fontWeight: "700",
+                      marginLeft: "10px",
+                      fontFamily: "Inter, sans-serif",
+                    }}
+                  >
+                    {`${t("LAST_REFRESHED_ON")} ${refreshedAt}`}
+                  </span>
+                )}
+              </div>
+            </div>
           )}
-        </React.Fragment>
+
+          {loading ? (
+            <div className={commonStyles.loading.container}>
+              <div className={commonStyles.loading.spinner}></div>
+            </div>
+          ) : (
+            <React.Fragment>
+              {" "}
+              {Boolean(error) ? (
+                <p
+                  style={{
+                    fontSize: "15px",
+                    color: "#DC2626",
+                    fontWeight: "700",
+                    padding: "10px",
+                    borderTop: "solid 1px  #CBD5E1",
+                  }}
+                  className=""
+                >
+                  {t(error)}
+                </p>
+              ) : hearingData?.length === 0 ? (
+                <p
+                  style={{
+                    fontSize: "15px",
+                    color: "#DC2626",
+                    fontWeight: "700",
+                    padding: "10px",
+                    borderTop: "solid 1px  #CBD5E1",
+                  }}
+                  className=""
+                >
+                  {t("NO_CASE_SCHEDULED_FOR_THIS_DATE")}
+                </p>
+              ) : (
+                hearingsTable
+              )}
+            </React.Fragment>
+          )}
+        </div>
       )}
     </div>
   );
