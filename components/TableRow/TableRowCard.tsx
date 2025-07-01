@@ -1,41 +1,63 @@
 import React from "react";
 
 interface TableRowCardProps {
-  data: Record<string, string | JSX.Element>; // supports string or JSX
   t: (key: string) => string;
+  caseIndex: number;
+  data: Record<string, string | JSX.Element>;
+  onActionClick?: () => void;
 }
 
-const TableRowCard: React.FC<TableRowCardProps> = ({ data, t }) => {
+const TableRowCard: React.FC<TableRowCardProps> = ({
+  t,
+  caseIndex,
+  data,
+  onActionClick,
+}) => {
   const entries = Object.entries(data);
 
+  const caseTitle = entries.find(([key]) => key === "CASE_TITLE");
+
   return (
-    <div className="rounded-md border border-slate-200 bg-white p-4 mb-3 shadow-sm w-full text-sm text-slate-700">
-      {/* Serial number on top */}
-      {entries.map(([key, value]) =>
-        key === "Sl. No" ? (
-          <div
-            key={key}
-            className="text-base font-bold text-slate-800 mb-3 border-b"
-          >
-            {value}
-          </div>
-        ) : null
+    <div className="font-[Baskerville] rounded-md border border-slate-200 bg-white p-5 mb-6 shadow-sm w-full">
+      {caseTitle && (
+        <div
+          key={"CASE_TITLE"}
+          className="pb-2 mb-4 flex gap-2 font-semibold text-[18px] text-[#0F172A] italic text-left border-b"
+        >
+          <span>{`${caseIndex + 1}.`}</span>
+          <span>{caseTitle[1]}</span>
+        </div>
       )}
 
-      {/* All other key-value pairs */}
-      {entries
-        .filter(([key]) => key !== "Sl. No")
-        .map(([key, value]) => (
-          <div
-            key={key}
-            className="flex justify-between py-1 border-b last:border-none"
-          >
-            <span className="font-bold text-slate-500">{t(key)}</span>
-            <span className="text-slate-700 text-right max-w-[55%] break-words">
-              {typeof value === "string" ? t(value) : value}
-            </span>
-          </div>
-        ))}
+      <div className="grid gap-4">
+        {entries
+          .filter(([key]) => key !== "CASE_TITLE")
+          .map(([key, value]) => (
+            <div key={key} className="grid grid-cols-2">
+              <div className="font-semibold text-[16px] text-left text-[#0F172A]">
+                {t(key)}
+              </div>
+              <div className="font-[Roboto] bg-white text-right text-[14px] text-[#334155] break-words">
+                {key === "ACTION" ? (
+                  <button
+                    className="p-2 font-medium rounded-md border-2 hover:text-teal-900"
+                    onClick={() => {
+                      if (onActionClick) {
+                        onActionClick();
+                      }
+                    }}
+                  >
+                    {typeof value === "string" ? t(value) : value}
+                  </button>
+                ) : typeof value === "string" ? (
+                  <span className="font-base">{t(value)}</span>
+                ) : (
+                  value
+                )}
+              </div>
+            </div>
+          ))}
+      </div>
     </div>
   );
 };

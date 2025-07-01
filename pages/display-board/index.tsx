@@ -359,16 +359,14 @@ export default function DisplayBoard() {
         <div className="sm:hidden">
           {hearingData.map((row, index) => {
             const labelMap = {
-              hearingNumber: "Sl. No",
-              caseTitle: "Case Name",
-              advocates: "Advocates",
-              caseNumber: "Case Number",
-              hearingType: "Purpose",
-              status: "Status",
+              caseTitle: "CASE_TITLE",
+              advocates: "ADVOCATES",
+              caseNumber: "CASE_NUMBER",
+              hearingType: "PURPOSE",
+              status: "HEARING_STATUS",
             };
 
             const flatRow: Record<string, string | JSX.Element> = {
-              hearingNumber: String(index + 1),
               caseTitle: row.caseTitle || "",
               advocates: advocates(row),
               caseNumber: row.caseNumber || "",
@@ -377,7 +375,14 @@ export default function DisplayBoard() {
             };
 
             const cardData = transformToCardData(flatRow, labelMap);
-            return <TableRowCard key={index} data={cardData} t={t} />;
+            return (
+              <TableRowCard
+                t={t}
+                key={index}
+                caseIndex={index}
+                data={cardData}
+              />
+            );
           })}
         </div>
       </>

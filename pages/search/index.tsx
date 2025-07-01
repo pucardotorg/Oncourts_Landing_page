@@ -20,6 +20,8 @@ import { commonStyles, animations } from "../../styles/commonStyles";
 import DetailedViewModal from "../../components/search/DetailedViewModal";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import { useMediaQuery } from "@mui/material";
+import TableRowCard from "../../components/TableRow/TableRowCard";
+import { transformToCardData } from "../../components/Utils";
 
 const SearchForCase = () => {
   const { t } = useSafeTranslation();
@@ -488,7 +490,39 @@ const SearchForCase = () => {
         )}
 
       {/* Case Details Table with built-in pagination */}
-      {(selectedTab === "all" || searchResults?.length > 0) && (
+      {isMobile &&
+        (selectedTab === "all" || searchResults?.length > 0) &&
+        searchResults?.map((caseResult, index) => {
+          // Transform CaseResult to the format expected by TableRowCard
+          const labelMap = {
+            caseTitle: "CASE_TITLE",
+            caseNumber: "CASE_NUMBER",
+            nextHearingDate: "NEXT_HEARING_DATE",
+            purpose: "PURPOSE",
+            actions: "ACTION",
+          };
+
+          const flatRow: Record<string, string | JSX.Element> = {
+            caseTitle: caseResult.caseTitle || "",
+            caseNumber: caseResult.stNumber || caseResult.cmpNumber || "",
+            nextHearingDate: caseResult.nextHearingDate || "",
+            purpose: caseResult.purpose || "",
+            actions: "VIEW_DETAILS",
+          };
+
+          const cardData = transformToCardData(flatRow, labelMap);
+
+          return (
+            <TableRowCard
+              t={t}
+              key={index}
+              caseIndex={index}
+              data={cardData}
+              onActionClick={() => handleViewCaseDetails(caseResult)}
+            />
+          );
+        })}
+      {!isMobile && (selectedTab === "all" || searchResults?.length > 0) && (
         <CaseDetailsTable
           selectedTab={selectedTab}
           searchResults={searchResults}
