@@ -19,9 +19,11 @@ import { newCaseSearchConfig } from "../../data/newCaseSearchConfig";
 import { commonStyles, animations } from "../../styles/commonStyles";
 import DetailedViewModal from "../../components/search/DetailedViewModal";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
+import { useMediaQuery } from "@mui/material";
 
 const SearchForCase = () => {
   const { t } = useSafeTranslation();
+  const isMobile = useMediaQuery("(max-width:640px)");
   const [selectedTab, setSelectedTab] = useState("filing_number");
   const [showViewDetailedModal, setShowViewDetailedModal] = useState(false);
   const [selectedCase, setSelectedCase] = useState<CaseResult>({
@@ -392,7 +394,7 @@ const SearchForCase = () => {
         <style dangerouslySetInnerHTML={{ __html: animations }} />
       </Head>
       <h1
-        className={commonStyles.heading.primary}
+        className={`text-center mb-6 font-libre text-gray-800 ${isMobile ? "text-4xl" : "text-6xl"}`}
         style={{ color: commonStyles.colors.text, fontFamily: "Baskerville" }}
       >
         {t(newCaseSearchConfig?.heading)}
@@ -402,6 +404,7 @@ const SearchForCase = () => {
         {/* Search Tabs */}
         <SearchTabs
           t={t}
+          isMobile={isMobile}
           selectedTab={selectedTab}
           onTabChange={handleTabChange}
           tabs={newCaseSearchConfig.tabs}
@@ -411,6 +414,7 @@ const SearchForCase = () => {
         {selectedTab !== "all" && (
           <SearchForm
             t={t}
+            isMobile={isMobile}
             selectedTab={selectedTab}
             formState={{
               ...formState,
@@ -467,20 +471,21 @@ const SearchForCase = () => {
         </div>
       )}
       {/* Additional Filters */}
-      {(selectedTab === "all" ||
-        (searchResults?.length > 0 &&
-          ["advocate", "litigant"].includes(selectedTab))) && (
-        <AdditionalFilters
-          selectedTab={selectedTab}
-          filterState={filterState}
-          onApplyFilters={handleFilterChangeAndSearch}
-          onResetFilters={handleResetFiltersAndSearch}
-          courtOptions={courtOptions}
-          caseStageOptions={caseStageOptions}
-          caseTypeOptions={caseTypeOptions}
-          caseStatusOptions={caseStatusOptions}
-        />
-      )}
+      {!isMobile &&
+        (selectedTab === "all" ||
+          (searchResults?.length > 0 &&
+            ["advocate", "litigant"].includes(selectedTab))) && (
+          <AdditionalFilters
+            selectedTab={selectedTab}
+            filterState={filterState}
+            onApplyFilters={handleFilterChangeAndSearch}
+            onResetFilters={handleResetFiltersAndSearch}
+            courtOptions={courtOptions}
+            caseStageOptions={caseStageOptions}
+            caseTypeOptions={caseTypeOptions}
+            caseStatusOptions={caseStatusOptions}
+          />
+        )}
 
       {/* Case Details Table with built-in pagination */}
       {(selectedTab === "all" || searchResults?.length > 0) && (

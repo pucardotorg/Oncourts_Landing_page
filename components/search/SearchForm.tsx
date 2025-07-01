@@ -16,6 +16,7 @@ interface FormStateWithHandlers extends FormState {
 
 interface SearchFormProps {
   t: (key: string) => string;
+  isMobile: boolean;
   selectedTab: string;
   formState: FormStateWithHandlers;
   handleInputChange: (field: string, value: string) => void;
@@ -24,6 +25,7 @@ interface SearchFormProps {
 
 const SearchForm: React.FC<SearchFormProps> = ({
   t,
+  isMobile,
   selectedTab,
   formState,
   handleInputChange,
@@ -31,6 +33,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
 }) => {
   // Get form validation from our utility function
   const formValid = isFormValid(selectedTab, formState);
+
   return (
     <div className={commonStyles.form.container}>
       <div className={commonStyles.form.grid}>
@@ -104,17 +107,27 @@ const SearchForm: React.FC<SearchFormProps> = ({
       <hr className="my-6 border-t border-gray-200" />
 
       {/* Action Buttons */}
-      <div className="font-[Baskerville] font-medium flex justify-end col-span-full md:col-span-2 lg:col-span-4 gap-4">
+      <div
+        className={`font-[Baskerville] font-medium 
+          ${isMobile ? "grid grid-cols-2 gap-2" : "flex justify-end col-span-full md:col-span-2 lg:col-span-4 gap-4"}
+          `}
+      >
         <button
           onClick={formState.handleClear}
-          className={commonStyles.button.secondary}
+          className={`border border-gray-300 font-medium text-gray-700 hover:bg-gray-50 bg-white
+            ${isMobile ? "px-3 py-2 rounded-lg" : "px-20 py-2 text-lg rounded-md"}`}
         >
           {t(newCaseSearchConfig.buttons.clear)}
         </button>
         <button
           onClick={formState.handleSubmit}
           disabled={!formValid}
-          className={`${commonStyles.button.primary} ${!formValid && commonStyles.button.disabled}`}
+          className={`border border-transparent shadow-sm font-medium text-white bg-[#0F766E] hover:bg-teal-700 focus:outline-none
+             ${
+               isMobile
+                 ? "px-3 py-2 rounded-lg"
+                 : "px-16 py-2 text-lg rounded-md"
+             } ${!formValid && commonStyles.button.disabled}`}
         >
           {t(newCaseSearchConfig.buttons.search)}
         </button>
