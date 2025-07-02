@@ -501,7 +501,7 @@ export default function DisplayBoard() {
               <div className="w-full sm:w-auto flex justify-center">
                 {showDownloadCauseListButton ? (
                   <button
-                    className="w-full sm:w-[190px] h-[34px] rounded border border-slate-300 bg-gray-100 shadow flex items-center justify-center"
+                    className="w-[60%] sm:w-[190px] h-[34px] rounded border border-slate-300 bg-gray-100 shadow flex items-center justify-center"
                     onClick={handleDownloadCauseList}
                   >
                     <svgIcons.downloadIcon2 />
@@ -552,15 +552,15 @@ export default function DisplayBoard() {
                 />
               </div>
               {/* Mobile Search + Reset buttons */}
-              <div className="flex justify-between items-center gap-2 mt-3 sm:hidden">
+              <div className="flex justify-center items-center gap-2 mt-3 sm:hidden">
                 <button
-                  className="w-[48%] h-[32px] text-sm font-bold border border-teal-700 text-teal-700 rounded"
+                  className="w-[25%] h-[32px] text-sm font-bold border border-teal-700 text-teal-700 rounded"
                   onClick={() => fetchCasesForDate(selectedDate, searchValue)}
                 >
                   {t("COMMON_SEARCH")}
                 </button>
                 <button
-                  className="w-[48%] h-[32px] text-sm font-bold border border-slate-500 text-slate-500 rounded"
+                  className="w-[25%] h-[32px] text-sm font-bold border border-slate-500 text-slate-500 rounded"
                   onClick={() => {
                     setSearchValue("");
                     fetchCasesForDate(selectedDate, "");
@@ -577,7 +577,7 @@ export default function DisplayBoard() {
               {isInProgressHearing?.caseNumber && (
                 <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
                   <button
-                    className="flex items-center justify-center bg-slate-800 text-white w-full sm:w-[175px] h-[32px] rounded text-sm font-medium"
+                    className="flex items-center justify-center bg-slate-800 text-white w-[60%] h-[32px] rounded text-sm font-medium"
                     onClick={() =>
                       hearingLink
                         ? window.open(hearingLink, "_blank")
