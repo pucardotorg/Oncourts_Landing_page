@@ -73,7 +73,10 @@ const CaseNumberForm: React.FC<CaseNumberFormProps> = ({
       <TextField
         label="CASE_NUMBER"
         value={caseNumber}
-        onChange={onCaseNumberChange}
+        onChange={(value) => {
+          const digitsOnly = value.replace(/\D/g, "");
+          onCaseNumberChange(digitsOnly);
+        }}
         required
       />
 

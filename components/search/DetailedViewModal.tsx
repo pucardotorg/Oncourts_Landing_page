@@ -312,6 +312,9 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
       | "accusedAdvocates"
   ) => {
     const visibleItems = show ? list : list.slice(0, 2);
+    if (visibleItems.length === 0) {
+      return <p className="text-[16px] font-normal">NA</p>;
+    }
     return (
       <>
         {visibleItems.map((item, idx) => (
