@@ -26,7 +26,6 @@ const FilingNumberForm: React.FC<FilingNumberFormProps> = ({
   onYearChange,
   courtOptions,
 }) => {
-
   // Generate years from 2024 to current year
   const generateYearOptions = (): string[] => {
     const startYear = 2024;
@@ -64,7 +63,10 @@ const FilingNumberForm: React.FC<FilingNumberFormProps> = ({
       <TextField
         label="FILING_NUMBER"
         value={caseNumber}
-        onChange={onCaseNumberChange}
+        onChange={(value) => {
+          const digitsOnly = value.replace(/\D/g, "");
+          onCaseNumberChange(digitsOnly);
+        }}
         maxLength={6}
         required
       />
