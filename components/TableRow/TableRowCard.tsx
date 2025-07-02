@@ -40,7 +40,7 @@ const TableRowCard: React.FC<TableRowCardProps> = ({
               <div className="font-[Roboto] bg-white text-right text-[14px] text-[#334155] break-words">
                 {key === "ACTION" ? (
                   <button
-                    className="p-2 font-medium rounded-md border-2 hover:text-teal-900"
+                    className="p-2 font-[Inter] font-medium rounded-md border-2 hover:text-teal-900"
                     onClick={() => {
                       if (onActionClick) {
                         onActionClick();

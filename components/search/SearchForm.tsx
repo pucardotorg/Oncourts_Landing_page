@@ -36,72 +36,68 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
   return (
     <div className={commonStyles.form.container}>
-      <div className={commonStyles.form.grid}>
-        {selectedTab === "cnr_number" && (
-          <CNRNumberForm
-            cnrNumber={formState.cnrNumber}
-            onChange={(value) => handleInputChange("cnrNumber", value)}
-          />
-        )}
+      {selectedTab === "cnr_number" && (
+        <CNRNumberForm
+          cnrNumber={formState.cnrNumber}
+          onChange={(value) => handleInputChange("cnrNumber", value)}
+        />
+      )}
 
-        {selectedTab === "advocate" && (
-          <AdvocateForm
-            advocateSearchMethod={formState.advocateSearchMethod}
-            barCode={formState.barCode}
-            selectedYear={formState.selectedYear}
-            stateCode={formState.stateCode}
-            advocateName={formState.advocateName}
-            onMethodChange={(value) =>
-              handleInputChange("advocateSearchMethod", value)
-            }
-            onBarCodeChange={(value) => handleInputChange("barCode", value)}
-            onStateCodeChange={(value) => handleInputChange("stateCode", value)}
-            onYearChange={(value) => handleInputChange("selectedYear", value)}
-            onNameChange={(value) => handleInputChange("advocateName", value)}
-          />
-        )}
+      {selectedTab === "advocate" && (
+        <AdvocateForm
+          isMobile={isMobile}
+          advocateSearchMethod={formState.advocateSearchMethod}
+          barCode={formState.barCode}
+          selectedYear={formState.selectedYear}
+          stateCode={formState.stateCode}
+          advocateName={formState.advocateName}
+          onMethodChange={(value) =>
+            handleInputChange("advocateSearchMethod", value)
+          }
+          onBarCodeChange={(value) => handleInputChange("barCode", value)}
+          onStateCodeChange={(value) => handleInputChange("stateCode", value)}
+          onYearChange={(value) => handleInputChange("selectedYear", value)}
+          onNameChange={(value) => handleInputChange("advocateName", value)}
+        />
+      )}
 
-        {selectedTab === "litigant" && (
-          <LitigantForm
-            litigantName={formState.litigantName}
-            onChange={(value) => handleInputChange("litigantName", value)}
-          />
-        )}
+      {selectedTab === "litigant" && (
+        <LitigantForm
+          isMobile={isMobile}
+          litigantName={formState.litigantName}
+          onChange={(value) => handleInputChange("litigantName", value)}
+        />
+      )}
 
-        {selectedTab === "filing_number" && (
-          <FilingNumberForm
-            selectedCourt={formState.selectedCourt}
-            code={formState.code}
-            caseNumber={formState.caseNumber}
-            selectedYear={formState.selectedYear}
-            onCourtChange={(value) => handleInputChange("selectedCourt", value)}
-            onCodeChange={(value) => handleInputChange("code", value)}
-            onCaseNumberChange={(value) =>
-              handleInputChange("caseNumber", value)
-            }
-            onYearChange={(value) => handleInputChange("selectedYear", value)}
-            courtOptions={courtOptions}
-          />
-        )}
+      {selectedTab === "filing_number" && (
+        <FilingNumberForm
+          selectedCourt={formState.selectedCourt}
+          code={formState.code}
+          caseNumber={formState.caseNumber}
+          selectedYear={formState.selectedYear}
+          onCourtChange={(value) => handleInputChange("selectedCourt", value)}
+          onCodeChange={(value) => handleInputChange("code", value)}
+          onCaseNumberChange={(value) => handleInputChange("caseNumber", value)}
+          onYearChange={(value) => handleInputChange("selectedYear", value)}
+          courtOptions={courtOptions}
+        />
+      )}
 
-        {selectedTab === "case_number" && (
-          <CaseNumberForm
-            selectedCourt={formState.selectedCourt}
-            selectedCaseType={formState.selectedCaseType}
-            caseNumber={formState.caseNumber}
-            selectedYear={formState.selectedYear}
-            onCourtChange={(value) => handleInputChange("selectedCourt", value)}
-            onCaseTypeChange={(value) =>
-              handleInputChange("selectedCaseType", value)
-            }
-            onCaseNumberChange={(value) =>
-              handleInputChange("caseNumber", value)
-            }
-            onYearChange={(value) => handleInputChange("selectedYear", value)}
-            courtOptions={courtOptions}
-          />
-        )}
-      </div>
+      {selectedTab === "case_number" && (
+        <CaseNumberForm
+          selectedCourt={formState.selectedCourt}
+          selectedCaseType={formState.selectedCaseType}
+          caseNumber={formState.caseNumber}
+          selectedYear={formState.selectedYear}
+          onCourtChange={(value) => handleInputChange("selectedCourt", value)}
+          onCaseTypeChange={(value) =>
+            handleInputChange("selectedCaseType", value)
+          }
+          onCaseNumberChange={(value) => handleInputChange("caseNumber", value)}
+          onYearChange={(value) => handleInputChange("selectedYear", value)}
+          courtOptions={courtOptions}
+        />
+      )}
 
       {/* Horizontal line break */}
       <hr className="my-6 border-t border-gray-200" />
