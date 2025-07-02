@@ -3,9 +3,9 @@ import { FiSearch } from "react-icons/fi";
 import { CaseResult, FilterState } from "../../types";
 import Pagination from "../Utils/Pagination";
 import { formatDate } from "../../utils/formatDate";
-import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 interface CaseDetailsTableProps {
+  t: (key: string) => string;
   selectedTab: string;
   searchResults: CaseResult[];
   onViewCaseDetails: (caseResult: CaseResult) => void;
@@ -19,6 +19,7 @@ interface CaseDetailsTableProps {
 }
 
 const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
+  t,
   selectedTab,
   searchResults,
   onViewCaseDetails,
@@ -30,8 +31,6 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
   filterState,
   onSearch,
 }) => {
-  const {t} = useSafeTranslation();
-  
   // State for the case title search input
   const [caseTitleInput, setCaseTitleInput] = useState(
     filterState?.caseTitle || ""
@@ -62,7 +61,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
     <div className="mt-8">
       <div className="flex justify-between items-center mb-2">
         <h2 className="font-['Baskerville'] font-semibold text-2xl leading-[31.72px] tracking-[0%] text-[#0F172A]">
-        {t("CASE_DETAILS")}
+          {t("CASE_DETAILS")}
         </h2>
         {["advocate", "litigant", "all"].includes(selectedTab) && (
           <div className="relative text-base flex gap-2">
@@ -145,7 +144,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
         ) : (
           <div className="flex justify-center items-center p-8">
             <div className="text-xl font-[Roboto] font-medium text-gray-500">
-            {t("NO_RESULTS_FOUND")}
+              {t("NO_RESULTS_FOUND")}
             </div>
           </div>
         )}

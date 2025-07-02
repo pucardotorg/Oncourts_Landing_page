@@ -24,6 +24,7 @@ import TableRowCard from "../../components/TableRow/TableRowCard";
 import { transformToCardData } from "../../components/Utils";
 import { FiSearch } from "react-icons/fi";
 import MobileFilters from "../../components/search/MobileFilters";
+import Pagination from "../../components/Utils/Pagination";
 
 const SearchForCase = () => {
   const { t } = useSafeTranslation();
@@ -285,6 +286,10 @@ const SearchForCase = () => {
     if (offset + limit < totalCount) {
       setOffset(offset + limit);
       handleSubmit(); // Re-fetch with new offset
+      // Scroll to top of page
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 200);
     }
   };
 
@@ -292,6 +297,10 @@ const SearchForCase = () => {
     if (offset - limit >= 0) {
       setOffset(offset - limit);
       handleSubmit(); // Re-fetch with new offset
+      // Scroll to top of page
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 200);
     }
   };
 
@@ -587,8 +596,22 @@ const SearchForCase = () => {
             />
           );
         })}
+      {isMobile &&
+        totalCount > 0 &&
+        ["all", "advocate", "litigant"].includes(selectedTab) && (
+          <Pagination
+            currentStartIndex={offset + 1}
+            totalItems={totalCount}
+            itemsPerPage={limit}
+            onPrevPage={handlePrevPage}
+            onNextPage={handleNextPage}
+            isFirstPage={offset === 0}
+            isLastPage={offset + limit >= totalCount}
+          />
+        )}
       {!isMobile && (selectedTab === "all" || searchResults?.length > 0) && (
         <CaseDetailsTable
+          t={t}
           selectedTab={selectedTab}
           searchResults={searchResults}
           onViewCaseDetails={handleViewCaseDetails}
@@ -603,6 +626,7 @@ const SearchForCase = () => {
       )}
       {showViewDetailedModal && (
         <DetailedViewModal
+          isMobile={isMobile}
           tenantId={tenantId}
           onClose={() => setShowViewDetailedModal(false)}
           caseResult={selectedCase}
