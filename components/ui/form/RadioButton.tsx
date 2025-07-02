@@ -55,13 +55,13 @@ const RadioButton: React.FC<RadioButtonProps> = ({
               value={option.id}
               checked={value === option.id}
               onChange={() => onChange(option.id)}
-              className={`form-radio h-4 w-4 text-teal-600 ${
+              className={`form-radio h-4 w-4 text-teal-600 accent-[#334155] ${
                 error ? "border-red-500" : "border-gray-300"
               }`}
               disabled={disabled}
             />
             <span
-              className={`ml-2 text-base font-medium ${disabled ? "text-gray-500" : "text-[#334155]"}`}
+              className={`ml-2 text-lg font-medium ${disabled ? "text-gray-500" : "text-[#334155]"}`}
             >
               {t(option.label)}
             </span>
