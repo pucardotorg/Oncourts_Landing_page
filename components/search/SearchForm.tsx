@@ -36,12 +36,48 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
   return (
     <div className={commonStyles.form.container}>
-      {selectedTab === "cnr_number" && (
-        <CNRNumberForm
-          cnrNumber={formState.cnrNumber}
-          onChange={(value) => handleInputChange("cnrNumber", value)}
-        />
-      )}
+      <div className={commonStyles.form.grid}>
+        {selectedTab === "cnr_number" && (
+          <CNRNumberForm
+            cnrNumber={formState.cnrNumber}
+            onChange={(value) => handleInputChange("cnrNumber", value)}
+          />
+        )}
+
+        {selectedTab === "filing_number" && (
+          <FilingNumberForm
+            selectedCourt={formState.selectedCourt}
+            code={formState.code}
+            caseNumber={formState.caseNumber}
+            selectedYear={formState.selectedYear}
+            onCourtChange={(value) => handleInputChange("selectedCourt", value)}
+            onCodeChange={(value) => handleInputChange("code", value)}
+            onCaseNumberChange={(value) =>
+              handleInputChange("caseNumber", value)
+            }
+            onYearChange={(value) => handleInputChange("selectedYear", value)}
+            courtOptions={courtOptions}
+          />
+        )}
+
+        {selectedTab === "case_number" && (
+          <CaseNumberForm
+            selectedCourt={formState.selectedCourt}
+            selectedCaseType={formState.selectedCaseType}
+            caseNumber={formState.caseNumber}
+            selectedYear={formState.selectedYear}
+            onCourtChange={(value) => handleInputChange("selectedCourt", value)}
+            onCaseTypeChange={(value) =>
+              handleInputChange("selectedCaseType", value)
+            }
+            onCaseNumberChange={(value) =>
+              handleInputChange("caseNumber", value)
+            }
+            onYearChange={(value) => handleInputChange("selectedYear", value)}
+            courtOptions={courtOptions}
+          />
+        )}
+      </div>
 
       {selectedTab === "advocate" && (
         <AdvocateForm
@@ -66,36 +102,6 @@ const SearchForm: React.FC<SearchFormProps> = ({
           isMobile={isMobile}
           litigantName={formState.litigantName}
           onChange={(value) => handleInputChange("litigantName", value)}
-        />
-      )}
-
-      {selectedTab === "filing_number" && (
-        <FilingNumberForm
-          selectedCourt={formState.selectedCourt}
-          code={formState.code}
-          caseNumber={formState.caseNumber}
-          selectedYear={formState.selectedYear}
-          onCourtChange={(value) => handleInputChange("selectedCourt", value)}
-          onCodeChange={(value) => handleInputChange("code", value)}
-          onCaseNumberChange={(value) => handleInputChange("caseNumber", value)}
-          onYearChange={(value) => handleInputChange("selectedYear", value)}
-          courtOptions={courtOptions}
-        />
-      )}
-
-      {selectedTab === "case_number" && (
-        <CaseNumberForm
-          selectedCourt={formState.selectedCourt}
-          selectedCaseType={formState.selectedCaseType}
-          caseNumber={formState.caseNumber}
-          selectedYear={formState.selectedYear}
-          onCourtChange={(value) => handleInputChange("selectedCourt", value)}
-          onCaseTypeChange={(value) =>
-            handleInputChange("selectedCaseType", value)
-          }
-          onCaseNumberChange={(value) => handleInputChange("caseNumber", value)}
-          onYearChange={(value) => handleInputChange("selectedYear", value)}
-          courtOptions={courtOptions}
         />
       )}
 
