@@ -1,6 +1,8 @@
+import { API_ENDPOINTS } from '../../../../lib/config';
+
 export default async function handler(req, res) {
   const { year, type, offset = 0, limit = 10  } = req.query;
-  const url = `https://oncourts.kerala.gov.in/openapi/v1/kl/case/${year}/${type}?offset=${offset}&limit=${limit}`;
+  const url = API_ENDPOINTS.OPENAPI.CASE_BY_TYPE(year as string, type as string, offset as string, limit as string);
 
   try {
     const response = await fetch(url, {

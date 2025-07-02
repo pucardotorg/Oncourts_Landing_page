@@ -3,151 +3,29 @@ import { GA_MEASUREMENT_ID } from "./constants";
 
 const isProd = process.env.NODE_ENV === "production";
 
-
-/**
- * Robust mobile device detection function
- * @param options - Configuration options
- * @param options.includeTablets - Whether to consider tablets as mobile (default: true)
- * @param options.checkTouch - Whether to include touch capability check (default: true)
- * @param options.maxWidth - Maximum screen width to consider mobile (default: 768)
- * @returns Detection results with detailed information
- */
-const isMobileDevice = (options: { includeTablets?: boolean; checkTouch?: boolean; maxWidth?: number } = {}) => {
-  const {
-    includeTablets = true,
-    checkTouch = true,
-    maxWidth = 768
-  } = options;
-
-  // User Agent patterns for mobile devices
-  const mobilePatterns = [
-    /android/i,
-    /webos/i,
-    /iphone/i,
-    /ipad/i,
-    /ipod/i,
-    /blackberry/i,
-    /windows phone/i,
-    /mobile/i,
-    /opera mini/i,
-    /iemobile/i
-  ];
-
-  // Tablet-specific patterns
-  const tabletPatterns = [
-    /ipad/i,
-    /android(?!.*mobile)/i,
-    /tablet/i,
-    /kindle/i,
-    /silk/i,
-    /playbook/i
-  ];
-
-  const userAgent = navigator.userAgent || '';
-  
-  // Check user agent for mobile patterns
-  const isMobileUserAgent = mobilePatterns.some(pattern => pattern.test(userAgent));
-  
-  // Check user agent for tablet patterns
-  const isTabletUserAgent = tabletPatterns.some(pattern => pattern.test(userAgent));
-  
-  // Check screen dimensions
-  const screenWidth = window.screen.width;
-  const screenHeight = window.screen.height;
-  const isSmallScreen = Math.min(screenWidth, screenHeight) <= maxWidth;
-  
-  // Check viewport dimensions
-  const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
-  const isSmallViewport = viewportWidth <= maxWidth;
-  
-  // Check touch capability
-  const hasTouch = checkTouch && (
-    'ontouchstart' in window ||
-    navigator.maxTouchPoints > 0 ||
-    navigator.maxTouchPoints > 0
-  );
-  
-  // Check device pixel ratio (high DPI often indicates mobile)
-  // Removed unused variable
-  
-  // Check for mobile-specific APIs
-  const hasMobileAPIs = 'orientation' in window || 'DeviceOrientationEvent' in window;
-  
-  // Check CSS media queries support
-  let matchesMediaQuery = false;
-  if (window.matchMedia) {
-    matchesMediaQuery = window.matchMedia('(max-width: ' + maxWidth + 'px)').matches ||
-                       window.matchMedia('(pointer: coarse)').matches ||
-                       window.matchMedia('(hover: none)').matches;
-  }
-  
-  // Determine if it's a phone
-  const isPhone = isMobileUserAgent && !isTabletUserAgent && (isSmallScreen || isSmallViewport);
-  
-  // Determine if it's a tablet
-  const isTablet = isTabletUserAgent || (hasTouch && !isPhone && (screenWidth > maxWidth || screenHeight > maxWidth));
-  
-  // Final mobile determination
-  let isMobile: boolean;
-  if (includeTablets) {
-    isMobile = isPhone || isTablet;
-  } else {
-    isMobile = isPhone;
-  }
-  
-  // Fallback detection using multiple indicators
-  if (!isMobile && !isTablet) {
-    const mobileIndicators = [
-      isSmallScreen,
-      isSmallViewport,
-      hasTouch && hasMobileAPIs,
-      matchesMediaQuery
-    ].filter(Boolean).length;
-    
-    // If we have multiple mobile indicators, likely mobile
-    isMobile = mobileIndicators >= 2;
-  }
-  
-  // Determine device type
-  let deviceType: 'phone' | 'tablet' | 'desktop';
-  if (isPhone) {
-    deviceType = 'phone';
-  } else if (isTablet) {
-    deviceType = 'tablet';
-  } else {
-    deviceType = 'desktop';
-  }
-
-  return deviceType;
-}
-
 // Pageview tracking
 export const pageview = (url: string): void => {
-  if (isProd) {
-    // Determine the device type using the isMobileDevice function
-    const deviceType = isMobileDevice();
-
+  if(isProd) {
     // Only run this in production
-    window.gtag('config', GA_MEASUREMENT_ID, {
-      page_path: url,
-      device_type: deviceType, // Include device type in the tracking data
-    });
-  }
+      window.gtag('config', GA_MEASUREMENT_ID, {
+        page_path: url,
+      });
+    }
 };
 
-export const trackEvent = (eventName: string, eventValue: string | number | undefined, eventCategory: string,
-  extraParams?: Record<string, string | number | boolean | undefined | null>) => {
-  if (isProd) {
-    // Only run this in production
-    window.gtag('event', eventName, {
-      ...(eventValue && { value: eventValue }),
-      page_path: window.location.pathname,
-      ...(eventCategory && { event_category: eventCategory }),
-      ...(extraParams && { ...extraParams }),
-      device_type: isMobileDevice()
-    });
-  }
-};
+// // Event tracking
+// export const event = ({ action, category, label, value }: {
+//   action: string;
+//   category: string;
+//   label: string;
+//   value?: number;
+// }): void => {
+//   window.gtag('event', action, {
+//     event_category: category,
+//     event_label: label,
+//     value: value,
+//   });
+// };
 
 // Declare gtag for TypeScript
 declare global {

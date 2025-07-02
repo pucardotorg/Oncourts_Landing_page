@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
-import { contactInfo } from "../data/contactInfo";
-import { svgIcons } from "../data/svgIcons";
+import { contactInfo } from "../../data/contactInfo";
+import { svgIcons } from "../../data/svgIcons";
 
 export default function ContactPopup({ isOpen, onClose }) {
     const modalRef = useRef<HTMLDivElement | null>(null);

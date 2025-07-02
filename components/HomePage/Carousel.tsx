@@ -1,8 +1,10 @@
 import React from "react";
 import Image from "next/image";
-import { trackEvent } from "../../lib/gtag";
+import { APP_URLS } from "../../lib/config";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 const Carousel: React.FC = () => {
+  const { t } = useSafeTranslation();
   return (
     <div className="w-full relative">
       <Image
@@ -16,12 +18,8 @@ const Carousel: React.FC = () => {
 
       <div className="flex flex-wrap md:flex-nowrap gap-8 px-6 md:px-12 py-8 -mt-28 relative z-10">
         <a
-          href="https://oncourts.kerala.gov.in/ui/citizen/dristi/home/login"
+          href={APP_URLS.CITIZEN_DRISTI}
           className="flex-1 flex items-center pl-6 rounded-[10px] border border-teal bg-white text-teal shadow-xl transition-colors duration-300 hover:bg-teal hover:text-white group"
-          onClick={() => {
-               trackEvent("login_as_advocate_or_litigant_click", undefined, "Homepage_Clicks")
-            }
-          }
           target="/"
         >
           <div className="relative w-[50px] h-[50px] mr-6">
@@ -45,7 +43,7 @@ const Carousel: React.FC = () => {
               className="block font-semibold text-base group-hover:text-white"
               style={{ fontSize: "22px" }}
             >
-              Login as Litigant/Advocate/Clerk
+              {t("Login as Litigant/Advocate/Clerk")}
             </span>
             <span className="block text-sm group-hover:text-white">
               To perform case-related actions and access case details and
@@ -64,12 +62,8 @@ const Carousel: React.FC = () => {
         </a>
 
         <a
-          href="https://oncourts.kerala.gov.in/ui/employee/user/login"
+          href={APP_URLS.EMPLOYEE_USER}
           className="flex-1 flex items-center pl-6 rounded-[10px] border border-teal bg-white text-teal shadow-xl transition-colors duration-300 hover:bg-teal hover:text-white group"
-          onClick={() => {
-            trackEvent("login_as_employee_click", undefined, "Homepage_Clicks", {})
-         }
-       }
           target="/"
         >
           <div className="relative w-[50px] h-[50px] mr-6">

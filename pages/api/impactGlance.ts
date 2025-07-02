@@ -1,7 +1,9 @@
+import { API_ENDPOINTS } from '../../lib/config';
+
 export default async function handler(req, res) {
   try {
     const response = await fetch(
-      "https://oncourts.kerala.gov.in/egov-mdms-service/v1/_search?tenantId=kl",
+      API_ENDPOINTS.MDMS.SEARCH,
       {
         method: "POST",
         headers: {
