@@ -171,7 +171,7 @@ const Header = () => {
                   { label: "FAQs & Contact Details", href: "/support/faqs" },
                 ]}
               />
-              <NavLink href="/display-board" label="Display Board" />
+              <NavLink href="/display-board" label="Cause List Display" />
             </div>
             <LanguageSelector className="ml-auto mr-2" />
 
