@@ -444,7 +444,7 @@ export default function DisplayBoard() {
           fontSize: "40px",
         }}
       >
-        {t("DISPLAY_BOARD")}
+        {t("DISPLAY_CAUSELIST_HEADING")}
       </h1>
       <p
         className="text-center text-gray-600 mb-6"
@@ -454,7 +454,7 @@ export default function DisplayBoard() {
           fontWeight: "500",
         }}
       >
-        {t("DISPLAY_BOARD_SUB_HEADING")}
+        {t("DISPLAY_CAUSELIST_SUB_HEADING")}
       </p>
 
       <div
@@ -688,18 +688,6 @@ export default function DisplayBoard() {
                       {t("JOIN_HEARING_ONLINE")}
                     </span>
                   </button>
-                </div>
-
-                <div className="going-hearing-details">
-                  <span
-                    style={{
-                      color: "#334155",
-                      fontWeight: "700",
-                      fontFamily: "Inter, sans-serif",
-                    }}
-                  >
-                    {`${isInProgressHearing?.caseTitle} ${isInProgressHearing?.caseNumber} hearing is on-going`}
-                  </span>
                 </div>
               </div>
             )}
