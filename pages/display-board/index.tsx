@@ -465,7 +465,7 @@ export default function DisplayBoard() {
   }, [hearingData]);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
+    <div className="max-w-full mx-auto px-4 sm:px-6 py-4 bg-white">
       {isMobile ? (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
           <h1
