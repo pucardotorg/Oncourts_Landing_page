@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import CNRNumberForm from "./forms/CNRNumberForm";
 import CaseNumberForm from "./forms/CaseNumberForm";
 import AdvocateForm from "./forms/AdvocateForm";
@@ -33,12 +33,6 @@ const SearchForm: React.FC<SearchFormProps> = ({
 }) => {
   // Get form validation from our utility function
   const formValid = isFormValid(selectedTab, formState);
-  useEffect(() => {
-    if (courtOptions.length > 0) {
-
-      handleInputChange("selectedCourt", courtOptions[0].name || "");
-    }
-  })
   return (
     <div className={commonStyles.form.container}>
       <div className={commonStyles.form.grid}>
