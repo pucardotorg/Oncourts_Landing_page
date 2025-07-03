@@ -113,6 +113,7 @@ const SearchForCase = () => {
 
   const getCourtOptions = useCallback(async () => {
     try {
+      setIsLoading(true);
       const response = await fetch(
         `/egov-mdms-service/v1/_search?tenantId=${tenantId}`,
         {
@@ -183,6 +184,8 @@ const SearchForCase = () => {
     } catch (error) {
       console.error("Error fetching court options:", error);
       setCourtOptions([]);
+    } finally {
+      setIsLoading(false);
     }
   }, [tenantId, defaultFormState, defaultFilterState]);
 

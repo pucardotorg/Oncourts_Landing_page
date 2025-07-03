@@ -415,7 +415,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
             </div>
 
             <div className="overflow-y-auto px-6 pt-4 pb-8 space-y-6">
-              <div className="font-[Roboto] grid grid-cols-2 md:grid-cols-7 gap-y-2 bg-[#F7F5F3] p-4 rounded-md text-sm">
+              <div className="font-[Roboto] grid grid-cols-2 md:grid-cols-5 gap-y-2 bg-[#F7F5F3] p-4 rounded-md text-sm">
                 <div className="flex flex-col border-r pr-4">
                   <span className="text-sm font-base text-[#77787B]">
                     {t("CASE_NUMBER")}
@@ -448,7 +448,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     {formatDate(caseResult.filingDate)}
                   </span>
                 </div>
-                <div className="flex flex-col border-r pr-4 pl-2">
+                <div className="flex flex-col pr-4 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
                     {t("REGISTRATION_DATE")}
                   </span>
@@ -456,7 +456,9 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     {formatDate(caseResult.registrationDate)}
                   </span>
                 </div>
-                <div className="flex flex-col border-r pr-4 pl-2">
+              </div>
+              <div className="font-[Roboto] flex bg-[#F7F5F3] p-4 rounded-md text-sm">
+                <div className="w-1/5 flex flex-col border-r pr-4">
                   <span className="text-sm font-base text-[#77787B]">
                     {t("MAGISTRATE")}
                   </span>
@@ -464,7 +466,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     {magistrateName}
                   </span>
                 </div>
-                <div className="flex flex-col pl-2">
+                <div className="w-4/5 flex flex-col pl-2">
                   <span className="text-sm font-base text-[#77787B]">
                     {t("COURT_NAME")}
                   </span>
