@@ -22,7 +22,7 @@ import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 const SearchForCase = () => {
   const { t } = useSafeTranslation();
-  const [selectedTab, setSelectedTab] = useState("filing_number");
+  const [selectedTab, setSelectedTab] = useState("case_number");
   const [showViewDetailedModal, setShowViewDetailedModal] = useState(false);
   const [selectedCase, setSelectedCase] = useState<CaseResult>({
     caseTitle: "",
@@ -166,8 +166,8 @@ const SearchForCase = () => {
   }, [tenantId]);
 
   // Reset filters
-  const handleResetFilters = () => {
-    setFilterState(defaultFilterState);
+  const handleResetFilters = (newFilterState?: FilterState) => {
+    setFilterState(newFilterState || defaultFilterState);
   };
 
   // Centralized handler to update filter state and trigger search
@@ -178,8 +178,19 @@ const SearchForCase = () => {
 
   // Centralized handler to reset filter state and trigger search
   const handleResetFiltersAndSearch = () => {
-    handleResetFilters();
-    handleSubmit(defaultFilterState);
+    if (selectedTab === "all") {
+      handleResetFilters({
+        ...defaultFilterState,
+        courtName: courtOptions[0]?.name || "",
+      });
+      handleSubmit({
+        ...defaultFilterState,
+        courtName: courtOptions[0]?.name || "",
+      });
+    } else {
+      handleResetFilters();
+      handleSubmit(defaultFilterState);
+    }
   };
 
   // Handle tab change
@@ -189,7 +200,14 @@ const SearchForCase = () => {
     // Reset form fields on tab change
     setFormState(defaultFormState);
 
-    handleResetFilters();
+    if (tab === "all") {
+      handleResetFilters({
+        ...defaultFilterState,
+        courtName: courtOptions[0]?.name || "",
+      });
+    } else {
+      handleResetFilters();
+    }
 
     // Reset search results and pagination
     setOffset(0);

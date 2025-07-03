@@ -33,7 +33,10 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
 }) => {
   const { t } = useSafeTranslation();
   // Local state to track filter changes before applying them
-  const [localFilters, setLocalFilters] = useState<FilterState>(filterState);
+  const [localFilters, setLocalFilters] = useState<FilterState>({
+    ...filterState,
+    courtName: courtOptions[0]?.name || "",
+  });
 
   // Update local filters when parent filterState changes
   useEffect(() => {
@@ -101,7 +104,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
             <CustomDropdown
               label={"COURT_NAME"}
               placeHolder={"SELECT_COURT"}
-              value={localFilters.courtName}
+              value={localFilters.courtName || courtOptions[0]?.name || ""}
               onChange={(value) => handleLocalFilterChange("courtName", value)}
               options={
                 courtOptions?.map((court: CourtRoom) => ({
