@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import SearchTabs from "../../components/search/SearchTabs";
@@ -59,32 +65,39 @@ const SearchForCase = () => {
   const [caseStatusOptions, setCaseStatusOptions] = useState<CaseStatus[]>([]);
   const [caseTypeOptions, setCaseTypeOptions] = useState<CaseType[]>([]);
 
-  const defaultFormState = {
-    caseNumber: "",
-    selectedYear: "",
-    selectedCourt: "",
-    selectedCaseType: "",
-    code: "",
-    cnrNumber: "",
-    advocateSearchMethod: "bar_code", // Default search method
-    barCode: "",
-    stateCode: "",
-    advocateName: "",
-    litigantName: "",
-  };
+  // Use useMemo to create stable references to default states
+  const defaultFormState = useMemo(
+    () => ({
+      caseNumber: "",
+      selectedYear: "",
+      selectedCourt: "",
+      selectedCaseType: "",
+      code: "",
+      cnrNumber: "",
+      advocateSearchMethod: "bar_code", // Default search method
+      barCode: "",
+      stateCode: "",
+      advocateName: "",
+      litigantName: "",
+    }),
+    []
+  );
   // Form state
   const [formState, setFormState] = useState<FormState>(defaultFormState);
 
-  const defaultFilterState = {
-    courtName: "",
-    caseType: "",
-    hearingDateFrom: "",
-    hearingDateTo: "",
-    caseSubStage: "",
-    caseStatus: "",
-    yearOfFiling: "",
-    caseTitle: "",
-  };
+  const defaultFilterState = useMemo(
+    () => ({
+      courtName: "",
+      caseType: "",
+      hearingDateFrom: "",
+      hearingDateTo: "",
+      caseSubStage: "",
+      caseStatus: "",
+      yearOfFiling: "",
+      caseTitle: "",
+    }),
+    []
+  );
 
   // Additional filters state
   const [filterState, setFilterState] =
@@ -144,6 +157,14 @@ const SearchForCase = () => {
         const courtRooms: CourtRoom[] =
           data.MdmsRes["common-masters"].Court_Rooms;
         setCourtOptions(courtRooms);
+        setFormState({
+          ...defaultFormState,
+          selectedCourt: courtRooms[0]?.name || "",
+        });
+        setFilterState({
+          ...defaultFilterState,
+          courtName: courtRooms[0]?.name || "",
+        });
       }
       if (data && data.MdmsRes && data.MdmsRes["case"]) {
         if (data.MdmsRes["case"].SubStage) {
@@ -163,7 +184,7 @@ const SearchForCase = () => {
       console.error("Error fetching court options:", error);
       setCourtOptions([]);
     }
-  }, [tenantId]);
+  }, [tenantId, defaultFormState, defaultFilterState]);
 
   // Reset filters
   const handleResetFilters = (newFilterState?: FilterState) => {
@@ -178,14 +199,15 @@ const SearchForCase = () => {
 
   // Centralized handler to reset filter state and trigger search
   const handleResetFiltersAndSearch = () => {
-    if (selectedTab === "all") {
+    if (selectedTab === "all" && courtOptions.length > 0) {
+      const defaultCourt = courtOptions[0]?.name || "";
       handleResetFilters({
         ...defaultFilterState,
-        courtName: courtOptions[0]?.name || "",
+        courtName: defaultCourt,
       });
       handleSubmit({
         ...defaultFilterState,
-        courtName: courtOptions[0]?.name || "",
+        courtName: defaultCourt,
       });
     } else {
       handleResetFilters();
@@ -197,13 +219,19 @@ const SearchForCase = () => {
   const handleTabChange = async (tab: string) => {
     setSelectedTab(tab);
 
+    const defaultCourt =
+      courtOptions.length > 0 ? courtOptions[0]?.name || "" : "";
+
     // Reset form fields on tab change
-    setFormState(defaultFormState);
+    setFormState({
+      ...defaultFormState,
+      selectedCourt: defaultCourt,
+    });
 
     if (tab === "all") {
       handleResetFilters({
         ...defaultFilterState,
-        courtName: courtOptions[0]?.name || "",
+        courtName: defaultCourt,
       });
     } else {
       handleResetFilters();
@@ -285,7 +313,10 @@ const SearchForCase = () => {
 
   // Clear form
   const handleClear = () => {
-    setFormState(defaultFormState);
+    setFormState({
+      ...defaultFormState,
+      selectedCourt: courtOptions.length > 0 ? courtOptions[0]?.name || "" : "",
+    });
     // Reset pagination
     setOffset(0);
     setTotalCount(0);
