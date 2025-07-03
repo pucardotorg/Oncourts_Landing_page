@@ -145,7 +145,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
                   />
                 </div>
 
-                <span className="text-[#0A0A0A] text-lg font-medium">To</span>
+                <span className="text-[#0A0A0A] text-lg font-[Roboto] font-medium">To</span>
 
                 <div className="flex-1">
                   <DatePickerComponent
