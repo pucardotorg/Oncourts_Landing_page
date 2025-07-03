@@ -37,7 +37,7 @@ const SearchForCase = () => {
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width:768px)");
   const [showMobileFilter, setShowMobileFilter] = useState(false);
-  const [selectedTab, setSelectedTab] = useState("filing_number");
+  const [selectedTab, setSelectedTab] = useState("case_number");
   const [showViewDetailedModal, setShowViewDetailedModal] = useState(false);
   const [selectedCase, setSelectedCase] = useState<CaseResult>({
     caseTitle: "",

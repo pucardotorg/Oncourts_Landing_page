@@ -442,8 +442,8 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 </button>
               )}
               {/* Case Details - Mobile First Card Layout */}
-              <div className="font-[Roboto] grid grid-cols-1 md:grid-cols-7 gap-4 bg-[#F7F5F3] p-4 rounded-md text-sm">
-                <div className="flex flex-col border-r pr-4 pl-1">
+              <div className="font-[Roboto] grid grid-cols-1 md:grid-cols-5 gap-1 bg-[#F7F5F3] p-4 rounded-md text-sm">
+                <div className="flex flex-col md:border-r pr-4 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
                     {t("CASE_NUMBER")}
                   </span>
@@ -451,7 +451,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     {caseResult.stNumber || caseResult.cmpNumber}
                   </span>
                 </div>
-                <div className="flex flex-col border-r pr-4 pl-1">
+                <div className="flex flex-col md:border-r pr-4 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
                     {t("CNR_NUMBER")}
                   </span>
@@ -459,7 +459,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     {caseResult.cnrNumber}
                   </span>
                 </div>
-                <div className="flex flex-col border-r pr-4 pl-1">
+                <div className="flex flex-col md:border-r pr-4 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
                     {t("FILING_NUMBER")}
                   </span>
@@ -467,7 +467,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     {caseResult.filingNumber}
                   </span>
                 </div>
-                <div className="flex flex-col border-r pr-4 pl-1">
+                <div className="flex flex-col md:border-r pr-4 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
                     {t("FILING_DATE")}
                   </span>
@@ -475,7 +475,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     {formatDate(caseResult.filingDate)}
                   </span>
                 </div>
-                <div className="flex flex-col border-r pr-4 pl-1">
+                <div className="flex flex-col pr-4 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
                     {t("REGISTRATION_DATE")}
                   </span>
@@ -483,7 +483,9 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     {formatDate(caseResult.registrationDate)}
                   </span>
                 </div>
-                <div className="flex flex-col border-r pr-4 pl-1">
+              </div>
+              <div className="font-[Roboto] flex md:flex-row flex-col gap-3 bg-[#F7F5F3] p-4 rounded-md text-sm">
+                <div className="md:w-1/5 flex flex-col md:border-r md:pl-0 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
                     {t("MAGISTRATE")}
                   </span>
@@ -491,7 +493,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     {magistrateName}
                   </span>
                 </div>
-                <div className="flex flex-col pl-1">
+                <div className="md:w-4/5 flex flex-col md:pl-0 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
                     {t("COURT_NAME")}
                   </span>
