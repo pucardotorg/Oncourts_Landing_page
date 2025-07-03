@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { DatePickerComponent } from "../ui/form";
+import DatePickerComponent from "../ui/form/DatePickerComponent";
 import {
   CaseStage,
   CaseStatus,
@@ -129,32 +129,37 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
               className="bg-[#F8FAFC] border-[#94A3B8]"
             />
 
-            <DatePickerComponent
-              label="NEXT_HEARING_DATE"
-              value={localFilters.hearingDateFrom}
-              onChange={(value) =>
-                handleLocalFilterChange("hearingDateFrom", value)
-              }
-            />
+            <div className="col-span-2">
+              <label className="block text-lg font-[Roboto] font-medium text-[#0A0A0A] mb-1">
+                {t("NEXT_HEARING_DATE")}
+              </label>
+              <div className="flex items-center gap-1">
+                <div className="flex-1">
+                  <DatePickerComponent
+                    label=""
+                    value={localFilters.hearingDateFrom || ""}
+                    onChange={(value) =>
+                      handleLocalFilterChange("hearingDateFrom", value)
+                    }
+                    className="bg-[#F8FAFC] border-[#94A3B8] "
+                  />
+                </div>
 
-            <DatePickerComponent
-              label="TO"
-              value={localFilters.hearingDateTo}
-              onChange={(value) =>
-                handleLocalFilterChange("hearingDateTo", value)
-              }
-            />
+                <span className="text-[#0A0A0A] text-lg font-medium">To</span>
 
-            <CustomDropdown
-              label="YEAR_OF_FILING"
-              placeHolder="SELECT_YEAR"
-              value={localFilters.yearOfFiling}
-              onChange={(value) =>
-                handleLocalFilterChange("yearOfFiling", value)
-              }
-              options={yearOptions}
-              className="bg-[#F8FAFC] border-[#94A3B8]"
-            />
+                <div className="flex-1">
+                  <DatePickerComponent
+                    label=""
+                    value={localFilters.hearingDateTo || ""}
+                    onChange={(value) =>
+                      handleLocalFilterChange("hearingDateTo", value)
+                    }
+                    className="bg-[#F8FAFC] border-[#94A3B8]"
+                  />
+                </div>
+              </div>
+            </div>
+
             <CustomDropdown
               label="CASE_STAGE"
               placeHolder="SELECT_CASE_STAGE"
@@ -182,6 +187,17 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
                   value: status?.code || "",
                 })) || []
               }
+              className="bg-[#F8FAFC] border-[#94A3B8]"
+            />
+
+            <CustomDropdown
+              label="YEAR_OF_FILING"
+              placeHolder="SELECT_YEAR"
+              value={localFilters.yearOfFiling}
+              onChange={(value) =>
+                handleLocalFilterChange("yearOfFiling", value)
+              }
+              options={yearOptions}
               className="bg-[#F8FAFC] border-[#94A3B8]"
             />
           </div>

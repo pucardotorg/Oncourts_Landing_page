@@ -31,7 +31,7 @@ export const animations = `
 
 export const commonStyles = {
   // Layout
-  container: "max-w-screen mx-auto py-6 px-20",
+  container: "max-w-screen mx-auto py-6 px-20 bg-white",
 
   // Typography
   heading: {
