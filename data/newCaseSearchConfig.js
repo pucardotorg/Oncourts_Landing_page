@@ -8,8 +8,8 @@ export const newCaseSearchConfig = {
 
   // Search tab configuration
   tabs: [
-    { id: "filing_number", label: "FILING_NUMBER" },
     { id: "case_number", label: "CASE_NUMBER" },
+    { id: "filing_number", label: "FILING_NUMBER" },
     { id: "cnr_number", label: "CNR_NUMBER" },
     { id: "advocate", label: "ADVOCATE" },
     { id: "litigant", label: "LITIGANT" },
