@@ -18,6 +18,7 @@ interface LayoutProps {
 // In your page or parent component
 import dynamic from "next/dynamic";
 import { commonStyles } from "../styles/commonStyles";
+import HeaderV2 from "./HeaderV2";
 
 const DigitInitializer = dynamic(() => import("./DigitInitializer"), {
   ssr: false,
@@ -31,12 +32,23 @@ const Layout: React.FC<LayoutProps> = ({
   const [digitReady, setDigitReady] = useState(false);
   const [stateCode, setStateCode] = useState("pb");
 
-  const enabledModules = ["DRISTI", "Submissions", "orders", "Hearings", "Cases", "home"];
+  const enabledModules = [
+    "DRISTI",
+    "Submissions",
+    "orders",
+    "Hearings",
+    "Cases",
+    "home",
+  ];
 
   // Wait for window.Digit to be available
   useEffect(() => {
     const interval = setInterval(() => {
-      if (typeof window !== "undefined" && window?.Digit?.Hooks?.useInitStore && window?.globalConfigs) {
+      if (
+        typeof window !== "undefined" &&
+        window?.Digit?.Hooks?.useInitStore &&
+        window?.globalConfigs
+      ) {
         const code = window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID");
         setStateCode(code || "pb");
         setDigitReady(true);
@@ -51,7 +63,9 @@ const Layout: React.FC<LayoutProps> = ({
     return (
       <div className={commonStyles.loading.container}>
         <div className={commonStyles.loading.spinner}></div>
-        <div className="mt-4 text-[#0F766E] text-sm font-medium">Loading, please wait...</div>
+        <div className="mt-4 text-[#0F766E] text-sm font-medium">
+          Loading, please wait...
+        </div>
       </div>
     );
   }
@@ -72,6 +86,7 @@ const Layout: React.FC<LayoutProps> = ({
         </Head>
         <div className="flex flex-col min-h-screen">
           <Header />
+          <HeaderV2 />
           <main className="flex-grow">{children}</main>
           <Footer />
         </div>
