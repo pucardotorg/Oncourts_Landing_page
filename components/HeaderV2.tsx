@@ -75,21 +75,19 @@ const HeaderV2 = () => {
   };
 
   return (
-    <header className="w-full shadow-sm">
-      <nav className="max-w-[1440px] mx-auto">
-        <div className="flex items-center justify-between px-6 h-16">
-          {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
-            <Image
-              src="/images/logo.png"
-              alt={t("ONCOURTS_LOGO")} // "OnCourts Logo"
-              width={123}
-              height={73}
-              className="h-12 w-auto"
-            />
-          </Link>
-
-          {/* Navigation Items */}
+    <header className="w-full h-[73px] border-b border-gray-300 px-[30px] py-2 flex justify-between items-center">
+      {/* Logo */}
+      <Link href="/" className="flex-shrink-0">
+        <Image
+          src="/images/logo.png"
+          alt={t("ONCOURTS_LOGO")} // "OnCourts Logo"
+          width={123}
+          height={73}
+          className="h-12 w-auto"
+        />
+      </Link>
+      <nav className="flex">
+        <div className="flex items-center justify-between h-16">
           <div
             className="hidden md:flex items-center space-x-1"
             onClick={handleDropdownClick}
@@ -115,6 +113,7 @@ const HeaderV2 = () => {
                   setSupportDropdownOpen(false);
                 }}
                 t={t}
+                isDropdownOpen={aboutDropdownOpen}
               />
               {aboutDropdownOpen && (
                 <DropdownMenu
@@ -131,7 +130,9 @@ const HeaderV2 = () => {
                 label="SERVICES" // "Services"
                 isActive={
                   servicesDropdownOpen ||
-                  router.pathname.startsWith("/services")
+                  router.pathname.includes("/display-board") ||
+                  router.pathname.includes("/login") ||
+                  router.pathname.includes("/search")
                 }
                 hasDropdown
                 onClick={() => {
@@ -140,6 +141,7 @@ const HeaderV2 = () => {
                   setSupportDropdownOpen(false);
                 }}
                 t={t}
+                isDropdownOpen={servicesDropdownOpen}
               />
               {servicesDropdownOpen && (
                 <DropdownMenu
@@ -178,6 +180,7 @@ const HeaderV2 = () => {
                   setServicesDropdownOpen(false);
                 }}
                 t={t}
+                isDropdownOpen={supportDropdownOpen}
               />
               {supportDropdownOpen && (
                 <DropdownMenu

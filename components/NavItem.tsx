@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { svgIcons } from "../data/svgIcons";
 
 export interface NavItemProps {
   href: string;
@@ -8,6 +9,7 @@ export interface NavItemProps {
   hasDropdown?: boolean;
   onClick?: () => void;
   t: (key: string) => string;
+  isDropdownOpen?: boolean;
 }
 
 const NavItem: React.FC<NavItemProps> = ({
@@ -17,6 +19,7 @@ const NavItem: React.FC<NavItemProps> = ({
   hasDropdown = false,
   onClick,
   t,
+  isDropdownOpen = false,
 }) => {
   if (hasDropdown) {
     return (
@@ -26,26 +29,22 @@ const NavItem: React.FC<NavItemProps> = ({
           e.preventDefault();
           onClick?.();
         }}
-        className={`flex items-center gap-1 px-4 py-2 text-sm font-medium transition-colors
-          ${isActive ? "text-[#007E7E]" : "text-[#3A3A3A] hover:text-[#007E7E]"}`}
+        className={`text-[20px] leading-[28px] tracking-[0.01em] flex items-center gap-1 px-4 py-2 font-medium font-sans`}
       >
-        {t(label)}
-        <svg
-          width="12"
-          height="12"
-          viewBox="0 0 12 12"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className={`transition-transform ${isActive ? "rotate-180" : ""}`}
+        <span
+          className={
+            isActive ? "text-[#0F766E]" : "text-[#3A3A3A] hover:text-[#0F766E]"
+          }
         >
-          <path
-            d="M2.5 4.5L6 8L9.5 4.5"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+          {t(label)}
+        </span>
+        <span>
+          {isDropdownOpen ? (
+            <svgIcons.upArrowIcon fill="#0F766E" />
+          ) : (
+            <svgIcons.downArrowIcon />
+          )}
+        </span>
       </button>
     );
   }
@@ -54,8 +53,8 @@ const NavItem: React.FC<NavItemProps> = ({
     <Link
       href={href}
       onClick={onClick}
-      className={`flex items-center gap-1 px-4 py-2 text-sm font-medium transition-colors
-        ${isActive ? "text-[#007E7E]" : "text-[#3A3A3A] hover:text-[#007E7E]"}`}
+      className={`text-[20px] leading-[28px] tracking-[0.01em] flex items-center gap-1 px-4 py-2 font-medium font-sans
+        ${isActive ? "text-[#0F766E]" : "text-[#3A3A3A] hover:text-[#0F766E]"}`}
     >
       {t(label)}
     </Link>
