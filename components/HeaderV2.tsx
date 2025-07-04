@@ -24,7 +24,7 @@ const MENU_ITEMS = {
     { label: "DISPLAY_BOARD", href: "/display-board" }, // Display Board
   ],
   SUPPORT: [
-    { label: "HELP", href: "/help" },
+    { label: "HELP_RESOURCES", href: "/help-resources" },
     { label: "CONTACT", href: "/contact" },
     { label: "FAQ", href: "/faq" },
   ],

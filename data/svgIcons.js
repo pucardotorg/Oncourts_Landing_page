@@ -375,8 +375,8 @@ const PhoneIcon = () => (
 
 const EmailIcon = () => (
   <svg
-    width="50"
-    height="50"
+    width="35"
+    height="35"
     viewBox="0 0 50 50"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -402,8 +402,8 @@ const EmailIcon = () => (
 
 const HelpDeskIcon = () => (
   <svg
-    width="50"
-    height="50"
+    width="35"
+    height="35"
     viewBox="0 0 50 50"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -424,8 +424,8 @@ const HelpDeskIcon = () => (
 
 const ClockIcon = () => (
   <svg
-    width="50"
-    height="50"
+    width="35"
+    height="35"
     viewBox="0 0 50 50"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
