@@ -1,17 +1,17 @@
 import React from "react";
-import Carousel from "../../components/HomePage/Carousel";
 import NoticeAndCauseListSection from "../../components/HomePage/NoticeAndCauseListSection";
 import Support from "../../components/HomePage/Support";
 import ImpactGlance from "../../components/HomePage/ImpactGlance";
 import TestimonialCarousel from "../../components/HomePage/TestimonialCarousel";
 import WhatsNewSections from "../../components/HomePage/WhatNewSections";
 import StickyHelpButton from "../../components/Utils/StickyHelpButton";
+import HomeIntroVideo from "../../components/HomePage/HomeIntroVideo";
 
 const Hero = () => {
   return (
     <div className="w-full space-y-0 overflow-x-hidden">
       <StickyHelpButton />
-      <Carousel />
+      <HomeIntroVideo />
       <NoticeAndCauseListSection />
       <WhatsNewSections />
       <ImpactGlance />
