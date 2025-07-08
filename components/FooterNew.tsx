@@ -46,7 +46,7 @@ const FooterNew: React.FC = () => {
                   <FooterLink href="/about">About ON Courts</FooterLink>
                 </li>
                 <li>
-                  <FooterLink href="/tutorials">Video Tutorials</FooterLink>
+                  <FooterLink href="/video-tutorials">Video Tutorials</FooterLink>
                 </li>
                 <li>
                   <FooterLink href="/media-gallery">Media Gallery</FooterLink>

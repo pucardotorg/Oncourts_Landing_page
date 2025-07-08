@@ -86,7 +86,6 @@ const Layout: React.FC<LayoutProps> = ({
           <link rel="icon" href="/images/logo.png" />
         </Head>
         <div className="flex flex-col min-h-screen">
-          <Header />
           <HeaderV2 />
           <main className="flex-grow">{children}</main>
           <Footer />
