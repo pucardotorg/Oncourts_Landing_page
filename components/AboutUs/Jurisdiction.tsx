@@ -2,20 +2,20 @@ import React from "react";
 import SectionHeading from "../common/SectionHeading";
 import Image from "next/image";
 import FullscreenButton from "../common/FullscreenButton";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 export default function Jurisdiction({ isMobile }: { isMobile: boolean }) {
+  const { t } = useSafeTranslation();
   return (
     <div className="py-10 md:py-16 bg-[#F0FDFA]" id="jurisdiction-section">
       <div className="container mx-auto px-5">
         <div className="mb-8">
-          <SectionHeading title="Jurisdiction" />
+          <SectionHeading title={t("JURISDICTION")} />
         </div>
 
         <div className="max-w-4xl mx-auto mb-8 font-[Roboto] text-[20px] text-[#334155]">
           <p className="text-center px-1 md:px-4">
-            The 24x7 ON Court currently accepts cheque dishonour cases under
-            Section 138 of the Negotiable Instruments Act, 1881, arising from 9
-            police stations within the Kollam district.
+            {t("JURISDICTION_DESCRIPTION")}
           </p>
         </div>
 

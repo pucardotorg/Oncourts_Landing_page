@@ -2,11 +2,13 @@ import React from "react";
 import Image from "next/image";
 import DetailCard from "../common/DetailCard";
 import SectionHeading from "../common/SectionHeading";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 export default function Benefits() {
+  const { t } = useSafeTranslation();
   const benefitsData = [
     {
-      heading: "Litigants",
+      heading: "LITIGANTS",
       icon: (
         <div className="relative w-12 h-12 flex items-center justify-center">
           <Image
@@ -19,13 +21,13 @@ export default function Benefits() {
         </div>
       ),
       points: [
-        "Get proactive alerts (SMS) on case status and action to be taken",
-        "Access case files and track progress using unique logins",
-        "Avoid visits to advocates for document signing",
+        "LITIGANTS_DESCRIPTION_1",
+        "LITIGANTS_DESCRIPTION_2",
+        "LITIGANTS_DESCRIPTION_3",
       ],
     },
     {
-      heading: "Lawyers",
+      heading: "LAWYERS",
       icon: (
         <div className="relative w-12 h-12 flex items-center justify-center">
           <Image
@@ -38,13 +40,13 @@ export default function Benefits() {
         </div>
       ),
       points: [
-        "File cases remotely via digitally native & rule-based system",
-        "Get proactive alerts on case updates and action to be taken",
-        "Make payments digitally through the platform",
+        "LAWYERS_DESCRIPTION_1",
+        "LAWYERS_DESCRIPTION_2",
+        "LAWYERS_DESCRIPTION_3",
       ],
     },
     {
-      heading: "Judge",
+      heading: "JUDGE",
       icon: (
         <div className="relative w-12 h-12 flex items-center justify-center">
           <Image
@@ -57,13 +59,13 @@ export default function Benefits() {
         </div>
       ),
       points: [
-        "Access needed case information digitally",
-        "Issue orders using pre-defined templates",
-        "Sign orders in bulk using digital signatures",
+        "JUDGE_DESCRIPTION_1",
+        "JUDGE_DESCRIPTION_2",
+        "JUDGE_DESCRIPTION_3",
       ],
     },
     {
-      heading: "Court Staff",
+      heading: "COURT_STAFF",
       icon: (
         <div className="relative w-12 h-12 flex items-center justify-center">
           <Image
@@ -76,9 +78,9 @@ export default function Benefits() {
         </div>
       ),
       points: [
-        "Perform scrutiny remotely with system assistance",
-        "Auto-generate, track & deliver processes via multiple channels",
-        "Avoid manual entry of data across case workflows",
+        "COURT_STAFF_DESCRIPTION_1",
+        "COURT_STAFF_DESCRIPTION_2",
+        "COURT_STAFF_DESCRIPTION_3",
       ],
     },
   ];
@@ -91,6 +93,7 @@ export default function Benefits() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-12">
           {benefitsData.map((benefit, index) => (
             <DetailCard
+              t={t}
               key={index}
               heading={benefit.heading}
               icon={benefit.icon}

@@ -4,194 +4,170 @@ import { APP_URLS } from "../lib/config";
 export const contactInfoData = [
   {
     icon: "PhoneIcon",
-    title: "Helpline Number:",
+    title: "HELPLINE_NUMBER",
     content: "047 - 42919099",
     href: "callto:oncourt@gmail.com",
   },
   {
     icon: "HelpDeskIcon",
     title: "",
-    content: "In-person Helpdesk at 24x7 ON Court, Kollam",
+    content: "IN_PERSON_HELPDESK",
   },
   {
     icon: "ClockIcon",
-    title: "Availability:",
+    title: "AVAILABILITY",
     content: "10:00 - 17:00 IST",
-    subContent: "Monday - Saturday except 2nd Saturday",
+    subContent: "MONDAY_SATURDAY_EXCEPT",
   },
   {
     icon: "EmailIcon",
-    title: "Email:",
+    title: "EMAIL",
     content: "oncourtkollam@keralacourts.in",
     href: "mailto:oncourtkollam@keralacourts.in",
   },
 ];
 
-export const faqs = [
+export const getFaqs = (t) => [
   {
-    question:
-      "Where can I check the proceedings of the last hearing and the next hearing date?",
+    question: t(
+      "HOW_CAN_I_CHECK_THE_PROCEEDINGS_OF_THE_LAST_HEARING_AND_THE_NEXT_HEARING_DATE"
+    ),
     answer: (
       <div>
         <p>
-          You can find these details in the{" "}
+          {t("YOU_CAN_FIND_THESE_DETAILS_IN_THE")}{" "}
           <Link href="/search" className="text-[#1D4ED8] underline">
-            Case Search
+            {t("CASE_SEARCH")}
           </Link>{" "}
-          section under the Services tab on the ON Court website.
-        </p>
-        <p className="mt-2">
-          Just enter your case number, CNR, or name to view the next hearing
-          date, case stage, past orders and pending process payment tasks.
-        </p>
-        <p className="mt-2">
-          You can access this from your mobile browser as well — no login
-          needed!
+          {t(
+            "SECTION_UNDER_SERVICES_TAB_ON_COURT_WEBSITE_SEARCH_CASE_VIEW_DETAILS"
+          )}
         </p>
       </div>
     ),
   },
   {
-    question:
-      "Where can I see tasks I need to complete for my case to move forward?",
+    question: t(
+      "HOW_CAN_I_SEE_TASKS_I_NEED_TO_COMPLETE_FOR_MY_CASE_TO_MOVE_FORWARD"
+    ),
     answer: (
       <p>
-        You can access pending tasks by logging into the ON Court portal and
-        navigating to the All Pending Tasks section on the right-side panel in
-        the homepage. Alternatively, you can use the{" "}
+        {t("YOU_CAN_ACCESS_PENDING_TASKS_BY_LOGGING_INTO_PORTAL")}{" "}
+        {t("NAVIGATING_TO_ALL_PENDING_TASKS_SECTION")}
         <Link href="/search" className="text-[#1D4ED8] underline">
-          Case Search
+          {t("CASE_SEARCH")}
         </Link>{" "}
-        section under the Services tab to review pending payments, such as
-        online fees or stamp and envelope submissions (applicable for RPAD
-        channel only) related to notices, summons, or warrants.
+        {t("SECTION_UNDER_SERVICES_TO_REVIEW_PENDING_PAYMENTS")}
       </p>
     ),
   },
   {
-    question:
-      "How can I check if my cases are scheduled for hearing on a specific day?",
+    question: t(
+      "HOW_CAN_I_CHECK_IF_MY_CASES_ARE_SCHEDULED_FOR_HEARING_ON_A_SPECIFIC_DAY"
+    ),
     answer: (
       <p>
-        You can use the{" "}
+        {t("YOU_CAN_USE_THE")}{" "}
         <Link href="/display-board" className="text-[#1D4ED8] underline">
-          Display Board
+          {t("DISPLAY_BOARD")}
         </Link>{" "}
-        to view all cases listed for a chosen date. You can also search the
-        cases by case number, case title or advocate name in this section.
-        Alternatively, you can access the{" "}
+        {t("TO_VIEW_ALL_CASES_LISTED_FOR_CHOSEN_DATE")}{" "}
+        {t("ALTERNATIVELY_YOU_CAN_ACCESS_THE")}{" "}
         <Link href="/search" className="text-[#1D4ED8] underline">
-          Case Search
+          {t("CASE_SEARCH")}
         </Link>{" "}
-        section under the Services tab to check the next hearing dates for all
-        your cases.
+        {t("SECTION_UNDER_SERVICES_TO_CHECK_NEXT_HEARING_DATES")}
       </p>
     ),
   },
   {
-    question: "Can I join my hearing online?",
-    answer: (
-      <p>
-        Yes. You can join your hearing online by clicking the Join Hearing
-        button available in the Display Board section of the website. You can
-        also use the{" "}
-        <Link href="/display-board" className="text-[#1D4ED8] underline">
-          Display Board
-        </Link>{" "}
-        to check the live status of hearings and see which case is currently
-        being heard.
-      </p>
-    ),
-  },
-  {
-    question: "What documents are required for e-filing?",
-    answer: (
-      <div>
-        <p>List of documents required for e-filing:</p>
-        <ol className="list-decimal pl-6 mt-2 space-y-1">
-          <li>
-            <span className="font-semibold">Proof of identity:</span> PAN Card,
-            Aadhar card, Passport, Driving license, Voter ID, Ration card or
-            Bank passbook
-          </li>
-          <li>
-            <span className="font-semibold">Dishonored Cheque:</span> A copy of
-            the dishonored cheque on the basis which this case is being filed
-          </li>
-          <li>
-            <span className="font-semibold">Cheque Return Memo:</span> The
-            document received from the bank that has the information that the
-            cheque has bounced
-          </li>
-          <li>
-            <span className="font-semibold">Legal Demand Notice:</span> Any
-            intimation you provided to the respondent informing them that their
-            cheque had bounced and they still owed you the cheque amount
-          </li>
-          <li>
-            <span className="font-semibold">
-              Postal acknowledgement (Issue of legal demand notice):
-            </span>{" "}
-            The acknowledgement provided by the postal department when sending
-            the letter/RPAD/anything else containing legal demand notice (see
-            number 4 in the list) to the accused.
-          </li>
-          <li>
-            <span className="font-semibold">
-              Postal acknowledgement (Delivery of legal demand notice):
-            </span>{" "}
-            The acknowledgement provided by the postal department when the
-            letter/RPAD/anything else containing legal demand notice (see number
-            4 in the list) is received by the accused
-          </li>
-          <li>
-            <span className="font-semibold">
-              Affidavit under section 223 of BNSS:
-            </span>{" "}
-            Affidavit under section 223 of BNSS must be there in the infobox at
-            the start of filing.
-          </li>
-          <li>
-            <span className="font-semibold">
-              Any other document you deem necessary:
-            </span>{" "}
-            Please include any additional documents you believe will strengthen
-            your case and that will be crucial in substantiating your claims
-            when filing the complaint.
-          </li>
-        </ol>
-      </div>
-    ),
-  },
-  {
-    question: "What documents are required for Bail?",
-    answer: (
-      <div>
-        <p>List of documents required for Bail:</p>
-        <ol className="list-decimal pl-6 mt-2 space-y-1">
-          <li>Bail Application (System generated)</li>
-          <li>ID proofs for surety(s)</li>
-          <li>Tax receipts for surety(s)</li>
-          <li>Affidavits for surety(s) (System Generated)</li>
-          <li>Bail Bond</li>
-          <li>Any other document you deem necessary</li>
-        </ol>
-      </div>
-    ),
-  },
-  {
-    question:
-      "Are there videos or guides to help me understand how to use the platform (e.g., filing, application submission, payments)?",
+    question: t("CAN_I_JOIN_MY_HEARING_ONLINE"),
     answer: (
       <div>
         <p>
-          Yes. You can access step-by-step user guides and short video tutorials
-          to learn how to file cases, submit applications, make payments, and
-          more.
+          {t("YES_YOU_CAN_JOIN_YOUR_HEARING_ONLINE")}{" "}
+          <Link href="/display-board" className="text-[#1D4ED8] underline">
+            {t("DISPLAY_BOARD")}
+          </Link>{" "}
+          {t("SECTION_OF_THE_WEBSITE")}
         </p>
+        <p>{t("YOU_CAN_ALSO_USE_THE_TO_DISPLAY_BOARD")}</p>
+      </div>
+    ),
+  },
+  {
+    question: t("WHAT_DOCUMENTS_ARE_REQUIRED_FOR_E_FILING"),
+    answer: (
+      <div>
+        <p>{t("LIST_OF_DOCUMENTS_REQUIRED_FOR_E_FILING")}:</p>
+        <ol className="list-decimal pl-6 mt-2 space-y-1">
+          <li>
+            <span className="font-semibold">{t("PROOF_OF_IDENTITY")}:</span>{" "}
+            {t("ID_DOCUMENTS_LIST")}
+          </li>
+          <li>
+            <span className="font-semibold">{t("DISHONORED_CHEQUE")}:</span>{" "}
+            {t("DISHONORED_CHEQUE_DESCRIPTION")}
+          </li>
+          <li>
+            <span className="font-semibold">{t("CHEQUE_RETURN_MEMO")}:</span>{" "}
+            {t("CHEQUE_RETURN_MEMO_DESCRIPTION")}
+          </li>
+          <li>
+            <span className="font-semibold">{t("LEGAL_DEMAND_NOTICE")}:</span>{" "}
+            {t("LEGAL_DEMAND_NOTICE_DESCRIPTION")}
+          </li>
+          <li>
+            <span className="font-semibold">
+              {t("POSTAL_ACKNOWLEDGEMENT_ISSUE")}:
+            </span>{" "}
+            {t("POSTAL_ACKNOWLEDGEMENT_ISSUE_DESCRIPTION")}
+          </li>
+          <li>
+            <span className="font-semibold">
+              {t("POSTAL_ACKNOWLEDGEMENT_DELIVERY")}:
+            </span>{" "}
+            {t("POSTAL_ACKNOWLEDGEMENT_DELIVERY_DESCRIPTION")}
+          </li>
+          <li>
+            <span className="font-semibold">
+              {t("AFFIDAVIT_UNDER_SECTION_223")}:
+            </span>{" "}
+            {t("AFFIDAVIT_UNDER_SECTION_223_DESCRIPTION")}
+          </li>
+          <li>
+            <span className="font-semibold">{t("ANY_OTHER_DOCUMENT")}:</span>{" "}
+            {t("ANY_OTHER_DOCUMENT_DESCRIPTION")}
+          </li>
+        </ol>
+      </div>
+    ),
+  },
+  {
+    question: t("WHAT_DOCUMENTS_ARE_REQUIRED_FOR_BAIL"),
+    answer: (
+      <div>
+        <p>{t("LIST_OF_DOCUMENTS_REQUIRED_FOR_BAIL")}:</p>
+        <ol className="list-decimal pl-6 mt-2 space-y-1">
+          <li>{t("BAIL_APPLICATION_SYSTEM_GENERATED")}</li>
+          <li>{t("ID_PROOFS_FOR_SURETIES")}</li>
+          <li>{t("TAX_RECEIPTS_FOR_SURETIES")}</li>
+          <li>{t("AFFIDAVITS_FOR_SURETIES_SYSTEM_GENERATED")}</li>
+          <li>{t("BAIL_BOND")}</li>
+          <li>{t("ANY_OTHER_DOCUMENT_YOU_DEEM_NECESSARY")}</li>
+        </ol>
+      </div>
+    ),
+  },
+  {
+    question: t(
+      "ARE_THERE_VIDEOS_OR_GUIDES_TO_HELP_ME_UNDERSTAND_HOW_TO_USE_THE_PLATFORM"
+    ),
+    answer: (
+      <div>
+        <p>{t("YES_YOU_CAN_ACCESS_STEP_BY_STEP_USER_GUIDES")}</p>
         <p className="mt-2">
-          These resources are available under the Support tab in the navigation
-          menu. You can also use the direct links below:
+          {t("THESE_RESOURCES_ARE_AVAILABLE_UNDER_SUPPORT_TAB")}
         </p>
         <div className="mt-2">
           <ol className="list-decimal pl-6 mt-2 space-y-1">
@@ -200,12 +176,12 @@ export const faqs = [
                 href="https://drive.google.com/file/d/1j4mIw0K2F8m_urJE-zbu-oeluiOL-8Pg/view?usp=sharing"
                 className="text-[#1D4ED8] hover:underline block"
               >
-                User Guide for Advocates and Clerks
+                {t("USER_GUIDE_FOR_ADVOCATES_AND_CLERKS")}
               </Link>
             </li>
             <li>
               <Link href="#" className="text-[#1D4ED8] hover:underline block">
-                Video tutorials for Advocates and Clerks
+                {t("VIDEO_TUTORIALS_FOR_ADVOCATES_AND_CLERKS")}
               </Link>
             </li>
           </ol>
@@ -214,72 +190,66 @@ export const faqs = [
     ),
   },
   {
-    question: "How can I report an issue or request for support online?",
+    question: t("WHERE_CAN_I_REPORT_AN_ISSUE_OR_REQUEST_FOR_SUPPORT_ONLINE"),
     answer: (
       <p>
-        You can use the 24x7 ON Courts{" "}
+        {t("YOU_CAN_USE_THE_24X7_ON_COURTS")}{" "}
         <Link
           href="https://forms.gle/uCSgGiqGiMQYjjgeA"
           className="text-[#1D4ED8] underline"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Support Form
+          {t("SUPPORT_FORM")}
         </Link>{" "}
-        to report any issue or request a feature. The support team monitors all
-        submissions and shares updates on the resolution with the concerned.
+        {t("TO_REPORT_ANY_ISSUE_OR_REQUEST_A_FEATURE")}
       </p>
     ),
   },
   {
-    question: "How can I update my email ID on the portal?",
+    question: t("WHERE_CAN_I_UPDATE_MY_EMAIL_ID_ON_THE_PORTAL"),
     answer: (
       <p>
-        To update your email ID,{" "}
+        {t("TO_UPDATE_YOUR_EMAIL_ID")}{" "}
         <Link
           href={`${APP_URLS.CITIZEN_APP}`}
           className="text-[#1D4ED8] underline"
           target="_blank"
           rel="noopener noreferrer"
         >
-          log in
+          {t("LOG_IN")}
         </Link>{" "}
-        to the portal and click the profile icon at the top right corner of the
-        homepage. Select Edit Profile, enter your email ID in the space
-        provided, and click Continue to save.
+        {t(
+          "TO_THE_PORTAL_AND_CLICK_THE_PROFILE_ICON_AT_THE_TOP_RIGHT_CORNER_OF_THE_HOMEPAGE"
+        )}
       </p>
     ),
   },
   {
-    question:
-      "What should I do if I encounter an error message on the website?",
+    question: t(
+      "WHERE_SHOULD_I_DO_IF_I_ENCOUNTER_AN_ERROR_MESSAGE_ON_THE_WEBSITE"
+    ),
     answer: (
       <div>
-        <p>
-          You can attempt to refresh the page. If the issue persists, you can
-          clear your browser cache and cookies by pressing Ctrl + Shift +
-          Delete, selecting Cached Images and Files, and clicking Clear Data.
+        <p>{t("YOU_CAN_ATTEMPT_TO_REFRESH_THE_PAGE")}</p>
+        <p className="mt-2">
+          {t(
+            "IF_THE_PROBLEM_CONTINUES_YOU_CAN_CONTACT_THE_ON_COURT_HELPDESK_USING"
+          )}
         </p>
         <p className="mt-2">
-          If the problem continues, you can contact the ON Court Helpdesk using
-          the following contact details:
-        </p>
-        <p className="mt-2">
-          Phone Support: Call +91 474 2919099 (Monday to Saturday, 10:00 AM –
-          5:00 PM)
+          {t("PHONE_SUPPORT_CALL_MONDAY_TO_SATURDAY_1000_AM_500_PM")}
         </p>
       </div>
     ),
   },
   {
-    question: "How is my data protected on the platform?",
+    question: t("WHERE_IS_MY_DATA_PROTECTED_ON_THE_PLATFORM"),
     answer: (
       <p>
-        All personal and case-related data is securely stored and protected
-        through authenticated, role-based access. Personally Identifiable
-        Information (PII) is encrypted before storage, and the platform
-        undergoes regular security audits to ensure compliance with data
-        protection standards.
+        {t(
+          "ALL_PERSONAL_AND_CASE_RELATED_DATA_IS_SECURELY_STORED_AND_PROTECTED"
+        )}
       </p>
     ),
   },

@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import PersonCard from "../../components/common/PersonCard";
 import SectionHeading from "../../components/common/SectionHeading";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 // Data structure to hold all the people information
 const peopleData = {
   chiefJustices: [
     {
       name: "Justice Nitin Jamdar",
-      title: "Chief Justice",
+      title: "CHIEF_JUSTICE",
       image: "/images/jOne.png",
     },
   ],
@@ -16,53 +17,49 @@ const peopleData = {
     magistrates: [
       {
         name: "Sri. Micheal George",
-        title: "Judicial First Class Magistrate",
+        title: "JUDICIAL_FIRST_CLASS_MAGISTRATE",
         image: "/images/jThree.png",
-        description:
-          "The Magistrate is the presiding officer of the ON court . He also manages administrative tasks such as permitting delayed submissions, and reviewing case readiness.",
+        description: "JUDICIAL_FIRST_CLASS_MAGISTRATE_DESCRIPTION",
       },
     ],
     employees: [
       {
         name: "Sri. Biju A.",
-        title: "Junior Superintendent",
+        title: "JUNIOR_SUPERINTENDENT",
         image: "/images/biju.jpg",
-        description:
-          "The Junior Superintendent is the chief ministerial officer of the court. They scrutinize case files and accept physical payments. Supporting the day-to-day functioning of the courtroom, they are the general courtroom manager of ON Court.",
+        description: "JUNIOR_SUPERINTENDENT_DESCRIPTION",
       },
       {
         name: "Smt. Shobha K.",
-        title: "Bench Clerk",
+        title: "BENCH_CLERK",
         image: "/images/shobha.jpg",
-        description:
-          "The Bench Clerk plays a key role in courtroom operations management - facilitating virtual and in-person hearings, assisting the magistrate with hearing scheduling, verifying submitted documents, updating and dispatching court processes like summons and notices, and maintaining digital courtroom registers.",
+        description: "BENCH_CLERK_DESCRIPTION",
       },
       {
         name: "Smt. Sony P.",
-        title: "Confidential Assistant",
+        title: "CONFIDENTIAL_ASSISTANT",
         image: "/images/sony.jpg",
-        description:
-          "The Confidential Assistant is the legal assistant who supports the judge by drafting orders and judgments as directed and editing depositions during hearings.",
+        description: "CONFIDENTIAL_ASSISTANT_DESCRIPTION",
       },
       {
         name: "Smt. Rakhi",
-        title: "eSewa Kendra person",
+        title: "ESEWA_KENDRA_PERSON",
         image: "",
-        description:
-          "The eSewa Kendra representative provides first-level technical and functional support, resolving user issues and capturing feedback to inform system improvements. The role also involves assisting with case filings, courtroom logistics, and coordinating with users to ensure smooth daily operations.",
+        description: "ESEWA_KENDRA_PERSON_DESCRIPTION",
       },
     ],
   },
   formerMagistrates: [
     {
       name: "Smt. Soumya S Subramanian",
-      title: "Judicial First Class Magistrate I",
+      title: "JUDICIAL_FIRST_CLASS_MAGISTRATE_I",
       image: "/images/jFour.png",
     },
   ],
 };
 
 const People = () => {
+  const { t } = useSafeTranslation();
   // State to track the maximum height of all text sections
   const [maxTextHeight, setMaxTextHeight] = useState<number>(0);
 
@@ -78,7 +75,7 @@ const People = () => {
   return (
     <>
       <Head>
-        <title>ON Courts People | Judicial Staff</title>
+        <title>{t("ABOUT_US_PEOPLE")}</title>
         <meta
           name="description"
           content="Meet the dedicated team of judicial officers and staff at ON Courts"
@@ -88,7 +85,7 @@ const People = () => {
       <div className="py-8 md:py-12 bg-[#F0FDFA]">
         <div className="w-[80%] md:w-[90%] lg:w-[90%] mx-auto px-2 sm:px-4">
           <SectionHeading
-            title="People"
+            title={t("PEOPLE")}
             fontSize="text-5xl"
             className="mb-12"
             showBorder={false}
@@ -97,7 +94,7 @@ const People = () => {
           {/* High Court of Kerala Section */}
           <div className="mb-16">
             <SectionHeading
-              title="High Court of Kerala"
+              title={t("HIGH_COURT_OF_KERALA")}
               fontSize="text-4xl"
               className="mb-8"
             />
@@ -116,6 +113,7 @@ const People = () => {
               >
                 {peopleData.chiefJustices.map((justice, index) => (
                   <PersonCard
+                    t={t}
                     key={index}
                     imagePath={justice.image}
                     name={justice.name}
@@ -131,7 +129,7 @@ const People = () => {
           {/* 24x7 ON Court, Kollam Section */}
           <div className="mb-16">
             <SectionHeading
-              title="24x7 ON Court, Kollam"
+              title={t("24X7_ON_COURT_KOLLAM")}
               fontSize="text-4xl"
               className="mb-8"
             />
@@ -153,6 +151,7 @@ const People = () => {
                 >
                   {peopleData.oncourt.magistrates.map((magistrate, index) => (
                     <PersonCard
+                      t={t}
                       key={index}
                       imagePath={magistrate.image}
                       name={magistrate.name}
@@ -183,6 +182,7 @@ const People = () => {
               >
                 {peopleData.oncourt.employees.map((person, index) => (
                   <PersonCard
+                    t={t}
                     key={index}
                     imagePath={person.image}
                     name={person.name}
@@ -200,7 +200,7 @@ const People = () => {
           {/* Former Magistrates Section */}
           <div>
             <SectionHeading
-              title="Former Magistrates"
+              title={t("FORMER_MAGISTRATES")}
               fontSize="text-4xl"
               className="mb-8"
             />
@@ -219,6 +219,7 @@ const People = () => {
               >
                 {peopleData.formerMagistrates.map((person, index) => (
                   <PersonCard
+                    t={t}
                     key={index}
                     imagePath={person.image}
                     name={person.name}

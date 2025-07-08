@@ -1,35 +1,34 @@
 import CustomCard from "../common/CustomCard";
 import SectionHeading from "../common/SectionHeading";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 export default function ONCourtsExperience() {
+  const { t } = useSafeTranslation();
   const experiences = [
     {
-      title: "Accessible & Predictable",
-      description:
-        "File cases, respond to summons, submit applications, and manage hearing dates—from anywhere, at any time. Understand when your case will advance with more certainty.",
+      title: "ACCESSIBLE_AND_PREDICTABLE",
+      description: "ACCESSIBLE_AND_PREDICTABLE_DESCRIPTION",
     },
     {
-      title: "Assisted & Empowering",
-      description:
-        "Get real-time updates on your case: amounts paid, next hearing date, summons status, & orders passed. Receive alerts for actions to be taken. Easily take action using templates, prompts, & dashboards.",
+      title: "ASSISTED_AND_EMPOWERING",
+      description: "ASSISTED_AND_EMPOWERING_DESCRIPTION",
     },
     {
-      title: "Seamless & Frictionless",
-      description:
-        "Optimise your time by eliminating the need to run pillar to post to sign documents, make payments, correct errors, send or track status of notices.",
+      title: "SEAMLESS_AND_FRICTIONLESS",
+      description: "SEAMLESS_AND_FRICTIONLESS_DESCRIPTION",
     },
   ];
   return (
     <div className="py-16 bg-[#F0FDFA]" id="experience-section">
       <div className="container mx-auto px-4">
-        <SectionHeading title="ON Courts Experience" />
+        <SectionHeading title={t("ON_COURTS_EXPERIENCE")} />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-5">
           {experiences.map((experience, index) => (
             <CustomCard
               key={index}
-              title={experience.title}
-              description={experience.description}
+              title={t(experience.title)}
+              description={t(experience.description)}
             />
           ))}
         </div>

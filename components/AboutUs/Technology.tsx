@@ -1,8 +1,10 @@
 import React from "react";
 import SectionHeading from "../common/SectionHeading";
 import Image from "next/image";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 export default function Technology() {
+  const { t } = useSafeTranslation();
   return (
     <div className="py-16 bg-white relative" id="technology-section">
       <div
@@ -16,16 +18,11 @@ export default function Technology() {
         }}
       />
       <div className="container mx-auto px-4 relative z-10">
-        <SectionHeading title="Technology" />
+        <SectionHeading title={t("TECHNOLOGY")} />
 
         <div className="font-[Roboto] max-w-5xl mx-auto text-center">
           <p className="text-[20px] font-normal text-[#334155] mb-8">
-            ON Courts is powered by DRISTI, an open source case management
-            platform. DRISTI is freely available to everyone and provides
-            reusable building blocks for essential functions such as e-filing,
-            document scrutiny, and case management. DRISTI has been configured
-            to suit the context in Kerala, particularly for cheque dishonour
-            cases.
+            {t("TECHNOLOGY_DESCRIPTION")}
           </p>
 
           <a
@@ -34,7 +31,7 @@ export default function Technology() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Git book
+            {t("GIT_BOOK")}
             <Image
               src="/images/rightArrow.png"
               alt="Arrow right"

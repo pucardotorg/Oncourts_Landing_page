@@ -1,29 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import SectionHeading from "../common/SectionHeading";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 const UserVoices: React.FC = () => {
+  const { t } = useSafeTranslation();
   // Testimonial data
   const testimonials = [
     {
       name: "Asha G.V",
-      designation: "Advocate",
-      quote:
-        "I am the first advocate to have filed a case before the 24*7 ON Court. At that time I found it would be very difficult. But now, I have filed more than 40 cases before the 24*7 ON Court. In my  experience, the court is completely paperless and filing is very easy.  Now, it only takes me 10 to 20 minutes to file a case. In my personal experience, this ON Court is very useful and easy.",
-      photo: "/images/singlePerson.png",
+      designation: "ADVOCATE",
+      quote: "ASHA_TESTIMONIAL",
+      photo: "/images/asha.jpg",
     },
     {
       name: "Beena M.",
-      designation: "Advocate",
-      quote:
-        "The first point I would like to say is that now the full posting dates of the cases of month is visible so that is very useful. Earlier we could see only the next day's posting date. This change is very helpful. Altogether its improving a lot and it's useful to lawyers.",
-      photo: "/images/singlePerson.png",
+      designation: "ADVOCATE",
+      quote: "BEENA_TESTIMONIAL",
+      photo: "/images/beena.jpg",
     },
     {
       name: "Karthika S.",
-      designation: "Advocate",
-      quote:
-        "24x7 Oncourt has completely changed my perspective on the judicial system. I find it simple, fast, and always accessible. The most impressive aspect is the real-time updates, and the process is entirely paperless. It feels very transparent and efficient. One suggestion is that including a chatbot to assist users would be very helpful, in my opinion.",
+      designation: "ADVOCATE",
+      quote: "KARTHIKA_TESTIMONIAL",
       photo: "/images/singlePerson.png",
     },
   ];
@@ -76,7 +75,7 @@ const UserVoices: React.FC = () => {
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          <SectionHeading title="User Voices" />
+          <SectionHeading title={t("USER_VOICES")} />
 
           {/* Testimonial */}
           <div className="mt-20 flex flex-col items-center transition-opacity duration-500">
@@ -217,13 +216,13 @@ const UserVoices: React.FC = () => {
                 </div>
                 <div className="w-[5%] text-center">|</div>
                 <div className="w-[47.5%] text-left">
-                  {testimonials[activeIndex].designation}
+                  {t(testimonials[activeIndex].designation)}
                 </div>
               </div>
             </div>
             {/* Quote */}
             <p className="text-[19px] md:text-[21px] text-center text-[#334155] font-[Roboto] max-w-4xl">
-              {testimonials[activeIndex].quote}
+              {t(testimonials[activeIndex].quote)}
             </p>
 
             {/* Navigation dots */}

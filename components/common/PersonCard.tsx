@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
 interface PersonCardProps {
+  t: (key: string) => string;
   imagePath: string;
   name: string;
   title: string;
@@ -13,6 +14,7 @@ interface PersonCardProps {
 }
 
 const PersonCard: React.FC<PersonCardProps> = ({
+  t,
   imagePath,
   name,
   title,
@@ -80,7 +82,7 @@ const PersonCard: React.FC<PersonCardProps> = ({
             `}
             >
               <p className="text-white text-sm md:text-lg font-[Roboto] text-center">
-                {description}
+                {t(description)}
               </p>
             </div>
           )}
@@ -102,7 +104,7 @@ const PersonCard: React.FC<PersonCardProps> = ({
             {name}
           </h3>
           <p className="text-sm md:text-base lg:text-[20px] font-[Roboto] text-[#3A3A3A] text-center w-full break-words">
-            {title}
+            {t(title)}
           </p>
         </div>
       </div>
