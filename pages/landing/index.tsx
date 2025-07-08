@@ -8,6 +8,7 @@ import StickyHelpButton from "../../components/Utils/StickyHelpButton";
 import HomeIntroVideo from "../../components/HomePage/HomeIntroVideo";
 import InfoBanner from "../../components/InfoBanner";
 import Highlights from "../../components/HomePage/Highlights";
+import QuestionsSection from "../../components/HomePage/QuestionsSection";
 
 const Hero = () => {
   return (
@@ -16,6 +17,7 @@ const Hero = () => {
       <StickyHelpButton />
       <HomeIntroVideo />
       <Highlights />
+      <QuestionsSection />
       <NoticeAndCauseListSection />
       <WhatsNewSections />
       <ImpactGlance />
