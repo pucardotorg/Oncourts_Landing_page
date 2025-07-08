@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import { svgIcons } from "../../data/svgIcons";
+import { transformImpactGlance } from "../../TransformData/transformResponseData";
 
 interface HighlightItemProps {
   value: string;
   label: string;
+}
+
+export interface DashboardMetricsNew {
+  id: string;
+  numberOfCasesFiled: number;
+  numberOfCasesDisposed: number;
+  daysToCaseRegistration: number;
+  averageNumberOfDaysBetweenHearingsForCase: number;
 }
 
 const HighlightItem: React.FC<HighlightItemProps> = ({ value, label }) => (
@@ -20,12 +29,42 @@ const HighlightItem: React.FC<HighlightItemProps> = ({ value, label }) => (
 
 const Highlights: React.FC = () => {
   const { t } = useSafeTranslation();
+  const [stats, setStats] = useState<DashboardMetricsNew>();
+
+  useEffect(() => {
+    const fetchImpactGlance = async () => {
+      try {
+        const res = await fetch("/api/impactGlance");
+        const data = await res.json();
+        console.log("data", data);
+
+        const transformed = transformImpactGlance(data);
+        setStats(transformed?.stats || []);
+      } catch (error) {
+        console.error("Failed to fetch Whats New data", error);
+      }
+    };
+
+    fetchImpactGlance();
+  }, []);
 
   const highlights = [
-    { value: "315", label: t("CASES_FILED") },
-    { value: "184", label: t("CASES_DISPOSED") },
-    { value: "60", label: t("DAYS_TO_NEXT_HEARING") },
-    { value: "60", label: t("DAYS_TO_CASE_REGISTRATION") },
+    {
+      value: stats?.numberOfCasesFiled?.toString() || "",
+      label: t("CASES_FILED"),
+    },
+    {
+      value: stats?.numberOfCasesDisposed?.toString() || "",
+      label: t("CASES_DISPOSED"),
+    },
+    {
+      value: stats?.daysToCaseRegistration?.toString() || "",
+      label: t("DAYS_TO_NEXT_HEARING"),
+    },
+    {
+      value: stats?.averageNumberOfDaysBetweenHearingsForCase?.toString() || "",
+      label: t("DAYS_TO_CASE_REGISTRATION"),
+    },
   ];
 
   return (
