@@ -6,39 +6,25 @@ const UserVoices: React.FC = () => {
   // Testimonial data
   const testimonials = [
     {
-      name: "K. Kumar",
+      name: "Asha G.V",
       designation: "Advocate",
       quote:
-        "I am the first advocate to have filed a case before the 24*7 ON Court. At that time I found it would be very difficult. But now, I have filed more than 40 cases before the 24*7 ON Court. In my experience, the court is completely paperless and filing is very easy. Now, it only takes me 10 to 20 minutes to file a case. In my personal experience, this ON Court is very useful and easy.",
-      photo: "/images/jOne.png",
+        "I am the first advocate to have filed a case before the 24*7 ON Court. At that time I found it would be very difficult. But now, I have filed more than 40 cases before the 24*7 ON Court. In my  experience, the court is completely paperless and filing is very easy.  Now, it only takes me 10 to 20 minutes to file a case. In my personal experience, this ON Court is very useful and easy.",
+      photo: "/images/singlePerson.png",
     },
     {
       name: "Beena M.",
       designation: "Advocate",
       quote:
         "The first point I would like to say is that now the full posting dates of the cases of month is visible so that is very useful. Earlier we could see only the next day's posting date. This change is very helpful. Altogether its improving a lot and it's useful to lawyers.",
-      photo: "/images/jFour.png",
+      photo: "/images/singlePerson.png",
     },
     {
       name: "Karthika S.",
       designation: "Advocate",
       quote:
         "24x7 Oncourt has completely changed my perspective on the judicial system. I find it simple, fast, and always accessible. The most impressive aspect is the real-time updates, and the process is entirely paperless. It feels very transparent and efficient. One suggestion is that including a chatbot to assist users would be very helpful, in my opinion.",
-      photo: "/images/jTwo.png",
-    },
-    {
-      name: "Rajesh K.",
-      designation: "Advocate",
-      quote:
-        "The ON Courts platform has streamlined my workflow considerably. I appreciate the transparency and efficiency of the system.",
-      photo: "/images/jThree.png",
-    },
-    {
-      name: "Suresh P.",
-      designation: "Advocate Clerk",
-      quote:
-        "Filing documents through the ON Courts system has made my job much more efficient. The digital process saves time and reduces errors.",
-      photo: "/images/jOne.png",
+      photo: "/images/singlePerson.png",
     },
   ];
 

@@ -19,7 +19,6 @@ interface LayoutProps {
 import dynamic from "next/dynamic";
 import { commonStyles } from "../styles/commonStyles";
 import HeaderV2 from "./HeaderV2";
-import FooterNew from "./FooterNew";
 
 const DigitInitializer = dynamic(() => import("./DigitInitializer"), {
   ssr: false,
@@ -89,7 +88,6 @@ const Layout: React.FC<LayoutProps> = ({
           <HeaderV2 />
           <main className="flex-grow">{children}</main>
           <Footer />
-          <FooterNew />
         </div>
       </div>
     </DigitInitializer>

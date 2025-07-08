@@ -60,14 +60,16 @@ const HelpResources = () => {
                   {
                     icon: "/images/file.png",
                     text: "Support Form",
-                    link: "#",
+                    link: "https://forms.gle/uCSgGiqGiMQYjjgeA",
                     section: "Support Form",
+                    newTab: true,
                   },
                   {
                     icon: "/images/file.png",
                     text: "Feedback survey form",
-                    link: "#",
+                    link: "https://docs.google.com/forms/d/e/1FAIpQLSdsNBhg-9YYs-HKFja_UwUc7ZV38BItLgb7If4kWwTURMqXOg/viewform",
                     section: "Feedback survey form",
+                    newTab: true,
                   },
                 ]}
               />
@@ -79,14 +81,16 @@ const HelpResources = () => {
                   {
                     icon: "/images/file.png",
                     text: "User Guide for Advocates, Clerks & Litigants",
-                    link: "#",
+                    link: "https://drive.google.com/file/d/1j4mIw0K2F8m_urJE-zbu-oeluiOL-8Pg/view",
                     section: "User Guide for Advocates, Clerks & Litigants",
+                    newTab: true,
                   },
                   {
                     icon: "/images/file.png",
                     text: "Video tutorials",
                     link: "#",
                     section: "Video tutorials",
+                    newTab: false,
                   },
                 ]}
               />
@@ -97,7 +101,7 @@ const HelpResources = () => {
           )}
 
           {/* FAQ Section */}
-          <div className="my-16 pb-8 md:pb-0 bg-[#F0FDFA] md:bg-white">
+          <div id="faq" className="my-16 pb-8 md:pb-0 bg-[#F0FDFA] md:bg-white">
             <SectionHeading
               title="Frequently Asked Questions"
               fontSize="text-4xl"
@@ -117,14 +121,14 @@ const HelpResources = () => {
           </div>
 
           {/* Contact Information */}
-          <div>
+          <div id="contactUs">
             <SectionHeading
               title="Need Further Assistance? Contact Us!"
               fontSize="text-4xl"
               className="mb-8"
             />
 
-            <div className="font-[Roboto] md:px-20 pb-20 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div className="font-[Roboto] px-6 md:px-20 pb-20 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
               {contactInfoData.map((item, index) => (
                 <div key={index} className="flex items-center gap-4">
                   <div className="p-3 mt-1">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { APP_URLS } from "../lib/config";
 
 export const contactInfoData = [
   {
@@ -34,7 +35,7 @@ export const faqs = [
       <div>
         <p>
           You can find these details in the{" "}
-          <Link href="/search" className="text-teal-600 hover:underline">
+          <Link href="/search" className="text-[#1D4ED8] underline">
             Case Search
           </Link>{" "}
           section under the Services tab on the ON Court website.
@@ -57,10 +58,13 @@ export const faqs = [
       <p>
         You can access pending tasks by logging into the ON Court portal and
         navigating to the All Pending Tasks section on the right-side panel in
-        the homepage. Alternatively, you can use the Case Search section under
-        the Services tab to review pending payments, such as online fees or
-        stamp and envelope submissions (applicable for RPAD channel only)
-        related to notices, summons, or warrants.
+        the homepage. Alternatively, you can use the{" "}
+        <Link href="/search" className="text-[#1D4ED8] underline">
+          Case Search
+        </Link>{" "}
+        section under the Services tab to review pending payments, such as
+        online fees or stamp and envelope submissions (applicable for RPAD
+        channel only) related to notices, summons, or warrants.
       </p>
     ),
   },
@@ -69,11 +73,18 @@ export const faqs = [
       "How can I check if my cases are scheduled for hearing on a specific day?",
     answer: (
       <p>
-        You can use the Display Board to view all cases listed for a chosen
-        date. You can also search the cases by case number, case title or
-        advocate name in this section. Alternatively, you can access the Case
-        Search section under the Services tab to check the next hearing dates
-        for all your cases.
+        You can use the{" "}
+        <Link href="/display-board" className="text-[#1D4ED8] underline">
+          Display Board
+        </Link>{" "}
+        to view all cases listed for a chosen date. You can also search the
+        cases by case number, case title or advocate name in this section.
+        Alternatively, you can access the{" "}
+        <Link href="/search" className="text-[#1D4ED8] underline">
+          Case Search
+        </Link>{" "}
+        section under the Services tab to check the next hearing dates for all
+        your cases.
       </p>
     ),
   },
@@ -83,8 +94,12 @@ export const faqs = [
       <p>
         Yes. You can join your hearing online by clicking the Join Hearing
         button available in the Display Board section of the website. You can
-        also use the Display Board to check the live status of hearings and see
-        which case is currently being heard.
+        also use the{" "}
+        <Link href="/display-board" className="text-[#1D4ED8] underline">
+          Display Board
+        </Link>{" "}
+        to check the live status of hearings and see which case is currently
+        being heard.
       </p>
     ),
   },
@@ -93,46 +108,58 @@ export const faqs = [
     answer: (
       <div>
         <p>List of documents required for e-filing:</p>
-        <ul className="list-disc pl-6 mt-2 space-y-1">
+        <ol className="list-decimal pl-6 mt-2 space-y-1">
           <li>
-            Proof of identity: PAN Card, Aadhar card, Passport, Driving license,
-            Voter ID, Ration card or Bank passbook
+            <span className="font-semibold">Proof of identity:</span> PAN Card,
+            Aadhar card, Passport, Driving license, Voter ID, Ration card or
+            Bank passbook
           </li>
           <li>
-            Dishonored Cheque: A copy of the dishonored cheque on the basis
-            which this case is being filed
+            <span className="font-semibold">Dishonored Cheque:</span> A copy of
+            the dishonored cheque on the basis which this case is being filed
           </li>
           <li>
-            Cheque Return Memo: The document received from the bank that has the
-            information that the cheque has bounced
+            <span className="font-semibold">Cheque Return Memo:</span> The
+            document received from the bank that has the information that the
+            cheque has bounced
           </li>
           <li>
-            Legal Demand Notice: Any intimation you provided to the respondent
-            to informing them that their cheque had bounced and they still owed
-            you the cheque amount
+            <span className="font-semibold">Legal Demand Notice:</span> Any
+            intimation you provided to the respondent informing them that their
+            cheque had bounced and they still owed you the cheque amount
           </li>
           <li>
-            Postal acknowledgement (Issue of legal demand notice): The
-            acknowledgement provided by the postal department when sending the
-            letter/RPAD/anything else containing legal demand notice (see number
-            4 in the list) to the accused.
+            <span className="font-semibold">
+              Postal acknowledgement (Issue of legal demand notice):
+            </span>{" "}
+            The acknowledgement provided by the postal department when sending
+            the letter/RPAD/anything else containing legal demand notice (see
+            number 4 in the list) to the accused.
           </li>
           <li>
-            Postal acknowledgement (Delivery of legal demand notice): The
-            acknowledgement provided by the postal department when the
+            <span className="font-semibold">
+              Postal acknowledgement (Delivery of legal demand notice):
+            </span>{" "}
+            The acknowledgement provided by the postal department when the
             letter/RPAD/anything else containing legal demand notice (see number
             4 in the list) is received by the accused
           </li>
           <li>
-            Affidavit under section 223 of BNSS: Affidavit under section 223 of
-            BNSS must be there in the infobox at the start of filing.
+            <span className="font-semibold">
+              Affidavit under section 223 of BNSS:
+            </span>{" "}
+            Affidavit under section 223 of BNSS must be there in the infobox at
+            the start of filing.
           </li>
           <li>
-            Any other document you deem necessary: Please include any additional
-            documents you believe will strengthen your case and that will be
-            crucial in substantiating your claims when filing the complaint.
+            <span className="font-semibold">
+              Any other document you deem necessary:
+            </span>{" "}
+            Please include any additional documents you believe will strengthen
+            your case and that will be crucial in substantiating your claims
+            when filing the complaint.
           </li>
-        </ul>
+        </ol>
       </div>
     ),
   },
@@ -141,14 +168,14 @@ export const faqs = [
     answer: (
       <div>
         <p>List of documents required for Bail:</p>
-        <ul className="list-disc pl-6 mt-2 space-y-1">
+        <ol className="list-decimal pl-6 mt-2 space-y-1">
           <li>Bail Application (System generated)</li>
           <li>ID proofs for surety(s)</li>
           <li>Tax receipts for surety(s)</li>
           <li>Affidavits for surety(s) (System Generated)</li>
           <li>Bail Bond</li>
           <li>Any other document you deem necessary</li>
-        </ul>
+        </ol>
       </div>
     ),
   },
@@ -167,12 +194,21 @@ export const faqs = [
           menu. You can also use the direct links below:
         </p>
         <div className="mt-2">
-          <Link href="#" className="text-teal-600 hover:underline block">
-            User Guide for Advocates and Clerks
-          </Link>
-          <Link href="#" className="text-teal-600 hover:underline block mt-1">
-            Video tutorials for Advocates and Clerks
-          </Link>
+          <ol className="list-decimal pl-6 mt-2 space-y-1">
+            <li>
+              <Link
+                href="https://drive.google.com/file/d/1j4mIw0K2F8m_urJE-zbu-oeluiOL-8Pg/view?usp=sharing"
+                className="text-[#1D4ED8] hover:underline block"
+              >
+                User Guide for Advocates and Clerks
+              </Link>
+            </li>
+            <li>
+              <Link href="#" className="text-[#1D4ED8] hover:underline block">
+                Video tutorials for Advocates and Clerks
+              </Link>
+            </li>
+          </ol>
         </div>
       </div>
     ),
@@ -181,9 +217,17 @@ export const faqs = [
     question: "How can I report an issue or request for support online?",
     answer: (
       <p>
-        You can use the 24x7 ON Courts Support Form to report any issue or
-        request a feature. The support team monitors all submissions and shares
-        updates on the resolution with the concerned.
+        You can use the 24x7 ON Courts{" "}
+        <Link
+          href="https://forms.gle/uCSgGiqGiMQYjjgeA"
+          className="text-[#1D4ED8] underline"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Support Form
+        </Link>{" "}
+        to report any issue or request a feature. The support team monitors all
+        submissions and shares updates on the resolution with the concerned.
       </p>
     ),
   },
@@ -191,9 +235,18 @@ export const faqs = [
     question: "How can I update my email ID on the portal?",
     answer: (
       <p>
-        To update your email ID, log in to the portal and click the profile icon
-        at the top right corner of the homepage. Select Edit Profile, enter your
-        email ID in the space provided, and click Continue to save.
+        To update your email ID,{" "}
+        <Link
+          href={`${APP_URLS.CITIZEN_APP}`}
+          className="text-[#1D4ED8] underline"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          log in
+        </Link>{" "}
+        to the portal and click the profile icon at the top right corner of the
+        homepage. Select Edit Profile, enter your email ID in the space
+        provided, and click Continue to save.
       </p>
     ),
   },

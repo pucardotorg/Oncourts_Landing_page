@@ -9,6 +9,7 @@ interface ResourceItemProps {
     text: string;
     link: string;
     section: string;
+    newTab: boolean;
   }[];
 }
 
@@ -21,7 +22,12 @@ const ResourceItem: React.FC<ResourceItemProps> = ({ heading, items }) => {
       <div className="space-y-4">
         {items.map((item, index) => (
           <React.Fragment key={index}>
-            <Link href={item?.link} className="block mb-4">
+            <Link
+              target={item.newTab ? "_blank" : "_self"}
+              rel={item.newTab ? "noopener noreferrer" : undefined}
+              href={item?.link}
+              className="block mb-4"
+            >
               <div
                 className="flex items-center justify-between cursor-pointer"
                 onMouseEnter={() => setHoveredItem(item?.section)}

@@ -4,7 +4,7 @@ import Image from "next/image";
 import FullscreenButton from "../common/FullscreenButton";
 
 export default function Vision() {
-  const videoId = "gVgXhi2C-w4";
+  const videoId = "EDDAkm4FvBc";
 
   return (
     <div className="py-10 md:py-16 bg-white" id="vision-section">
@@ -29,8 +29,10 @@ export default function Vision() {
               the vision outlined in Phase III of the E-Courts Project.
             </p>
             <a
-              href="#"
+              href="https://docs.google.com/document/d/109ZayX_-WRr87k69m3GSEiqtgSnziWtnW08SxUZEIGQ/edit?tab=t.0#heading=h.hxgglwufvkno"
               className="inline-flex items-center bg-[#0F766E] text-white py-2 md:py-3 px-4 md:px-6 rounded-md hover:bg-[#0F766E]/80 transition-colors text-base md:text-lg"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <span>ON Courts Journey</span>
               <Image

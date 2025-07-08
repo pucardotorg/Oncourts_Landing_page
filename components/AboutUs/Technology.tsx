@@ -29,8 +29,10 @@ export default function Technology() {
           </p>
 
           <a
-            href="#"
+            href="https://pucar.gitbook.io/dristi/dristi-platform/release-notes"
             className="inline-flex items-center bg-[#0F766E] text-white text-[28px] font-medium py-3 px-6 rounded-md hover:bg-[#0F766E]/80 transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             Git book
             <Image

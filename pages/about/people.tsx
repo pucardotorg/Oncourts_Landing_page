@@ -22,23 +22,23 @@ const peopleData = {
     ],
     employees: [
       {
-        name: "Sri. Raju A",
-        title: "Office Superintendent",
-        image: "",
+        name: "Sri. Biju A.",
+        title: "Junior Superintendent",
+        image: "/images/biju.jpg",
       },
       {
-        name: "Smt. Shibha K.",
-        title: "Head Clerk",
-        image: "",
+        name: "Smt. Shobha K.",
+        title: "Bench Clerk",
+        image: "/images/shobha.jpg",
       },
       {
         name: "Smt. Sony P.",
-        title: "Computer Assistant",
-        image: "",
+        title: "Confidential Assistant",
+        image: "/images/sony.jpg",
       },
       {
-        name: "Rakhi",
-        title: "Office Clerk (2019-2021)",
+        name: "Smt. Rakhi",
+        title: "eSewa Kendra person",
         image: "",
       },
     ],
@@ -46,8 +46,8 @@ const peopleData = {
   formerMagistrates: [
     {
       name: "Smt. Soumya S Subramanian",
-      title: "Judicial First Class Magistrate",
-      image: "",
+      title: "Judicial First Class Magistrate I",
+      image: "/images/jFour.png",
     },
   ],
 };
