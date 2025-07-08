@@ -18,11 +18,11 @@ const Hero = () => {
       <HomeIntroVideo />
       <Highlights />
       <QuestionsSection />
-      <NoticeAndCauseListSection />
-      <WhatsNewSections />
-      <ImpactGlance />
-      <TestimonialCarousel />
-      <Support />
+      {/* <NoticeAndCauseListSection /> */}
+      {/* <WhatsNewSections /> */}
+      {/* <ImpactGlance />
+      <TestimonialCarousel /> */}
+      {/* <Support /> */}
     </div>
   );
 };
