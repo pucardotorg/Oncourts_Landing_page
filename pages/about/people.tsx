@@ -18,6 +18,8 @@ const peopleData = {
         name: "Sri. Micheal George",
         title: "Judicial First Class Magistrate",
         image: "/images/jThree.png",
+        description:
+          "The Magistrate is the presiding officer of the ON court . He also manages administrative tasks such as permitting delayed submissions, and reviewing case readiness.",
       },
     ],
     employees: [
@@ -25,21 +27,29 @@ const peopleData = {
         name: "Sri. Biju A.",
         title: "Junior Superintendent",
         image: "/images/biju.jpg",
+        description:
+          "The Junior Superintendent is the chief ministerial officer of the court. They scrutinize case files and accept physical payments. Supporting the day-to-day functioning of the courtroom, they are the general courtroom manager of ON Court.",
       },
       {
         name: "Smt. Shobha K.",
         title: "Bench Clerk",
         image: "/images/shobha.jpg",
+        description:
+          "The Bench Clerk plays a key role in courtroom operations management - facilitating virtual and in-person hearings, assisting the magistrate with hearing scheduling, verifying submitted documents, updating and dispatching court processes like summons and notices, and maintaining digital courtroom registers.",
       },
       {
         name: "Smt. Sony P.",
         title: "Confidential Assistant",
         image: "/images/sony.jpg",
+        description:
+          "The Confidential Assistant is the legal assistant who supports the judge by drafting orders and judgments as directed and editing depositions during hearings.",
       },
       {
         name: "Smt. Rakhi",
         title: "eSewa Kendra person",
         image: "",
+        description:
+          "The eSewa Kendra representative provides first-level technical and functional support, resolving user issues and capturing feedback to inform system improvements. The role also involves assisting with case filings, courtroom logistics, and coordinating with users to ensure smooth daily operations.",
       },
     ],
   },
@@ -147,8 +157,10 @@ const People = () => {
                       imagePath={magistrate.image}
                       name={magistrate.name}
                       title={magistrate.title}
+                      description={magistrate.description}
                       cardHeight={maxTextHeight}
                       setMaxHeight={updateMaxHeight}
+                      animateOnHover={true}
                     />
                   ))}
                 </div>
@@ -175,8 +187,10 @@ const People = () => {
                     imagePath={person.image}
                     name={person.name}
                     title={person.title}
+                    description={person.description}
                     cardHeight={maxTextHeight}
                     setMaxHeight={updateMaxHeight}
+                    animateOnHover={true}
                   />
                 ))}
               </div>

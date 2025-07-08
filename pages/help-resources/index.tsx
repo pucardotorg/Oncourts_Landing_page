@@ -14,7 +14,7 @@ const HelpResources = () => {
     setOpenFaq(openFaq === index ? null : index);
   };
 
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useMediaQuery("(max-width: 640px)");
 
   // Using contact information data from external file
 

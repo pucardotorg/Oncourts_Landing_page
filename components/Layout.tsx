@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
-import Header from "./Header";
 import Footer from "./Footer";
 import { Raleway } from "next/font/google";
 

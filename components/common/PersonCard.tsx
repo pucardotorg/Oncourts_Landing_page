@@ -1,24 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
 interface PersonCardProps {
   imagePath: string;
   name: string;
   title: string;
+  description?: string;
   className?: string;
   cardHeight?: number;
   setMaxHeight?: (height: number) => void;
+  animateOnHover?: boolean;
 }
 
 const PersonCard: React.FC<PersonCardProps> = ({
   imagePath,
   name,
   title,
+  description,
   className = "",
   cardHeight,
   setMaxHeight,
+  animateOnHover = false,
 }) => {
-  // No need to track local content height since we're using the parent's max height
+  const [isHovered, setIsHovered] = useState(false);
   const textRef = React.useRef<HTMLDivElement>(null);
 
   // Report this card's height to parent for uniform sizing
@@ -30,8 +34,18 @@ const PersonCard: React.FC<PersonCardProps> = ({
   }, [name, title, setMaxHeight]);
 
   return (
-    <div className={`flex flex-col ${className} w-full max-w-[350px]`}>
-      <div className="w-full bg-white border border-[#CBD5E1] rounded-md overflow-hidden shadow-sm flex flex-col">
+    <div
+      className={`flex flex-col ${className} w-full max-w-[350px]`}
+      onMouseEnter={() => animateOnHover && setIsHovered(true)}
+      onMouseLeave={() => animateOnHover && setIsHovered(false)}
+    >
+      <div
+        className={`
+        w-full bg-white border border-[#CBD5E1] rounded-md overflow-hidden shadow-sm flex flex-col
+        ${animateOnHover ? "transition-all duration-300 ease-in-out" : ""}
+        ${isHovered ? "shadow-lg transform scale-105" : ""}
+      `}
+      >
         {/* Image container - fixed aspect ratio and dimensions */}
         <div className="relative w-full aspect-[3.5/4.5] border-b border-[#CBD5E1]">
           {imagePath ? (
@@ -50,10 +64,24 @@ const PersonCard: React.FC<PersonCardProps> = ({
                   alt={name}
                   width={100}
                   height={100}
-                  // className="object-cover w-full h-full"
                   priority
                 />
               </div>
+            </div>
+          )}
+
+          {/* Overlay with description on hover */}
+          {animateOnHover && description && (
+            <div
+              className={`
+              absolute inset-0 bg-[#0F766E]/90 flex items-center justify-center p-4 overflow-y-auto
+              transition-opacity duration-300 ease-in-out
+              ${isHovered ? "opacity-100" : "opacity-0 pointer-events-none"}
+            `}
+            >
+              <p className="text-white text-sm md:text-lg font-[Roboto] text-center">
+                {description}
+              </p>
             </div>
           )}
         </div>
@@ -64,7 +92,13 @@ const PersonCard: React.FC<PersonCardProps> = ({
           className="py-3 px-2 flex flex-col justify-center items-center overflow-auto"
           style={{ height: cardHeight ? `${cardHeight}px` : "auto" }}
         >
-          <h3 className="text-base md:text-xl lg:text-[24px] font-medium font-[Baskerville] text-[#0F766E] w-full text-center break-words">
+          <h3
+            className={`
+            text-base md:text-xl lg:text-[24px] font-medium font-[Baskerville] w-full text-center break-words
+            ${isHovered ? "text-[#0F766E]" : "text-[#0F766E]"}
+            transition-colors duration-300
+          `}
+          >
             {name}
           </h3>
           <p className="text-sm md:text-base lg:text-[20px] font-[Roboto] text-[#3A3A3A] text-center w-full break-words">

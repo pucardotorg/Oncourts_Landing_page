@@ -10,7 +10,7 @@ import Head from "next/head";
 import { useMediaQuery } from "@mui/system";
 
 export default function About() {
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useMediaQuery("(max-width: 640px)");
   return (
     <>
       <Head>

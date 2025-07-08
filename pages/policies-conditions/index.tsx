@@ -4,7 +4,7 @@ import { policySections } from "../../data/PoliciesData";
 import { useMediaQuery } from "@mui/material";
 
 const Policies = () => {
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useMediaQuery("(max-width: 640px)");
   return (
     <main className="pt-20 pb-40 bg-white text-[#334155] font-[Roboto] text-lg md:text-2xl">
       <div className="w-full mx-auto space-y-12">

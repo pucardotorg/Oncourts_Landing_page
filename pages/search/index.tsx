@@ -35,7 +35,7 @@ import Pagination from "../../components/Utils/Pagination";
 const SearchForCase = () => {
   const { t } = useSafeTranslation();
   const router = useRouter();
-  const isMobile = useMediaQuery("(max-width:768px)");
+  const isMobile = useMediaQuery("(max-width:640px)");
   const [showMobileFilter, setShowMobileFilter] = useState(false);
   const [selectedTab, setSelectedTab] = useState("case_number");
   const [showViewDetailedModal, setShowViewDetailedModal] = useState(false);

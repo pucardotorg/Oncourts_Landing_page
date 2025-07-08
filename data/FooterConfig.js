@@ -26,7 +26,7 @@ export const FooterConfig = {
     { label: "FAQs", url: "/help-resources#faq" },
   ],
   informationPrivacy: [
-    { label: "RTI", url: "/about" },
+    { label: "RTI", url: "/rti" },
     { label: "Terms & Conditions", url: "/policies-conditions#terms" },
     { label: "Privacy Policy", url: "/policies-conditions#privacy" },
   ],
