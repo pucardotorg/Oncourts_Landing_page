@@ -165,7 +165,7 @@ const HeaderV2: React.FC = () => {
             </div>
 
             <NavItem
-              href="/"
+              href="/notices"
               label="NOTICES" // "Notices"
               isActive={router.pathname === "/notices"}
               t={t}

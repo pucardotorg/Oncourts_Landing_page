@@ -90,7 +90,7 @@ const HelpResources = () => {
                   {
                     icon: "/images/file.png",
                     text: "VIDEO_TUTORIALS",
-                    link: "#",
+                    link: "/video-tutorials",
                     section: "Video tutorials",
                     newTab: false,
                   },
