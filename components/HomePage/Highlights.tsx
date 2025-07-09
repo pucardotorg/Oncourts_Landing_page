@@ -21,7 +21,7 @@ const HighlightItem: React.FC<HighlightItemProps> = ({ value, label }) => (
     <span className="font-noto font-bold text-[72.28px] h-[78.3px] leading-[78.3px] tracking-[-2.41px] text-center text-[#0F766E]">
       {value || "\u00A0"}
     </span>
-    <span className="font-sans font-medium text-[16px] leading-[24px] tracking-[0.01em] text-center text-[[#0F172A]]">
+    <span className="h-[30px] font-roboto font-medium text-[26px] leading-[30px] tracking-[-0.26px] text-center text-[#0F172A]">
       {label}
     </span>
   </div>
@@ -57,11 +57,11 @@ const Highlights: React.FC = () => {
       label: t("CASES_DISPOSED"),
     },
     {
-      value: stats?.daysToCaseRegistration?.toString() || "",
+      value: stats?.averageNumberOfDaysBetweenHearingsForCase?.toString() || "",
       label: t("DAYS_TO_NEXT_HEARING"),
     },
     {
-      value: stats?.averageNumberOfDaysBetweenHearingsForCase?.toString() || "",
+      value: stats?.daysToCaseRegistration?.toString() || "",
       label: t("DAYS_TO_CASE_REGISTRATION"),
     },
   ];
@@ -69,7 +69,7 @@ const Highlights: React.FC = () => {
   return (
     <section className="w-full bg-white py-12">
       <div className="max-w-[1440px] mx-auto px-6">
-        <h2 className="font-libre font-normal text-[48px] leading-[56px] tracking-normal text-center align-middle text-[#3A3A3A]">
+        <h2 className="font-libre h-[48px] font-[400] text-[40px] leading-[48px] tracking-normal text-center align-middle text-[#3A3A3A]">
           {t("HIGHLIGHTS")}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -79,11 +79,11 @@ const Highlights: React.FC = () => {
         </div>
         <div className="flex justify-center mt-8">
           <button
-            className="flex justify-center items-center w-[376px] h-[69px] px-8 border border-[#0F766E] rounded-xl gap-3"
+            className="flex flex-row items-center justify-center px-4 md:px-[16px] gap-[12px] w-[376px] h-[69px] bg-white border border-[#0F766E] rounded-[12px] shadow-[inset_-2px_-2px_2px_rgba(15,23,42,0.14),inset_2px_2px_2px_1px_rgba(255,255,255,0.9)]"
             onClick={() => window.open("/", "_blank")}
           >
             <svgIcons.openInNewTabIcon />
-            <span className="font-sans font-medium text-[16px] leading-[24px] tracking-[0.01em] text-center text-[#0F766E]">
+            <span className="w-[296px] h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-center text-[#0F766E]">
               {t("VIEW_DETAILED_DASHBOARD")}
             </span>
           </button>
