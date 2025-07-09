@@ -71,7 +71,7 @@ function CauseListDisplay({ date, pdfUrl, onDownload }: CauseListDisplayProps) {
       )}
 
       <div
-        className={`flex flex-col items-center bg-white overflow-hidden ${isMobile ? "h-[253px] w-[95%]" : "w-[416px] h-[253px]"}`}
+        className={`flex flex-col items-center bg-white overflow-hidden ${isMobile ? "h-[253px] w-[95%]" : "w-[436px] h-[253px]"}`}
       >
         <div className=" h-[194px] p-2 aspect-[1.64] relative bg-white">
           {pdfUrl ? (
@@ -79,12 +79,12 @@ function CauseListDisplay({ date, pdfUrl, onDownload }: CauseListDisplayProps) {
               <PdfPreview
                 fileUrl={pdfUrl}
                 height={isMobile ? "194px" : "194px"}
-                width={isMobile ? "85%" : "416px"}
+                width={isMobile ? "90%" : "436px"}
                 scrollable={false}
               />
               <button
                 onClick={() => setShowPreview(true)}
-                className="absolute bottom-4 right-4 z-10"
+                className={`absolute bottom-0 z-10 ${isMobile ? "right-8" : "right-6"}`}
               >
                 <svgIcons.PreviewIcon />
               </button>

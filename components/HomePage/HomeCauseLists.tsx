@@ -4,6 +4,7 @@ import CauseListDisplay from "./CauseListDisplay";
 import { svgIcons } from "../../data/svgIcons";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import { useMediaQuery } from "@mui/material";
+import Tooltip from "../common/Tooltip";
 
 interface CauseListState {
   date: string;
@@ -12,6 +13,7 @@ interface CauseListState {
 
 function HomeCauseLists(): JSX.Element {
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const [showTooltip, setShowTooltip] = useState(false);
   const [leftCauseList, setLeftCauseList] = useState<CauseListState | null>(
     null
   );
@@ -166,17 +168,24 @@ function HomeCauseLists(): JSX.Element {
           </p>
         </div>
         <div className="flex justify-center mt-8">
-          <button
-            className={`flex flex-row items-center justify-center px-4 md:px-[16px] gap-[12px] bg-white border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px]" : "h-[69px]"}`}
-            onClick={() => window.open("/", "_blank")}
-          >
-            <svgIcons.OpenInNewTabIcon width={isMobile ? "16" : "30"} />
-            <span
-              className={`h-[32px] font-roboto font-medium leading-[32px] tracking-[-0.56px] text-center text-[#0F766E] ${isMobile ? "text-[16px]" : "text-[28px]"}`}
+          <div className="relative">
+            <button
+              className={`flex flex-row items-center justify-center px-4 md:px-[16px] gap-[12px] bg-white border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px]" : "h-[69px]"}`}
+              onClick={() => window.open("/", "_blank")}
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
             >
-              {t("View Cause List Display")}
-            </span>
-          </button>
+              <svgIcons.OpenInNewTabIcon width={isMobile ? "16" : "30"} />
+              <span
+                className={`h-[32px] font-roboto font-medium leading-[32px] tracking-[-0.56px] text-center text-[#0F766E] ${isMobile ? "text-[16px]" : "text-[28px]"}`}
+              >
+                {t("View Cause List Display")}
+              </span>
+            </button>
+            {showTooltip && (
+              <Tooltip text="Track real-time progress of today's listed cases" />
+            )}
+          </div>
         </div>
       </div>
     </div>
