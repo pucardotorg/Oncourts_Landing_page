@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import { useRouter } from "next/router";
 import { svgIcons } from "../../data/svgIcons";
-import urls from "../../libraries/services/atoms/urls";
 import { APP_URLS } from "../../lib/config";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 const HomeIntroVideo = () => {
   const { t } = useSafeTranslation();
   const router = useRouter();
-  const [isPlaying, setIsPlaying] = useState(false);
   const [loginDropdownOpen, setLoginDropdownOpen] = useState(false);
+  const [showFullscreen, setShowFullscreen] = useState(false);
+  const videoId = "-JoWnkE-uTs";
 
   // Close dropdown when clicking outside
   React.useEffect(() => {
@@ -27,12 +28,25 @@ const HomeIntroVideo = () => {
     }
   }, [loginDropdownOpen]);
 
-  const handleVideoClick = () => {
-    setIsPlaying(true);
-  };
-
   return (
     <div className="relative bg-white py-12 px-10 sm:px-6 lg:px-8 md:py-16">
+      {showFullscreen && (
+        <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
+          <button
+            onClick={() => setShowFullscreen(false)}
+            className="absolute top-4 right-4 text-white hover:text-gray-300 p-2"
+          >
+            <XMarkIcon className="w-8 h-8" />
+          </button>
+          <iframe
+            className="w-full h-full"
+            src={`https://www.youtube.com/embed/${videoId}?rel=0&autoplay=1`}
+            title="ON Courts Video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      )}
       <div className="px-10 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Left Content */}
@@ -100,43 +114,43 @@ const HomeIntroVideo = () => {
           </div>
 
           {/* Right Video Section */}
-          <div className="relative aspect-video rounded-lg overflow-hidden shadow-lg bg-[#F3F4F6]">
-            <div
-              className="absolute inset-0 cursor-pointer group flex items-center justify-center"
-              onClick={handleVideoClick}
-            >
-              {!isPlaying ? (
-                <>
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#0F766E]/20 to-transparent">
-                    <div className="absolute inset-0 p-8 flex flex-col justify-center">
-                      <h3 className="text-2xl font-medium text-white mb-2">
-                        Watch Video
-                      </h3>
-                      <p className="text-white/80 max-w-[300px]">
-                        Learn how OnCourts is transforming the judicial system
-                      </p>
-                    </div>
-                  </div>
-                  <div className="relative z-10 w-16 h-16 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <svg
-                      className="w-8 h-8 text-[#0F766E] ml-1"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </div>
-                </>
-              ) : (
-                <iframe
-                  className="absolute inset-0 w-full h-full"
-                  src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-                  title="Court Video"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              )}
+          <div className="w-[740px] h-[444px]">
+            <div className="relative rounded-md overflow-hidden shadow-lg aspect-video">
+              <iframe
+                className="w-full h-full"
+                src={`https://www.youtube.com/embed/${videoId}?rel=0`}
+                title="ON Courts Video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+              <button
+                onClick={() => setShowFullscreen(true)}
+                className="absolute bottom-3 right-3 flex items-center justify-center rounded-full hover:opacity-90 transition-opacity"
+                style={{
+                  width: 40,
+                  height: 40,
+                  backgroundColor: "rgba(0,0,0,0.5)",
+                  border: "2px solid #4B5563",
+                }}
+                aria-label="View fullscreen"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  width={20}
+                  height={20}
+                  fill="none"
+                  stroke="#FFFFFF"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M9 3H5a2 2 0 0 0-2 2v4" />
+                  <path d="M15 3h4a2 2 0 0 1 2 2v4" />
+                  <path d="M9 21H5a2 2 0 0 1-2-2v-4" />
+                  <path d="M15 21h4a2 2 0 0 0 2-2v-4" />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
