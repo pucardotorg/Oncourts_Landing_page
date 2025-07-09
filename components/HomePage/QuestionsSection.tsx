@@ -40,7 +40,7 @@ const Question: React.FC<QuestionProps> = ({
 
 const QuestionsSection: React.FC = () => {
   const { t } = useSafeTranslation();
-  const [openQuestionId, setOpenQuestionId] = useState<number | null>(0);
+  const [openQuestionId, setOpenQuestionId] = useState<number | null>(null);
 
   const questions = [
     {
