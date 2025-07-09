@@ -31,6 +31,12 @@ const MobileHeader = () => {
         : [...prev, label]
     );
   };
+
+  const handleNavigation = () => {
+    setIsMenuOpen(false);
+    setExpandedSection(null);
+    setExpandedSubItems([]);
+  };
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -83,6 +89,7 @@ const MobileHeader = () => {
             <Link
               href="/"
               className="mx-[10px] block px-6 py-3 text-[20px] text-[#3A3A3A] font-roboto"
+              onClick={handleNavigation}
             >
               {t("HOME")}
             </Link>
@@ -108,6 +115,7 @@ const MobileHeader = () => {
                       key={item.href}
                       href={item.href}
                       className="block px-10 py-3 text-[18px] text-[#3A3A3A] font-roboto"
+                      onClick={handleNavigation}
                     >
                       {t(item.label)}
                     </Link>
@@ -158,6 +166,13 @@ const MobileHeader = () => {
                                 key={subItem.href}
                                 href={subItem.href}
                                 className="block px-10 py-3 text-[18px] text-[#3A3A3A] font-roboto"
+                                target={subItem.target}
+                                rel={
+                                  subItem.target === "_blank"
+                                    ? "noopener noreferrer"
+                                    : undefined
+                                }
+                                onClick={handleNavigation}
                               >
                                 {t(subItem.label)}
                               </Link>
@@ -170,6 +185,7 @@ const MobileHeader = () => {
                         key={item.href}
                         href={item.href}
                         className="block px-10 py-3 text-[18px] text-[#3A3A3A] font-roboto"
+                        onClick={handleNavigation}
                       >
                         {t(item.label)}
                       </Link>
@@ -200,6 +216,7 @@ const MobileHeader = () => {
                       key={item.href}
                       href={item.href}
                       className="block px-10 py-3 text-[18px] text-[#3A3A3A] font-roboto"
+                      onClick={handleNavigation}
                     >
                       {t(item.label)}
                     </Link>
@@ -210,6 +227,7 @@ const MobileHeader = () => {
             <Link
               href="/"
               className="mx-[10px] block px-6 py-3 text-[20px] text-[#3A3A3A] font-roboto"
+              onClick={handleNavigation}
             >
               {t("NOTICES")}
             </Link>
@@ -217,6 +235,7 @@ const MobileHeader = () => {
             <Link
               href="/"
               className="mx-[10px] block px-6 py-3 text-[20px] text-[#3A3A3A] font-roboto"
+              onClick={handleNavigation}
             >
               {t("DASHBOARD")}
             </Link>
