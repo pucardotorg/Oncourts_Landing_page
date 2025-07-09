@@ -3,6 +3,7 @@ import { format, subDays, addDays } from "date-fns";
 // import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import CauseListDisplay from "./CauseListDisplay";
 import { svgIcons } from "../../data/svgIcons";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 interface CauseListState {
   date: string;
@@ -17,6 +18,7 @@ const HomeCauseLists: React.FC = () => {
     null
   );
   const tenantId = localStorage.getItem("tenant-id") || "kl";
+  const { t } = useSafeTranslation();
 
   const fetchPdf = useCallback(async (date: string): Promise<string | null> => {
     try {
@@ -148,6 +150,17 @@ const HomeCauseLists: React.FC = () => {
             Cause list for the next day will be available after{" "}
             <strong>05:00 PM</strong>
           </p>
+        </div>
+        <div className="flex justify-center mt-8">
+          <button
+            className="flex flex-row items-center justify-center px-4 md:px-[16px] gap-[12px] w-[311px] h-[69px] bg-white border border-[#0F766E] rounded-[12px] shadow-[inset_-2px_-2px_2px_rgba(15,23,42,0.14),inset_2px_2px_2px_1px_rgba(255,255,255,0.9)]"
+            onClick={() => window.open("/", "_blank")}
+          >
+            <svgIcons.openInNewTabIcon />
+            <span className="w-[296px] h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-center text-[#0F766E]">
+              {t("View Display Board")}
+            </span>
+          </button>
         </div>
       </div>
     </div>
