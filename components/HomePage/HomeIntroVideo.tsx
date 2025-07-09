@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import { useRouter } from "next/router";
+import { svgIcons } from "../../data/svgIcons";
+import urls from "../../libraries/services/atoms/urls";
+import { APP_URLS } from "../../lib/config";
 
 const HomeIntroVideo = () => {
   const { t } = useSafeTranslation();
@@ -43,61 +46,55 @@ const HomeIntroVideo = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="relative login-dropdown">
                 <button
-                  className="w-[241px] flex justify-center items-center gap-2  px-6 py-3 bg-[#0F766E] text-white rounded-xl font-medium hover:bg-[#115E59] transition-colors"
+                  // className="w-[241px] flex justify-center items-center gap-2  px-6 py-3 bg-[#0F766E] text-white rounded-xl font-medium hover:bg-[#115E59] transition-colors"
+                  className="box-border flex flex-row items-center justify-center px-4 py-8 gap-4 w-[241px] h-[69px] bg-[#0F766E] border border-[#0F766E] rounded-[12px]"
                   onClick={(e) => {
                     e.stopPropagation();
                     setLoginDropdownOpen(!loginDropdownOpen);
                   }}
                 >
-                  <span>{t("LOGIN")}</span>
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 12 12"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className={`transition-transform ${loginDropdownOpen ? "rotate-180" : ""}`}
-                  >
-                    <path
-                      d="M2.5 4.5L6 8L9.5 4.5"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                  <span className="w-[68px] h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-white">
+                    {t("LOGIN")}
+                  </span>
+                  <svgIcons.downArrowIcon fill="#fff" />
                 </button>
                 {loginDropdownOpen && (
                   <div
-                    className="absolute left-0 top-full mt-1 w-[241px] bg-white rounded-md shadow-lg overflow-hidden z-50"
+                    className="w-max absolute left-0 top-full mt-1bg-white rounded-md shadow-lg overflow-hidden z-50"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <button
-                      className="w-[241px] px-4 py-3 text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-2 text-sm hover:text-[#0F766E]"
+                      className="px-4 py-3 text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-2 text-sm hover:text-[#0F766E]"
                       onClick={() => {
-                        router.push("/advocate-login");
+                        window.open(APP_URLS.CITIZEN_DRISTI, "_blank");
                         setLoginDropdownOpen(false);
                       }}
                     >
-                      {t("ADVOCATE_LITIGANT_LOGIN")}
+                      <span className="font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]">
+                        {t("ADVOCATE_LITIGANT_LOGIN")}
+                      </span>
                     </button>
                     <button
-                      className="w-[241px] px-4 py-3 text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-2 text-sm hover:text-[#0F766E]"
+                      className="px-4 py-3 text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-2 text-sm hover:text-[#0F766E]"
                       onClick={() => {
-                        router.push("/judge-login");
+                        window.open(APP_URLS.EMPLOYEE_USER, "_blank");
                         setLoginDropdownOpen(false);
                       }}
                     >
-                      {t("JUDGE_STAFF_LOGIN")}
+                      <span className="font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]">
+                        {t("JUDGE_STAFF_LOGIN")}
+                      </span>
                     </button>
                   </div>
                 )}
               </div>
               <button
-                className="w-[241px] px-6 py-3 border border-[#0F766E] text-[#0F766E] rounded-xl font-medium hover:bg-gray-50 transition-colors"
+                className="box-border flex flex-col items-center justify-center px-4 py-8 gap-6 w-[241px] h-[69px] bg-white border border-[#0F766E] rounded-[12px]"
                 onClick={() => router.push("/search")}
               >
-                {t("CASE_SEARCH")}
+                <span className="font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-[#0F766E]">
+                  {t("CASE_SEARCH")}
+                </span>
               </button>
             </div>
           </div>
