@@ -88,7 +88,7 @@ const HeaderV2: React.FC = () => {
   }
 
   return (
-    <header className="w-full h-[73px] border-b border-gray-300 px-[30px] py-2 flex justify-between items-center">
+    <header className="w-full h-[73px] border-b border-gray-300 px-[30px] py-2 flex justify-between items-center fixed top-0 left-0 right-0 bg-white z-50">
       <Link href="/" className="flex-shrink-0">
         <Image
           src="/images/logo.png"

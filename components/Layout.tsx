@@ -85,7 +85,7 @@ const Layout: React.FC<LayoutProps> = ({
         </Head>
         <div className="flex flex-col min-h-screen">
           <HeaderV2 />
-          <main className="flex-grow">{children}</main>
+          <main className="flex-grow pt-[73px]">{children}</main>
           <Footer />
         </div>
       </div>
