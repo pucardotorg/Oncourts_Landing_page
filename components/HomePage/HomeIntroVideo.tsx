@@ -107,7 +107,7 @@ const HomeIntroVideo = () => {
                 )}
                 {loginDropdownOpen && (
                   <div
-                    className="w-max absolute left-0 top-full mt-1bg-white rounded-md shadow-lg overflow-hidden z-[9999]"
+                    className="w-max absolute left-0 top-full mt-1 bg-white rounded-md shadow-lg overflow-hidden z-[9999] min-w-[135px]"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <button
