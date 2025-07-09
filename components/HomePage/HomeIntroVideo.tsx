@@ -5,6 +5,7 @@ import { svgIcons } from "../../data/svgIcons";
 import { APP_URLS } from "../../lib/config";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import Tooltip from "../common/Tooltip";
+import { useMediaQuery } from "@mui/material";
 
 const HomeIntroVideo = () => {
   const { t } = useSafeTranslation();
@@ -14,6 +15,7 @@ const HomeIntroVideo = () => {
   const [showLoginTooltip, setShowLoginTooltip] = useState(false);
   const [showSearchTooltip, setShowSearchTooltip] = useState(false);
   const videoId = "-JoWnkE-uTs";
+  const isMobile = useMediaQuery("(max-width: 640px)");
 
   // Close dropdown when clicking outside
   React.useEffect(() => {
@@ -32,7 +34,9 @@ const HomeIntroVideo = () => {
   }, [loginDropdownOpen]);
 
   return (
-    <div className="relative bg-white py-12 px-10 sm:px-6 lg:px-8 md:py-16">
+    <div
+      className={`relative bg-white py-12 px-2 sm:px-6 lg:px-8 ${isMobile ? "pb-0" : "pb-2"}`}
+    >
       {showFullscreen && (
         <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
           <button
@@ -50,31 +54,49 @@ const HomeIntroVideo = () => {
           />
         </div>
       )}
-      <div className="px-10 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      <div className={` ${isMobile ? "px-2" : "px-2"}`}>
+        <div
+          className={`flex items-center justify-center mb-8 ${isMobile ? "flex-col gap-4" : "flex-row gap-32"}`}
+        >
           {/* Left Content */}
-          <div className="space-y-6">
-            <h1 className="font-libre not-italic font-normal text-[64px] leading-[78px] text-[#3A3A3A]">
+          <div
+            className={`space-y-6 ${isMobile ? "max-w-[100%] px-8" : "max-w-[50%]"}`}
+          >
+            <h1
+              className={`font-libre not-italic font-normal text-[64px] leading-[78px] text-[#3A3A3A] ${isMobile ? "text-center" : ""}`}
+            >
               {t("TAKING_COURT_TO_PEOPLE")}
             </h1>
-            <p className="font-roboto not-italic font-normal text-[#334155] text-[28px] leading-[36px] tracking-normal">
+            <p
+              className={`font-roboto not-italic font-normal text-[#334155] text-[28px] leading-[36px] tracking-normal ${isMobile ? "text-center" : ""}`}
+            >
               {t("COURT_DESCRIPTION")}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-row gap-4">
               <div className="relative login-dropdown">
                 <button
-                  className="box-border flex flex-row items-center justify-center px-4 py-8 gap-4 w-[241px] h-[69px] bg-[#0F766E] border border-[#0F766E] rounded-[12px]"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setLoginDropdownOpen(!loginDropdownOpen);
-                  }}
+                  className={`cursor-default box-border flex flex-row items-center justify-center gap-4  bg-[#0F766E] border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px] w-[135px] px-[12px] py-2" : "h-[69px] w-[241px] px-4 py-8"}`}
                   onMouseEnter={() => setShowLoginTooltip(true)}
                   onMouseLeave={() => setShowLoginTooltip(false)}
                 >
-                  <span className="w-[68px] h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-white">
+                  <span
+                    className={
+                      isMobile
+                        ? "text-center font-roboto font-medium text-[14px] leading-[20px] text-white"
+                        : "h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-white"
+                    }
+                  >
                     {t("LOGIN")}
                   </span>
-                  <svgIcons.DownArrowIcon fill="#fff" />
+                  <span
+                    className="cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setLoginDropdownOpen(!loginDropdownOpen);
+                    }}
+                  >
+                    <svgIcons.DownArrowIcon fill="#fff" />
+                  </span>
                 </button>
                 {showLoginTooltip && !loginDropdownOpen && (
                   <Tooltip
@@ -85,7 +107,7 @@ const HomeIntroVideo = () => {
                 )}
                 {loginDropdownOpen && (
                   <div
-                    className="w-max absolute left-0 top-full mt-1bg-white rounded-md shadow-lg overflow-hidden z-50"
+                    className="w-max absolute left-0 top-full mt-1bg-white rounded-md shadow-lg overflow-hidden z-[9999]"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <button
@@ -95,7 +117,14 @@ const HomeIntroVideo = () => {
                         setLoginDropdownOpen(false);
                       }}
                     >
-                      <span className="font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]">
+                      <span
+                        className={
+                          isMobile
+                            ? "text-center font-roboto font-medium text-[14px] leading-[20px] text-[#0F766E]"
+                            : "font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]"
+                        }
+                      >
+                        {" "}
                         {t("ADVOCATE_LITIGANT_LOGIN")}
                       </span>
                     </button>
@@ -106,7 +135,13 @@ const HomeIntroVideo = () => {
                         setLoginDropdownOpen(false);
                       }}
                     >
-                      <span className="font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]">
+                      <span
+                        className={
+                          isMobile
+                            ? "text-center font-roboto font-medium text-[14px] leading-[20px] text-[#0F766E]"
+                            : "font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]"
+                        }
+                      >
                         {t("JUDGE_STAFF_LOGIN")}
                       </span>
                     </button>
@@ -115,12 +150,19 @@ const HomeIntroVideo = () => {
               </div>
               <div className="relative">
                 <button
-                  className="box-border flex flex-col items-center justify-center px-4 py-8 gap-6 w-[241px] h-[69px] bg-white border border-[#0F766E] rounded-[12px]"
+                  className={`box-border text-[white] flex flex-row items-center justify-center gap-4  bg-[white] border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px] w-[135px] px-[12px] py-2" : "h-[69px] w-[241px] px-4 py-8"}`}
                   onClick={() => router.push("/search")}
                   onMouseEnter={() => setShowSearchTooltip(true)}
                   onMouseLeave={() => setShowSearchTooltip(false)}
                 >
-                  <span className="font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-[#0F766E]">
+                  <span
+                    className={
+                      isMobile
+                        ? "text-center font-roboto font-medium text-[14px] leading-[20px] text-[#0F766E]"
+                        : "h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-[#0F766E]"
+                    }
+                  >
+                    {" "}
                     {t("CASE_SEARCH")}
                   </span>
                 </button>
@@ -136,7 +178,9 @@ const HomeIntroVideo = () => {
           </div>
 
           {/* Right Video Section */}
-          <div className="w-[740px] h-[444px]">
+          <div
+            className={` ${isMobile ? "w-full h-[90%]" : "w-[90%] h-[50%]"}`}
+          >
             <div className="relative rounded-md overflow-hidden shadow-lg aspect-video">
               <iframe
                 className="w-full h-full"
