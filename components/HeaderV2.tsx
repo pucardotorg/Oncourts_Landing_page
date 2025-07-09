@@ -32,7 +32,7 @@ export const MENU_ITEMS = {
       ],
     },
     { label: "CASE_SEARCH", href: "/search" },
-    { label: "DISPLAY_BOARD", href: "/display-board" },
+    { label: "DISPLAY_CAUSELIST_HEADING", href: "/display-board" },
   ],
   SUPPORT: [
     { label: "HELP_RESOURCES", href: "/help-resources" },

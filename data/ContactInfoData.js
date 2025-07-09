@@ -69,7 +69,7 @@ export const getFaqs = (t) => [
       <p>
         {t("YOU_CAN_USE_THE")}{" "}
         <Link href="/display-board" className="text-[#1D4ED8] underline">
-          {t("DISPLAY_BOARD")}
+          {t("DISPLAY_CAUSELIST_HEADING")}
         </Link>{" "}
         {t("TO_VIEW_ALL_CASES_LISTED_FOR_CHOSEN_DATE")}{" "}
         {t("ALTERNATIVELY_YOU_CAN_ACCESS_THE")}{" "}
@@ -87,7 +87,7 @@ export const getFaqs = (t) => [
         <p>
           {t("YES_YOU_CAN_JOIN_YOUR_HEARING_ONLINE")}{" "}
           <Link href="/display-board" className="text-[#1D4ED8] underline">
-            {t("DISPLAY_BOARD")}
+            {t("DISPLAY_CAUSELIST_HEADING")}
           </Link>{" "}
           {t("SECTION_OF_THE_WEBSITE")}
         </p>

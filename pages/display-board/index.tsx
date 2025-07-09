@@ -472,10 +472,10 @@ export default function DisplayBoard() {
             className="text-2xl sm:text-3xl font-bold text-center text-[#3A3A3A] mb-2"
             style={{ fontFamily: "Libre Baskerville, serif" }}
           >
-            {t("DISPLAY_BOARD")}
+            {t("DISPLAY_CAUSELIST_HEADING")}
           </h1>
           <p className="text-center text-gray-600 mb-6 text-sm sm:text-base font-medium leading-6 sm:leading-10">
-            {t("DISPLAY_BOARD_SUB_HEADING")}
+            {t("DISPLAY_CAUSELIST_SUB_HEADING")}
           </p>
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-4 bg-gray-50 p-4 rounded-md border mb-6">
@@ -639,7 +639,7 @@ export default function DisplayBoard() {
               fontSize: "40px",
             }}
           >
-            {t("DISPLAY_BOARD")}
+            {t("DISPLAY_CAUSELIST_HEADING")}
           </h1>
           <p
             className="text-center text-gray-600 mb-6"
@@ -649,7 +649,7 @@ export default function DisplayBoard() {
               fontWeight: "500",
             }}
           >
-            {t("DISPLAY_BOARD_SUB_HEADING")}
+            {t("DISPLAY_CAUSELIST_SUB_HEADING")}
           </p>
 
           <div
