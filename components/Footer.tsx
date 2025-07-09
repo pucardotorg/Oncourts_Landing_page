@@ -1,8 +1,10 @@
 import Image from "next/image";
 import { FooterConfig } from "../data/FooterConfig"; // Ensure path is correct
 import Link from "next/link";
+import { useSafeTranslation } from "../hooks/useSafeTranslation";
 
 const Footer: React.FC = () => {
+  const { t } = useSafeTranslation();
   return (
     <footer className="px-8 md:px-16 py-10 font-[Roboto] bg-footerBg text-white w-full mt-auto">
       <div
@@ -24,7 +26,7 @@ const Footer: React.FC = () => {
           {/* Quick Links Section */}
           <div className="flex flex-col">
             <h3 className="text-[15px] md:text-[17px] font-normal mb-2">
-              Quick Links
+              {t("QUICK_LINKS")}
             </h3>
             <div className="grid grid-cols-1 gap-y-4">
               {FooterConfig.quickLinks.map((link, index) => (
@@ -35,7 +37,7 @@ const Footer: React.FC = () => {
                   target={link.url.startsWith("http") ? "_blank" : "_self"}
                   rel={link.url.startsWith("http") ? "noopener noreferrer" : ""}
                 >
-                  {link.label}
+                  {t(link.label)}
                 </Link>
               ))}
             </div>
@@ -44,7 +46,7 @@ const Footer: React.FC = () => {
           {/* Help & Resources Section */}
           <div className="flex flex-col">
             <h3 className="text-[15px] md:text-[17px] font-normal mb-2">
-              Help & Resources
+              {t("HELP_RESOURCES")}
             </h3>
             <div className="grid grid-cols-1 gap-y-4">
               {FooterConfig.helpResources.map((link, index) => (
@@ -55,7 +57,7 @@ const Footer: React.FC = () => {
                   target={link.url.startsWith("http") ? "_blank" : "_self"}
                   rel={link.url.startsWith("http") ? "noopener noreferrer" : ""}
                 >
-                  {link.label}
+                  {t(link.label)}
                 </Link>
               ))}
             </div>
@@ -64,7 +66,7 @@ const Footer: React.FC = () => {
           {/* Information & Privacy Section */}
           <div className="flex flex-col">
             <h3 className="text-[15px] md:text-[17px] font-normal mb-2">
-              Information & Privacy
+              {t("INFORMATION_PRIVACY")}
             </h3>
             <div className="grid grid-cols-1 gap-y-4">
               {FooterConfig.informationPrivacy.map((link, index) => (
@@ -75,7 +77,7 @@ const Footer: React.FC = () => {
                   target={link.url.startsWith("http") ? "_blank" : "_self"}
                   rel={link.url.startsWith("http") ? "noopener noreferrer" : ""}
                 >
-                  {link.label}
+                  {t(link.label)}
                 </Link>
               ))}
             </div>
@@ -84,7 +86,7 @@ const Footer: React.FC = () => {
           {/* External Links Section */}
           <div className="flex flex-col">
             <h3 className="text-[15px] md:text-[17px] font-normal mb-2">
-              External Links
+              {t("EXTERNAL_LINKS")}
             </h3>
             <div className="grid grid-cols-1 gap-y-4">
               {FooterConfig.externalLinks.map((link, index) => (
@@ -95,7 +97,7 @@ const Footer: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {link.label}
+                  {t(link.label)}
                 </Link>
               ))}
             </div>
@@ -110,8 +112,7 @@ const Footer: React.FC = () => {
       {/* Copyright Section */}
       <div className="mt-6">
         <div className="text-center text-[15px] md:text-[17px]">
-          {FooterConfig.copyright ||
-            `© High Court of Kerala 2025 | Last updated on : 24/12/2025`}
+          {t(FooterConfig.copyright)}
         </div>
       </div>
     </footer>

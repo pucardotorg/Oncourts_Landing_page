@@ -1,6 +1,7 @@
 import React from "react";
 
 interface InfoCardProps {
+  t: (key: string) => string;
   items: {
     label: string;
     value: string;
@@ -11,7 +12,7 @@ interface InfoCardProps {
   className?: string;
 }
 
-const RtiInfoCard: React.FC<InfoCardProps> = ({ items, className = "" }) => {
+const RtiInfoCard: React.FC<InfoCardProps> = ({ t, items, className = "" }) => {
   return (
     <div
       className={`bg-white rounded-lg border border-[#E2E8F0] shadow-sm mb-8 ${className}`}
@@ -24,7 +25,7 @@ const RtiInfoCard: React.FC<InfoCardProps> = ({ items, className = "" }) => {
           >
             <div className="p-4 flex items-center font-[Baskerville] text-[#0F172A] font-semibold text-xl border-b border-[#E2E8F0] bg-[#F8FAFC]">
               {item.icon && <span className="mr-2">{item.icon}</span>}
-              {item.label}
+              {t(item.label)}
             </div>
             {item.isLink && item.href ? (
               <a

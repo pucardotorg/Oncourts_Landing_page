@@ -3,11 +3,12 @@ import Head from "next/head";
 import { useMediaQuery } from "@mui/material";
 import SectionHeading from "../../components/common/SectionHeading";
 import RtiInfoCard from "../../components/common/RtiInfoCard";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 const RTIAuthorities = () => {
   // Check if the screen is mobile size
   const isMobile = useMediaQuery("(max-width:640px)");
-
+  const { t } = useSafeTranslation();
   // RTI designated authorities data
   const rtiAuthoritiesData = [
     {
@@ -30,8 +31,8 @@ const RTIAuthorities = () => {
       id: 3,
       designation: "Appellate Authority",
       name: "Sri. Nizar T. A Sheristadaar",
-      title: "Chief JudicialMagistrate Court, Kollam",
-      phone: "04742919099",
+      title: "Chief Judicial Magistrate Court, Kollam",
+      phone: "04742793491",
       email: "cjmklm@kerala.gov.in",
     },
   ];
@@ -39,7 +40,7 @@ const RTIAuthorities = () => {
   return (
     <>
       <Head>
-        <title>RTI Authorities | ON Courts</title>
+        <title>{t("RTI_AUTHORITIES")}</title>
         <meta
           name="description"
           content="Designated Authorities under RTI Act, 2005 at ON Courts"
@@ -49,7 +50,7 @@ const RTIAuthorities = () => {
       <div className="bg-white min-h-screen">
         <div className="w-[90%] py-8 md:py-12 mx-auto">
           <SectionHeading
-            title="Designated Authorities under RTI, 2005"
+            title={t("RTI_AUTHORITIES_HEADING")}
             fontSize="text-4xl"
             className="!mb-4 !text-left"
             showBorder={false}
@@ -95,23 +96,24 @@ const RTIAuthorities = () => {
 
                 return (
                   <RtiInfoCard
+                    t={t}
                     key={authority.id}
                     items={[
                       {
-                        label: "Designated Authority",
+                        label: "DESIGNATED_AUTHORITY",
                         value: authority.designation,
                       },
                       {
-                        label: "Name",
+                        label: "NAME",
                         value: `${authority.name}, ${authority.title}`,
                       },
                       {
-                        label: "Phone",
+                        label: "PHONE",
                         value: authority.phone,
                         icon: phoneIcon,
                       },
                       {
-                        label: "Mail-id",
+                        label: "MAIL_ID",
                         value: authority.email,
                         icon: emailIcon,
                       },
@@ -126,11 +128,11 @@ const RTIAuthorities = () => {
               <table className="min-w-full bg-white border-collapse">
                 <thead>
                   <tr className="font-[Baskerville] bg-[#F8FAFC] text-[#0F172A] text-left text-xl md:text-[22px] border border-[#E2E8F0]">
-                    <th className="py-3 px-4 font-semibold">Sl.No</th>
+                    <th className="py-3 px-4 font-semibold">{t("SL_NO")}</th>
                     <th className="py-3 px-4 font-semibold">
-                      Designated Authority
+                      {t("DESIGNATED_AUTHORITY")}
                     </th>
-                    <th className="py-3 px-4 font-semibold">Name</th>
+                    <th className="py-3 px-4 font-semibold">{t("NAME")}</th>
                     <th className="py-3 px-4 font-semibold">
                       <div className="!flex !flex-row !items-center gap-2">
                         <svg
@@ -147,7 +149,7 @@ const RTIAuthorities = () => {
                             d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                           />
                         </svg>
-                        <span>Phone</span>
+                        <span>{t("PHONE")}</span>
                       </div>
                     </th>
                     <th className="py-3 px-4 font-semibold">
@@ -166,7 +168,7 @@ const RTIAuthorities = () => {
                             d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                           />
                         </svg>
-                        <span>Mail-id</span>
+                        <span>{t("MAIL_ID")}</span>
                       </div>
                     </th>
                   </tr>

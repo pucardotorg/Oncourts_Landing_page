@@ -99,45 +99,61 @@ export const getFaqs = (t) => [
     question: t("WHAT_DOCUMENTS_ARE_REQUIRED_FOR_E_FILING"),
     answer: (
       <div>
-        <p>{t("LIST_OF_DOCUMENTS_REQUIRED_FOR_E_FILING")}:</p>
+        <p>{t("LIST_OF_DOCUMENTS_REQUIRED_FOR_E_FILING")}</p>
         <ol className="list-decimal pl-6 mt-2 space-y-1">
           <li>
-            <span className="font-semibold">{t("PROOF_OF_IDENTITY")}:</span>{" "}
-            {t("ID_DOCUMENTS_LIST")}
+            <span className="font-medium">{t("PROOF_OF_IDENTITY")}</span>{" "}
+            <span className="text-lg font-normal">
+              {t("ID_DOCUMENTS_LIST")}
+            </span>
           </li>
           <li>
-            <span className="font-semibold">{t("DISHONORED_CHEQUE")}:</span>{" "}
-            {t("DISHONORED_CHEQUE_DESCRIPTION")}
+            <span className="font-medium">{t("DISHONORED_CHEQUE")}</span>{" "}
+            <span className="text-lg font-normal">
+              {t("DISHONORED_CHEQUE_DESCRIPTION")}
+            </span>
           </li>
           <li>
-            <span className="font-semibold">{t("CHEQUE_RETURN_MEMO")}:</span>{" "}
-            {t("CHEQUE_RETURN_MEMO_DESCRIPTION")}
+            <span className="font-medium">{t("CHEQUE_RETURN_MEMO")}</span>{" "}
+            <span className="text-lg font-normal">
+              {t("CHEQUE_RETURN_MEMO_DESCRIPTION")}
+            </span>
           </li>
           <li>
-            <span className="font-semibold">{t("LEGAL_DEMAND_NOTICE")}:</span>{" "}
-            {t("LEGAL_DEMAND_NOTICE_DESCRIPTION")}
+            <span className="font-medium">{t("LEGAL_DEMAND_NOTICE")}</span>{" "}
+            <span className="text-lg font-normal">
+              {t("LEGAL_DEMAND_NOTICE_DESCRIPTION")}
+            </span>
           </li>
           <li>
-            <span className="font-semibold">
-              {t("POSTAL_ACKNOWLEDGEMENT_ISSUE")}:
+            <span className="font-medium">
+              {t("POSTAL_ACKNOWLEDGEMENT_ISSUE")}
             </span>{" "}
-            {t("POSTAL_ACKNOWLEDGEMENT_ISSUE_DESCRIPTION")}
+            <span className="text-lg font-normal">
+              {t("POSTAL_ACKNOWLEDGEMENT_ISSUE_DESCRIPTION")}
+            </span>
           </li>
           <li>
-            <span className="font-semibold">
-              {t("POSTAL_ACKNOWLEDGEMENT_DELIVERY")}:
+            <span className="font-medium">
+              {t("POSTAL_ACKNOWLEDGEMENT_DELIVERY")}
             </span>{" "}
-            {t("POSTAL_ACKNOWLEDGEMENT_DELIVERY_DESCRIPTION")}
+            <span className="text-lg font-normal">
+              {t("POSTAL_ACKNOWLEDGEMENT_DELIVERY_DESCRIPTION")}
+            </span>
           </li>
           <li>
-            <span className="font-semibold">
-              {t("AFFIDAVIT_UNDER_SECTION_223")}:
+            <span className="font-medium">
+              {t("AFFIDAVIT_UNDER_SECTION_223")}
             </span>{" "}
-            {t("AFFIDAVIT_UNDER_SECTION_223_DESCRIPTION")}
+            <span className="text-lg font-normal">
+              {t("AFFIDAVIT_UNDER_SECTION_223_DESCRIPTION")}
+            </span>
           </li>
           <li>
-            <span className="font-semibold">{t("ANY_OTHER_DOCUMENT")}:</span>{" "}
-            {t("ANY_OTHER_DOCUMENT_DESCRIPTION")}
+            <span className="font-medium">{t("ANY_OTHER_DOCUMENT")}</span>{" "}
+            <span className="text-lg font-normal">
+              {t("ANY_OTHER_DOCUMENT_DESCRIPTION")}
+            </span>
           </li>
         </ol>
       </div>
@@ -147,7 +163,7 @@ export const getFaqs = (t) => [
     question: t("WHAT_DOCUMENTS_ARE_REQUIRED_FOR_BAIL"),
     answer: (
       <div>
-        <p>{t("LIST_OF_DOCUMENTS_REQUIRED_FOR_BAIL")}:</p>
+        <p>{t("LIST_OF_DOCUMENTS_REQUIRED_FOR_BAIL")}</p>
         <ol className="list-decimal pl-6 mt-2 space-y-1">
           <li>{t("BAIL_APPLICATION_SYSTEM_GENERATED")}</li>
           <li>{t("ID_PROOFS_FOR_SURETIES")}</li>
@@ -172,16 +188,23 @@ export const getFaqs = (t) => [
         <div className="mt-2">
           <ol className="list-decimal pl-6 mt-2 space-y-1">
             <li>
+              {t("USER_GUIDE_FOR_ADVOCATES_AND_CLERKS")}{" "}
               <Link
                 href="https://drive.google.com/file/d/1j4mIw0K2F8m_urJE-zbu-oeluiOL-8Pg/view?usp=sharing"
-                className="text-[#1D4ED8] hover:underline block"
+                className="text-[#1D4ED8] hover:underline inline-block"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                {t("USER_GUIDE_FOR_ADVOCATES_AND_CLERKS")}
+                {t("LINK")}
               </Link>
             </li>
             <li>
-              <Link href="#" className="text-[#1D4ED8] hover:underline block">
-                {t("VIDEO_TUTORIALS_FOR_ADVOCATES_AND_CLERKS")}
+              {t("VIDEO_TUTORIALS_FOR_ADVOCATES_AND_CLERKS")}{" "}
+              <Link
+                href="/video-tutorials"
+                className="text-[#1D4ED8] hover:underline inline-block"
+              >
+                {t("LINK")}
               </Link>
             </li>
           </ol>

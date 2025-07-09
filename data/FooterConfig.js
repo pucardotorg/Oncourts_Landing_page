@@ -6,44 +6,44 @@ export const FooterConfig = {
     height: 182,
   },
   quickLinks: [
-    { label: "About ON Courts", url: "/about" },
+    { label: "ABOUT_ON_COURTS", url: "/about" },
     {
-      label: "Video Tutorials",
-      url: "https://www.youtube.com/playlist?list=PL2HnAXES1w-ShQIq8DAhvqeYe-uLCAr6",
+      label: "VIDEO_TUTORIALS",
+      url: "/video-tutorials",
     },
     {
-      label: "Media Gallery",
+      label: "MEDIA_GALLERY",
       url: "/media-gallery",
     },
   ],
   helpResources: [
-    { label: "Support Form", url: "https://forms.gle/uCSgGiqGiMQYjjgeA" },
+    { label: "SUPPORT_FORM", url: "https://forms.gle/uCSgGiqGiMQYjjgeA" },
     {
-      label: "User Manual",
+      label: "USER_MANUAL",
       url: "https://drive.google.com/file/d/1j4mIw0K2F8m_urJE-zbu-oeluiOL-8Pg/view?usp=sharing",
     },
-    { label: "Contact Details", url: "/help-resources#contactUs" },
-    { label: "FAQs", url: "/help-resources#faq" },
+    { label: "CONTACT_DETAILS", url: "/help-resources#contactUs" },
+    { label: "FAQS", url: "/help-resources#faq" },
   ],
   informationPrivacy: [
     { label: "RTI", url: "/rti" },
-    { label: "Terms & Conditions", url: "/policies-conditions#terms" },
-    { label: "Privacy Policy", url: "/policies-conditions#privacy" },
+    { label: "TERMS_AND_CONDITIONS", url: "/policies-conditions#terms" },
+    { label: "PRIVACY_POLICY", url: "/policies-conditions#privacy" },
   ],
   externalLinks: [
     {
-      label: "Kollam District Court",
+      label: "KOLLAM_DISTRICT_COURT",
       url: "https://kollam.dcourts.gov.in/",
     },
     {
-      label: "Kerala High Court",
+      label: "KERALA_HIGH_COURT",
       url: "https://highcourt.kerala.gov.in/",
     },
-    { label: "Supreme Court", url: "https://www.sci.gov.in/" },
+    { label: "SUPREME_COURT", url: "https://www.sci.gov.in/" },
     {
-      label: "NJDG - District",
+      label: "NJDG_DISTRICT",
       url: "https://njdg.ecourts.gov.in/njdg_v3/",
     },
   ],
-  copyright: "© High Court of Kerala 2025 | Last updated on - 24/6/2025",
+  copyright: "FOOTER_COPYRIGHT",
 };
