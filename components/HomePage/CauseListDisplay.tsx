@@ -32,8 +32,7 @@ const CauseListDisplay: React.FC<CauseListDisplayProps> = ({
                   className="text-teal-600 hover:text-teal-700 p-2 rounded-full hover:bg-teal-50 transition-colors"
                   title="Download"
                 >
-                  {/* <ArrowDownTrayIcon className="w-5 h-5" /> */}
-                  <svgIcons.downloadIcon2 />
+                  <svgIcons.smallDownloadIcon />
                 </button>
                 <button
                   onClick={() => setShowPreview(false)}
@@ -54,14 +53,14 @@ const CauseListDisplay: React.FC<CauseListDisplayProps> = ({
           </div>
         </div>
       )}
-      <div className="bg-white rounded-lg shadow-sm p-6 h-[300px] flex flex-col relative">
-        <div className="flex-1 flex items-center justify-center">
+      <div className="flex flex-col items-start p-0 w-[416px] h-[253px]">
+        <div className="flex-1 flex items-center justify-center w-[416px]">
           {pdfUrl ? (
             <>
-              <div className="relative w-full h-full">
+              <div className="relative w-[416px] h-full">
                 <iframe
                   src={`${pdfUrl}#toolbar=0`}
-                  className="w-full h-full"
+                  className="w-[416px] h-full"
                   title={`Cause List ${formattedDate}`}
                 />
                 <button
@@ -78,17 +77,21 @@ const CauseListDisplay: React.FC<CauseListDisplayProps> = ({
             </div>
           )}
         </div>
-        <div className="flex items-center justify-between mt-4 pt-4 border-t">
+        <div className="flex items-center justify-between mt-4 border-t w-[416px]">
           <div className="flex items-center space-x-2">
-            <span className="text-gray-600">{formattedDate}</span>
-            {pdfUrl && <span className="text-gray-500">_causelist.pdf</span>}
+            <span>
+              <svgIcons.smallFileIcon />
+            </span>
+            <span className="w-[295px] h-[30px] font-roboto font-medium text-[26px] leading-[30px] tracking-[-0.26px] text-[#334155]">
+              {formattedDate}_causelist.pdf
+            </span>
           </div>
           {pdfUrl && (
             <button
               onClick={onDownload}
               className="text-teal-600 hover:text-teal-700 p-2 rounded-full hover:bg-teal-50 transition-colors"
             >
-              <svgIcons.downloadIcon2 />
+              <svgIcons.smallDownloadIcon />
             </button>
           )}
         </div>

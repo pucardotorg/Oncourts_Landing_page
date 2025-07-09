@@ -122,10 +122,10 @@ const HomeCauseLists: React.FC = () => {
   return (
     <div className="bg-[#F8FAFC] py-12">
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-8 text-center">
+        <h2 className="flex mb-12 items-center justify-center text-center font-libre font-normal text-[40px] leading-[48px] text-[#3A3A3A]">
           Cause List
         </h2>
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="flex center justify-center gap-[60px]">
           {leftCauseList && (
             <CauseListDisplay
               date={leftCauseList.date}
@@ -144,8 +144,9 @@ const HomeCauseLists: React.FC = () => {
         <div className="flex items-center justify-center mt-8 gap-2">
           {/* <InformationCircleIcon className="w-5 h-5 text-teal-700" /> */}
           <svgIcons.infoIcon />
-          <p className="text-sm text-teal-700">
-            Cause list for the next day will be available after 05:00 PM
+          <p className="font-roboto font-normal text-[20px] leading-[26px] tracking-[-0.2px] text-[#334155]">
+            Cause list for the next day will be available after{" "}
+            <strong>05:00 PM</strong>
           </p>
         </div>
       </div>
