@@ -39,16 +39,16 @@ const MediaGallery: React.FC = () => {
             Home
           </Link>
           <span className="text-[#3A3A3A]">/</span>
-          <span className="text-[#3A3A3A]">Media Gallery</span>
+          <span className="text-[#3A3A3A] ">Media Gallery</span>
         </div>
         <div className="text-center mb-8">
-          <h1 className="text-[48px] leading-[56px] text-[#3A3A3A] font-libre mb-4">
+          <h1 className="text-[32px] sm:text-[48px] leading-[1.2] sm:leading-[56px] text-[#3A3A3A] font-libre mb-8 sm:mb-12">
             Media Gallery
           </h1>
-          <h2 className="text-[32px] leading-[40px] text-[#3A3A3A] font-libre mb-3">
+          <h2 className="text-[28px] sm:text-[40px] leading-[1.2] sm:leading-[48px] font-libre font-normal text-center text-[#3A3A3A] mb-4 px-4">
             Courtroom, ON Court Kollam
           </h2>
-          <p className="text-[#666666] text-base max-w-3xl mx-auto">
+          <p className="text-[18px] sm:text-[28px] leading-[1.4] sm:leading-[40px] font-roboto font-normal tracking-[-0.56px] text-center text-[#334155] px-4 mb-8">
             With a waiting area and help desk, the ON Court is designed to be
             people-centric. Equipped with state of art equipment, it enables
             quality virtual and hybrid hearing experience for users.
@@ -103,33 +103,13 @@ const MediaGallery: React.FC = () => {
           </div>
         </div>
 
-        {/* Image Title and Description */}
-        {(currentImage.title || currentImage.description) && (
-          <div className="text-center mb-8">
-            {currentImage.title && (
-              <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-                {currentImage.title}
-              </h2>
-            )}
-            {currentImage.description && (
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                {currentImage.description}
-              </p>
-            )}
-          </div>
-        )}
-
         {/* Thumbnails */}
-        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4 max-w-4xl mx-auto">
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-4 max-w-4xl mx-auto px-4 sm:px-0">
           {galleryImages.map((image) => (
             <button
               key={image.id}
               onClick={() => handleThumbnailClick(image)}
-              className={`relative aspect-square w-full rounded-lg overflow-hidden ${
-                currentImage.id === image.id
-                  ? "ring-2 ring-offset-2 ring-teal-500"
-                  : "hover:opacity-80"
-              }`}
+              className={`relative aspect-video w-full cursor-pointer rounded-lg overflow-hidden hover:opacity-90 transition-opacity ${currentImage.src === image.src ? "ring-2 ring-[#0F766E]" : ""}`}
             >
               <Image
                 src={image.src}

@@ -271,8 +271,8 @@ const QuestionsSection: React.FC = () => {
             onClick={() => window.open("/help", "_blank")}
           >
             <svgIcons.openInNewTabIcon />
-            <span className="font-sans font-medium text-[16px] leading-[24px] tracking-[0.01em]">
-              {t("HELP_AND_SUPPORT")}
+            <span className="h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-center text-[#0F766E]">
+              {t("Help & Support")}
             </span>
           </button>
         </div>
