@@ -82,7 +82,7 @@ const Highlights: React.FC = () => {
             className="flex flex-row items-center justify-center px-4 md:px-[16px] gap-[12px] w-[376px] h-[69px] bg-white border border-[#0F766E] rounded-[12px] shadow-[inset_-2px_-2px_2px_rgba(15,23,42,0.14),inset_2px_2px_2px_1px_rgba(255,255,255,0.9)]"
             onClick={() => window.open("/", "_blank")}
           >
-            <svgIcons.openInNewTabIcon />
+            <svgIcons.OpenInNewTabIcon />
             <span className="w-[296px] h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-center text-[#0F766E]">
               {t("VIEW_DETAILED_DASHBOARD")}
             </span>

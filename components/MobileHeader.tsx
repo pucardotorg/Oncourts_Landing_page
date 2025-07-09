@@ -95,9 +95,9 @@ const MobileHeader = () => {
                 {t("ABOUT_US")}
                 <span className={`text-[#00A7A7]`}>
                   {expandedSection === "ABOUT_US" ? (
-                    <svgIcons.upArrowIcon fill="#0F766E" />
+                    <svgIcons.UpArrowIcon fill="#0F766E" />
                   ) : (
-                    <svgIcons.downArrowIcon />
+                    <svgIcons.DownArrowIcon />
                   )}
                 </span>
               </button>
@@ -124,9 +124,9 @@ const MobileHeader = () => {
                 {t("SERVICES")}
                 <span className={`text-[#00A7A7]`}>
                   {expandedSection === "SERVICES" ? (
-                    <svgIcons.upArrowIcon fill="#0F766E" />
+                    <svgIcons.UpArrowIcon fill="#0F766E" />
                   ) : (
-                    <svgIcons.downArrowIcon />
+                    <svgIcons.DownArrowIcon />
                   )}
                 </span>
               </button>
@@ -145,9 +145,9 @@ const MobileHeader = () => {
                           {t(item.label)}
                           <span className="text-[#00A7A7]">
                             {expandedSubItems.includes(item.label) ? (
-                              <svgIcons.upArrowIcon fill="#0F766E" />
+                              <svgIcons.UpArrowIcon fill="#0F766E" />
                             ) : (
-                              <svgIcons.downArrowIcon />
+                              <svgIcons.DownArrowIcon />
                             )}
                           </span>
                         </button>
@@ -187,9 +187,9 @@ const MobileHeader = () => {
                 {t("SUPPORT")}
                 <span className={`text-[#00A7A7]`}>
                   {expandedSection === "SUPPORT" ? (
-                    <svgIcons.upArrowIcon fill="#0F766E" />
+                    <svgIcons.UpArrowIcon fill="#0F766E" />
                   ) : (
-                    <svgIcons.downArrowIcon />
+                    <svgIcons.DownArrowIcon />
                   )}
                 </span>
               </button>

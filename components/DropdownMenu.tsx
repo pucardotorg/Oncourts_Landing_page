@@ -34,7 +34,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
               {t(item.label)}
             </span>
             <span className="text-[#3A3A3A] group-hover:text-[#007E7E]">
-              <svgIcons.rightArrowIcon className="w-5 h-5" />
+              <svgIcons.RightArrowIcon className="w-5 h-5" />
             </span>
           </div>
 

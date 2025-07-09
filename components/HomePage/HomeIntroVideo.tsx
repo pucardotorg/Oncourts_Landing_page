@@ -74,7 +74,7 @@ const HomeIntroVideo = () => {
                   <span className="w-[68px] h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-white">
                     {t("LOGIN")}
                   </span>
-                  <svgIcons.downArrowIcon fill="#fff" />
+                  <svgIcons.DownArrowIcon fill="#fff" />
                 </button>
                 {showLoginTooltip && !loginDropdownOpen && (
                   <Tooltip

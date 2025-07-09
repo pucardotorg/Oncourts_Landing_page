@@ -9,7 +9,7 @@ interface CauseListState {
   pdfUrl: string | null;
 }
 
-const HomeCauseLists: React.FC = () => {
+function HomeCauseLists(): JSX.Element {
   const [leftCauseList, setLeftCauseList] = useState<CauseListState | null>(
     null
   );
@@ -153,7 +153,7 @@ const HomeCauseLists: React.FC = () => {
           )}
         </div>
         <div className="flex items-center justify-center mt-8 gap-2">
-          <svgIcons.infoIcon />
+          <svgIcons.InfoIcon />
           <p className="font-roboto font-normal text-[20px] leading-[26px] tracking-[-0.2px] text-[#334155]">
             Cause list for the next day will be available after{" "}
             <strong>05:00 PM</strong>
@@ -164,7 +164,7 @@ const HomeCauseLists: React.FC = () => {
             className="flex flex-row items-center justify-center px-4 md:px-[16px] gap-[12px] w-[311px] h-[69px] bg-white border border-[#0F766E] rounded-[12px] shadow-[inset_-2px_-2px_2px_rgba(15,23,42,0.14),inset_2px_2px_2px_1px_rgba(255,255,255,0.9)]"
             onClick={() => window.open("/", "_blank")}
           >
-            <svgIcons.openInNewTabIcon />
+            <svgIcons.OpenInNewTabIcon />
             <span className="w-[296px] h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-center text-[#0F766E]">
               {t("View Display Board")}
             </span>
@@ -173,6 +173,6 @@ const HomeCauseLists: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default HomeCauseLists;

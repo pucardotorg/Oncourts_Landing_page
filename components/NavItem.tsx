@@ -40,9 +40,9 @@ const NavItem: React.FC<NavItemProps> = ({
         </span>
         <span>
           {isDropdownOpen ? (
-            <svgIcons.upArrowIcon fill="#0F766E" />
+            <svgIcons.UpArrowIcon fill="#0F766E" />
           ) : (
-            <svgIcons.downArrowIcon />
+            <svgIcons.DownArrowIcon />
           )}
         </span>
       </button>

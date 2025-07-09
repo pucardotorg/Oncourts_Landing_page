@@ -25,7 +25,7 @@ const Question: React.FC<QuestionProps> = ({
         {question}
       </span>
       <span className="flex-shrink-0">
-        {isOpen ? <svgIcons.upArrowIcon /> : <svgIcons.downArrowIcon />}
+        {isOpen ? <svgIcons.UpArrowIcon /> : <svgIcons.DownArrowIcon />}
       </span>
     </button>
     {isOpen && (
@@ -270,7 +270,7 @@ const QuestionsSection: React.FC = () => {
             className="flex items-center gap-2 px-8 py-4 border border-[#0F766E] rounded-xl text-[#0F766E] hover:bg-[#F1F5F9] transition-colors"
             onClick={() => window.open("/help", "_blank")}
           >
-            <svgIcons.openInNewTabIcon />
+            <svgIcons.OpenInNewTabIcon />
             <span className="h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-center text-[#0F766E]">
               {t("Help & Support")}
             </span>

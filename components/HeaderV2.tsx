@@ -40,7 +40,7 @@ export const MENU_ITEMS = {
   ],
 };
 
-const HeaderV2: React.FC = () => {
+function HeaderV2(): JSX.Element {
   const router = useRouter();
   const { t } = useSafeTranslation();
   const isMobile = useMediaQuery("(max-width:640px)");
@@ -208,6 +208,6 @@ const HeaderV2: React.FC = () => {
       </nav>
     </header>
   );
-};
+}
 
 export default HeaderV2;

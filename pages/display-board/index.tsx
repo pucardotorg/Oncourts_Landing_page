@@ -504,14 +504,14 @@ export default function DisplayBoard() {
                     className="w-[60%] sm:w-[190px] h-[34px] rounded border border-slate-300 bg-gray-100 shadow flex items-center justify-center"
                     onClick={handleDownloadCauseList}
                   >
-                    <svgIcons.downloadIcon2 />
+                    <svgIcons.DownloadIcon2 />
                     <span className="font-bold text-sm text-slate-700 ml-2">
                       {t("DOWNLOAD_CAUSELIST")}
                     </span>
                   </button>
                 ) : (
                   <div className="flex items-center gap-2 text-sm text-slate-700 text-center max-w-xs mx-auto">
-                    <svgIcons.infoIcon />
+                    <svgIcons.InfoIcon />
                     <span>
                       {t("THE_CAUSE_LIST_FOR_THIS_DAY_WILL_BE_AVAILABLE_AFTER")}{" "}
                       <span className="font-bold text-slate-800">
@@ -585,7 +585,7 @@ export default function DisplayBoard() {
                     }
                   >
                     <span className="mr-2">
-                      <svgIcons.videoCallIcon />
+                      <svgIcons.VideoCallIcon />
                     </span>
                     {t("JOIN_HEARING_ONLINE")}
                   </button>
@@ -599,7 +599,7 @@ export default function DisplayBoard() {
                   className="cursor-pointer"
                   onClick={() => fetchCasesForDate(selectedDate, searchValue)}
                 >
-                  {svgIcons.refreshIcon()}
+                  {svgIcons.RefreshIcon()}
                 </span>
                 {showRefreshTime && (
                   <span className="text-blue-600 font-bold">{`${t("LAST_REFRESHED_ON")} ${refreshedAt}`}</span>
@@ -705,7 +705,7 @@ export default function DisplayBoard() {
                       }}
                       onClick={handleDownloadCauseList}
                     >
-                      <svgIcons.downloadIcon2 />
+                      <svgIcons.DownloadIcon2 />
                       <div
                         style={{
                           fontWeight: 700,
@@ -729,7 +729,7 @@ export default function DisplayBoard() {
                       justifyContent: "center",
                     }}
                   >
-                    <svgIcons.infoIcon />
+                    <svgIcons.InfoIcon />
                     <span style={{ maxWidth: "290px", fontSize: "14px" }}>
                       {t("THE_CAUSE_LIST_FOR_THIS_DAY_WILL_BE_AVAILABLE_AFTER")}
                       <span style={{ color: "#334155", fontWeight: "bold" }}>
@@ -882,7 +882,7 @@ export default function DisplayBoard() {
                         }}
                       >
                         <span style={{ marginRight: "5px" }}>
-                          <svgIcons.videoCallIcon />
+                          <svgIcons.VideoCallIcon />
                         </span>
                         <span style={{ fontWeight: "500", fontSize: "13px" }}>
                           {t("JOIN_HEARING_ONLINE")}
@@ -918,7 +918,7 @@ export default function DisplayBoard() {
                     fetchCasesForDate(selectedDate, searchValue);
                   }}
                 >
-                  {svgIcons.refreshIcon()}
+                  {svgIcons.RefreshIcon()}
                 </span>
                 {showRefreshTime && (
                   <span

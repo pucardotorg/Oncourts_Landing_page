@@ -59,7 +59,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
           className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-500"
           aria-label={isExpanded ? "Collapse" : "Expand"}
         >
-          {isExpanded ? <svgIcons.upArrowIcon /> : <svgIcons.downArrowIcon />}
+          {isExpanded ? <svgIcons.UpArrowIcon /> : <svgIcons.DownArrowIcon />}
         </button>
       </div>
 

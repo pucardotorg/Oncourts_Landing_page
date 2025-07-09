@@ -9,11 +9,7 @@ interface CauseListDisplayProps {
   onDownload: () => void;
 }
 
-const CauseListDisplay: React.FC<CauseListDisplayProps> = ({
-  date,
-  pdfUrl,
-  onDownload,
-}) => {
+function CauseListDisplay({ date, pdfUrl, onDownload }: CauseListDisplayProps) {
   const [showPreview, setShowPreview] = useState(false);
   const formattedDate = format(new Date(date), "dd/MM/yyyy");
 
@@ -32,7 +28,7 @@ const CauseListDisplay: React.FC<CauseListDisplayProps> = ({
                   className="text-teal-600 hover:text-teal-700 p-2 rounded-full hover:bg-teal-50 transition-colors"
                   title="Download"
                 >
-                  <svgIcons.smallDownloadIcon />
+                  <svgIcons.SmallDownloadIcon />
                 </button>
                 <button
                   onClick={() => setShowPreview(false)}
@@ -66,7 +62,7 @@ const CauseListDisplay: React.FC<CauseListDisplayProps> = ({
                 onClick={() => setShowPreview(true)}
                 className="absolute bottom-4 right-4 z-10"
               >
-                <svgIcons.previewIcon />
+                <svgIcons.PreviewIcon />
               </button>
             </>
           ) : (
@@ -78,7 +74,7 @@ const CauseListDisplay: React.FC<CauseListDisplayProps> = ({
         <div className="flex items-center justify-between w-full py-3 border-t border-gray-100">
           <div className="flex items-center gap-2">
             <span className="flex-shrink-0">
-              <svgIcons.smallFileIcon />
+              <svgIcons.SmallFileIcon />
             </span>
             <span className="font-roboto font-medium text-[20px] leading-[24px] tracking-[-0.2px] text-[#334155] truncate max-w-[300px]">
               {`${formattedDate}${pdfUrl ? "_causelist.pdf" : ""}`}
@@ -89,13 +85,13 @@ const CauseListDisplay: React.FC<CauseListDisplayProps> = ({
               onClick={onDownload}
               className="flex-shrink-0 text-teal-600 hover:text-teal-700 p-2 rounded-full hover:bg-teal-50 transition-colors"
             >
-              <svgIcons.smallDownloadIcon />
+              <svgIcons.SmallDownloadIcon />
             </button>
           )}
         </div>
       </div>
     </>
   );
-};
+}
 
 export default CauseListDisplay;
