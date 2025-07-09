@@ -3,43 +3,52 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useSafeTranslation } from "../hooks/useSafeTranslation";
-
 import NavItem from "./NavItem";
 import DropdownMenu from "./DropdownMenu";
+import { useMediaQuery } from "@mui/material";
 
-const MENU_ITEMS = {
-  ABOUT: [
-    { label: "ABOUT_ON_COURTS", href: "/about" }, // About ON Courts
-    { label: "PEOPLE", href: "/about/people" }, // People
+import MobileHeader from "./MobileHeader";
+import { APP_URLS } from "../lib/config";
+
+export const MENU_ITEMS = {
+  ABOUT_US: [
+    { label: "ABOUT_ON_COURTS", href: "/about" },
+    { label: "PEOPLE", href: "/about/people" },
   ],
   SERVICES: [
     {
       label: "LOGIN",
       subItems: [
-        { label: "ADVOCATE_LITIGANT_LOGIN", href: "/login/advocate" },
-        { label: "JUDGE_STAFF_LOGIN", href: "/login/judge" },
+        {
+          label: "ADVOCATE_LITIGANT_LOGIN",
+          href: `${APP_URLS.CITIZEN_DRISTI}`,
+          target: "_blank",
+        },
+        {
+          label: "JUDGE_STAFF_LOGIN",
+          href: `${APP_URLS.EMPLOYEE_USER}`,
+          target: "_blank",
+        },
       ],
     },
-    { label: "CASE_SEARCH", href: "/search" }, // Case Search
-    { label: "DISPLAY_BOARD", href: "/display-board" }, // Display Board
+    { label: "CASE_SEARCH", href: "/search" },
+    { label: "DISPLAY_BOARD", href: "/display-board" },
   ],
   SUPPORT: [
     { label: "HELP_RESOURCES", href: "/help-resources" },
-    { label: "CONTACT", href: "/contact" },
-    { label: "FAQ", href: "/faq" },
+    { label: "VIDEO_TUTORIALS", href: "/video-tutorials" },
   ],
 };
 
-const HeaderV2 = () => {
+const HeaderV2: React.FC = () => {
   const router = useRouter();
   const { t } = useSafeTranslation();
+  const isMobile = useMediaQuery("(max-width:640px)");
   const [aboutDropdownOpen, setAboutDropdownOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
   const [supportDropdownOpen, setSupportDropdownOpen] = useState(false);
-
   const closeDropdownsRef = useRef(() => {});
 
-  // Always point to the latest state update logic
   useEffect(() => {
     closeDropdownsRef.current = () => {
       setAboutDropdownOpen(false);
@@ -74,13 +83,16 @@ const HeaderV2 = () => {
     e.stopPropagation();
   };
 
+  if (isMobile) {
+    return <MobileHeader />;
+  }
+
   return (
     <header className="w-full h-[73px] border-b border-gray-300 px-[30px] py-2 flex justify-between items-center">
-      {/* Logo */}
       <Link href="/" className="flex-shrink-0">
         <Image
           src="/images/logo.png"
-          alt={t("ONCOURTS_LOGO")} // "OnCourts Logo"
+          alt={t("ONCOURTS_LOGO")}
           width={123}
           height={73}
           className="h-12 w-auto"
@@ -89,12 +101,12 @@ const HeaderV2 = () => {
       <nav className="flex">
         <div className="flex items-center justify-between h-16">
           <div
-            className="hidden md:flex items-center space-x-1"
+            className="flex items-center space-x-1"
             onClick={handleDropdownClick}
           >
             <NavItem
               href="/"
-              label="HOME" // "Home"
+              label="HOME"
               isActive={router.pathname === "/"}
               t={t}
             />
@@ -102,7 +114,7 @@ const HeaderV2 = () => {
             <div className="relative">
               <NavItem
                 href="#"
-                label="ABOUT_US" // "About Us"
+                label="ABOUT_US"
                 isActive={
                   aboutDropdownOpen || router.pathname.startsWith("/about")
                 }
@@ -117,7 +129,7 @@ const HeaderV2 = () => {
               />
               {aboutDropdownOpen && (
                 <DropdownMenu
-                  items={MENU_ITEMS.ABOUT}
+                  items={MENU_ITEMS.ABOUT_US}
                   isOpen={aboutDropdownOpen}
                   t={t}
                 />
@@ -127,7 +139,7 @@ const HeaderV2 = () => {
             <div className="relative">
               <NavItem
                 href="#"
-                label="SERVICES" // "Services"
+                label="SERVICES"
                 isActive={
                   servicesDropdownOpen ||
                   router.pathname.includes("/display-board") ||
@@ -153,14 +165,14 @@ const HeaderV2 = () => {
             </div>
 
             <NavItem
-              href="/notices"
+              href="/"
               label="NOTICES" // "Notices"
               isActive={router.pathname === "/notices"}
               t={t}
             />
 
             <NavItem
-              href="/dashboard"
+              href="/"
               label="DASHBOARD" // "Dashboard"
               isActive={router.pathname === "/dashboard"}
               t={t}
@@ -187,34 +199,11 @@ const HeaderV2 = () => {
                   items={MENU_ITEMS.SUPPORT}
                   isOpen={supportDropdownOpen}
                   t={t}
+                  isLast={true}
                 />
               )}
             </div>
           </div>
-
-          {/* Mobile menu button */}
-          <button
-            className="md:hidden p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
-            onClick={() => {
-              /* TODO: Add mobile menu handler */
-            }}
-          >
-            <span className="sr-only">{t("OPEN_MENU")}</span>{" "}
-            {/* "Open menu" */}
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
         </div>
       </nav>
     </header>

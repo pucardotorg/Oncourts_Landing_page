@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useSafeTranslation } from '../../hooks/useSafeTranslation';
-import { useRouter } from 'next/router';
+import React, { useState } from "react";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
+import { useRouter } from "next/router";
 
 const HomeIntroVideo = () => {
   const { t } = useSafeTranslation();
@@ -12,14 +12,15 @@ const HomeIntroVideo = () => {
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      if (!target.closest('.login-dropdown')) {
+      if (!target.closest(".login-dropdown")) {
         setLoginDropdownOpen(false);
       }
     };
 
     if (loginDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [loginDropdownOpen]);
 
@@ -33,15 +34,11 @@ const HomeIntroVideo = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Left Content */}
           <div className="space-y-6">
-            <h1 className="font-libre font-normal text-[#3A3A3A] text-6xl leading-[78px] tracking-normal">
-              {t('TAKING_COURT_TO_PEOPLE')}
+            <h1 className="font-libre not-italic font-normal text-[64px] leading-[78px] text-[#3A3A3A]">
+              {t("TAKING_COURT_TO_PEOPLE")}
             </h1>
-            <p 
-            className="font-sans font-normal text-[#3A3A3A] text-[20px] leading-[36px] tracking-normal"
-
-
-            >
-              {t('COURT_DESCRIPTION')}
+            <p className="font-roboto not-italic font-normal text-[#334155] text-[28px] leading-[36px] tracking-normal">
+              {t("COURT_DESCRIPTION")}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="relative login-dropdown">
@@ -52,14 +49,14 @@ const HomeIntroVideo = () => {
                     setLoginDropdownOpen(!loginDropdownOpen);
                   }}
                 >
-                  <span>{t('LOGIN')}</span>
+                  <span>{t("LOGIN")}</span>
                   <svg
                     width="12"
                     height="12"
                     viewBox="0 0 12 12"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    className={`transition-transform ${loginDropdownOpen ? 'rotate-180' : ''}`}
+                    className={`transition-transform ${loginDropdownOpen ? "rotate-180" : ""}`}
                   >
                     <path
                       d="M2.5 4.5L6 8L9.5 4.5"
@@ -71,43 +68,43 @@ const HomeIntroVideo = () => {
                   </svg>
                 </button>
                 {loginDropdownOpen && (
-                  <div 
+                  <div
                     className="absolute left-0 top-full mt-1 w-[241px] bg-white rounded-md shadow-lg overflow-hidden z-50"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <button
                       className="w-[241px] px-4 py-3 text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-2 text-sm hover:text-[#0F766E]"
                       onClick={() => {
-                        router.push('/advocate-login');
+                        router.push("/advocate-login");
                         setLoginDropdownOpen(false);
                       }}
                     >
-                      {t('ADVOCATE_LITIGANT_LOGIN')}
+                      {t("ADVOCATE_LITIGANT_LOGIN")}
                     </button>
                     <button
                       className="w-[241px] px-4 py-3 text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-2 text-sm hover:text-[#0F766E]"
                       onClick={() => {
-                        router.push('/judge-login');
+                        router.push("/judge-login");
                         setLoginDropdownOpen(false);
                       }}
                     >
-                      {t('JUDGE_STAFF_LOGIN')}
+                      {t("JUDGE_STAFF_LOGIN")}
                     </button>
                   </div>
                 )}
               </div>
               <button
                 className="w-[241px] px-6 py-3 border border-[#0F766E] text-[#0F766E] rounded-xl font-medium hover:bg-gray-50 transition-colors"
-                onClick={() => router.push('/search')}
+                onClick={() => router.push("/search")}
               >
-                {t('CASE_SEARCH')}
+                {t("CASE_SEARCH")}
               </button>
             </div>
           </div>
 
           {/* Right Video Section */}
           <div className="relative aspect-video rounded-lg overflow-hidden shadow-lg bg-[#F3F4F6]">
-            <div 
+            <div
               className="absolute inset-0 cursor-pointer group flex items-center justify-center"
               onClick={handleVideoClick}
             >
@@ -115,8 +112,12 @@ const HomeIntroVideo = () => {
                 <>
                   <div className="absolute inset-0 bg-gradient-to-r from-[#0F766E]/20 to-transparent">
                     <div className="absolute inset-0 p-8 flex flex-col justify-center">
-                      <h3 className="text-2xl font-medium text-white mb-2">Watch Video</h3>
-                      <p className="text-white/80 max-w-[300px]">Learn how OnCourts is transforming the judicial system</p>
+                      <h3 className="text-2xl font-medium text-white mb-2">
+                        Watch Video
+                      </h3>
+                      <p className="text-white/80 max-w-[300px]">
+                        Learn how OnCourts is transforming the judicial system
+                      </p>
                     </div>
                   </div>
                   <div className="relative z-10 w-16 h-16 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -147,4 +148,4 @@ const HomeIntroVideo = () => {
   );
 };
 
-export default HomeIntroVideo;    
+export default HomeIntroVideo;

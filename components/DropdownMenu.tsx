@@ -5,16 +5,24 @@ import { svgIcons } from "../data/svgIcons";
 interface DropdownItem {
   label: string;
   href?: string;
+  target?: string;
   subItems?: DropdownItem[];
+  isLast?: boolean;
 }
 
 interface DropdownMenuProps {
   items: DropdownItem[];
   isOpen: boolean;
   t: (key: string) => string;
+  isLast?: boolean;
 }
 
-const DropdownMenu: React.FC<DropdownMenuProps> = ({ items, isOpen, t }) => {
+const DropdownMenu: React.FC<DropdownMenuProps> = ({
+  items,
+  isOpen,
+  t,
+  isLast,
+}) => {
   if (!isOpen) return null;
 
   const renderDropdownItem = (item: DropdownItem) => {
@@ -35,10 +43,11 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ items, isOpen, t }) => {
               <Link
                 key={subItem.label}
                 href={subItem.href || "#"}
+                target={subItem.target}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#007E7E] border-b border-[#CBD5E1] last:border-b-0"
               >
                 <div className="flex items-center center ">
-                  <span className="text-[#3A3A3A] font-sans font-medium text-[20px] leading-[28px] tracking-[0.01em]">
+                  <span className="text-[#3A3A3A] font-sans font-medium text-[20px] leading-[28px] tracking-[0.01em] hover:bg-gray-50 hover:text-[#007E7E]">
                     {t(subItem.label)}
                   </span>
                 </div>
@@ -55,7 +64,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ items, isOpen, t }) => {
         href={item.href || "#"}
         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#007E7E] border-b border-[#E5E5E5] last:border-b-0"
       >
-        <span className="text-[#3A3A3A] font-sans font-medium text-[20px] leading-[28px] tracking-[0.01em]">
+        <span className="text-[#3A3A3A] font-sans font-medium text-[20px] leading-[28px] tracking-[0.01em] hover:bg-gray-50 hover:text-[#007E7E]">
           {t(item.label)}
         </span>
       </Link>
@@ -63,7 +72,9 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ items, isOpen, t }) => {
   };
 
   return (
-    <div className="absolute z-50 top-[55px] left-0 min-w-[200px] bg-white shadow-lg py-1 mt-1 whitespace-nowrap">
+    <div
+      className={`absolute z-50 top-[55px] min-w-[200px] bg-white shadow-lg py-1 mt-1 whitespace-nowrap ${isLast ? "right-0" : "left-0"}`}
+    >
       <span className="text-[#3A3A3A]font-sans font-medium text-[20px] leading-[28px] tracking-[0.01em]">
         {items.map(renderDropdownItem)}
       </span>

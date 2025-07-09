@@ -18,8 +18,8 @@ export interface DashboardMetricsNew {
 
 const HighlightItem: React.FC<HighlightItemProps> = ({ value, label }) => (
   <div className="flex flex-col items-center justify-center px-4 py-6 text-center">
-    <span className="font-noto font-bold text-[72.28px] leading-[78.3px] tracking-[-2.41px] text-center text-[#0F766E]">
-      {value}
+    <span className="font-noto font-bold text-[72.28px] h-[78.3px] leading-[78.3px] tracking-[-2.41px] text-center text-[#0F766E]">
+      {value || "\u00A0"}
     </span>
     <span className="font-sans font-medium text-[16px] leading-[24px] tracking-[0.01em] text-center text-[[#0F172A]]">
       {label}
@@ -36,7 +36,6 @@ const Highlights: React.FC = () => {
       try {
         const res = await fetch("/api/impactGlance");
         const data = await res.json();
-        console.log("data", data);
 
         const transformed = transformImpactGlance(data);
         setStats(transformed?.stats || []);
@@ -81,7 +80,7 @@ const Highlights: React.FC = () => {
         <div className="flex justify-center mt-8">
           <button
             className="flex justify-center items-center w-[376px] h-[69px] px-8 border border-[#0F766E] rounded-xl gap-3"
-            onClick={() => window.open("/dashboard", "_blank")}
+            onClick={() => window.open("/", "_blank")}
           >
             <svgIcons.openInNewTabIcon />
             <span className="font-sans font-medium text-[16px] leading-[24px] tracking-[0.01em] text-center text-[#0F766E]">
