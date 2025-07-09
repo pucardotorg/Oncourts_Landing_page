@@ -4,6 +4,7 @@ import HomeIntroVideo from "../../components/HomePage/HomeIntroVideo";
 import InfoBanner from "../../components/InfoBanner";
 import Highlights from "../../components/HomePage/Highlights";
 import QuestionsSection from "../../components/HomePage/QuestionsSection";
+import HomeCauseLists from "../../components/HomePage/HomeCauseLists";
 
 const Hero = () => {
   return (
@@ -11,6 +12,7 @@ const Hero = () => {
       <InfoBanner messages={[]} />
       <StickyHelpButton />
       <HomeIntroVideo />
+      <HomeCauseLists />
       <Highlights />
       <QuestionsSection />
     </div>
