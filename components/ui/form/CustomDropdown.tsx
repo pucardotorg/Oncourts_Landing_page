@@ -118,7 +118,7 @@ const CustomDropdown: React.FC<DropdownProps> = ({
                     : ""
                 }`}
               >
-                <span className="block whitespace-normal break-words">
+                <span className="block whitespace-normal break-words font-[Roboto]">
                   {t(option.label)}
                 </span>
               </li>
