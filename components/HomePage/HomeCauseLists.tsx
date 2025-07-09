@@ -3,6 +3,7 @@ import { format, subDays, addDays } from "date-fns";
 import CauseListDisplay from "./CauseListDisplay";
 import { svgIcons } from "../../data/svgIcons";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
+import { useMediaQuery } from "@mui/material";
 
 interface CauseListState {
   date: string;
@@ -10,6 +11,7 @@ interface CauseListState {
 }
 
 function HomeCauseLists(): JSX.Element {
+  const isMobile = useMediaQuery("(max-width: 640px)");
   const [leftCauseList, setLeftCauseList] = useState<CauseListState | null>(
     null
   );
@@ -131,11 +133,13 @@ function HomeCauseLists(): JSX.Element {
   }, [leftCauseList?.pdfUrl, rightCauseList?.pdfUrl]);
 
   return (
-    <div className="bg-[#F8FAFC] py-12">
+    <div className="bg-[white] py-12">
       <div className="max-w-[1440px] mx-auto px-4 md:px-6">
-        <h2 className="flex mb-12 items-center justify-center text-center font-libre font-normal text-[40px] leading-[48px] text-[#3A3A3A]">
-          Cause List
-        </h2>
+        <div className="flex mb-12 items-center justify-center">
+          <h2 className="px-[30px] py-[12px] text-center font-libre font-normal text-[40px] leading-[48px] text-[#3A3A3A] border-b border-[#CBD5E1]">
+            Cause List
+          </h2>
+        </div>
         <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-[60px]">
           {leftCauseList && (
             <CauseListDisplay
@@ -153,20 +157,24 @@ function HomeCauseLists(): JSX.Element {
           )}
         </div>
         <div className="flex items-center justify-center mt-8 gap-2">
-          <svgIcons.InfoIcon />
-          <p className="font-roboto font-normal text-[20px] leading-[26px] tracking-[-0.2px] text-[#334155]">
+          <svgIcons.InfoIcon width={isMobile ? "64" : "34"} />
+          <p
+            className={`font-roboto font-normal leading-[26px] tracking-[-0.2px] text-[#334155] ${isMobile ? "text-[15px]" : "text-[20px]"}`}
+          >
             Cause list for the next day will be available after{" "}
             <strong>05:00 PM</strong>
           </p>
         </div>
         <div className="flex justify-center mt-8">
           <button
-            className="flex flex-row items-center justify-center px-4 md:px-[16px] gap-[12px] w-[311px] h-[69px] bg-white border border-[#0F766E] rounded-[12px] shadow-[inset_-2px_-2px_2px_rgba(15,23,42,0.14),inset_2px_2px_2px_1px_rgba(255,255,255,0.9)]"
+            className={`flex flex-row items-center justify-center px-4 md:px-[16px] gap-[12px] bg-white border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px]" : "h-[69px]"}`}
             onClick={() => window.open("/", "_blank")}
           >
-            <svgIcons.OpenInNewTabIcon />
-            <span className="w-[296px] h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-center text-[#0F766E]">
-              {t("View Display Board")}
+            <svgIcons.OpenInNewTabIcon width={isMobile ? "16" : "30"} />
+            <span
+              className={`h-[32px] font-roboto font-medium leading-[32px] tracking-[-0.56px] text-center text-[#0F766E] ${isMobile ? "text-[16px]" : "text-[28px]"}`}
+            >
+              {t("View Cause List Display")}
             </span>
           </button>
         </div>

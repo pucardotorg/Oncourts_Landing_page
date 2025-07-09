@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { svgIcons } from "../../data/svgIcons";
+import PdfPreview from "../Utils/PdfPreview";
+import { useMediaQuery } from "@mui/material";
 
 interface CauseListDisplayProps {
   date: string;
@@ -12,12 +14,27 @@ interface CauseListDisplayProps {
 function CauseListDisplay({ date, pdfUrl, onDownload }: CauseListDisplayProps) {
   const [showPreview, setShowPreview] = useState(false);
   const formattedDate = format(new Date(date), "dd/MM/yyyy");
+  const isMobile = useMediaQuery("(max-width: 640px)");
+
+  useEffect(() => {
+    if (showPreview) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showPreview]);
 
   return (
     <>
       {showPreview && pdfUrl && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg w-full max-w-6xl h-[90vh] flex flex-col">
+          <div
+            className={`bg-white rounded-lg  flex flex-col ${isMobile ? "h-[95%] w-[95%]" : "h-[90vh] w-[70%]"}`}
+          >
             <div className="flex justify-between items-center p-4 border-b">
               <h3 className="text-lg font-medium text-gray-900">
                 Cause List - {formattedDate}
@@ -39,24 +56,31 @@ function CauseListDisplay({ date, pdfUrl, onDownload }: CauseListDisplayProps) {
                 </button>
               </div>
             </div>
-            <div className="flex-1 p-4">
-              <iframe
-                src={`${pdfUrl}#toolbar=0`}
-                className="w-full h-full rounded border-2 border-gray-200"
-                title={`Cause List Preview - ${formattedDate}`}
+
+            {/* Scrollable preview area */}
+            <div className="flex-1 overflow-y-hidden p-4">
+              <PdfPreview
+                fileUrl={pdfUrl}
+                width={isMobile ? "80%" : "65%"}
+                height={isMobile ? "80%" : "80%"}
+                scrollable={true}
               />
             </div>
           </div>
         </div>
       )}
-      <div className="flex flex-col items-center w-full max-w-[416px] bg-white rounded-lg overflow-hidden shadow-sm">
-        <div className="w-full aspect-[1.64] relative bg-white">
+
+      <div
+        className={`flex flex-col items-center bg-white overflow-hidden ${isMobile ? "h-[253px] w-[95%]" : "w-[416px] h-[253px]"}`}
+      >
+        <div className=" h-[194px] p-2 aspect-[1.64] relative bg-white">
           {pdfUrl ? (
             <>
-              <iframe
-                src={`${pdfUrl}#toolbar=0&view=FitH`}
-                className="w-full h-full absolute inset-0"
-                title={`Cause List ${formattedDate}`}
+              <PdfPreview
+                fileUrl={pdfUrl}
+                height={isMobile ? "194px" : "194px"}
+                width={isMobile ? "85%" : "416px"}
+                scrollable={false}
               />
               <button
                 onClick={() => setShowPreview(true)}

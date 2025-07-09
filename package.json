@@ -33,6 +33,7 @@
     "jspdf": "^3.0.1",
     "lucide-react": "^0.487.0",
     "next": "^15.0.3",
+    "pdfjs-dist": "^5.3.93",
     "react": "^18.2.0",
     "react-countup": "^6.5.3",
     "react-datepicker": "^7.5.0",
