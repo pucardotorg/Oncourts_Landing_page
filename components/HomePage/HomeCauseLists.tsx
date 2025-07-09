@@ -48,7 +48,7 @@ const HomeCauseLists: React.FC = () => {
       console.error("Error fetching PDF:", error);
       return null;
     }
-  }, []);
+  }, [tenantId]);
 
   const downloadPdf = useCallback(async (date: string) => {
     try {
@@ -82,7 +82,7 @@ const HomeCauseLists: React.FC = () => {
       console.error("Error downloading PDF:", error);
       alert("Failed to download cause list");
     }
-  }, []);
+  }, [tenantId]);
 
   const updateCauseLists = useCallback(async () => {
     const now = new Date();
