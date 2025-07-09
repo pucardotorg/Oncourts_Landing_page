@@ -39,11 +39,15 @@ const HomeCauseLists: React.FC = () => {
 
         if (!response.ok) {
           const { error } = await response.json();
-          throw new Error(error || `HTTP error! Status: ${response.status}`);
+          console.error("Error fetching PDF:", error);
+          return null;
         }
 
-        const blob = await response.blob();
-        return URL.createObjectURL(blob);
+        if (response.status === 200) {
+          const blob = await response.blob();
+          return URL.createObjectURL(blob);
+        }
+        return null;
       } catch (error) {
         console.error("Error fetching PDF:", error);
         return null;

@@ -70,7 +70,7 @@ const CauseListDisplay: React.FC<CauseListDisplayProps> = ({
               </button>
             </>
           ) : (
-            <div className="flex items-center justify-center h-full text-red-500">
+            <div className="flex items-center justify-center h-full text-[#DC2626]">
               Hearing not scheduled for this date
             </div>
           )}
@@ -81,7 +81,7 @@ const CauseListDisplay: React.FC<CauseListDisplayProps> = ({
               <svgIcons.smallFileIcon />
             </span>
             <span className="font-roboto font-medium text-[20px] leading-[24px] tracking-[-0.2px] text-[#334155] truncate max-w-[300px]">
-              {formattedDate}_causelist.pdf
+              {`${formattedDate}${pdfUrl ? "_causelist.pdf" : ""}`}
             </span>
           </div>
           {pdfUrl && (
