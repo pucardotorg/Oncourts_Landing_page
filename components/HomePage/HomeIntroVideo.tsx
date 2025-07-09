@@ -4,12 +4,15 @@ import { useRouter } from "next/router";
 import { svgIcons } from "../../data/svgIcons";
 import { APP_URLS } from "../../lib/config";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import Tooltip from "../common/Tooltip";
 
 const HomeIntroVideo = () => {
   const { t } = useSafeTranslation();
   const router = useRouter();
   const [loginDropdownOpen, setLoginDropdownOpen] = useState(false);
   const [showFullscreen, setShowFullscreen] = useState(false);
+  const [showLoginTooltip, setShowLoginTooltip] = useState(false);
+  const [showSearchTooltip, setShowSearchTooltip] = useState(false);
   const videoId = "-JoWnkE-uTs";
 
   // Close dropdown when clicking outside
@@ -60,18 +63,26 @@ const HomeIntroVideo = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="relative login-dropdown">
                 <button
-                  // className="w-[241px] flex justify-center items-center gap-2  px-6 py-3 bg-[#0F766E] text-white rounded-xl font-medium hover:bg-[#115E59] transition-colors"
                   className="box-border flex flex-row items-center justify-center px-4 py-8 gap-4 w-[241px] h-[69px] bg-[#0F766E] border border-[#0F766E] rounded-[12px]"
                   onClick={(e) => {
                     e.stopPropagation();
                     setLoginDropdownOpen(!loginDropdownOpen);
                   }}
+                  onMouseEnter={() => setShowLoginTooltip(true)}
+                  onMouseLeave={() => setShowLoginTooltip(false)}
                 >
                   <span className="w-[68px] h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-white">
                     {t("LOGIN")}
                   </span>
                   <svgIcons.downArrowIcon fill="#fff" />
                 </button>
+                {showLoginTooltip && !loginDropdownOpen && (
+                  <Tooltip
+                    text={t(
+                      "Log in to file cases, submit applications and more"
+                    )}
+                  />
+                )}
                 {loginDropdownOpen && (
                   <div
                     className="w-max absolute left-0 top-full mt-1bg-white rounded-md shadow-lg overflow-hidden z-50"
@@ -102,14 +113,25 @@ const HomeIntroVideo = () => {
                   </div>
                 )}
               </div>
-              <button
-                className="box-border flex flex-col items-center justify-center px-4 py-8 gap-6 w-[241px] h-[69px] bg-white border border-[#0F766E] rounded-[12px]"
-                onClick={() => router.push("/search")}
-              >
-                <span className="font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-[#0F766E]">
-                  {t("CASE_SEARCH")}
-                </span>
-              </button>
+              <div className="relative">
+                <button
+                  className="box-border flex flex-col items-center justify-center px-4 py-8 gap-6 w-[241px] h-[69px] bg-white border border-[#0F766E] rounded-[12px]"
+                  onClick={() => router.push("/search")}
+                  onMouseEnter={() => setShowSearchTooltip(true)}
+                  onMouseLeave={() => setShowSearchTooltip(false)}
+                >
+                  <span className="font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-[#0F766E]">
+                    {t("CASE_SEARCH")}
+                  </span>
+                </button>
+                {showSearchTooltip && (
+                  <Tooltip
+                    text={t(
+                      "Log in to manage cases, issue orders, and support courtroom proceedings"
+                    )}
+                  />
+                )}
+              </div>
             </div>
           </div>
 
