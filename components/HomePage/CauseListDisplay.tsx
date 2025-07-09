@@ -53,43 +53,41 @@ const CauseListDisplay: React.FC<CauseListDisplayProps> = ({
           </div>
         </div>
       )}
-      <div className="flex flex-col items-start p-0 w-[416px] h-[253px]">
-        <div className="flex-1 flex items-center justify-center w-[416px]">
+      <div className="flex flex-col items-center w-full max-w-[416px] bg-white rounded-lg overflow-hidden shadow-sm">
+        <div className="w-full aspect-[1.64] relative bg-white">
           {pdfUrl ? (
             <>
-              <div className="relative w-[416px] h-full">
-                <iframe
-                  src={`${pdfUrl}#toolbar=0`}
-                  className="w-[416px] h-full"
-                  title={`Cause List ${formattedDate}`}
-                />
-                <button
-                  onClick={() => setShowPreview(true)}
-                  className="absolute bottom-4 right-4"
-                >
-                  <svgIcons.previewIcon />
-                </button>
-              </div>
+              <iframe
+                src={`${pdfUrl}#toolbar=0&view=FitH`}
+                className="w-full h-full absolute inset-0"
+                title={`Cause List ${formattedDate}`}
+              />
+              <button
+                onClick={() => setShowPreview(true)}
+                className="absolute bottom-4 right-4 z-10"
+              >
+                <svgIcons.previewIcon />
+              </button>
             </>
           ) : (
-            <div className="text-red-500 text-center">
+            <div className="flex items-center justify-center h-full text-red-500">
               Hearing not scheduled for this date
             </div>
           )}
         </div>
-        <div className="flex items-center justify-between mt-4 border-t w-[416px]">
-          <div className="flex items-center space-x-2">
-            <span>
+        <div className="flex items-center justify-between w-full py-3 border-t border-gray-100">
+          <div className="flex items-center gap-2">
+            <span className="flex-shrink-0">
               <svgIcons.smallFileIcon />
             </span>
-            <span className="w-[295px] h-[30px] font-roboto font-medium text-[26px] leading-[30px] tracking-[-0.26px] text-[#334155]">
+            <span className="font-roboto font-medium text-[20px] leading-[24px] tracking-[-0.2px] text-[#334155] truncate max-w-[300px]">
               {formattedDate}_causelist.pdf
             </span>
           </div>
           {pdfUrl && (
             <button
               onClick={onDownload}
-              className="text-teal-600 hover:text-teal-700 p-2 rounded-full hover:bg-teal-50 transition-colors"
+              className="flex-shrink-0 text-teal-600 hover:text-teal-700 p-2 rounded-full hover:bg-teal-50 transition-colors"
             >
               <svgIcons.smallDownloadIcon />
             </button>
