@@ -26,8 +26,7 @@ import { commonStyles, animations } from "../../styles/commonStyles";
 import DetailedViewModal from "../../components/search/DetailedViewModal";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import { useMediaQuery } from "@mui/material";
-import TableRowCard from "../../components/TableRow/TableRowCard";
-import { transformToCardData } from "../../components/Utils";
+import ExpandableCard from "../../components/TableRow/ExpandableCard";
 import { FiSearch } from "react-icons/fi";
 import MobileFilters from "../../components/search/MobileFilters";
 import Pagination from "../../components/Utils/Pagination";
@@ -217,12 +216,24 @@ const SearchForCase = () => {
       });
       handleSubmit({
         ...defaultFilterState,
-        courtName: defaultCourt,
       });
     } else {
       handleResetFilters();
       handleSubmit(defaultFilterState);
     }
+  };
+
+  const areFiltersApplied = () => {
+    debugger;
+    return (
+      filterState.caseType !== defaultFilterState.caseType ||
+      filterState.hearingDateFrom !== defaultFilterState.hearingDateFrom ||
+      filterState.hearingDateTo !== defaultFilterState.hearingDateTo ||
+      filterState.caseSubStage !== defaultFilterState.caseSubStage ||
+      filterState.caseStatus !== defaultFilterState.caseStatus ||
+      filterState.yearOfFiling !== defaultFilterState.yearOfFiling ||
+      filterState.caseTitle !== defaultFilterState.caseTitle
+    );
   };
 
   // Handle tab change
@@ -556,12 +567,12 @@ const SearchForCase = () => {
       {isMobile && (selectedTab === "all" || searchResults?.length > 0) && (
         <div className="mb-4">
           <div className="flex justify-between items-center">
-            <h2 className="py-2 font-['Baskerville'] font-semibold text-2xl text-[#0F172A]">
+            <h2 className="py-2 font-['Baskerville'] font-semibold text-3xl text-[#0F172A]">
               {t("CASE_DETAILS")}
             </h2>
             <button
               onClick={() => setShowMobileFilter(true)}
-              className="p-2 rounded-full bg-teal-50 border border-teal-200"
+              className={`p-2 rounded-full relative ${areFiltersApplied() ? "bg-teal-600 border border-teal-700" : "bg-white border border-teal-200"}`}
               aria-label="Open filters"
             >
               <svg
@@ -574,7 +585,7 @@ const SearchForCase = () => {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="text-teal-700"
+                className={`${areFiltersApplied() ? "text-[#FCC037]" : "text-black"}`}
               >
                 <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
               </svg>
@@ -619,32 +630,19 @@ const SearchForCase = () => {
       {isMobile &&
         (selectedTab === "all" || searchResults?.length > 0) &&
         searchResults?.map((caseResult, index) => {
-          // Transform CaseResult to the format expected by TableRowCard
-          const labelMap = {
-            caseTitle: "CASE_TITLE",
-            caseNumber: "CASE_NUMBER",
-            nextHearingDate: "NEXT_HEARING_DATE",
-            purpose: "PURPOSE",
-            actions: "ACTION",
-          };
-
-          const flatRow: Record<string, string | JSX.Element> = {
-            caseTitle: caseResult.caseTitle || "",
+          const caseData = {
             caseNumber: caseResult.stNumber || caseResult.cmpNumber || "",
             nextHearingDate: caseResult.nextHearingDate || "",
+            caseTitle: caseResult.caseTitle || "",
             purpose: caseResult.purpose || "",
-            actions: "VIEW_DETAILS",
           };
 
-          const cardData = transformToCardData(flatRow, labelMap);
-
           return (
-            <TableRowCard
+            <ExpandableCard
               t={t}
               key={index}
-              caseIndex={index}
-              data={cardData}
-              onActionClick={() => handleViewCaseDetails(caseResult)}
+              caseData={caseData}
+              onViewDetails={() => handleViewCaseDetails(caseResult)}
             />
           );
         })}
