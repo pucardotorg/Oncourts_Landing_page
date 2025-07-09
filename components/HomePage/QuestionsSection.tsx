@@ -50,7 +50,7 @@ const QuestionsSection: React.FC = () => {
         <div className="space-y-4 text-[#1E293B] text-[16px] leading-[24px]">
           <p>
             {t("WHERE_CHECK_HEARING_DETAILS_ANSWER_1")}
-            <Link href="/search" className="text-[#0F766E] hover:underline">
+            <Link href="/search" className="text-[#1D4ED8] hover:underline">
               {t("CASE_SEARCH")}
             </Link>
             {t("WHERE_CHECK_HEARING_DETAILS_ANSWER_2")}
@@ -68,12 +68,12 @@ const QuestionsSection: React.FC = () => {
         <div className="space-y-4 text-[#1E293B] text-[16px] leading-[24px]">
           <p>
             You can access pending tasks by logging into the{" "}
-            <Link href="/login" className="text-[#0F766E] hover:underline">
+            <Link href="/login" className="text-[#1D4ED8] hover:underline">
               ON Court portal
             </Link>{" "}
             and navigating to the &quot;All Pending Tasks&quot; section on the
             right-side panel in the homepage. Alternatively, you can use the{" "}
-            <Link href="/search" className="text-[#0F766E] hover:underline">
+            <Link href="/search" className="text-[#1D4ED8] hover:underline">
               Case Search
             </Link>{" "}
             section under the Services tab to review pending payments, such as
@@ -93,7 +93,7 @@ const QuestionsSection: React.FC = () => {
             You can use the{" "}
             <Link
               href="/display-board"
-              className="text-[#0F766E] hover:underline"
+              className="text-[#1D4ED8] hover:underline"
             >
               Display Board
             </Link>{" "}
@@ -102,7 +102,7 @@ const QuestionsSection: React.FC = () => {
           </p>
           <p>
             Alternatively, you can access the{" "}
-            <Link href="/search" className="text-[#0F766E] hover:underline">
+            <Link href="/search" className="text-[#1D4ED8] hover:underline">
               Case Search
             </Link>{" "}
             section under the Services tab to check the next hearing dates for
@@ -226,7 +226,7 @@ const QuestionsSection: React.FC = () => {
               User Guide for Advocates and Clerks:{" "}
               <Link
                 href="/advocate-guide"
-                className="text-[#0F766E] hover:underline"
+                className="text-[#1D4ED8] hover:underline"
               >
                 Link
               </Link>
@@ -235,7 +235,7 @@ const QuestionsSection: React.FC = () => {
               Video tutorials for Advocates and Clerks:{" "}
               <Link
                 href="/advocate-tutorials"
-                className="text-[#0F766E] hover:underline"
+                className="text-[#1D4ED8] hover:underline"
               >
                 Link
               </Link>

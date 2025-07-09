@@ -67,7 +67,7 @@ const Highlights: React.FC = () => {
   ];
 
   return (
-    <section className="w-full bg-white py-12">
+    <section className="w-full bg-white py-24">
       <div className="max-w-[1440px] mx-auto px-6">
         <h2 className="font-libre h-[48px] font-[400] text-[40px] leading-[48px] tracking-normal text-center align-middle text-[#3A3A3A]">
           {t("HIGHLIGHTS")}
