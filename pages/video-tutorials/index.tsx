@@ -149,7 +149,7 @@ const videoCategories: VideoCategory[] = [
       },
       {
         id: "view-display-board",
-        title: "View Display Board",
+        title: "View Cause List Display",
         thumbnail: "/images/graph.png",
         videoUrl:
           "https://www.youtube.com/watch?v=yXaegVWBrK0&ab_channel=LEdINDIA",

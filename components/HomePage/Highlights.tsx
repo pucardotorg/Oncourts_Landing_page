@@ -24,11 +24,13 @@ const HighlightItem: React.FC<HighlightItemProps> = ({
   isMobile = false,
 }) => (
   <div className="flex flex-col items-center justify-center px-4 text-center">
-    <span className="font-noto font-bold text-[72.28px] h-[78.3px] leading-[78.3px] tracking-[-2.41px] text-center text-[#0F766E]">
+    <span
+      className={`font-noto font-bold tracking-[-2.41px] text-center text-[#0F766E] self-stretch ${isMobile ? "text-[48px] leading-[78px]" : "text-[72.2755px] leading-[78px]"}`}
+    >
       {value || "\u00A0"}
     </span>
     <span
-      className={`h-[30px] font-roboto font-medium text-[26px] leading-[30px] tracking-[-0.26px] text-center text-[#0F172A] mt-4 ${isMobile ? "text-[16px]" : "text-[26px]"}`}
+      className={`font-roboto font-medium tracking-[-0.26px] text-center mt-4 text-[#0F172A] ${isMobile ? "text-[20px] leading-[24px]" : "text-[26px] leading-[30px]"}`}
     >
       {label}
     </span>
@@ -72,10 +74,12 @@ const Highlights: React.FC = () => {
   ];
 
   return (
-    <section className="w-full bg-white py-24">
+    <section className={`w-full bg-white ${isMobile ? "py-4" : "py-16"}`}>
       <div className="max-w-[1440px] mx-auto px-6">
         <div className="flex items-center justify-center mb-8">
-          <h2 className="px-12 font-libre h-[70px] font-[400] text-[40px] leading-[48px] tracking-normal text-center align-middle text-[#3A3A3A] border-b border-[#CBD5E1]">
+          <h2
+            className={`px-12 pb-2 font-libre font-[400]  tracking-normal text-center align-middle text-[#3A3A3A] border-b border-[#CBD5E1] ${isMobile ? "text-[32px] leading-[40px]" : "text-[40px] leading-[48px]"}`}
+          >
             {t("HIGHLIGHTS")}
           </h2>
         </div>
