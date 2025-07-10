@@ -202,29 +202,30 @@ const SearchForCase = () => {
 
   // Centralized handler to update filter state and trigger search
   const handleFilterChangeAndSearch = (newFilterState: FilterState) => {
+    setOffset(0);
     setFilterState(newFilterState);
-    handleSubmit(newFilterState);
+    handleSubmit(0, newFilterState);
   };
 
   // Centralized handler to reset filter state and trigger search
   const handleResetFiltersAndSearch = () => {
     if (selectedTab === "all" && courtOptions.length > 0) {
       const defaultCourt = courtOptions[0]?.name || "";
+      setOffset(0);
       handleResetFilters({
         ...defaultFilterState,
         courtName: defaultCourt,
       });
-      handleSubmit({
+      handleSubmit(0, {
         ...defaultFilterState,
       });
     } else {
       handleResetFilters();
-      handleSubmit(defaultFilterState);
+      handleSubmit(0, defaultFilterState);
     }
   };
 
   const areFiltersApplied = () => {
-    debugger;
     return (
       filterState.caseType !== defaultFilterState.caseType ||
       filterState.hearingDateFrom !== defaultFilterState.hearingDateFrom ||
@@ -278,7 +279,7 @@ const SearchForCase = () => {
       results,
       totalCount: count,
       error,
-    } = await searchCases("all", { offset, limit });
+    } = await searchCases("all", { offset: 0, limit });
 
     if (error) {
       setErrorNotification({
@@ -348,7 +349,7 @@ const SearchForCase = () => {
   const handleNextPage = () => {
     if (offset + limit < totalCount) {
       setOffset(offset + limit);
-      handleSubmit(); // Re-fetch with new offset
+      handleSubmit(offset + limit); // Re-fetch with new offset
       // Scroll to top of page
       setTimeout(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -359,7 +360,7 @@ const SearchForCase = () => {
   const handlePrevPage = () => {
     if (offset - limit >= 0) {
       setOffset(offset - limit);
-      handleSubmit(); // Re-fetch with new offset
+      handleSubmit(offset - limit); // Re-fetch with new offset
       // Scroll to top of page
       setTimeout(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -368,7 +369,10 @@ const SearchForCase = () => {
   };
 
   // Submit form
-  const handleSubmit = async (filterStateOverride?: FilterState) => {
+  const handleSubmit = async (
+    offsetOverride: number,
+    filterStateOverride?: FilterState
+  ) => {
     // Check if form is valid before submission
     if (!isFormValid(selectedTab, formState)) {
       return;
@@ -387,7 +391,7 @@ const SearchForCase = () => {
       selectedTab,
       {
         ...formState,
-        offset,
+        offset: offsetOverride,
         limit,
       },
       filterStateOverride || filterState
@@ -631,7 +635,11 @@ const SearchForCase = () => {
         (selectedTab === "all" || searchResults?.length > 0) &&
         searchResults?.map((caseResult, index) => {
           const caseData = {
-            caseNumber: caseResult.stNumber || caseResult.cmpNumber || "",
+            caseNumber:
+              caseResult.stNumber ||
+              caseResult.cmpNumber ||
+              caseResult.filingNumber ||
+              "",
             nextHearingDate: caseResult.nextHearingDate || "",
             caseTitle: caseResult.caseTitle || "",
             purpose: caseResult.purpose || "",
@@ -640,6 +648,7 @@ const SearchForCase = () => {
           return (
             <ExpandableCard
               t={t}
+              index={index}
               key={index}
               caseData={caseData}
               onViewDetails={() => handleViewCaseDetails(caseResult)}

@@ -3,6 +3,7 @@ import { svgIcons } from "../../data/svgIcons";
 
 interface ExpandableCardProps {
   t: (key: string) => string;
+  index: number;
   caseData: {
     caseNumber: string;
     nextHearingDate: string;
@@ -14,6 +15,7 @@ interface ExpandableCardProps {
 
 const ExpandableCard: React.FC<ExpandableCardProps> = ({
   t,
+  index,
   caseData,
   onViewDetails,
 }) => {
@@ -24,31 +26,35 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
   };
 
   return (
-    <div className="font-[Roboto] bg-white mb-8 shadow-sm w-full overflow-hidden">
+    <div className="font-[Roboto] bg-white shadow-sm w-full overflow-hidden">
       {/* Header section - always visible */}
       {/* Labels row */}
-      <div className="grid grid-cols-2 bg-[#F8FAFC] font-[Baskerville]">
-        <div className="p-3 border-r-2 border-[#E2E8F0]">
-          <div className="text-lg text-[#0F172A] font-semibold">
-            {t("CASE_NUMBER")}
+      {index === 0 && (
+        <div className="grid grid-cols-2 bg-[#F8FAFC] font-[Baskerville]">
+          <div className="p-3 border-r border-b border-[#E2E8F0]">
+            <div className="text-[14px] text-[#0F172A] font-semibold">
+              {t("CASE_NUMBER")}
+            </div>
+          </div>
+          <div className="p-3 border-b border-[#E2E8F0]">
+            <div className="text-[14px] text-[#0F172A] font-semibold">
+              {t("NEXT_HEARING_DATE")}
+            </div>
           </div>
         </div>
-        <div className="p-3">
-          <div className="text-lg text-[#0F172A] font-semibold">
-            {t("NEXT_HEARING_DATE")}
-          </div>
-        </div>
-      </div>
+      )}
 
       {/* Values row */}
-      <div className="grid grid-cols-2 relative bg-[#F0FDFA] font-[Roboto]">
-        <div className="p-3 border-t-2 border-r-2 border-[#E2E8F0]">
-          <div className="text-lg text-[#334155] font-medium">
+      <div
+        className={`grid grid-cols-2 relative font-[Roboto] ${isExpanded ? "bg-[#F0FDFA]" : "bg-white"}`}
+      >
+        <div className="p-3 border-x border-b border-[#E2E8F0]">
+          <div className="text-[14px] text-[#334155] font-medium">
             {caseData.caseNumber}
           </div>
         </div>
-        <div className="p-3 border-t-2 border-[#E2E8F0]">
-          <div className="text-lg text-[#334155] font-medium">
+        <div className="p-3 border-r border-b border-[#E2E8F0]">
+          <div className="text-[14px] text-[#334155] font-medium">
             {caseData.nextHearingDate}
           </div>
         </div>
@@ -65,31 +71,31 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
 
       {/* Expandable content */}
       {isExpanded && (
-        <div className="p-4 border-2 border-[#E2E8F0] bg-white">
+        <div className="p-4 border-x-2 border-t border-b-2 border-[#E2E8F0] bg-white">
           <div className="grid grid-cols-1 gap-4">
             <div className="grid grid-cols-2 items-center">
-              <div className="text-lg text-[#0F172A] font-semibold">
+              <div className="text-[14px] text-[#0F172A] font-semibold">
                 {t("CASE_TITLE")}:
               </div>
-              <div className="ps-3 text-lg text-[#334155]">
+              <div className="ps-3 text-[14px] text-[#334155]">
                 {caseData.caseTitle}
               </div>
             </div>
             <div className="grid grid-cols-2 items-center">
-              <div className="text-lg text-[#0F172A] font-semibold">
+              <div className="text-[14px] text-[#0F172A] font-semibold">
                 {t("PURPOSE")}:
               </div>
-              <div className="ps-3 text-lg text-[#334155]">
+              <div className="ps-3 text-[14px] text-[#334155]">
                 {t(caseData.purpose)}
               </div>
             </div>
             <div className="grid grid-cols-2 items-center">
-              <div className="text-lg text-[#0F172A] font-semibold">
+              <div className="text-[14px] text-[#0F172A] font-semibold">
                 {t("ACTION")}:
               </div>
               <button
                 onClick={onViewDetails}
-                className="ms-2 font-[Inter] font-semibold py-2 bg-white border-2 border-[#E2E8F0] rounded text-[#334155] text-lg w-full text-center"
+                className="ms-2 font-[Inter] font-semibold py-2 bg-white border-2 border-[#E2E8F0] rounded text-[#334155] text-[14px] w-full text-center"
               >
                 {t("VIEW_DETAILS")}
               </button>
