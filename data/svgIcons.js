@@ -671,11 +671,11 @@ const ClockIcon2 = ({ width = "32" }) => (
   </svg>
 );
 
-const DownArrowIcon = ({ fill = "#3A3A3A" }) => {
+const DownArrowIcon = ({ fill = "#3A3A3A", width = "24" }) => {
   return (
     <svg
-      width="24"
-      height="24"
+      width={width}
+      height={width}
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -690,11 +690,11 @@ const DownArrowIcon = ({ fill = "#3A3A3A" }) => {
   );
 };
 
-const UpArrowIcon = ({ fill = "#3A3A3A" }) => {
+const UpArrowIcon = ({ fill = "#3A3A3A", width = "24" }) => {
   return (
     <svg
-      width="24"
-      height="24"
+      width={width}
+      height={width}
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

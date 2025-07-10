@@ -14,9 +14,19 @@ interface HearingItem {
 import { svgIcons } from "../../data/svgIcons";
 import { commonStyles } from "../../styles/commonStyles";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
-import { transformToCardData } from "../../components/Utils";
-import TableRowCard from "../../components/TableRow/TableRowCard";
+import ExpandableCardV2 from "../../components/TableRow/ExpandableCardV2";
 import { useMediaQuery } from "@mui/material";
+
+export const getStatusStyle = (status: string) => {
+  switch (status) {
+    case "IN_PROGRESS":
+      return "bg-pistachio text-darkGreen";
+    case "SCHEDULED":
+      return "bg-peach text-darkBrown";
+    default:
+      return "bg-gray-100 text-gray-700";
+  }
+};
 
 const formatDate = (dateStr: string) => {
   const [year, month, day] = dateStr.split("-");
@@ -215,17 +225,6 @@ export default function DisplayBoard() {
     };
   }, [selectedDate, fetchCasesForDate, hearingData, error, searchValue]);
 
-  const getStatusStyle = (status: string) => {
-    switch (status) {
-      case "IN_PROGRESS":
-        return "bg-pistachio text-darkGreen";
-      case "SCHEDULED":
-        return "bg-peach text-darkBrown";
-      default:
-        return "bg-gray-100 text-gray-700";
-    }
-  };
-
   const showRefreshSection = useMemo(() => {
     const now = new Date();
     const currentDateStr = now.toISOString().split("T")[0];
@@ -305,7 +304,7 @@ export default function DisplayBoard() {
                   {t("SL_NO")}
                 </th>
                 <th className="px-4 py-2 border-t border-b border-slate-200">
-                  {t("CASE_NAME")}
+                  {t("CASE_TITLE")}
                 </th>
                 <th className="px-4 py-2 border-t border-b border-slate-200">
                   {t("ADVOCATES")}
@@ -353,37 +352,6 @@ export default function DisplayBoard() {
               ))}
             </tbody>
           </table>
-        </div>
-
-        {/* Mobile view */}
-        <div className="sm:hidden">
-          {hearingData.map((row, index) => {
-            const labelMap = {
-              caseTitle: "CASE_TITLE",
-              advocates: "ADVOCATES",
-              caseNumber: "CASE_NUMBER",
-              hearingType: "PURPOSE",
-              status: "HEARING_STATUS",
-            };
-
-            const flatRow: Record<string, string | JSX.Element> = {
-              caseTitle: row.caseTitle || "",
-              advocates: advocates(row),
-              caseNumber: row.caseNumber || "",
-              hearingType: row.hearingType || "",
-              status: row.status || "",
-            };
-
-            const cardData = transformToCardData(flatRow, labelMap);
-            return (
-              <TableRowCard
-                t={t}
-                key={index}
-                caseIndex={index}
-                data={cardData}
-              />
-            );
-          })}
         </div>
       </>
     );
@@ -468,27 +436,24 @@ export default function DisplayBoard() {
     <div className="max-w-full mx-auto px-4 sm:px-6 py-4 bg-white">
       {isMobile ? (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
-          <h1
-            className="text-2xl sm:text-3xl font-bold text-center text-[#3A3A3A] mb-2"
-            style={{ fontFamily: "Libre Baskerville, serif" }}
-          >
+          <h1 className="font-libre font-normal text-[32px] leading-[40px] text-center tracking-[-0.6px] text-[#3A3A3A] mb-2">
             {t("DISPLAY_CAUSELIST_HEADING")}
           </h1>
           <p className="text-center text-gray-600 mb-6 text-sm sm:text-base font-medium leading-6 sm:leading-10">
             {t("DISPLAY_CAUSELIST_SUB_HEADING")}
           </p>
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-4 bg-gray-50 p-4 rounded-md border mb-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-4 p-4 rounded-[6px] shadow-[0_1px_2px_rgba(0,0,0,0.16)] border border-[#E2E8F0] mb-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full">
-              <div className="sm:hidden w-full flex justify-center mb-2">
-                <label className="font-bold text-slate-900 text-center">
+              <div className="flex justify-left font-roboto font-normal text-[16px] leading-[19px] text-[#0B0C0C]">
+                <label className="font-normal text-slate-900 text-center">
                   {t("VIEW_CASE_SCHEDULE_BY_DATE")}
                 </label>
               </div>
 
               <input
                 type="date"
-                className="border px-2 py-1 rounded w-full sm:w-[220px] text-sm text-slate-700"
+                className="border px-2 py-1 h-[40px] w-full sm:w-[220px] text-sm text-slate-700 bg-[white] border-[#505A5F] rounded-[6px]"
                 value={selectedDate}
                 onChange={(e) => {
                   setSelectedDate(e.target.value);
@@ -498,10 +463,10 @@ export default function DisplayBoard() {
             </div>
 
             {hearingData?.length > 0 && (
-              <div className="w-full sm:w-auto flex justify-center">
+              <div className="w-[100%] flex justify-center">
                 {showDownloadCauseListButton ? (
                   <button
-                    className="w-[60%] sm:w-[190px] h-[34px] rounded border border-slate-300 bg-gray-100 shadow flex items-center justify-center"
+                    className="flex flex-row justify-center items-center px-3 w-[100%] h-[40px] gap-1 bg-[#F8FAFC] border border-[#CBD5E1] rounded-[12px] shadow-[inset_-2px_-2px_2px_rgba(15,23,42,0.14),inset_2px_2px_2px_1px_rgba(255,255,255,0.9)]"
                     onClick={handleDownloadCauseList}
                   >
                     <svgIcons.DownloadIcon2 />
@@ -510,8 +475,8 @@ export default function DisplayBoard() {
                     </span>
                   </button>
                 ) : (
-                  <div className="flex items-center gap-2 text-sm text-slate-700 text-center max-w-xs mx-auto">
-                    <svgIcons.InfoIcon />
+                  <div className="flex items-center gap-2 text-[15px] leading-[18px] tracking-[-0.16px] text-slate-700 text-center">
+                    <svgIcons.InfoIcon width="64" />
                     <span>
                       {t("THE_CAUSE_LIST_FOR_THIS_DAY_WILL_BE_AVAILABLE_AFTER")}{" "}
                       <span className="font-bold text-slate-800">
@@ -524,13 +489,51 @@ export default function DisplayBoard() {
             )}
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-4">
-            <h2 className="text-lg font-semibold text-center sm:text-left">
+          <div>
+            {showRefreshSection && (
+              <div className="flex flex-col sm:flex-row justify-between items-center text-sm text-gray-600 border-t border-slate-300 py-6 gap-6">
+                {isInProgressHearing?.caseNumber && (
+                  <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left w-[100%]">
+                    <button
+                      className=" max-w-6xl mx-auto px-12 sm:px-12 py-4  flex flex-row justify-center font-roboto text-[14px] leading-[20px] font-medium items-center text-white px-3 w-[100%] h-[40px] gap-1 bg-[#3A3A3A] border border-[#CBD5E1] rounded-[12px] box-border"
+                      onClick={() =>
+                        hearingLink
+                          ? window.open(hearingLink, "_blank")
+                          : console.warn(t("HEARING_LINK_NOT_AVAILABLE"))
+                      }
+                    >
+                      <span className="mr-2">
+                        <svgIcons.VideoCallIcon />
+                      </span>
+                      {t("JOIN_HEARING_ONLINE")}
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-4 mt-6">
+            <h2 className="font-semibold text-center text-[24px] leading-[28px] tracking-[-0.24px]">
               {t("CASE_SCHEDULE_HEADING")} |{" "}
-              <span className="text-teal-700 font-bold">
+              <span className="text-[#0F766E] font-bold">
                 {formattedDateV2(selectedDate)}
               </span>
             </h2>
+
+            {showRefreshSection && (
+              <div className="flex items-center gap-2 justify-center ">
+                <span
+                  className="cursor-pointer"
+                  onClick={() => fetchCasesForDate(selectedDate, searchValue)}
+                >
+                  {svgIcons.RefreshIcon()}
+                </span>
+                {showRefreshTime && (
+                  <span className="text-blue-600 font-roboto font-medium text-[14px] leading-[17px]">{`${t("LAST_REFRESHED_ON")} ${refreshedAt}`}</span>
+                )}
+              </div>
+            )}
 
             <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
               <div className="relative w-full sm:w-[310px]">
@@ -572,42 +575,6 @@ export default function DisplayBoard() {
             </div>
           </div>
 
-          {showRefreshSection && (
-            <div className="flex flex-col sm:flex-row justify-between items-center text-sm text-gray-600 border-y border-slate-300 py-2 gap-2">
-              {isInProgressHearing?.caseNumber && (
-                <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
-                  <button
-                    className="flex items-center justify-center bg-slate-800 text-white w-[60%] h-[32px] rounded text-sm font-medium"
-                    onClick={() =>
-                      hearingLink
-                        ? window.open(hearingLink, "_blank")
-                        : console.warn(t("HEARING_LINK_NOT_AVAILABLE"))
-                    }
-                  >
-                    <span className="mr-2">
-                      <svgIcons.VideoCallIcon />
-                    </span>
-                    {t("JOIN_HEARING_ONLINE")}
-                  </button>
-                  <span className="text-slate-800 font-bold">
-                    {`${isInProgressHearing?.caseTitle} ${isInProgressHearing?.caseNumber} hearing is on-going`}
-                  </span>
-                </div>
-              )}
-              <div className="flex items-center gap-2">
-                <span
-                  className="cursor-pointer"
-                  onClick={() => fetchCasesForDate(selectedDate, searchValue)}
-                >
-                  {svgIcons.RefreshIcon()}
-                </span>
-                {showRefreshTime && (
-                  <span className="text-blue-600 font-bold">{`${t("LAST_REFRESHED_ON")} ${refreshedAt}`}</span>
-                )}
-              </div>
-            </div>
-          )}
-
           {loading ? (
             <div className={commonStyles.loading.container}>
               <div className={commonStyles.loading.spinner}></div>
@@ -619,11 +586,47 @@ export default function DisplayBoard() {
                   {t(error)}
                 </p>
               ) : hearingData?.length === 0 ? (
-                <p className="text-red-600 font-bold text-sm p-2 border-t border-slate-300">
+                <p className="text-red-600 font-roboto font-medium text-[20px] leading-[26px] tracking-[-0.2px] p-2 border-t border-slate-300">
                   {t("NO_CASE_SCHEDULED_FOR_THIS_DATE")}
                 </p>
               ) : (
-                hearingsTable
+                <div className="">
+                  <div className="border border-[#E2E8F0] bg-[#F8FAFC]">
+                    <div
+                      className={`flex justify-between items-center px-[5px] cursor-pointer h-[41px]`}
+                    >
+                      <div className="flex flex-row">
+                        <div className="flex justify-between items-center">
+                          <span className="font-inter font-semibold text-[14.07px] leading-[20px] text-slate-900 w-[40vw]">
+                            {t("CASE_NUMBER")}:
+                          </span>
+                          <span
+                            className={`flex flex-row justify-center items-center p-[8.22px] gap-[4.11px] h-[20.55px] rounded-[4.19px]`}
+                          >
+                            <h2
+                              className={`font-inter font-semibold text-[14.07px] leading-[20px] text-slate-900`}
+                            >
+                              {t("STATUS")}
+                            </h2>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {hearingData.map((hearing, index) => (
+                    <ExpandableCardV2
+                      key={`${hearing.caseNumber}-${index}`}
+                      caseData={{
+                        caseNumber: hearing.caseNumber,
+                        caseTitle: hearing.caseTitle,
+                        purpose: hearing.hearingType,
+                        status: hearing.status,
+                        advocates: advocates(hearing),
+                      }}
+                      onViewDetails={() => {}}
+                    />
+                  ))}
+                </div>
               )}
             </>
           )}
@@ -888,18 +891,6 @@ export default function DisplayBoard() {
                           {t("JOIN_HEARING_ONLINE")}
                         </span>
                       </button>
-                    </div>
-
-                    <div className="going-hearing-details">
-                      <span
-                        style={{
-                          color: "#334155",
-                          fontWeight: "700",
-                          fontFamily: "Inter, sans-serif",
-                        }}
-                      >
-                        {`${isInProgressHearing?.caseTitle} ${isInProgressHearing?.caseNumber} hearing is on-going`}
-                      </span>
                     </div>
                   </div>
                 )}
