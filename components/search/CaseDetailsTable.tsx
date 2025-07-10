@@ -70,6 +70,11 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
               placeholder={t("SEARCH_BY_CASE_TITLE")}
               value={caseTitleInput}
               onChange={handleCaseTitleChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch();
+                }
+              }}
               className="pl-10 pr-4 py-2 font-[Roboto] font-medium text-[#64748B] bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#334155]" />

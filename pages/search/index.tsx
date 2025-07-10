@@ -655,6 +655,13 @@ const SearchForCase = () => {
             />
           );
         })}
+      {isMobile && searchResults.length === 0 && (
+        <div className="flex justify-center items-center p-8">
+          <div className="text-xl font-[Roboto] font-medium text-gray-500">
+            {t("NO_RESULTS_FOUND")}
+          </div>
+        </div>
+      )}
       {isMobile &&
         totalCount > 0 &&
         ["all", "advocate", "litigant"].includes(selectedTab) && (

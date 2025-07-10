@@ -12,7 +12,7 @@ export default async function handler(
   const { searchText, limit, offset, tenantId } = req.body;
 
   try {
-    const url = API_ENDPOINTS.LANDING_PAGE.SEARCH_NOTICES;
+    const url = API_ENDPOINTS.NOTICES.SEARCH_NOTICES;
 
     const response = await fetch(url, {
       method: "POST",

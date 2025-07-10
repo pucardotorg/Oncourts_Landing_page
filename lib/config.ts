@@ -15,8 +15,9 @@ export const API_ENDPOINTS = {
   },
 
   // Landing page endpoints
-  LANDING_PAGE: {
-    SEARCH_NOTICES: `${API_BASE_URL}/landing-page/v1/search-notices`,
+  NOTICES: {
+    SEARCH_NOTICES: `${API_BASE_URL}/openapi/landing-page/v1/search-notices`,
+    DOWNLOAD_FILE: `${API_BASE_URL}/openapi/v1/landing_page/file`,
   },
 
   // Inbox endpoints

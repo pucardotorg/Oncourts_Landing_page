@@ -6,6 +6,7 @@ import SectionHeading from "../../components/common/SectionHeading";
 import { FiDownload, FiSearch, FiRefreshCw } from "react-icons/fi";
 import Pagination from "../../components/Utils/Pagination";
 import { useMediaQuery } from "@mui/material";
+import { formatDate } from "../../utils/formatDate";
 
 // Define the Notice type
 interface Notice {
@@ -59,12 +60,12 @@ const Notices: React.FC = () => {
           setNoticesList(data.LandingPageNotices);
           setTotalCount(data.totalCount || data.LandingPageNotices.length);
         } else {
-          // setNoticesList([]);
+          setNoticesList([]);
           setTotalCount(0);
         }
       } catch (error) {
         console.error("Error searching notices:", error);
-        // setNoticesList([]);
+        setNoticesList([]);
         setTotalCount(0);
       } finally {
         setIsLoading(false);
@@ -113,6 +114,70 @@ const Notices: React.FC = () => {
     }
   }, [searchNotices]);
 
+  const fetchFile = async (fileStoreId?: string): Promise<Blob | null> => {
+    if (!fileStoreId) {
+      console.error("File Store ID is required");
+      return null;
+    }
+
+    try {
+      // Direct API call to get the file
+      const response = await fetch(`/api/downloadNotice`, {
+        method: "POST",
+        headers: {
+          accept: "*/*",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tenantId,
+          fileStoreId,
+          moduleName: "landing-page",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`File download failed with status: ${response.status}`);
+      }
+
+      return await response.blob();
+    } catch (error) {
+      console.error("Error fetching file:", error);
+      return null;
+    }
+  };
+
+  const openFileInNewTab = async (fileStoreId?: string): Promise<void> => {
+    const blob = await fetchFile(fileStoreId);
+    if (!blob) return;
+
+    const url = window.URL.createObjectURL(blob);
+    window.open(url, "_blank");
+
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+    }, 5000);
+  };
+
+  const downloadFile = async (
+    fileStoreId?: string,
+    fileName?: string
+  ): Promise<void> => {
+    const blob = await fetchFile(fileStoreId);
+    if (!blob) return;
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName || `notice-${fileStoreId}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+    }, 5000);
+  };
+
   return (
     <div className="max-w-screen min-h-screen mx-auto py-4 px-4 md:py-6 md:px-20 bg-white font-[Roboto]">
       <Head>
@@ -138,7 +203,7 @@ const Notices: React.FC = () => {
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             className="md:pl-10 pl-4 pr-4 py-1 font-[Roboto] text-lg font-medium text-[#64748B] bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
-            onKeyPress={(e) => {
+            onKeyDown={(e) => {
               if (e.key === "Enter") {
                 handleSearch();
               }
@@ -166,15 +231,17 @@ const Notices: React.FC = () => {
       <div className="border-b border-[#CBD5E1] w-full mx-auto mb-4 mt-4 md:mt-2"></div>
 
       {/* Notices Table */}
-      {!isMobile && (
+      {!isMobile && noticesList.length > 0 && (
         <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-[#E2E8F0]">
           <table className="w-full">
             <thead className="text-[#0F172A] text-[22px] font-semibold font-[Baskerville] bg-[#F8FAFC] border-b border-[#E2E8F0]">
               <tr>
-                <th className="py-3 px-4 text-left">{t("SL_NO")}</th>
-                <th className="py-3 px-4 text-left">{t("TITLE")}</th>
-                <th className="py-3 px-4 text-left">{t("DATE_OF_ISSUE")}</th>
-                <th className="py-3 px-4 text-left">{t("ACTION")}</th>
+                <th className="py-3 px-4 text-left w-[10%]">{t("SL_NO")}</th>
+                <th className="py-3 px-4 text-left w-[50%]">{t("TITLE")}</th>
+                <th className="py-3 px-4 text-left w-[20%]">
+                  {t("DATE_OF_ISSUE")}
+                </th>
+                <th className="py-3 px-4 text-left w-[20%]">{t("ACTION")}</th>
               </tr>
             </thead>
             <tbody className="text-[22px] text-[#334155] font-[Roboto] bg-white">
@@ -185,15 +252,27 @@ const Notices: React.FC = () => {
                 >
                   <td className="py-3 px-4">{index + 1}</td>
                   <td className="py-3 px-4">
-                    <a href="#" className="text-blue-600 hover:underline">
+                    <a
+                      href="#"
+                      className="text-blue-600 hover:underline"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        openFileInNewTab(notice.fileStoreId);
+                      }}
+                    >
                       {notice.title}
                     </a>
                   </td>
-                  <td className="py-3 px-4">{notice.publishedDate}</td>
+                  <td className="py-3 px-4">
+                    {formatDate(notice.publishedDate)}
+                  </td>
                   <td className="py-3 px-4 text-left">
                     <button
-                      className="shadow-[0_2px_10px_rgba(0,0,0,0.1)] font-[Inter] inline-flex items-center justify-center gap-2 p-2 bg-[#F8FAFC] text-[#334155] text-[20px] border-2 border-[#CBD5E1] rounded-xl hover:bg-gray-50 font-medium w-[250px]"
+                      className="shadow-[0_2px_10px_rgba(0,0,0,0.1)] font-[Inter] inline-flex items-center justify-center gap-2 py-2 px-6 bg-[#F8FAFC] text-[#334155] text-[20px] border-2 border-[#CBD5E1] rounded-xl hover:bg-gray-50 font-medium"
                       aria-label={`${t("DOWNLOAD")} ${notice.title}`}
+                      onClick={() =>
+                        downloadFile(notice.fileStoreId, `${notice.title}.pdf`)
+                      }
                     >
                       <FiDownload size={24} /> {t("DOWNLOAD")}
                     </button>
@@ -205,6 +284,7 @@ const Notices: React.FC = () => {
         </div>
       )}
       {isMobile &&
+        noticesList.length > 0 &&
         noticesList.map((notice, index) => (
           <div
             key={index}
@@ -215,7 +295,18 @@ const Notices: React.FC = () => {
                 <div className="font-[Baskerville] text-[14px] text-[#0F172A] font-semibold">
                   {t("TITLE")}:
                 </div>
-                <div className="text-[14px] text-[#334155]">{notice.title}</div>
+                <div className="text-[14px] text-[#334155]">
+                  <a
+                    href="#"
+                    className="text-blue-600 hover:underline"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openFileInNewTab(notice.fileStoreId);
+                    }}
+                  >
+                    {notice.title}
+                  </a>
+                </div>
               </div>
               <div className="grid grid-cols-2 items-center">
                 <div className="font-[Baskerville] text-[14px] text-[#0F172A] font-semibold">
@@ -232,6 +323,9 @@ const Notices: React.FC = () => {
                 <button
                   className="shadow-[0_2px_10px_rgba(0,0,0,0.1)] w-fit font-[Inter] inline-flex items-center justify-center gap-2 py-2 px-6 bg-[#F8FAFC] text-[#334155] text-[14px] border-2 border-[#CBD5E1] rounded-xl hover:bg-gray-50 font-medium"
                   aria-label={`${t("DOWNLOAD")} ${notice.title}`}
+                  onClick={() =>
+                    downloadFile(notice.fileStoreId, `${notice.title}.pdf`)
+                  }
                 >
                   <FiDownload size={15} /> {t("DOWNLOAD")}
                 </button>
@@ -239,15 +333,24 @@ const Notices: React.FC = () => {
             </div>
           </div>
         ))}
-      <Pagination
-        currentStartIndex={offset + 1}
-        totalItems={totalCount}
-        itemsPerPage={limit}
-        onPrevPage={handlePrevPage}
-        onNextPage={handleNextPage}
-        isFirstPage={offset === 0}
-        isLastPage={offset + limit >= totalCount}
-      />
+      {noticesList.length === 0 && (
+        <div className="flex justify-center items-center p-8">
+          <div className="text-xl font-[Roboto] font-medium text-gray-500">
+            {t("NO_RESULTS_FOUND")}
+          </div>
+        </div>
+      )}
+      {noticesList.length > 0 && (
+        <Pagination
+          currentStartIndex={offset + 1}
+          totalItems={totalCount}
+          itemsPerPage={limit}
+          onPrevPage={handlePrevPage}
+          onNextPage={handleNextPage}
+          isFirstPage={offset === 0}
+          isLastPage={offset + limit >= totalCount}
+        />
+      )}
     </div>
   );
 };
