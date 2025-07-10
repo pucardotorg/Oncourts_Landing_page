@@ -138,7 +138,9 @@ function HomeCauseLists(): JSX.Element {
     <div className="bg-[white] py-12">
       <div className="max-w-[1440px] mx-auto px-4 md:px-6">
         <div className="flex mb-12 items-center justify-center">
-          <h2 className="px-[30px] pb-2 text-center font-libre font-normal text-[40px] leading-[48px] text-[#3A3A3A] border-b border-[#CBD5E1]">
+          <h2
+            className={`px-[30px] pb-2 text-center font-libre font-normal  text-[#3A3A3A] border-b border-[#CBD5E1] ${isMobile ? "text-[32px] leading-[40px] w-[90%]" : "text-[40px] leading-[48px]"}`}
+          >
             Cause List
           </h2>
         </div>

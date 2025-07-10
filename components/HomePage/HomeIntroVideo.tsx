@@ -35,7 +35,7 @@ const HomeIntroVideo = () => {
 
   return (
     <div
-      className={`relative bg-white py-12 px-2 sm:px-6 lg:px-8 ${isMobile ? "pb-0" : "pb-2"}`}
+      className={`relative bg-white px-2 sm:px-6 lg:px-8 ${isMobile ? "pb-0 pt-4" : "pb-2 pt-12"}`}
     >
       {showFullscreen && (
         <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
@@ -63,12 +63,12 @@ const HomeIntroVideo = () => {
             className={`space-y-6 ${isMobile ? "max-w-[100%] px-8" : "max-w-[50%]"}`}
           >
             <h1
-              className={`font-libre not-italic font-normal text-[64px] leading-[78px] text-[#3A3A3A] ${isMobile ? "text-center" : ""}`}
+              className={`font-libre not-italic font-normal  text-[#3A3A3A] ${isMobile ? "text-center text-[32px] leading-[42px] border-b border-[#CBD5E1] pb-2" : "text-[64px] leading-[78px]"}`}
             >
               {t("TAKING_COURT_TO_PEOPLE")}
             </h1>
             <p
-              className={`font-roboto not-italic font-normal text-[#334155] text-[28px] leading-[36px] tracking-normal ${isMobile ? "text-center" : ""}`}
+              className={`font-roboto not-italic font-normal text-[#334155]  tracking-normal ${isMobile ? "text-center text-[17px] leading-[22px]" : "text-[28px] leading-[36px]"}`}
             >
               {t("COURT_DESCRIPTION")}
             </p>

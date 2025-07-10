@@ -654,10 +654,10 @@ const InfoIcon = ({ width = "34" }) => {
   );
 };
 
-const ClockIcon2 = () => (
+const ClockIcon2 = ({ width = "32" }) => (
   <svg
-    width="32"
-    height="32"
+    width={width}
+    height={width}
     viewBox="0 0 32 32"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

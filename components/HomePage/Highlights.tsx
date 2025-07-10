@@ -78,7 +78,7 @@ const Highlights: React.FC = () => {
       <div className="max-w-[1440px] mx-auto px-6">
         <div className="flex items-center justify-center mb-8">
           <h2
-            className={`px-12 pb-2 font-libre font-[400]  tracking-normal text-center align-middle text-[#3A3A3A] border-b border-[#CBD5E1] ${isMobile ? "text-[32px] leading-[40px]" : "text-[40px] leading-[48px]"}`}
+            className={`px-12 pb-2 font-libre font-normal  tracking-normal text-center align-middle text-[#3A3A3A] border-b border-[#CBD5E1] ${isMobile ? "text-[32px] leading-[40px] w-[90%]" : "text-[40px] leading-[48px]"}`}
           >
             {t("HIGHLIGHTS")}
           </h2>
@@ -93,7 +93,7 @@ const Highlights: React.FC = () => {
             />
           ))}
         </div>
-        <div className="flex justify-center mt-12">
+        <div className={`flex justify-center ${isMobile ? "mt-6" : "mt-12"}`}>
           <button
             className={`flex flex-row items-center justify-center px-4 md:px-[16px] gap-[12px] bg-white border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px]" : "h-[69px]"}`}
             onClick={() => window.open("/", "_blank")}
