@@ -4,8 +4,7 @@ import Image from "next/image";
 interface VideoTutorial {
   id: string;
   title: string;
-  thumbnail: string;
-  videoUrl: string;
+  videoId?: string;
   category:
     | "general"
     | "complainant"
@@ -28,50 +27,44 @@ const videoCategories: VideoCategory[] = [
       {
         id: "user-registration",
         title: "User Registration & Login",
-        thumbnail: "/images/group.png",
-        videoUrl:
-          "https://www.youtube.com/watch?v=yXaegVWBrK0&ab_channel=LEdINDIA",
         category: "general",
+        videoId: "ka7KPcPVDe0",
       },
       {
-        id: "email-upload",
-        title: "E-mail Upload",
-        thumbnail: "/images/group.png",
-        videoUrl:
-          "https://www.youtube.com/watch?v=yXaegVWBrK0&ab_channel=LEdINDIA",
+        id: "home-screen",
+        title: "Home Screen",
         category: "general",
+        videoId: "YqmvFNhjDdk",
       },
       {
-        id: "submission",
-        title: "Submission Extension & Response",
-        thumbnail: "/images/group.png",
-        videoUrl:
-          "https://www.youtube.com/watch?v=yXaegVWBrK0&ab_channel=LEdINDIA",
+        id: "view-case",
+        title: "View a Case",
         category: "general",
+        videoId: "5kmtfjHpEJQ",
       },
       {
-        id: "calendar",
+        id: "submissions-extensions-and-responses",
+        title: "Submissions, Extensions and Responses",
+        category: "general",
+        videoId: "smP5T8V9MCc",
+      },
+      {
+        id: "calendar-management-scheduling-and-rescheduling",
         title: "Calendar Management, Scheduling & Rescheduling",
-        thumbnail: "/images/group.png",
-        videoUrl:
-          "https://www.youtube.com/watch?v=yXaegVWBrK0&ab_channel=LEdINDIA",
         category: "general",
+        videoId: "DXCcVvkkMqs",
       },
       {
-        id: "hearing",
+        id: "hearing-management",
         title: "Hearing Management",
-        thumbnail: "/images/group.png",
-        videoUrl:
-          "https://www.youtube.com/watch?v=yXaegVWBrK0&ab_channel=LEdINDIA",
         category: "general",
+        videoId: "aYOEFSMzGgw",
       },
       {
-        id: "order",
-        title: "Order & Judgement",
-        thumbnail: "/images/group.png",
-        videoUrl:
-          "https://www.youtube.com/watch?v=yXaegVWBrK0&ab_channel=LEdINDIA",
+        id: "order-and-judgement",
+        title: "Orders & Judgements",
         category: "general",
+        videoId: "u-HqgM1tLtA",
       },
     ],
   },
@@ -82,34 +75,20 @@ const videoCategories: VideoCategory[] = [
       {
         id: "file-case-complainant",
         title: "File a Case",
-        thumbnail: "/images/graph.png",
-        videoUrl:
-          "https://www.youtube.com/watch?v=yXaegVWBrK0&ab_channel=LEdINDIA",
         category: "complainant",
+        videoId: "p9Ey6Ea3AXg",
       },
       {
         id: "defect-correction",
         title: "Defect Correction",
-        thumbnail: "/images/graph.png",
-        videoUrl:
-          "https://www.youtube.com/watch?v=yXaegVWBrK0&ab_channel=LEdINDIA",
         category: "complainant",
+        videoId: "_aJ0qYYebKA",
       },
       {
         id: "process-management",
         title: "Process Management",
-        thumbnail: "/images/graph.png",
-        videoUrl:
-          "https://www.youtube.com/watch?v=yXaegVWBrK0&ab_channel=LEdINDIA",
         category: "complainant",
-      },
-      {
-        id: "join-case",
-        title: "Join a Case",
-        thumbnail: "/images/graph.png",
-        videoUrl:
-          "https://www.youtube.com/watch?v=yXaegVWBrK0&ab_channel=LEdINDIA",
-        category: "complainant",
+        videoId: "RYF-krKyLBU",
       },
     ],
   },
@@ -120,70 +99,14 @@ const videoCategories: VideoCategory[] = [
       {
         id: "join-case",
         title: "Join a Case",
-        thumbnail: "/images/graph.png",
-        videoUrl:
-          "https://www.youtube.com/watch?v=yXaegVWBrK0&ab_channel=LEdINDIA",
         category: "accused",
+        videoId: "w_gL0YsG8X0",
       },
       {
         id: "bail",
         title: "Bail",
-        thumbnail: "/images/graph.png",
-        videoUrl:
-          "https://www.youtube.com/watch?v=yXaegVWBrK0&ab_channel=LEdINDIA",
         category: "accused",
-      },
-    ],
-  },
-  {
-    id: "know-your-case",
-    title: "Know your Case",
-    videos: [
-      {
-        id: "download-cause-list",
-        title: "Download Cause list",
-        thumbnail: "/images/graph.png",
-        videoUrl:
-          "https://www.youtube.com/watch?v=yXaegVWBrK0&ab_channel=LEdINDIA",
-        category: "know-your-case",
-      },
-      {
-        id: "view-display-board",
-        title: "View Cause List Display",
-        thumbnail: "/images/graph.png",
-        videoUrl:
-          "https://www.youtube.com/watch?v=yXaegVWBrK0&ab_channel=LEdINDIA",
-        category: "know-your-case",
-      },
-      {
-        id: "case-search",
-        title: "Case Search",
-        thumbnail: "/images/graph.png",
-        videoUrl:
-          "https://www.youtube.com/watch?v=yXaegVWBrK0&ab_channel=LEdINDIA",
-        category: "know-your-case",
-      },
-    ],
-  },
-  {
-    id: "screen-walkthrough",
-    title: "Screen Walkthrough",
-    videos: [
-      {
-        id: "home-screen",
-        title: "Home Screen",
-        thumbnail: "/images/graph.png",
-        videoUrl:
-          "https://www.youtube.com/watch?v=yXaegVWBrK0&ab_channel=LEdINDIA",
-        category: "screen-walkthrough",
-      },
-      {
-        id: "view-case",
-        title: "View a Case",
-        thumbnail: "/images/graph.png",
-        videoUrl:
-          "https://www.youtube.com/watch?v=yXaegVWBrK0&ab_channel=LEdINDIA",
-        category: "screen-walkthrough",
+        videoId: "2VxsJI_eqgY",
       },
     ],
   },
@@ -191,10 +114,10 @@ const videoCategories: VideoCategory[] = [
 
 const VideoTutorials: React.FC = () => {
   return (
-    <div className="py-8 bg-white">
+    <div className="py-8 bg-white px-4">
       <div className="w-[95%] md:w-[90%] mx-auto">
         {/* Page Title */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 border-b border-[#E5E7EB] pb-6">
           <h1 className="font-libre not-italic font-normal text-[40px] md:text-[64px] leading-[46px] md:leading-[70px] text-center tracking-[-0.8px] text-[#3A3A3A]">
             Video Tutorials
           </h1>
@@ -215,26 +138,25 @@ const VideoTutorials: React.FC = () => {
                 {category.videos.map((video) => (
                   <div
                     key={video.id}
-                    className="bg-[#F8FAFC] rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                    className="rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
                   >
-                    <div className="relative aspect-video">
-                      <Image
-                        src={video.thumbnail}
-                        alt={video.title}
-                        fill
-                        className="object-cover"
-                      />
+                    <div className="relative aspect-video ">
                       <a
-                        href={video.videoUrl}
+                        href={`https://www.youtube.com/watch?v=${video?.videoId}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300"
+                        className="relative block w-full h-full"
                       >
-                        <span className="bg-white text-[#3A3A3A] px-4 py-2 rounded-full hover:bg-[#3A3A3A] hover:text-white transition-colors duration-300">
-                          Watch Video
-                        </span>
+                        <Image
+                          src={`https://img.youtube.com/vi/${video?.videoId}/hqdefault.jpg`}
+                          alt="Video Thumbnail"
+                          fill
+                          className="object-cover object-center"
+                          unoptimized
+                        />
                       </a>
                     </div>
+
                     <div className="p-4">
                       <h3 className="font-roboto not-italic font-normal text-[18px] md:text-[26px] leading-[24px] md:leading-[32px] tracking-[-0.26px] text-[#0F172A]">
                         {video.title}
