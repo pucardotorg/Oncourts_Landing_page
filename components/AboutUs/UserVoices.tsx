@@ -11,19 +11,19 @@ const UserVoices: React.FC = () => {
       name: "Asha G.V",
       designation: "ADVOCATE",
       quote: "ASHA_TESTIMONIAL",
-      photo: "/images/asha.jpg",
+      photo: "/images/testimonials/asha.jpg",
     },
     {
       name: "Beena M.",
       designation: "ADVOCATE",
       quote: "BEENA_TESTIMONIAL",
-      photo: "/images/beena.jpg",
+      photo: "/images/testimonials/beena.jpg",
     },
     {
       name: "Karthika S.",
       designation: "ADVOCATE",
       quote: "KARTHIKA_TESTIMONIAL",
-      photo: "/images/singlePerson.png",
+      photo: "/images/testimonials/karthika.jpg",
     },
   ];
 

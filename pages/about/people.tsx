@@ -10,7 +10,7 @@ const peopleData = {
     {
       name: "Justice Nitin Jamdar",
       title: "CHIEF_JUSTICE",
-      image: "/images/jOne.png",
+      image: "/images/people/jOne.png",
     },
   ],
   oncourt: {
@@ -18,7 +18,7 @@ const peopleData = {
       {
         name: "Sri. Micheal George",
         title: "JUDICIAL_FIRST_CLASS_MAGISTRATE",
-        image: "/images/jThree.png",
+        image: "/images/people/jThree.png",
         description: "JUDICIAL_FIRST_CLASS_MAGISTRATE_DESCRIPTION",
       },
     ],
@@ -26,25 +26,25 @@ const peopleData = {
       {
         name: "Sri. Biju A.",
         title: "JUNIOR_SUPERINTENDENT",
-        image: "/images/biju.jpg",
+        image: "/images/people/biju.jpg",
         description: "JUNIOR_SUPERINTENDENT_DESCRIPTION",
       },
       {
         name: "Smt. Shobha K.",
         title: "BENCH_CLERK",
-        image: "/images/shobha.jpg",
+        image: "/images/people/shobha.jpg",
         description: "BENCH_CLERK_DESCRIPTION",
       },
       {
         name: "Smt. Sony P.",
         title: "CONFIDENTIAL_ASSISTANT",
-        image: "/images/sony.jpg",
+        image: "/images/people/sony.jpg",
         description: "CONFIDENTIAL_ASSISTANT_DESCRIPTION",
       },
       {
         name: "Smt. Rakhi",
         title: "ESEWA_KENDRA_PERSON",
-        image: "",
+        image: "/images/people/rakhi.jpg",
         description: "ESEWA_KENDRA_PERSON_DESCRIPTION",
       },
     ],
