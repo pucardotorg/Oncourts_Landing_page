@@ -5,6 +5,7 @@ import { svgIcons } from "../../data/svgIcons";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import { useMediaQuery } from "@mui/material";
 import Tooltip from "../common/Tooltip";
+import router from "next/router";
 
 interface CauseListState {
   date: string;
@@ -172,7 +173,7 @@ function HomeCauseLists(): JSX.Element {
   }, [leftCauseList?.pdfUrl, rightCauseList?.pdfUrl]);
 
   return (
-    <div className="bg-[white] py-12">
+    <div className="py-12 bg-[#F0FDFA]">
       <div className="max-w-[1440px] mx-auto px-4 md:px-6">
         <div className="flex mb-12 items-center justify-center">
           <h2
@@ -210,7 +211,7 @@ function HomeCauseLists(): JSX.Element {
           <div className="relative">
             <button
               className={`flex flex-row items-center justify-center px-4 md:px-[16px] gap-[12px] bg-white border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px]" : "h-[69px]"}`}
-              onClick={() => window.open("/", "_blank")}
+              onClick={() => router.push("/display-board")}
               onMouseEnter={() => setShowTooltip(true)}
               onMouseLeave={() => setShowTooltip(false)}
             >

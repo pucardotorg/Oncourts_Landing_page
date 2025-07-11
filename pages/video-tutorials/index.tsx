@@ -138,7 +138,7 @@ const VideoTutorials: React.FC = () => {
                 {category.videos.map((video) => (
                   <div
                     key={video.id}
-                    className="rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                    className="rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-[#E2E8F0]"
                   >
                     <div className="relative aspect-video ">
                       <a
@@ -158,7 +158,7 @@ const VideoTutorials: React.FC = () => {
                     </div>
 
                     <div className="p-4">
-                      <h3 className="font-roboto not-italic font-normal text-[18px] md:text-[26px] leading-[24px] md:leading-[32px] tracking-[-0.26px] text-[#0F172A]">
+                      <h3 className="font-roboto not-italic font-normal text-[15px] md:text-[26px] leading-[18px] md:leading-[32px] tracking-[-0.26px] text-[#0F172A]">
                         {video.title}
                       </h3>
                     </div>

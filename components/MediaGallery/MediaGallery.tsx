@@ -38,7 +38,7 @@ const MediaGallery: React.FC = () => {
       <div className={`w-[100vw] mx-auto px-4 ${isMobile ? "px-2" : "px-4"}`}>
         <div className="text-center mb-8">
           <h1
-            className={`text-[#3A3A3A] font-libre mb-[20px] border-b border-[#CBD5E1] pb-[10px] ${isMobile ? "text-[32px] leading-[40px] mx-[50px]" : "text-[40px] leading-[48px] mx-[60px]"}`}
+            className={`text-[#3A3A3A] font-libre mb-[20px] border-b border-[#CBD5E1] pb-[10px] ${isMobile ? "text-[32px] leading-[40px] mx-[50px]" : "text-[64px] leading-[70px] mx-[60px]"}`}
           >
             Media Gallery
           </h1>
