@@ -47,6 +47,7 @@ export default function Vision() {
               <div className="absolute bottom-3 right-3">
                 <FullscreenButton
                   url={`https://www.youtube.com/watch?v=${videoId}`}
+                  videoId={videoId}
                   iconColor="#FFFFFF"
                   borderColor="#4B5563"
                   backgroundColor="rgba(0,0,0,0.5)"
