@@ -1,0 +1,79 @@
+.react-datepicker-wrapper {
+  width: 220px;
+}
+
+.datepicker-popper {
+  z-index: 999 !important;
+}
+
+.datepicker-calendar {
+  font-family: Inter, sans-serif !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+
+.datepicker-calendar .react-datepicker__month-container {
+  width: 220px !important;
+}
+
+.datepicker-calendar .react-datepicker__header {
+  width: 220px !important;
+  background-color: #F8FAFC !important;
+  border-bottom: 1px solid #E2E8F0 !important;
+  border-top-left-radius: 8px !important;
+  border-top-right-radius: 8px !important;
+  padding: 8px 0 !important;
+}
+
+.datepicker-calendar .react-datepicker__month {
+  margin: 0 !important;
+  padding: 8px !important;
+}
+
+.datepicker-calendar .react-datepicker__day-names {
+  margin-bottom: 4px !important;
+}
+
+.datepicker-calendar .react-datepicker__day-name {
+  color: #64748B !important;
+  width: 26px !important;
+  line-height: 26px !important;
+  font-size: 11px !important;
+  margin: 2px !important;
+}
+
+.datepicker-calendar .react-datepicker__day {
+  width: 26px !important;
+  line-height: 28px !important;
+  margin: 1px !important;
+  border-radius: 4px !important;
+  font-size: 13px !important;
+  color: #334155 !important;
+}
+
+.datepicker-calendar .react-datepicker__day--selected {
+  background-color: #334155 !important;
+  color: white !important;
+}
+
+.datepicker-calendar .react-datepicker__day:hover {
+  background-color: #F1F5F9 !important;
+}
+
+.datepicker-calendar .react-datepicker__day--keyboard-selected {
+  background-color: #E2E8F0 !important;
+  color: #334155 !important;
+}
+
+.react-datepicker__input-container input {
+  width: 220px !important;
+  height: 32px !important;
+  border-radius: 4px !important;
+  border: 1.44px solid #334155 !important;
+  font-family: Inter, sans-serif !important;
+  font-size: 14px !important;
+  color: #334155 !important;
+  padding: 0 8px !important;
+}

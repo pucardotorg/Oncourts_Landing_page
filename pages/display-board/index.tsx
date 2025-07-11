@@ -16,6 +16,29 @@ import { commonStyles } from "../../styles/commonStyles";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import ExpandableCardV2 from "../../components/TableRow/ExpandableCardV2";
 import { useMediaQuery } from "@mui/material";
+import DatePicker from "react-datepicker";
+
+interface CustomInputProps {
+  value?: string;
+  onClick?: () => void;
+}
+
+const CustomInput = React.forwardRef<HTMLDivElement, CustomInputProps>(({ value, onClick }, ref) => (
+  <div className="relative inline-block cursor-pointer" onClick={onClick} ref={ref}>
+    <input
+      className="border px-2 py-1 pr-8 rounded w-[220px] h-[32px] text-sm cursor-pointer"
+      value={value}
+      readOnly
+    />
+    <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
+      <svgIcons.CalendarIcon2 />
+    </div>
+  </div>
+));
+
+CustomInput.displayName = 'CustomInput';
+
+
 
 export const getStatusStyle = (status: string) => {
   switch (status) {
@@ -444,22 +467,29 @@ export default function DisplayBoard() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-4 p-4 rounded-[6px] shadow-[0_1px_2px_rgba(0,0,0,0.16)] border border-[#E2E8F0] mb-6">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-[80%]">
               <div className="flex justify-left font-roboto font-normal text-[16px] leading-[19px] text-[#0B0C0C]">
                 <label className="font-normal text-slate-900 text-center">
                   {t("VIEW_CASE_SCHEDULE_BY_DATE")}
                 </label>
               </div>
 
-              <input
-                type="date"
-                className="border px-2 py-1 h-[40px] w-full sm:w-[220px] text-sm text-slate-700 bg-[white] border-[#505A5F] rounded-[6px]"
-                value={selectedDate}
-                onChange={(e) => {
-                  setSelectedDate(e.target.value);
-                  setSearchValue("");
-                }}
-              />
+              <div className="relative">
+                <DatePicker
+                  selected={selectedDate ? new Date(selectedDate) : null}
+                  onChange={(date: Date | null) => {
+                    if (date) {
+                      setSelectedDate(date.toISOString().split('T')[0]);
+                      setSearchValue("");
+                    }
+                  }}
+                  dateFormat="yyyy-MM-dd"
+                  popperPlacement="bottom-start"
+                  popperClassName="datepicker-popper"
+                  // calendarClassName="datepicker-calendar-mobile"
+                  customInput={<CustomInput />}
+                />
+              </div>
             </div>
 
             {hearingData?.length > 0 && (
@@ -665,24 +695,22 @@ export default function DisplayBoard() {
               >
                 {t("VIEW_CASE_SCHEDULE_BY_DATE")}
               </label>
-              <input
-                type="date"
-                className="border px-2 py-1 rounded"
-                value={selectedDate}
-                onChange={(e) => {
-                  setSelectedDate(e.target.value);
-                  setSearchValue("");
-                }}
-                style={{
-                  width: "220px",
-                  height: "32px",
-                  borderRadius: "4px",
-                  border: "1.44px solid #334155",
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "14px",
-                  color: "#334155",
-                }}
-              />
+              <div className="relative">
+                <DatePicker
+                  selected={selectedDate ? new Date(selectedDate) : null}
+                  onChange={(date: Date | null) => {
+                    if (date) {
+                      setSelectedDate(date.toISOString().split('T')[0]);
+                      setSearchValue("");
+                    }
+                  }}
+                  dateFormat="yyyy-MM-dd"
+                  popperPlacement="bottom-start"
+                  popperClassName="datepicker-popper"
+                  calendarClassName="datepicker-calendar"
+                  customInput={<CustomInput />}
+                />
+              </div>
             </div>
             {hearingData?.length > 0 && (
               <div>

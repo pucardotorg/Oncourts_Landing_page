@@ -2,7 +2,9 @@ import type { AppProps } from "next/app";
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Layout from "../components/Layout";
-import "../styles/globals.css";
+import '../styles/globals.css'
+import "react-datepicker/dist/react-datepicker.css";
+import "../styles/datepicker.css";
 import Head from "next/head";
 import { pageview } from '../lib/gtag';
 import { QueryClient, QueryClientProvider } from "react-query";
