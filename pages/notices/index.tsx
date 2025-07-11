@@ -37,7 +37,7 @@ const Notices: React.FC = () => {
   const isMobile = useMediaQuery("(max-width:640px)");
 
   const searchNotices = useCallback(
-    async (offsetOverride: number) => {
+    async (offsetOverride: number, searchTextOverride: string) => {
       try {
         setIsLoading(true);
         const response = await fetch("/api/search-notices", {
@@ -47,7 +47,7 @@ const Notices: React.FC = () => {
             Accept: "application/json",
           },
           body: JSON.stringify({
-            searchText,
+            searchText: searchTextOverride,
             limit,
             offset: offsetOverride,
             tenantId,
@@ -71,14 +71,14 @@ const Notices: React.FC = () => {
         setIsLoading(false);
       }
     },
-    [searchText, limit, tenantId]
+    [limit, tenantId]
   );
 
   // Pagination handlers
   const handleNextPage = () => {
     if (offset + limit < totalCount) {
       setOffset(offset + limit);
-      searchNotices(offset + limit);
+      searchNotices(offset + limit, searchText);
       setTimeout(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
       }, 200);
@@ -88,7 +88,7 @@ const Notices: React.FC = () => {
   const handlePrevPage = () => {
     if (offset - limit >= 0) {
       setOffset(offset - limit);
-      searchNotices(offset - limit);
+      searchNotices(offset - limit, searchText);
       setTimeout(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
       }, 200);
@@ -97,20 +97,20 @@ const Notices: React.FC = () => {
 
   const handleSearch = () => {
     setOffset(0);
-    searchNotices(0);
+    searchNotices(0, searchText);
   };
 
   const handleReset = () => {
     setSearchText("");
     setOffset(0);
-    searchNotices(0);
+    searchNotices(0, "");
   };
 
   useEffect(() => {
     // Only run initialization once
     if (!initialLoadRef.current) {
       initialLoadRef.current = true;
-      searchNotices(0);
+      searchNotices(0, "");
     }
   }, [searchNotices]);
 
