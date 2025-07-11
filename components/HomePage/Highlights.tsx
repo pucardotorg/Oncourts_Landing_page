@@ -42,20 +42,57 @@ const Highlights: React.FC = () => {
   const [stats, setStats] = useState<DashboardMetricsNew>();
   const isMobile = useMediaQuery("(max-width: 640px)");
 
+  const fetchImpactGlance = async () => {
+    try {
+      const res = await fetch("/api/impactGlance");
+      const data = await res.json();
+
+      const transformed = transformImpactGlance(data);
+      setStats(transformed?.stats || []);
+    } catch (error) {
+      console.error("Failed to fetch Whats New data", error);
+    }
+  };
+
+  const calculateTimeUntilRefresh = () => {
+    const now = new Date();
+    const targetTime = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      17,
+      0,
+      45
+    );
+
+    // If current time is past today's target time, set target to tomorrow
+    if (now > targetTime) {
+      targetTime.setDate(targetTime.getDate() + 1);
+    }
+
+    return targetTime.getTime() - now.getTime();
+  };
+
   useEffect(() => {
-    const fetchImpactGlance = async () => {
-      try {
-        const res = await fetch("/api/impactGlance");
-        const data = await res.json();
-
-        const transformed = transformImpactGlance(data);
-        setStats(transformed?.stats || []);
-      } catch (error) {
-        console.error("Failed to fetch Whats New data", error);
-      }
-    };
-
+    // Initial fetch
     fetchImpactGlance();
+
+    // Set up refresh timer
+    const timeUntilRefresh = calculateTimeUntilRefresh();
+    console.log(
+      `[Highlights] Setting refresh timer for ${timeUntilRefresh}ms (${new Date(Date.now() + timeUntilRefresh).toLocaleString()})`
+    );
+
+    const refreshTimer = setTimeout(() => {
+      fetchImpactGlance();
+      // After the refresh, set up the next day's timer
+      const nextDayTimer = setTimeout(() => {
+        window.location.reload(); // Force a full reload to reset all timers
+      }, calculateTimeUntilRefresh());
+      return () => clearTimeout(nextDayTimer);
+    }, timeUntilRefresh);
+
+    return () => clearTimeout(refreshTimer);
   }, []);
 
   const highlights = [

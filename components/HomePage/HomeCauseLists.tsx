@@ -122,9 +122,46 @@ function HomeCauseLists(): JSX.Element {
     setRightCauseList({ date: rightDate, pdfUrl: rightPdfUrl });
   }, [fetchPdf]);
 
+  const calculateTimeUntilRefresh = useCallback(() => {
+    const now = new Date();
+    const targetTime = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      17, // Hours (17:00)
+      0, // Minutes
+      45 // Seconds
+    );
+
+    // If current time is past today's target time, set target to tomorrow
+    if (now > targetTime) {
+      targetTime.setDate(targetTime.getDate() + 1);
+    }
+
+    return targetTime.getTime() - now.getTime();
+  }, []);
+
   useEffect(() => {
+    // Initial fetch
     updateCauseLists();
-  }, [updateCauseLists]);
+
+    // Set up refresh timer
+    const timeUntilRefresh = calculateTimeUntilRefresh();
+    console.log(
+      `Setting refresh timer for ${timeUntilRefresh}ms (${new Date(Date.now() + timeUntilRefresh).toLocaleString()})`
+    );
+
+    const refreshTimer = setTimeout(() => {
+      updateCauseLists();
+      // After the refresh, set up the next day's timer
+      const nextDayTimer = setTimeout(() => {
+        window.location.reload(); // Force a full reload to reset all timers
+      }, calculateTimeUntilRefresh());
+      return () => clearTimeout(nextDayTimer);
+    }, timeUntilRefresh);
+
+    return () => clearTimeout(refreshTimer);
+  }, [updateCauseLists, calculateTimeUntilRefresh]);
 
   // Cleanup effect for object URLs
   useEffect(() => {
