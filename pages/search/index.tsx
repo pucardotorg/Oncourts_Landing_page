@@ -338,6 +338,9 @@ const SearchForCase = () => {
     setFormState({
       ...defaultFormState,
       selectedCourt: courtOptions.length > 0 ? courtOptions[0]?.name || "" : "",
+      ...(selectedTab === "advocate" && {
+        advocateSearchMethod: formState.advocateSearchMethod,
+      }),
     });
     // Reset pagination
     setOffset(0);
