@@ -29,7 +29,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
     if (item.subItems) {
       return (
         <div className="group relative" key={item.label}>
-          <div className="flex items-center justify-between px-4 py-2 hover:bg-gray-50 hover:text-[#007E7E] group cursor-pointer border-b border-[#CBD5E1]">
+          <div className="flex items-center justify-between mx-[15px] py-2 hover:text-[#007E7E] group cursor-pointer border-b border-[#CBD5E1]">
             <span className="font-sans font-medium text-[20px] leading-[28px] tracking-[0.01em]">
               {t(item.label)}
             </span>
@@ -38,13 +38,13 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
             </span>
           </div>
 
-          <div className="absolute left-full top-[9px] min-w-[200px] bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 -mt-2 border-l border-[#E5E5E5]">
+          <div className="absolute left-full top-[7px] min-w-[200px] bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 -mt-2 border-l border-[#E2E8F0]">
             {item.subItems.map((subItem) => (
               <Link
                 key={subItem.label}
                 href={subItem.href || "#"}
                 target={subItem.target}
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#007E7E] border-b border-[#CBD5E1] last:border-b-0"
+                className="block mx-[15px] py-2 text-sm text-gray-700  hover:text-[#007E7E] border-b border-[#CBD5E1] last:border-b-0"
               >
                 <div className="flex items-center center ">
                   <span className="text-[#3A3A3A] font-sans font-medium text-[20px] leading-[28px] tracking-[0.01em] hover:bg-gray-50 hover:text-[#007E7E]">
@@ -62,7 +62,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
       <Link
         key={item.label}
         href={item.href || "#"}
-        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#007E7E] border-b border-[#E5E5E5] last:border-b-0"
+        className="block py-2 mx-[15px] text-sm text-gray-700 hover:text-[#007E7E] border-b border-[#E5E5E5] last:border-b-0"
       >
         <span className="text-[#3A3A3A] font-sans font-medium text-[20px] leading-[28px] tracking-[0.01em] hover:bg-gray-50 hover:text-[#007E7E]">
           {t(item.label)}
