@@ -1,40 +1,49 @@
 export const FooterConfig = {
   logo: {
-    imageUrl: "/images/footerLogo.png",
+    imageUrl: "/images/footerLogo.svg",
     alt: "OnCourts Logo",
-    width: 250,
-    height: 160,
-    tagline: "Courts that come to you!",
+    width: 290,
+    height: 182,
   },
   quickLinks: [
-    { label: "About Us", url: "/about" },
-    { label: "Feedback Form", url: "https://forms.gle/uCSgGiqGiMQYjjgeA" },
+    { label: "ABOUT_ON_COURTS", url: "/about" },
     {
-      label: "Training Videos",
-      url: "https://www.youtube.com/playlist?list=PL2HnAXES1w-ShQIq8DAhvqeYe-uLCAr6",
+      label: "VIDEO_TUTORIALS",
+      url: "/video-tutorials",
     },
     {
-      label: "User Manual",
+      label: "MEDIA_GALLERY",
+      url: "/media-gallery",
+    },
+  ],
+  helpResources: [
+    { label: "SUPPORT_FORM", url: "https://forms.gle/uCSgGiqGiMQYjjgeA" },
+    {
+      label: "USER_MANUAL",
       url: "https://drive.google.com/file/d/1j4mIw0K2F8m_urJE-zbu-oeluiOL-8Pg/view?usp=sharing",
     },
-    { label: "Contact Details", url: "/#contactUs" },
-    { label: "Terms & Conditions", url: "/policies-conditions#terms" },
-    { label: "Privacy Policy", url: "/policies-conditions#privacy" },
+    { label: "CONTACT_DETAILS", url: "/help-resources#contactUs" },
+    { label: "FAQS", url: "/help-resources#faq" },
+  ],
+  informationPrivacy: [
+    { label: "RTI", url: "/rti" },
+    { label: "TERMS_AND_CONDITIONS", url: "/policies-conditions#terms" },
+    { label: "PRIVACY_POLICY", url: "/policies-conditions#privacy" },
   ],
   externalLinks: [
     {
-      label: "eCourts Website",
-      url: "https://ecourts.gov.in/ecourts_home/index.php?p=dist_court/kerala",
-    },
-    {
-      label: "Kollam District Court Website",
+      label: "KOLLAM_DISTRICT_COURT",
       url: "https://kollam.dcourts.gov.in/",
     },
     {
-      label: "Kerala High Court Website",
+      label: "KERALA_HIGH_COURT",
       url: "https://highcourt.kerala.gov.in/",
     },
-    { label: "Supreme Court Website", url: "https://www.sci.gov.in/" },
+    { label: "SUPREME_COURT", url: "https://www.sci.gov.in/" },
+    {
+      label: "NJDG_DISTRICT",
+      url: "https://njdg.ecourts.gov.in/njdg_v3/",
+    },
   ],
-  copyright: "© High Court of Kerala 2025",
+  copyright: "FOOTER_COPYRIGHT",
 };

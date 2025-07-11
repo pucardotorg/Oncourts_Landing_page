@@ -1,84 +1,119 @@
 import Image from "next/image";
 import { FooterConfig } from "../data/FooterConfig"; // Ensure path is correct
 import Link from "next/link";
+import { useSafeTranslation } from "../hooks/useSafeTranslation";
 
 const Footer: React.FC = () => {
+  const { t } = useSafeTranslation();
   return (
-    <footer
-      className="bg-footerBg text-white w-full mt-auto"
-      style={{
-        padding: "58px 12px",
-      }}
-    >
+    <footer className="px-8 md:px-16 py-10 font-[Roboto] bg-footerBg text-white w-full mt-auto">
       <div
-        className="flex flex-col md:flex-row justify-between items-center md:items-start max-w-screen-xl mx-auto"
-        style={{ gap: "53.94px" }}
+        className="flex flex-col md:flex-row justify-between md:items-center md:items-start mx-auto"
+        style={{ gap: "30px" }}
       >
-        {/* Left Section: Logo */}
-        <div className="flex flex-col items-center md:items-start">
-          <Image
-            src={FooterConfig.logo.imageUrl}
-            alt={FooterConfig.logo.alt}
-            width={FooterConfig.logo.width}
-            height={FooterConfig.logo.height}
-          />
-          <p className="text-sm mt-2">{FooterConfig.logo.tagline}</p>
-        </div>
-
-        {/* Middle Section: Quick Links & User Terms */}
-        <div className="flex flex-col">
-          <h3 className="text-lg font-semibold mb-2">
-            Quick Links & User Terms
-          </h3>
-          <div
-            className={`grid ${FooterConfig.quickLinks.length > 4
-              ? "grid-cols-2 gap-x-20 gap-y-4"
-              : "grid-cols-1 gap-y-4"
-              }`}
-          >
-            {FooterConfig.quickLinks.map((link, index) => (
-              <Link
-                key={index}
-                href={link.url}
-                className="text-sm hover:underline"
-              >
-                {link.label}
-              </Link>
-            ))}
+        <div>
+          {/* Left Section: Logo */}
+          <div className="flex flex-col md:items-start">
+            <Image
+              src={FooterConfig.logo.imageUrl}
+              alt={FooterConfig.logo.alt}
+              width={FooterConfig.logo.width}
+              height={FooterConfig.logo.height}
+            />
           </div>
         </div>
+        <div className="grid grid-cols-2 md:flex md:flex-row gap-10">
+          {/* Quick Links Section */}
+          <div className="flex flex-col">
+            <h3 className="text-[15px] md:text-[17px] font-normal mb-2">
+              {t("QUICK_LINKS")}
+            </h3>
+            <div className="grid grid-cols-1 gap-y-4">
+              {FooterConfig.quickLinks.map((link, index) => (
+                <Link
+                  key={index}
+                  href={link.url}
+                  className="text-[17px] md:text-[20px] font-medium md:font-medium hover:underline"
+                  target={link.url.startsWith("http") ? "_blank" : "_self"}
+                  rel={link.url.startsWith("http") ? "noopener noreferrer" : ""}
+                >
+                  {t(link.label)}
+                </Link>
+              ))}
+            </div>
+          </div>
 
-        {/* Right Section: External Links */}
-        <div className="flex flex-col mr-[45px]">
-          {" "}
-          {/* Updated margin */}
-          <h3 className="text-lg font-semibold mb-2">External Links</h3>
-          <div
-            className={`grid ${FooterConfig.externalLinks.length > 4
-              ? "grid-cols-2 gap-x-20 gap-y-4"
-              : "grid-cols-1 gap-y-4"
-              }`}
-          >
-            {FooterConfig.externalLinks.map((link, index) => (
-              <Link
-                key={index}
-                href={link.url}
-                className="text-sm hover:underline"
-              >
-                {link.label}
-              </Link>
-            ))}
+          {/* Help & Resources Section */}
+          <div className="flex flex-col">
+            <h3 className="text-[15px] md:text-[17px] font-normal mb-2">
+              {t("HELP_RESOURCES")}
+            </h3>
+            <div className="grid grid-cols-1 gap-y-4">
+              {FooterConfig.helpResources.map((link, index) => (
+                <Link
+                  key={index}
+                  href={link.url}
+                  className="text-[17px] md:text-[20px] font-medium md:font-medium hover:underline"
+                  target={link.url.startsWith("http") ? "_blank" : "_self"}
+                  rel={link.url.startsWith("http") ? "noopener noreferrer" : ""}
+                >
+                  {t(link.label)}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Information & Privacy Section */}
+          <div className="flex flex-col">
+            <h3 className="text-[15px] md:text-[17px] font-normal mb-2">
+              {t("INFORMATION_PRIVACY")}
+            </h3>
+            <div className="grid grid-cols-1 gap-y-4">
+              {FooterConfig.informationPrivacy.map((link, index) => (
+                <Link
+                  key={index}
+                  href={link.url}
+                  className="text-[17px] md:text-[20px] font-medium md:font-medium hover:underline"
+                  target={link.url.startsWith("http") ? "_blank" : "_self"}
+                  rel={link.url.startsWith("http") ? "noopener noreferrer" : ""}
+                >
+                  {t(link.label)}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* External Links Section */}
+          <div className="flex flex-col">
+            <h3 className="text-[15px] md:text-[17px] font-normal mb-2">
+              {t("EXTERNAL_LINKS")}
+            </h3>
+            <div className="grid grid-cols-1 gap-y-4">
+              {FooterConfig.externalLinks.map((link, index) => (
+                <Link
+                  key={index}
+                  href={link.url}
+                  className="text-[17px] md:text-[20px] font-medium md:font-medium hover:underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t(link.label)}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-screen-xl mx-auto mt-6">
+      <div className="mx-auto mt-12">
         <hr className="border-t border-white" />
       </div>
 
       {/* Copyright Section */}
       <div className="mt-6">
-        <div className="text-center text-sm">{FooterConfig.copyright}</div>
+        <div className="text-center text-[15px] md:text-[17px]">
+          {t(FooterConfig.copyright)}
+        </div>
       </div>
     </footer>
   );

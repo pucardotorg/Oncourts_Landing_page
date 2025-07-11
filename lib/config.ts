@@ -14,6 +14,12 @@ export const API_ENDPOINTS = {
     DOWNLOAD: `${API_BASE_URL}/scheduler/causelist/v1/_download`,
   },
 
+  // Landing page endpoints
+  NOTICES: {
+    SEARCH_NOTICES: `${API_BASE_URL}/openapi/landing-page/v1/search-notices`,
+    DOWNLOAD_FILE: `${API_BASE_URL}/openapi/v1/landing_page/file`,
+  },
+
   // Inbox endpoints
   INBOX: {
     SEARCH: `${API_BASE_URL}/inbox/v2/open/_search`,
