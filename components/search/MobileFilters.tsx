@@ -7,7 +7,7 @@ import {
   FilterState,
 } from "../../types";
 import CustomDropdown from "../ui/form/CustomDropdown";
-import { DatePickerComponent } from "../ui/form";
+import CustomDatePicker from "../ui/form/CustomDatePicker";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 interface MobileFiltersProps {
@@ -34,6 +34,10 @@ const MobileFilters: React.FC<MobileFiltersProps> = ({
   const { t } = useSafeTranslation();
   // Local state to track filter changes before applying them
   const [localFilters, setLocalFilters] = useState<FilterState>(filterState);
+
+  // State to control the opening of date pickers
+  const [fromDateOpen, setFromDateOpen] = useState(false);
+  const [toDateOpen, setToDateOpen] = useState(false);
 
   // Update local filters when parent filterState changes
   useEffect(() => {
@@ -66,6 +70,18 @@ const MobileFilters: React.FC<MobileFiltersProps> = ({
   // Apply all filters at once when search button is clicked
   const applyFilters = () => {
     onApplyFilters(localFilters);
+  };
+
+  // Function to handle calendar icon click for the "From" date picker
+  const handleFromDateIconClick = () => {
+    setFromDateOpen(!fromDateOpen);
+    setToDateOpen(false); // Close the other date picker if open
+  };
+
+  // Function to handle calendar icon click for the "To" date picker
+  const handleToDateIconClick = () => {
+    setToDateOpen(!toDateOpen);
+    setFromDateOpen(false); // Close the other date picker if open
   };
 
   // Prevent background scrolling when modal is open
@@ -149,24 +165,52 @@ const MobileFilters: React.FC<MobileFiltersProps> = ({
             <label className="block text-lg font-[Roboto] font-medium text-[#0A0A0A] mb-1">
               {t("NEXT_HEARING_DATE")}
             </label>
-            <div>
-              <DatePickerComponent
-                label={t("FROM")}
-                value={filterState.hearingDateFrom}
-                onChange={(date) =>
-                  handleLocalFilterChange("hearingDateFrom", date)
+            <div className="mb-3">
+              <label className="block text-sm font-[Roboto] font-medium text-[#0A0A0A] mb-1">
+                {t("FROM")}
+              </label>
+              <CustomDatePicker
+                selected={
+                  localFilters.hearingDateFrom
+                    ? new Date(localFilters.hearingDateFrom)
+                    : null
                 }
-                className="w-full bg-white !border-[#3D3C3C]"
+                onChange={(date: Date | null) =>
+                  handleLocalFilterChange(
+                    "hearingDateFrom",
+                    date ? date.toISOString().split("T")[0] : ""
+                  )
+                }
+                isOpen={fromDateOpen}
+                onIconClick={handleFromDateIconClick}
+                onClickOutside={() => setFromDateOpen(false)}
+                padding="px-1"
+                borderRadius="rounded-md"
+                borderColor="border-[#3D3C3C]"
               />
             </div>
             <div>
-              <DatePickerComponent
-                label={t("TO")}
-                value={filterState.hearingDateTo}
-                onChange={(date) =>
-                  handleLocalFilterChange("hearingDateTo", date)
+              <label className="block text-sm font-[Roboto] font-medium text-[#0A0A0A] mb-1">
+                {t("TO")}
+              </label>
+              <CustomDatePicker
+                selected={
+                  localFilters.hearingDateTo
+                    ? new Date(localFilters.hearingDateTo)
+                    : null
                 }
-                className="w-full bg-white !border-[#3D3C3C]"
+                onChange={(date: Date | null) =>
+                  handleLocalFilterChange(
+                    "hearingDateTo",
+                    date ? date.toISOString().split("T")[0] : ""
+                  )
+                }
+                isOpen={toDateOpen}
+                onIconClick={handleToDateIconClick}
+                onClickOutside={() => setToDateOpen(false)}
+                padding="px-1"
+                borderRadius="rounded-lg"
+                borderColor="border-[#3D3C3C]"
               />
             </div>
           </div>
