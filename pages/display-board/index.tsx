@@ -557,13 +557,13 @@ export default function DisplayBoard() {
               {/* Mobile Search + Reset buttons */}
               <div className="flex justify-center items-center gap-2 mt-3 sm:hidden">
                 <button
-                  className="w-[25%] h-[32px] text-sm font-bold border border-teal-700 text-teal-700 rounded"
+                  className="w-[25%] h-[32px] text-sm font-bold border border-[#0F766E] text-[#0F766E] rounded"
                   onClick={() => fetchCasesForDate(selectedDate, searchValue)}
                 >
                   {t("COMMON_SEARCH")}
                 </button>
                 <button
-                  className="w-[25%] h-[32px] text-sm font-bold border border-slate-500 text-slate-500 rounded"
+                  className="w-[25%] h-[32px] text-sm font-bold border border-[#E2E8F0] shadow-[0px_1px_3px_rgba(0,0,0,0.1),_0px_1px_2px_rgba(0,0,0,0.06)] text-[#64748B] rounded"
                   onClick={() => {
                     setSearchValue("");
                     fetchCasesForDate(selectedDate, "");
@@ -593,24 +593,21 @@ export default function DisplayBoard() {
                 <div className="">
                   <div className="border border-[#E2E8F0] bg-[#F8FAFC]">
                     <div
-                      className={`flex justify-between items-center px-[5px] cursor-pointer h-[41px]`}
+                      className={`grid grid-cols-[45%_45%_10%] items-center px-[5px] cursor-pointer h-[41px] relative`}
                     >
-                      <div className="flex flex-row">
-                        <div className="flex justify-between items-center">
-                          <span className="font-inter font-semibold text-[14.07px] leading-[20px] text-slate-900 w-[40vw]">
-                            {t("CASE_NUMBER")}:
-                          </span>
-                          <span
-                            className={`flex flex-row justify-center items-center p-[8.22px] gap-[4.11px] h-[20.55px] rounded-[4.19px]`}
-                          >
-                            <h2
-                              className={`font-inter font-semibold text-[14.07px] leading-[20px] text-slate-900`}
-                            >
-                              {t("STATUS")}
-                            </h2>
-                          </span>
-                        </div>
-                      </div>
+                      <div className="absolute left-[45%] top-0 bottom-0 w-[1px] bg-[#E2E8F0]"></div>
+                      <span className="h-[21px] font-inter font-semibold text-[14.07px] leading-[20px] text-[#0F172A] pr-[5px]">
+                        {t("CASE_NUMBER")}:
+                      </span>
+                      <span
+                        className={`flex flex-row justify-center items-center py-[8.22px] ml-[10px] w-max gap-[4.11px] h-[20.55px] rounded-[4.19px]`}
+                      >
+                        <h2
+                          className={`font-inter font-semibold text-[14.07px] leading-[20px] text-[#0F172A]`}
+                        >
+                          {t("STATUS")}
+                        </h2>
+                      </span>
                     </div>
                   </div>
                   {hearingData.map((hearing, index) => (
