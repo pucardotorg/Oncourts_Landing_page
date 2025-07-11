@@ -507,7 +507,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 <h2 className="font-[Baskerville] text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
                   {t("LITIGANT_DETAILS")}
                 </h2>
-                <div className="font-[Roboto] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="font-[Roboto] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div className="pr-2 border-r">
                     <p className="text-[16px] font-bold text-[#0A0A0A]">
                       {t("COMPLAINANTS")}
@@ -551,7 +551,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 <h2 className="font-[Baskerville] text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
                   {t("KEY_DETAILS")}
                 </h2>
-                <div className="font-[Roboto] grid grid-cols-1 gap-4 md:gap-6">
+                <div className="font-[Roboto] grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   <div className="space-y-2 pr-0 md:pr-4 border-b pb-2 md:pb-0 md:border-b-0 md:border-r">
                     <div className="flex justify-between gap-4">
                       <span className="flex-1 text-[16px] font-bold text-[#0A0A0A]">
