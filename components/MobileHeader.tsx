@@ -99,7 +99,11 @@ const MobileHeader = () => {
                 onClick={() => toggleSection("ABOUT_US")}
                 className={`mx-[10px] px-6 py-3 text-left text-[20px] text-[#3A3A3A] font-roboto flex justify-between items-center hover:border-opacity-100 ${expandedSection === "ABOUT_US" ? "border-b border-[#00A7A7] border-opacity-0" : ""}`}
               >
-                {t("ABOUT_US")}
+                <span
+                  className={`${expandedSection === "ABOUT_US" ? "text-[#0F766E]" : ""}`}
+                >
+                  {t("ABOUT_US")}
+                </span>
                 <span className={`text-[#00A7A7]`}>
                   {expandedSection === "ABOUT_US" ? (
                     <svgIcons.UpArrowIcon fill="#0F766E" />
@@ -109,7 +113,7 @@ const MobileHeader = () => {
                 </span>
               </button>
               {expandedSection === "ABOUT_US" && (
-                <div className="bg-[#F8FAFC]">
+                <div className="">
                   {MENU_ITEMS.ABOUT_US.map((item) => (
                     <Link
                       key={item.href}
@@ -129,7 +133,11 @@ const MobileHeader = () => {
                 onClick={() => toggleSection("SERVICES")}
                 className={`mx-[10px] px-6 py-3 text-left text-[20px] text-[#3A3A3A] font-roboto flex justify-between items-center hover:border-opacity-100 ${expandedSection === "SERVICES" ? "border-b border-[#00A7A7]" : ""}`}
               >
-                {t("SERVICES")}
+                <span
+                  className={`${expandedSection === "SERVICES" ? "text-[#0F766E]" : ""}`}
+                >
+                  {t("SERVICES")}
+                </span>
                 <span className={`text-[#00A7A7]`}>
                   {expandedSection === "SERVICES" ? (
                     <svgIcons.UpArrowIcon fill="#0F766E" />
@@ -139,7 +147,7 @@ const MobileHeader = () => {
                 </span>
               </button>
               {expandedSection === "SERVICES" && (
-                <div className=" bg-[#F8FAFC]">
+                <div className="">
                   {MENU_ITEMS.SERVICES.map((item) =>
                     item.subItems ? (
                       <div
@@ -148,9 +156,13 @@ const MobileHeader = () => {
                       >
                         <button
                           onClick={() => toggleSubItem(item.label)}
-                          className={`mx-[20px] px-10 py-3 text-[18px] text-[#3A3A3A] font-roboto flex justify-between items-center ${expandedSubItems.includes(item.label) ? "border-b border-[#00A7A7]" : ""}`}
+                          className={`px-[30px] mx-[10px] py-3 text-[18px] text-[#3A3A3A] font-roboto flex justify-between items-center ${expandedSubItems.includes(item.label) ? "border-b border-[#00A7A7]" : ""}`}
                         >
-                          {t(item.label)}
+                          <span
+                            className={`${expandedSubItems.includes(item.label) ? "text-[#0F766E]" : ""}`}
+                          >
+                            {t(item.label)}
+                          </span>
                           <span className="text-[#00A7A7]">
                             {expandedSubItems.includes(item.label) ? (
                               <svgIcons.UpArrowIcon fill="#0F766E" />
@@ -160,7 +172,7 @@ const MobileHeader = () => {
                           </span>
                         </button>
                         {expandedSubItems.includes(item.label) && (
-                          <div className="mx-[20px] pl-4 bg-[#F8FAFC]">
+                          <div className="mx-[10px] pl-[0px]">
                             {item.subItems.map((subItem) => (
                               <Link
                                 key={subItem.href}
@@ -200,7 +212,11 @@ const MobileHeader = () => {
                 onClick={() => toggleSection("SUPPORT")}
                 className={`mx-[10px] px-6 py-3 text-left text-[20px] text-[#3A3A3A] font-roboto flex justify-between items-center hover:border-opacity-100 ${expandedSection === "SUPPORT" ? "border-b border-[#00A7A7] border-opacity-0" : ""}`}
               >
-                {t("SUPPORT")}
+                <span
+                  className={`${expandedSection === "SUPPORT" ? "text-[#0F766E]" : ""}`}
+                >
+                  {t("SUPPORT")}
+                </span>
                 <span className={`text-[#00A7A7]`}>
                   {expandedSection === "SUPPORT" ? (
                     <svgIcons.UpArrowIcon fill="#0F766E" />
@@ -210,7 +226,7 @@ const MobileHeader = () => {
                 </span>
               </button>
               {expandedSection === "SUPPORT" && (
-                <div className="bg-[#F8FAFC]">
+                <div className="">
                   {MENU_ITEMS.SUPPORT.map((item) => (
                     <Link
                       key={item.href}
