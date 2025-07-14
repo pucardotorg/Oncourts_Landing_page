@@ -100,71 +100,85 @@ const HomeIntroVideo = () => {
 
                 {loginDropdownOpen && (
                   <div
-                    className="w-max absolute left-0 top-full mt-1 bg-white rounded-md shadow-lg overflow-hidden z-[9999] min-w-[135px]"
+                    className="w-max absolute left-0 top-full mt-1 bg-white rounded-md shadow-lg z-[9999] min-w-[135px]"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <button
-                      className="px-4 py-3 text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-2 text-sm hover:text-[#0F766E]"
-                      onClick={() => {
-                        window.open(APP_URLS.CITIZEN_DRISTI, "_blank");
-                        setLoginDropdownOpen(false);
-                      }}
+                    <div
+                      className="relative overflow-visible"
                       onMouseEnter={() => setShowCitizenTooltip(true)}
                       onMouseLeave={() => setShowCitizenTooltip(false)}
                     >
-                      <span
-                        className={
-                          isMobile
-                            ? "text-center font-roboto font-medium text-[14px] leading-[20px] text-[#0F766E]"
-                            : "font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]"
-                        }
+                      <button
+                        className="px-4 py-3 text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-2 text-sm hover:text-[#0F766E] w-full"
+                        onClick={() => {
+                          window.open(APP_URLS.CITIZEN_DRISTI, "_blank");
+                          setLoginDropdownOpen(false);
+                        }}
                       >
-                        {" "}
-                        {t("ADVOCATE_LITIGANT_LOGIN")}
-                      </span>
-                    </button>
-                    {showCitizenTooltip && (
-                      <Tooltip
-                        text={t(
-                          "Log in to file cases, submit applications and more"
-                        )}
-                      />
-                    )}
-                    <button
-                      className="px-4 py-3 text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-2 text-sm hover:text-[#0F766E]"
-                      onClick={() => {
-                        window.open(APP_URLS.EMPLOYEE_USER, "_blank");
-                        setLoginDropdownOpen(false);
-                      }}
+                        <span
+                          className={
+                            isMobile
+                              ? "text-center font-roboto font-medium text-[14px] leading-[20px] text-[#0F766E]"
+                              : "font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]"
+                          }
+                        >
+                          {" "}
+                          {t("ADVOCATE_LITIGANT_LOGIN")}
+                        </span>
+                      </button>
+                      {showCitizenTooltip && !isMobile && (
+                        <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-[99999]">
+                          <Tooltip
+                            text={t(
+                              "Log in to file cases, submit applications and more"
+                            )}
+                          />
+                        </div>
+                      )}
+                    </div>
+                    <div
+                      className="relative overflow-visible"
                       onMouseEnter={() => setShowEmployeeTooltip(true)}
                       onMouseLeave={() => setShowEmployeeTooltip(false)}
                     >
-                      <span
-                        className={
-                          isMobile
-                            ? "text-center font-roboto font-medium text-[14px] leading-[20px] text-[#0F766E]"
-                            : "font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]"
-                        }
+                      <button
+                        className="px-4 py-3 text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-2 text-sm hover:text-[#0F766E] w-full"
+                        onClick={() => {
+                          window.open(APP_URLS.EMPLOYEE_USER, "_blank");
+                          setLoginDropdownOpen(false);
+                        }}
                       >
-                        {t("JUDGE_STAFF_LOGIN")}
-                      </span>
-                    </button>
-                    {showEmployeeTooltip && (
-                      <Tooltip
-                        text={t(
-                          "Log in to manage cases, issue orders, and support courtroom proceedings"
-                        )}
-                      />
-                    )}
+                        <span
+                          className={
+                            isMobile
+                              ? "text-center font-roboto font-medium text-[14px] leading-[20px] text-[#0F766E]"
+                              : "font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]"
+                          }
+                        >
+                          {t("JUDGE_STAFF_LOGIN")}
+                        </span>
+                      </button>
+                      {showEmployeeTooltip && !isMobile && (
+                        <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-[99999]">
+                          <Tooltip
+                            text={t(
+                              "Log in to manage cases, issue orders, and support courtroom proceedings"
+                            )}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
-              <div className="relative">
+              <div
+                className="relative"
+                onMouseEnter={() => setShowSearchTooltip(true)}
+                onMouseLeave={() => setShowSearchTooltip(false)}
+              >
                 <button
                   className={`box-border text-[white] flex flex-row items-center justify-center gap-4  bg-[white] border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px] w-[135px] px-[12px] py-2" : "h-[69px] w-[241px] px-4 py-8"}`}
                   onClick={() => router.push("/search")}
-                  onMouseEnter={() => setShowSearchTooltip(true)}
-                  onMouseLeave={() => setShowSearchTooltip(false)}
                 >
                   <span
                     className={
@@ -177,12 +191,14 @@ const HomeIntroVideo = () => {
                     {t("CASE_SEARCH")}
                   </span>
                 </button>
-                {showSearchTooltip && (
-                  <Tooltip
-                    text={t(
-                      "Log in to manage cases, issue orders, and support courtroom proceedings"
-                    )}
-                  />
+                {showSearchTooltip && !isMobile && (
+                  <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-[99999]">
+                    <Tooltip
+                      text={t(
+                        "Log in to manage cases, issue orders, and support courtroom proceedings"
+                      )}
+                    />
+                  </div>
                 )}
               </div>
             </div>
