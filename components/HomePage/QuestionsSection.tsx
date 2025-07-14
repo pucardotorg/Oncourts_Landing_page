@@ -263,7 +263,9 @@ const QuestionsSection: React.FC = () => {
   ];
 
   return (
-    <section className={`w-full bg-white pb-16 ${isMobile ? "pt-8" : "pt-0"}`}>
+    <section
+      className={`w-full bg-[#F0FDFA] pb-16 ${isMobile ? "pt-8" : "pt-12"}`}
+    >
       <div className="px-6 bg-[white]]">
         <div className="flex center justify-center">
           <h2
