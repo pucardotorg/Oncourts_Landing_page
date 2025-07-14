@@ -22,18 +22,17 @@ const Question: React.FC<QuestionProps> = ({
   isMobile,
 }) => (
   <div className="border-b border-[#CBD5E1]">
-    <button
-      className="w-full flex items-center justify-between py-6 text-left"
-      onClick={onToggle}
-    >
-      <span
-        className={`font-sans font-medium  tracking-[0.01em] text-[#3A3A3A] pr-8 ${isMobile ? "text-[20px] leading-[24px]" : "text-[26px] leading-[36px]"}`}
-      >
-        {question}
-      </span>
-      <span className="flex-shrink-0">
-        {isOpen ? <svgIcons.UpArrowIcon /> : <svgIcons.DownArrowIcon />}
-      </span>
+    <button className="w-full py-6 text-left" onClick={onToggle}>
+      <div className="flex items-start justify-between">
+        <span
+          className={`font-sans font-medium tracking-[0.01em] text-[#3A3A3A] pr-8 ${isMobile ? "text-[20px] leading-[24px]" : "text-[26px] leading-[36px]"}`}
+        >
+          {question}
+        </span>
+        <span className={`flex-shrink-0  ${isMobile ? "" : "mt-[0.5em]"}`}>
+          {isOpen ? <svgIcons.UpArrowIcon /> : <svgIcons.DownArrowIcon />}
+        </span>
+      </div>
     </button>
     {isOpen && (
       <div className="pb-6">
@@ -242,6 +241,8 @@ const QuestionsSection: React.FC = () => {
               <Link
                 href="https://drive.google.com/file/d/1j4mIw0K2F8m_urJE-zbu-oeluiOL-8Pg/view?usp=sharing"
                 className="text-[#1D4ED8] hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 Link
               </Link>
