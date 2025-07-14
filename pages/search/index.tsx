@@ -72,7 +72,7 @@ const SearchForCase = () => {
   const [caseStageOptions, setCaseStageOptions] = useState<CaseStage[]>([]);
   const [caseStatusOptions, setCaseStatusOptions] = useState<CaseStatus[]>([]);
   const [caseTypeOptions, setCaseTypeOptions] = useState<CaseType[]>([]);
-
+  const [mobileCaseTitle, setMobileCaseTitle] = useState("");
   // Use useMemo to create stable references to default states
   const defaultFormState = useMemo(
     () => ({
@@ -203,6 +203,7 @@ const SearchForCase = () => {
   // Centralized handler to update filter state and trigger search
   const handleFilterChangeAndSearch = (newFilterState: FilterState) => {
     setOffset(0);
+    setMobileCaseTitle(newFilterState.caseTitle);
     setFilterState(newFilterState);
     handleSubmit(0, newFilterState);
   };
@@ -233,7 +234,7 @@ const SearchForCase = () => {
       filterState.caseSubStage !== defaultFilterState.caseSubStage ||
       filterState.caseStatus !== defaultFilterState.caseStatus ||
       filterState.yearOfFiling !== defaultFilterState.yearOfFiling ||
-      filterState.caseTitle !== defaultFilterState.caseTitle
+      mobileCaseTitle !== defaultFilterState.caseTitle
     );
   };
 
@@ -658,13 +659,6 @@ const SearchForCase = () => {
             />
           );
         })}
-      {isMobile && searchResults.length === 0 && (
-        <div className="flex justify-center items-center p-8">
-          <div className="text-xl font-roboto font-medium text-gray-500">
-            {t("NO_RESULTS_FOUND")}
-          </div>
-        </div>
-      )}
       {isMobile &&
         totalCount > 0 &&
         ["all", "advocate", "litigant"].includes(selectedTab) && (

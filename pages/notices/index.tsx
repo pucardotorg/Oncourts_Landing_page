@@ -313,7 +313,7 @@ const Notices: React.FC = () => {
                   {t("DATE_OF_ISSUE")}:
                 </div>
                 <div className="text-[14px] text-[#334155]">
-                  {notice.publishedDate || ""}
+                  {formatDate(notice.publishedDate)}
                 </div>
               </div>
               <div className="grid grid-cols-2 items-center">
