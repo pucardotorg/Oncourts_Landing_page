@@ -54,7 +54,7 @@ const PdfPreview: React.FC<PdfPreviewProps> = ({
 
   return (
     <div
-      className={`w-full ${scrollable ? "overflow-auto" : "overflow-hidden"}`}
+      className={`w-full border-[0.25px] border-[#94A3B8] rounded-[1px] ${scrollable ? "overflow-auto" : "overflow-hidden"}`}
       style={{ height: calculatedHeight }} // FIXED height
     >
       <Document file={fileUrl} loading={<div>Loading...</div>}>
