@@ -242,6 +242,8 @@ const QuestionsSection: React.FC = () => {
               <Link
                 href="https://drive.google.com/file/d/1j4mIw0K2F8m_urJE-zbu-oeluiOL-8Pg/view?usp=sharing"
                 className="text-[#1D4ED8] hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 Link
               </Link>
