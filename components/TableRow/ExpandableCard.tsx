@@ -26,7 +26,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
   };
 
   return (
-    <div className="font-[Roboto] bg-white shadow-sm w-full overflow-hidden">
+    <div className="font-roboto bg-white shadow-sm w-full overflow-hidden">
       {/* Header section - always visible */}
       {/* Labels row */}
       {index === 0 && (
@@ -46,7 +46,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
 
       {/* Values row */}
       <div
-        className={`grid grid-cols-2 relative font-[Roboto] ${isExpanded ? "bg-[#F0FDFA]" : "bg-white"}`}
+        className={`grid grid-cols-2 relative font-roboto ${isExpanded ? "bg-[#F0FDFA]" : "bg-white"}`}
       >
         <div className="p-3 border-x border-b border-[#E2E8F0]">
           <div className="text-[14px] text-[#334155] font-medium">

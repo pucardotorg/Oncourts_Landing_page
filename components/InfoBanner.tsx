@@ -1,17 +1,56 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { svgIcons } from "../data/svgIcons";
 import { useMediaQuery } from "@mui/material";
 
-interface InfoBannerProps {
-  messages: string[];
-}
-
-const InfoBanner: React.FC<InfoBannerProps> = ({ messages = [] }) => {
+const InfoBanner: React.FC = () => {
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const tenantId = localStorage.getItem("tenant-id") || "kl";
+  const [messages, setMessages] = useState<string[]>([]);
 
-  const message =
-    messages[0] ||
-    "The ON Courts platform will be unavailable from 5 PM to 9 PM on 16/5/25 due to scheduled maintenance.";
+  const getInfoMessage = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `/egov-mdms-service/v1/_search?tenantId=${tenantId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            MdmsCriteria: {
+              tenantId: tenantId,
+              moduleDetails: [
+                {
+                  moduleName: "LandingPage",
+                  masterDetails: [{ name: "NotificationMessage" }],
+                },
+              ],
+            },
+            RequestInfo: {
+              apiId: "Rainmaker",
+              msgId: `${Date.now()}|en_IN`,
+            },
+          }),
+        }
+      );
+      const data = await response.json();
+      const message =
+        data?.MdmsRes?.["LandingPage"]?.NotificationMessage?.[0]?.message;
+      if (Boolean(message)) {
+        setMessages([message]);
+      }
+    } catch (error) {
+      console.error("Error fetching court options:", error);
+      setMessages([]);
+    }
+  }, [tenantId]);
+
+  useEffect(() => {
+    getInfoMessage();
+  }, []);
+
+  const message = messages?.[0];
   const MessageContent = () => (
     <div className="flex items-center space-x-2 px-4">
       <svgIcons.ClockIcon2 width={isMobile ? "22" : "32"} />
@@ -22,6 +61,10 @@ const InfoBanner: React.FC<InfoBannerProps> = ({ messages = [] }) => {
       </h4>
     </div>
   );
+
+  if (!Boolean(messages?.[0])) {
+    return null;
+  }
 
   return (
     <div

@@ -17,6 +17,7 @@ interface CustomDatePickerProps {
   padding?: string;
   iconColor?: string;
   backgroundColor?: string;
+  height?: string;
 }
 
 const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
@@ -32,6 +33,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   borderRadius = "rounded-md",
   padding = "",
   backgroundColor = "bg-white",
+  height = "h-10",
 }) => {
   return (
     <div
@@ -42,7 +44,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
         onChange={onChange}
         dateFormat={dateFormat}
         placeholderText={placeholderText}
-        className={`w-full h-10 pl-3 pr-10 py-2 font-[Roboto] text-base ${backgroundColor} focus:outline-none focus:ring-0 ${className}`}
+        className={`w-full ${height} pl-3 pr-10 py-2 font-roboto text-base ${backgroundColor} focus:outline-none focus:ring-0 ${className}`}
         readOnly={true}
         open={isOpen}
         onClickOutside={onClickOutside}

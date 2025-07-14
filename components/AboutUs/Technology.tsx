@@ -20,7 +20,7 @@ export default function Technology() {
       <div className="container mx-auto px-4 relative z-10">
         <SectionHeading title={t("TECHNOLOGY")} />
 
-        <div className="font-[Roboto] max-w-5xl mx-auto text-center">
+        <div className="font-roboto max-w-5xl mx-auto text-center">
           <p className="text-[20px] font-normal text-[#334155] mb-8">
             {t("TECHNOLOGY_DESCRIPTION")}
           </p>
