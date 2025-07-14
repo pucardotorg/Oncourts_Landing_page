@@ -208,12 +208,14 @@ function HomeCauseLists(): JSX.Element {
           </p>
         </div>
         <div className="flex justify-center mt-8">
-          <div className="relative">
+          <div
+            className="relative"
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
+          >
             <button
               className={`flex flex-row items-center justify-center px-4 md:px-[16px] gap-[12px] bg-white border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px]" : "h-[69px]"}`}
               onClick={() => router.push("/display-board")}
-              onMouseEnter={() => setShowTooltip(true)}
-              onMouseLeave={() => setShowTooltip(false)}
             >
               <svgIcons.OpenInNewTabIcon width={isMobile ? "16" : "30"} />
               <span
@@ -222,8 +224,10 @@ function HomeCauseLists(): JSX.Element {
                 {t("View Cause List Display")}
               </span>
             </button>
-            {showTooltip && (
-              <Tooltip text="Track real-time progress of today's listed cases" />
+            {showTooltip && !isMobile && (
+              <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-[99999]">
+                <Tooltip text="Track real-time progress of today's listed cases" />
+              </div>
             )}
           </div>
         </div>
