@@ -72,7 +72,6 @@ const SearchForCase = () => {
   const [caseStageOptions, setCaseStageOptions] = useState<CaseStage[]>([]);
   const [caseStatusOptions, setCaseStatusOptions] = useState<CaseStatus[]>([]);
   const [caseTypeOptions, setCaseTypeOptions] = useState<CaseType[]>([]);
-  const [mobileCaseTitle, setMobileCaseTitle] = useState("");
   // Use useMemo to create stable references to default states
   const defaultFormState = useMemo(
     () => ({
@@ -203,7 +202,6 @@ const SearchForCase = () => {
   // Centralized handler to update filter state and trigger search
   const handleFilterChangeAndSearch = (newFilterState: FilterState) => {
     setOffset(0);
-    setMobileCaseTitle(newFilterState.caseTitle);
     setFilterState(newFilterState);
     handleSubmit(0, newFilterState);
   };
@@ -233,8 +231,7 @@ const SearchForCase = () => {
       filterState.hearingDateTo !== defaultFilterState.hearingDateTo ||
       filterState.caseSubStage !== defaultFilterState.caseSubStage ||
       filterState.caseStatus !== defaultFilterState.caseStatus ||
-      filterState.yearOfFiling !== defaultFilterState.yearOfFiling ||
-      mobileCaseTitle !== defaultFilterState.caseTitle
+      filterState.yearOfFiling !== defaultFilterState.yearOfFiling
     );
   };
 
