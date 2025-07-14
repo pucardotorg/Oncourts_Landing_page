@@ -78,7 +78,7 @@ const SearchTabs: React.FC<SearchTabsProps> = ({
         <button
           key={tab.id}
           onClick={() => onTabChange(tab.id)}
-          className={`px-3 py-1 text-xl font-[Roboto] font-medium transition-colors rounded-md ${
+          className={`px-3 py-1 text-xl font-roboto font-medium transition-colors rounded-md ${
             selectedTab === tab.id
               ? "bg-[#3A3A3A] text-white"
               : "text-[#64748B] hover:bg-gray-200"

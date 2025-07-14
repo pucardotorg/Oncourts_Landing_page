@@ -81,7 +81,7 @@ const PersonCard: React.FC<PersonCardProps> = ({
               ${isHovered ? "opacity-100" : "opacity-0 pointer-events-none"}
             `}
             >
-              <p className="text-white text-sm md:text-lg font-[Roboto] text-center">
+              <p className="text-white text-sm md:text-lg font-roboto text-center">
                 {t(description)}
               </p>
             </div>
@@ -103,7 +103,7 @@ const PersonCard: React.FC<PersonCardProps> = ({
           >
             {name}
           </h3>
-          <p className="text-sm md:text-base lg:text-[20px] font-[Roboto] text-[#3A3A3A] text-center w-full break-words">
+          <p className="text-sm md:text-base lg:text-[20px] font-roboto text-[#3A3A3A] text-center w-full break-words">
             {t(title)}
           </p>
         </div>

@@ -606,7 +606,7 @@ const SearchForCase = () => {
               onChange={(e) =>
                 setFilterState({ ...filterState, caseTitle: e.target.value })
               }
-              className="w-full pl-10 pr-4 py-2 font-[Roboto] font-medium text-[#64748B] bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="w-full pl-10 pr-4 py-2 font-roboto font-medium text-[#64748B] bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#334155]" />
             <button
@@ -660,7 +660,7 @@ const SearchForCase = () => {
         })}
       {isMobile && searchResults.length === 0 && (
         <div className="flex justify-center items-center p-8">
-          <div className="text-xl font-[Roboto] font-medium text-gray-500">
+          <div className="text-xl font-roboto font-medium text-gray-500">
             {t("NO_RESULTS_FOUND")}
           </div>
         </div>

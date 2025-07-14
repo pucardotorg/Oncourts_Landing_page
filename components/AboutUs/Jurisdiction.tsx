@@ -13,7 +13,7 @@ export default function Jurisdiction({ isMobile }: { isMobile: boolean }) {
           <SectionHeading title={t("JURISDICTION")} />
         </div>
 
-        <div className="max-w-4xl mx-auto mb-8 font-[Roboto] text-[20px] text-[#334155]">
+        <div className="max-w-4xl mx-auto mb-8 font-roboto text-[20px] text-[#334155]">
           <p className="text-center px-1 md:px-4">
             {t("JURISDICTION_DESCRIPTION")}
           </p>

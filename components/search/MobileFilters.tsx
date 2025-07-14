@@ -162,11 +162,11 @@ const MobileFilters: React.FC<MobileFiltersProps> = ({
 
           {/* Next Hearing Date */}
           <div className="mb-4">
-            <label className="block text-lg font-[Roboto] font-medium text-[#0A0A0A] mb-1">
+            <label className="block text-lg font-roboto font-medium text-[#0A0A0A] mb-1">
               {t("NEXT_HEARING_DATE")}
             </label>
             <div className="mb-3">
-              <label className="block text-sm font-[Roboto] font-medium text-[#0A0A0A] mb-1">
+              <label className="block text-sm font-roboto font-medium text-[#0A0A0A] mb-1">
                 {t("FROM")}
               </label>
               <CustomDatePicker
@@ -190,7 +190,7 @@ const MobileFilters: React.FC<MobileFiltersProps> = ({
               />
             </div>
             <div>
-              <label className="block text-sm font-[Roboto] font-medium text-[#0A0A0A] mb-1">
+              <label className="block text-sm font-roboto font-medium text-[#0A0A0A] mb-1">
                 {t("TO")}
               </label>
               <CustomDatePicker

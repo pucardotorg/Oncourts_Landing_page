@@ -179,7 +179,7 @@ const Notices: React.FC = () => {
   };
 
   return (
-    <div className="max-w-screen min-h-screen mx-auto py-4 px-4 md:py-6 md:px-20 bg-white font-[Roboto]">
+    <div className="max-w-screen min-h-screen mx-auto py-4 px-4 md:py-6 md:px-20 bg-white font-roboto">
       <Head>
         <title>{t("NOTICES")}</title>
       </Head>
@@ -202,7 +202,7 @@ const Notices: React.FC = () => {
             placeholder={t("SEARCH")}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-            className="md:pl-10 pl-4 pr-4 py-1 font-[Roboto] text-lg font-medium text-[#64748B] bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="md:pl-10 pl-4 pr-4 py-1 font-roboto text-lg font-medium text-[#64748B] bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 handleSearch();
@@ -244,7 +244,7 @@ const Notices: React.FC = () => {
                 <th className="py-3 px-4 text-left w-[20%]">{t("ACTION")}</th>
               </tr>
             </thead>
-            <tbody className="text-[22px] text-[#334155] font-[Roboto] bg-white">
+            <tbody className="text-[22px] text-[#334155] font-roboto bg-white">
               {noticesList.map((notice, index) => (
                 <tr
                   key={index}
@@ -335,7 +335,7 @@ const Notices: React.FC = () => {
         ))}
       {noticesList.length === 0 && (
         <div className="flex justify-center items-center p-8">
-          <div className="text-xl font-[Roboto] font-medium text-gray-500">
+          <div className="text-xl font-roboto font-medium text-gray-500">
             {t("NO_RESULTS_FOUND")}
           </div>
         </div>

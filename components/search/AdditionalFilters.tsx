@@ -145,7 +145,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
             />
 
             <div className="col-span-2">
-              <label className="block text-lg font-[Roboto] font-medium text-[#0A0A0A] mb-1">
+              <label className="block text-lg font-roboto font-medium text-[#0A0A0A] mb-1">
                 {t("NEXT_HEARING_DATE")}
               </label>
               <div className="flex items-center gap-1">
@@ -172,7 +172,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
                   />
                 </div>
 
-                <span className="text-[#0A0A0A] text-lg font-[Roboto] font-medium">
+                <span className="text-[#0A0A0A] text-lg font-roboto font-medium">
                   To
                 </span>
 

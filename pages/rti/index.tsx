@@ -177,7 +177,7 @@ const RTIAuthorities = () => {
                   {rtiAuthoritiesData.map((authority) => (
                     <tr
                       key={authority.id}
-                      className="font-medium font-[Roboto] text-[18px] md:text-[20px] text-[#334155] hover:bg-gray-50 border border-[#E2E8F0]"
+                      className="font-medium font-roboto text-[18px] md:text-[20px] text-[#334155] hover:bg-gray-50 border border-[#E2E8F0]"
                     >
                       <td className="py-3 px-4">{authority.id}</td>
                       <td className="py-3 px-4">{authority.designation}</td>

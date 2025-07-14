@@ -62,7 +62,7 @@ const Pagination: React.FC<PaginationProps> = ({
           <FiChevronLeft size={18} />
         </button>
 
-        <div className="font-[Roboto] font-medium text-base text-gray-700">
+        <div className="font-roboto font-medium text-base text-gray-700">
           {currentStartIndex}-
           {Math.min(currentStartIndex + itemsPerPage - 1, totalItems)} of{" "}
           {totalItems}

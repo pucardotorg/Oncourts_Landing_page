@@ -16,7 +16,7 @@ export default function Vision() {
         </div>
 
         <div className="flex flex-col md:flex-row gap-8 md:gap-10 items-stretch">
-          <div className="text-center md:text-left md:w-1/2 text-[20px] lg:text-[22px] font-[Roboto] font-normal text-[#334155]">
+          <div className="text-center md:text-left md:w-1/2 text-[20px] lg:text-[22px] font-roboto font-normal text-[#334155]">
             <p className="mb-5">{t("VISION_DESCRIPTION_1")}</p>
             <p className="mb-5">{t("VISION_DESCRIPTION_2")}</p>
             <a
