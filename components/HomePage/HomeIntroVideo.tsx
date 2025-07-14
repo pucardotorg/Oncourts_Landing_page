@@ -73,7 +73,9 @@ const HomeIntroVideo = () => {
             >
               {t("COURT_DESCRIPTION")}
             </p>
-            <div className="flex flex-row gap-4">
+            <div
+              className={`flex flex-row gap-4 ${isMobile ? "justify-center" : ""}`}
+            >
               <div className="relative login-dropdown">
                 <button
                   className={`cursor-default box-border flex flex-row items-center justify-center gap-4  bg-[#0F766E] border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px] w-[135px] px-[12px] py-2" : "h-[69px] w-[241px] px-4 py-8"}`}
@@ -216,34 +218,6 @@ const HomeIntroVideo = () => {
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               ></iframe>
-              <button
-                onClick={() => setShowFullscreen(true)}
-                className="absolute bottom-3 right-3 flex items-center justify-center rounded-full hover:opacity-90 transition-opacity"
-                style={{
-                  width: 40,
-                  height: 40,
-                  backgroundColor: "rgba(0,0,0,0.5)",
-                  border: "2px solid #4B5563",
-                }}
-                aria-label="View fullscreen"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  width={20}
-                  height={20}
-                  fill="none"
-                  stroke="#FFFFFF"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M9 3H5a2 2 0 0 0-2 2v4" />
-                  <path d="M15 3h4a2 2 0 0 1 2 2v4" />
-                  <path d="M9 21H5a2 2 0 0 1-2-2v-4" />
-                  <path d="M15 21h4a2 2 0 0 0 2-2v-4" />
-                </svg>
-              </button>
             </div>
           </div>
         </div>
