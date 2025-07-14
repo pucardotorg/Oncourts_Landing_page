@@ -7,8 +7,8 @@ interface CustomCardProps {
 
 const CustomCard: React.FC<CustomCardProps> = ({ title, description }) => {
   return (
-    <div className="font-[Roboto] bg-white p-8 rounded-lg shadow-md flex flex-col">
-      <span className="text-[32px] font-medium font-[Roboto] text-[#3A3A3A]">
+    <div className="font-roboto bg-white p-8 rounded-lg shadow-md flex flex-col">
+      <span className="text-[32px] font-medium font-roboto text-[#3A3A3A]">
         {title}
       </span>
       <div className="border-b border-[#CBD5E1] my-2 w-[80%]"></div>

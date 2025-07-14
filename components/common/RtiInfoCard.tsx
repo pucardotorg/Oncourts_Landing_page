@@ -41,7 +41,7 @@ const RtiInfoCard: React.FC<InfoCardProps> = ({ t, items, className = "" }) => {
                 {item.value}
               </a>
             ) : (
-              <div className="p-4 font-[Roboto] text-[#334155] font-medium text-lg">
+              <div className="p-4 font-roboto text-[#334155] font-medium text-lg">
                 {item.value}
               </div>
             )}

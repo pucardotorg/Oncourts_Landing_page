@@ -10,7 +10,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 const Hero = () => {
   return (
     <div className="w-full space-y-0 overflow-x-hidden">
-      <InfoBanner messages={[]} />
+      <InfoBanner />
       <HomeIntroVideo />
       <HomeCauseLists />
       <Highlights />

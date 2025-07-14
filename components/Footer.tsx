@@ -6,7 +6,7 @@ import { useSafeTranslation } from "../hooks/useSafeTranslation";
 const Footer: React.FC = () => {
   const { t } = useSafeTranslation();
   return (
-    <footer className="px-8 md:px-16 py-10 font-[Roboto] bg-footerBg text-white w-full mt-auto">
+    <footer className="px-8 md:px-16 py-10 font-roboto bg-footerBg text-white w-full mt-auto">
       <div
         className="flex flex-col md:flex-row justify-between md:items-center md:items-start mx-auto"
         style={{ gap: "30px" }}

@@ -40,7 +40,7 @@ const HelpResources = () => {
               showBorder={false}
             />
 
-            <div className="font-[Roboto] font-normal text-xl md:text-2xl flex flex-col md:flex-row mb-12 gap-6">
+            <div className="font-roboto font-normal text-xl md:text-2xl flex flex-col md:flex-row mb-12 gap-6">
               <div className="md:w-[70%] text-[#334155] content-center text-center md:text-left">
                 {t("ACCESS_EVERYTHING_YOU_NEED")}
               </div>
@@ -109,7 +109,7 @@ const HelpResources = () => {
               fontSize="text-4xl"
               className="mb-8 pt-6 md:pt-0 px-6 md:px-0"
             />
-            <div className="font-[Roboto] px-6 md:px-20">
+            <div className="font-roboto px-6 md:px-20">
               {faqs.map((faq, index) => (
                 <FAQItem
                   key={index}
@@ -130,7 +130,7 @@ const HelpResources = () => {
               className="mb-8"
             />
 
-            <div className="font-[Roboto] px-6 md:px-20 pb-20 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div className="font-roboto px-6 md:px-20 pb-20 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
               {contactInfoData.map((item, index) => (
                 <div key={index} className="flex items-center gap-4">
                   <div className="p-3 mt-1">
