@@ -240,7 +240,7 @@ const QuestionsSection: React.FC = () => {
             <li>
               User Guide for Advocates and Clerks:{" "}
               <Link
-                href="/help-resources"
+                href="https://drive.google.com/file/d/1j4mIw0K2F8m_urJE-zbu-oeluiOL-8Pg/view?usp=sharing"
                 className="text-[#1D4ED8] hover:underline"
               >
                 Link
