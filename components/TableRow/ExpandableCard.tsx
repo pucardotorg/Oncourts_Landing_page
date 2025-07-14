@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { svgIcons } from "../../data/svgIcons";
+import { formatDate } from "../../utils/formatDate";
 
 interface ExpandableCardProps {
   t: (key: string) => string;
@@ -55,7 +56,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
         </div>
         <div className="p-3 border-r border-b border-[#E2E8F0]">
           <div className="text-[14px] text-[#334155] font-medium">
-            {caseData.nextHearingDate}
+            {formatDate(caseData.nextHearingDate)}
           </div>
         </div>
 
