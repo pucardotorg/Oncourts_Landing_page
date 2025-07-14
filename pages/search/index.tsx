@@ -658,6 +658,7 @@ const SearchForCase = () => {
         })}
       {isMobile &&
         totalCount > 0 &&
+        searchResults?.length > 0 &&
         ["all", "advocate", "litigant"].includes(selectedTab) && (
           <Pagination
             currentStartIndex={offset + 1}
