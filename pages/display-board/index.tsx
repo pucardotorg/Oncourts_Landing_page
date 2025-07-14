@@ -16,6 +16,7 @@ import { commonStyles } from "../../styles/commonStyles";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import ExpandableCardV2 from "../../components/TableRow/ExpandableCardV2";
 import { useMediaQuery } from "@mui/material";
+import CustomDatePicker from "../../components/ui/form/CustomDatePicker";
 
 export const getStatusStyle = (status: string) => {
   switch (status) {
@@ -64,6 +65,7 @@ export default function DisplayBoard() {
   const [hearingLink, setHearingLink] = useState("");
   const [error, setError] = useState("");
   const { t } = useSafeTranslation();
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const tenantId = localStorage.getItem("tenant-id") || "kl";
 
   useEffect(() => {
@@ -432,6 +434,10 @@ export default function DisplayBoard() {
     return { caseTitle: null, caseNumber: null };
   }, [hearingData]);
 
+  const handleCalendarIconClick = () => {
+    setIsCalendarOpen(!isCalendarOpen);
+  };
+
   return (
     <div className="max-w-full mx-auto px-4 sm:px-6 py-4 bg-white">
       {isMobile ? (
@@ -451,14 +457,19 @@ export default function DisplayBoard() {
                 </label>
               </div>
 
-              <input
-                type="date"
-                className="border px-2 py-1 h-[40px] w-full sm:w-[220px] text-sm text-slate-700 bg-[white] border-[#505A5F] rounded-[6px]"
-                value={selectedDate}
-                onChange={(e) => {
-                  setSelectedDate(e.target.value);
+              <CustomDatePicker
+                selected={selectedDate ? new Date(selectedDate) : null}
+                onChange={(date: Date | null) => {
+                  setSelectedDate(date ? date.toISOString().split("T")[0] : "");
                   setSearchValue("");
                 }}
+                isOpen={isCalendarOpen}
+                onIconClick={handleCalendarIconClick}
+                onClickOutside={() => setIsCalendarOpen(false)}
+                padding="px-1"
+                borderRadius="rounded-md"
+                borderColor="border-[#3D3C3C]"
+                height="h-8"
               />
             </div>
 
@@ -665,23 +676,19 @@ export default function DisplayBoard() {
               >
                 {t("VIEW_CASE_SCHEDULE_BY_DATE")}
               </label>
-              <input
-                type="date"
-                className="border px-2 py-1 rounded"
-                value={selectedDate}
-                onChange={(e) => {
-                  setSelectedDate(e.target.value);
+              <CustomDatePicker
+                selected={selectedDate ? new Date(selectedDate) : null}
+                onChange={(date: Date | null) => {
+                  setSelectedDate(date ? date.toISOString().split("T")[0] : "");
                   setSearchValue("");
                 }}
-                style={{
-                  width: "220px",
-                  height: "32px",
-                  borderRadius: "4px",
-                  border: "1.44px solid #334155",
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "14px",
-                  color: "#334155",
-                }}
+                isOpen={isCalendarOpen}
+                onIconClick={handleCalendarIconClick}
+                onClickOutside={() => setIsCalendarOpen(false)}
+                padding="px-1"
+                borderRadius="rounded-md"
+                borderColor="border-[#3D3C3C]"
+                height="h-8"
               />
             </div>
             {hearingData?.length > 0 && (

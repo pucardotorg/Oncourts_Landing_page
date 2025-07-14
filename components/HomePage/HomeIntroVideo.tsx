@@ -12,7 +12,8 @@ const HomeIntroVideo = () => {
   const router = useRouter();
   const [loginDropdownOpen, setLoginDropdownOpen] = useState(false);
   const [showFullscreen, setShowFullscreen] = useState(false);
-  const [showLoginTooltip, setShowLoginTooltip] = useState(false);
+  const [showCitizenTooltip, setShowCitizenTooltip] = useState(false);
+  const [showEmployeeTooltip, setShowEmployeeTooltip] = useState(false);
   const [showSearchTooltip, setShowSearchTooltip] = useState(false);
   const videoId = "-JoWnkE-uTs";
   const isMobile = useMediaQuery("(max-width: 640px)");
@@ -76,8 +77,6 @@ const HomeIntroVideo = () => {
               <div className="relative login-dropdown">
                 <button
                   className={`cursor-default box-border flex flex-row items-center justify-center gap-4  bg-[#0F766E] border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px] w-[135px] px-[12px] py-2" : "h-[69px] w-[241px] px-4 py-8"}`}
-                  onMouseEnter={() => setShowLoginTooltip(true)}
-                  onMouseLeave={() => setShowLoginTooltip(false)}
                 >
                   <span
                     className={
@@ -98,13 +97,7 @@ const HomeIntroVideo = () => {
                     <svgIcons.DownArrowIcon fill="#fff" />
                   </span>
                 </button>
-                {showLoginTooltip && !loginDropdownOpen && (
-                  <Tooltip
-                    text={t(
-                      "Log in to file cases, submit applications and more"
-                    )}
-                  />
-                )}
+
                 {loginDropdownOpen && (
                   <div
                     className="w-max absolute left-0 top-full mt-1 bg-white rounded-md shadow-lg overflow-hidden z-[9999] min-w-[135px]"
@@ -116,6 +109,8 @@ const HomeIntroVideo = () => {
                         window.open(APP_URLS.CITIZEN_DRISTI, "_blank");
                         setLoginDropdownOpen(false);
                       }}
+                      onMouseEnter={() => setShowCitizenTooltip(true)}
+                      onMouseLeave={() => setShowCitizenTooltip(false)}
                     >
                       <span
                         className={
@@ -128,12 +123,21 @@ const HomeIntroVideo = () => {
                         {t("ADVOCATE_LITIGANT_LOGIN")}
                       </span>
                     </button>
+                    {showCitizenTooltip && (
+                      <Tooltip
+                        text={t(
+                          "Log in to file cases, submit applications and more"
+                        )}
+                      />
+                    )}
                     <button
                       className="px-4 py-3 text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-2 text-sm hover:text-[#0F766E]"
                       onClick={() => {
                         window.open(APP_URLS.EMPLOYEE_USER, "_blank");
                         setLoginDropdownOpen(false);
                       }}
+                      onMouseEnter={() => setShowEmployeeTooltip(true)}
+                      onMouseLeave={() => setShowEmployeeTooltip(false)}
                     >
                       <span
                         className={
@@ -145,6 +149,13 @@ const HomeIntroVideo = () => {
                         {t("JUDGE_STAFF_LOGIN")}
                       </span>
                     </button>
+                    {showEmployeeTooltip && (
+                      <Tooltip
+                        text={t(
+                          "Log in to manage cases, issue orders, and support courtroom proceedings"
+                        )}
+                      />
+                    )}
                   </div>
                 )}
               </div>
