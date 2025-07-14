@@ -37,7 +37,7 @@ export const commonStyles = {
   heading: {
     primary: "text-center mb-6 text-6xl font-libre text-gray-800",
     secondary: "text-2xl font-semibold mb-4",
-    accent: "text-xl font-medium text-[#EA580C] italic font-[Roboto]",
+    accent: "text-xl font-medium text-[#EA580C] italic font-roboto",
   },
 
   // Form elements

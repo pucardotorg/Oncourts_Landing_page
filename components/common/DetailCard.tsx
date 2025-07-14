@@ -17,7 +17,7 @@ const DetailCard: React.FC<DetailCardProps> = ({
 }) => {
   return (
     <div
-      className={`font-[Roboto] border border-[#CBD5E1] p-8 rounded-lg shadow-sm ${className}`}
+      className={`font-roboto border border-[#CBD5E1] p-8 rounded-lg shadow-sm ${className}`}
     >
       <div className="flex items-center mb-6">
         <div className="text-teal-600 mr-4">{icon}</div>

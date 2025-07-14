@@ -36,7 +36,7 @@ const ResourceItem: React.FC<ResourceItemProps> = ({ t, heading, items }) => {
                 onMouseEnter={() => setHoveredItem(item?.section)}
                 onMouseLeave={() => setHoveredItem(null)}
               >
-                <div className="font-[Roboto] font-medium text-[#334155] text-lg md:text-xl flex items-center space-x-4">
+                <div className="font-roboto font-medium text-[#334155] text-lg md:text-xl flex items-center space-x-4">
                   <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center">
                     <svgIcons.GuideIcon
                       color="#0F766E"

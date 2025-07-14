@@ -36,7 +36,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
 }) => {
   const { t } = useSafeTranslation();
   return (
-    <div className={`font-[Roboto] mb-0 ${className}`}>
+    <div className={`font-roboto mb-0 ${className}`}>
       {label && (
         <label className="block text-lg font-medium text-[#334155]">
           {t(label)}
@@ -45,7 +45,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
       )}
 
       <div
-        className={`font-[Roboto] flex ${inline ? "space-x-6" : "flex-col space-y-2"}`}
+        className={`font-roboto flex ${inline ? "space-x-6" : "flex-col space-y-2"}`}
       >
         {options.map((option, index) => (
           <label key={index} className="text-lg inline-flex items-center">

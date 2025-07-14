@@ -209,7 +209,7 @@ const UserVoices: React.FC = () => {
             </div>
 
             {/* Name and designation */}
-            <div className="mt-8 flex justify-center items-center text-[#3A3A3A] font-medium font-[Roboto] text-[24px] md:text-[28px] w-full mb-3">
+            <div className="mt-8 flex justify-center items-center text-[#3A3A3A] font-medium font-roboto text-[24px] md:text-[28px] w-full mb-3">
               <div className="flex w-full max-w-2xl">
                 <div className="w-[47.5%] text-right">
                   {testimonials[activeIndex].name}
@@ -221,7 +221,7 @@ const UserVoices: React.FC = () => {
               </div>
             </div>
             {/* Quote */}
-            <p className="text-[19px] md:text-[21px] text-center text-[#334155] font-[Roboto] max-w-4xl">
+            <p className="text-[19px] md:text-[21px] text-center text-[#334155] font-roboto max-w-4xl">
               {t(testimonials[activeIndex].quote)}
             </p>
 

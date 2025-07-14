@@ -37,7 +37,7 @@ const TableRowCard: React.FC<TableRowCardProps> = ({
               <div className="font-semibold text-[16px] text-left text-[#0F172A]">
                 {t(key)}
               </div>
-              <div className="font-[Roboto] bg-white text-right text-[14px] text-[#334155] break-words">
+              <div className="font-roboto bg-white text-right text-[14px] text-[#334155] break-words">
                 {key === "ACTION" ? (
                   <button
                     className="p-2 font-[Inter] font-medium rounded-md border-2 hover:text-teal-900"
