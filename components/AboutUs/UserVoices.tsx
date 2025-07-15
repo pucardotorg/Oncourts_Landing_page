@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import SectionHeading from "../common/SectionHeading";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
+import { useMediaQuery } from "@mui/material";
 
 const UserVoices: React.FC = () => {
   const { t } = useSafeTranslation();
+  const isMobile = useMediaQuery("(max-width: 768px)");
   // Testimonial data
   const testimonials = [
     {
@@ -79,7 +81,7 @@ const UserVoices: React.FC = () => {
 
           {/* Testimonial */}
           <div className="mt-20 flex flex-col items-center transition-opacity duration-500">
-            {/* Avatar row with navigation - 3 column grid */}
+            {/* Avatar row with navigation - 3 column grid for desktop, different layout for mobile */}
             <div className="grid grid-cols-12 items-center mb-10 py-4 gap-4 w-full">
               {/* Left column with previous button */}
               <div className="col-span-1 flex justify-center">
@@ -108,6 +110,7 @@ const UserVoices: React.FC = () => {
               {/* Middle column with avatar images */}
               <div
                 className="col-span-10 flex justify-center items-center relative"
+                style={{ height: isMobile ? "120px" : "auto" }}
                 ref={(el) => {
                   // Store a reference to calculate responsive spacing
                   if (el) {
@@ -118,6 +121,7 @@ const UserVoices: React.FC = () => {
                   }
                 }}
               >
+                {/* Use the same layout for both mobile and desktop, but adjust sizes for mobile */}
                 {testimonials.map((testimonial, idx) => {
                   // Calculate position based on distance from active index
                   const distance =
@@ -131,23 +135,42 @@ const UserVoices: React.FC = () => {
 
                   // Determine if item should be visible and its position
                   const isActive = idx === activeIndex;
-                  const isVisible = Math.abs(adjustedDistance) <= 2; // Show 2 items on each side
+                  const isVisible =
+                    Math.abs(adjustedDistance) <= (isMobile ? 1 : 2); // Show fewer items on mobile
 
                   if (!isVisible) return null;
 
                   // Calculate position using percentages instead of fixed pixels
                   let positionClass = "";
-                  if (adjustedDistance === 0) {
-                    positionClass = "left-[50%] -translate-x-1/2"; // Center
-                  } else if (adjustedDistance === -1) {
-                    positionClass = "left-[35%] -translate-x-1/2"; // First left
-                  } else if (adjustedDistance === -2) {
-                    positionClass = "left-[25%] -translate-x-1/2"; // Second left
-                  } else if (adjustedDistance === 1) {
-                    positionClass = "left-[65%] -translate-x-1/2"; // First right
-                  } else if (adjustedDistance === 2) {
-                    positionClass = "left-[75%] -translate-x-1/2"; // Second right
+                  if (isMobile) {
+                    // Mobile positioning
+                    if (adjustedDistance === 0) {
+                      positionClass = "left-[50%] -translate-x-1/2"; // Center
+                    } else if (adjustedDistance === -1) {
+                      positionClass = "left-[20%] -translate-x-1/2"; // Left
+                    } else if (adjustedDistance === 1) {
+                      positionClass = "left-[80%] -translate-x-1/2"; // Right
+                    }
+                  } else {
+                    // Desktop positioning
+                    if (adjustedDistance === 0) {
+                      positionClass = "left-[50%] -translate-x-1/2"; // Center
+                    } else if (adjustedDistance === -1) {
+                      positionClass = "left-[35%] -translate-x-1/2"; // First left
+                    } else if (adjustedDistance === -2) {
+                      positionClass = "left-[25%] -translate-x-1/2"; // Second left
+                    } else if (adjustedDistance === 1) {
+                      positionClass = "left-[65%] -translate-x-1/2"; // First right
+                    } else if (adjustedDistance === 2) {
+                      positionClass = "left-[75%] -translate-x-1/2"; // Second right
+                    }
                   }
+
+                  // Calculate sizes based on device
+                  const activeWidth = isMobile ? 130 : 160;
+                  const activeHeight = isMobile ? 130 : 160;
+                  const inactiveWidth = isMobile ? 50 : 90;
+                  const inactiveHeight = isMobile ? 50 : 90;
 
                   return (
                     <div
@@ -160,8 +183,8 @@ const UserVoices: React.FC = () => {
                       <div
                         className={`bg-white rounded-full overflow-hidden transition-all duration-300 ${isActive ? "p-3 border-4 border-[#0F766E]" : ""}`}
                         style={{
-                          width: isActive ? 160 : 90,
-                          height: isActive ? 160 : 90,
+                          width: isActive ? activeWidth : inactiveWidth,
+                          height: isActive ? activeHeight : inactiveHeight,
                         }}
                         onClick={() => goToSlide(idx)}
                       >

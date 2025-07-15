@@ -146,16 +146,47 @@ const Notices: React.FC = () => {
     }
   };
 
-  const openFileInNewTab = async (fileStoreId?: string): Promise<void> => {
+  const openFileInNewTab = async (
+    fileStoreId?: string,
+    title?: string
+  ): Promise<void> => {
     const blob = await fetchFile(fileStoreId);
     if (!blob) return;
+    const isIOS =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) && !("MSStream" in window);
 
-    const url = window.URL.createObjectURL(blob);
-    window.open(url, "_blank");
+    if (isIOS) {
+      // For iOS, create a temporary anchor element and trigger a download
+      // Get filename from content-disposition header or create a default one
+      const fileName = `${title}.pdf`;
 
-    setTimeout(() => {
-      window.URL.revokeObjectURL(url);
-    }, 5000);
+      // Create a temporary anchor element
+      const a = document.createElement("a");
+      a.style.display = "none";
+      document.body.appendChild(a);
+
+      // Create a download URL and set attributes
+      const url = window.URL.createObjectURL(blob);
+      a.href = url;
+      a.download = fileName;
+
+      // Programmatically click the link to trigger download
+      a.click();
+
+      // Clean up
+      setTimeout(() => {
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }, 100);
+    } else {
+      // For other devices, use the standard window.open method
+      const url = window.URL.createObjectURL(blob);
+      window.open(url, "_blank");
+
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+      }, 5000);
+    }
   };
 
   const downloadFile = async (
@@ -257,7 +288,7 @@ const Notices: React.FC = () => {
                       className="text-blue-600 hover:underline"
                       onClick={(e) => {
                         e.preventDefault();
-                        openFileInNewTab(notice.fileStoreId);
+                        openFileInNewTab(notice.fileStoreId, notice.title);
                       }}
                     >
                       {notice.title}
@@ -301,7 +332,7 @@ const Notices: React.FC = () => {
                     className="text-blue-600 hover:underline"
                     onClick={(e) => {
                       e.preventDefault();
-                      openFileInNewTab(notice.fileStoreId);
+                      openFileInNewTab(notice.fileStoreId, notice.title);
                     }}
                   >
                     {notice.title}
