@@ -63,7 +63,7 @@ const QuestionsSection: React.FC = () => {
               {t("CASE_SEARCH")}
             </Link>
             {t("WHERE_CHECK_HEARING_DETAILS_ANSWER_2")}
-            <strong>{t("VIEW_DETAILS")}</strong>
+            <span className="font-bold">{t("VIEW_DETAILS")}</span>
             {t("WHERE_CHECK_HEARING_DETAILS_ANSWER_3")}
           </p>
         </div>
@@ -156,48 +156,54 @@ const QuestionsSection: React.FC = () => {
           <p className="mb-4">List of documents required for e-filing:</p>
           <ol className="list-decimal pl-8 space-y-4">
             <li>
-              <strong>Proof of identity:</strong> PAN Card, Aadhar card,
-              Passport, Driving license, Voter ID, Ration card or Bank passbook
+              <span className="font-bold">Proof of identity:</span> PAN Card,
+              Aadhar card, Passport, Driving license, Voter ID, Ration card or
+              Bank passbook
             </li>
             <li>
-              <strong>Dishonored Cheque:</strong> A copy of the dishonored
-              cheque on the basis which this case is being filed
+              <span className="font-bold">Dishonored Cheque:</span> A copy of
+              the dishonored cheque on the basis which this case is being filed
             </li>
             <li>
-              <strong>Cheque Return Memo:</strong> The document received from
-              the bank that has the information that the cheque has bounced
+              <span className="font-bold">Cheque Return Memo:</span> The
+              document received from the bank that has the information that the
+              cheque has bounced
             </li>
             <li>
-              <strong>Legal Demand Notice:</strong> Any intimation you provided
-              to the respondent to informing them that their cheque had bounced
-              and they still owed you the cheque amount
+              <span className="font-bold">Legal Demand Notice:</span> Any
+              intimation you provided to the respondent to informing them that
+              their cheque had bounced and they still owed you the cheque amount
             </li>
             <li>
-              <strong>
+              <span className="font-bold">
                 Postal acknowledgement (Issue of legal demand notice):
-              </strong>{" "}
+              </span>{" "}
               The acknowledgement provided by the postal department when sending
               the letter/RPAD/anything else containing legal demand notice (see
               number 4 in the list) to the accused
             </li>
             <li>
-              <strong>
+              <span className="font-bold">
                 Postal acknowledgement (Delivery of legal demand notice):
-              </strong>{" "}
+              </span>{" "}
               The acknowledgement provided by the postal department when the
               letter/RPAD/anything else containing legal demand notice (see
               number 4 in the list) is received by the accused
             </li>
             <li>
-              <strong>Affidavit under section 223 of BNSS:</strong> Affidavit
-              under section 223 of BNSS must be there in the infobox at the
-              start of filing
+              <span className="font-bold">
+                Affidavit under section 223 of BNSS:
+              </span>{" "}
+              Affidavit under section 223 of BNSS must be there in the infobox
+              at the start of filing
             </li>
             <li>
-              <strong>Any other document you deem necessary:</strong> Please
-              include any additional documents you believe will strengthen your
-              case and that will be crucial in substantiating your claims when
-              filing the complaint
+              <span className="font-bold">
+                Any other document you deem necessary:
+              </span>{" "}
+              Please include any additional documents you believe will
+              strengthen your case and that will be crucial in substantiating
+              your claims when filing the complaint
             </li>
           </ol>
         </div>
