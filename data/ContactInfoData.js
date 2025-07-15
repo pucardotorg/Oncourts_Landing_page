@@ -102,56 +102,64 @@ export const getFaqs = (t) => [
         <p>{t("LIST_OF_DOCUMENTS_REQUIRED_FOR_E_FILING")}</p>
         <ol className="list-decimal pl-6 mt-2 space-y-1">
           <li>
-            <span className="font-medium">{t("PROOF_OF_IDENTITY")}</span>{" "}
-            <span className="text-lg font-normal">
-              {t("ID_DOCUMENTS_LIST")}
-            </span>
+            <span className="font-semibold text-[#3A3A3A]">
+              {t("PROOF_OF_IDENTITY")}
+            </span>{" "}
+            <span className="font-normal">{t("ID_DOCUMENTS_LIST")}</span>
           </li>
           <li>
-            <span className="font-medium">{t("DISHONORED_CHEQUE")}</span>{" "}
-            <span className="text-lg font-normal">
+            <span className="font-semibold text-[#3A3A3A]">
+              {t("DISHONORED_CHEQUE")}
+            </span>{" "}
+            <span className="font-normal">
               {t("DISHONORED_CHEQUE_DESCRIPTION")}
             </span>
           </li>
           <li>
-            <span className="font-medium">{t("CHEQUE_RETURN_MEMO")}</span>{" "}
-            <span className="text-lg font-normal">
+            <span className="font-semibold text-[#3A3A3A]">
+              {t("CHEQUE_RETURN_MEMO")}
+            </span>{" "}
+            <span className="font-normal">
               {t("CHEQUE_RETURN_MEMO_DESCRIPTION")}
             </span>
           </li>
           <li>
-            <span className="font-medium">{t("LEGAL_DEMAND_NOTICE")}</span>{" "}
-            <span className="text-lg font-normal">
+            <span className="font-semibold text-[#3A3A3A]">
+              {t("LEGAL_DEMAND_NOTICE")}
+            </span>{" "}
+            <span className="font-normal">
               {t("LEGAL_DEMAND_NOTICE_DESCRIPTION")}
             </span>
           </li>
           <li>
-            <span className="font-medium">
+            <span className="font-semibold text-[#3A3A3A]">
               {t("POSTAL_ACKNOWLEDGEMENT_ISSUE")}
             </span>{" "}
-            <span className="text-lg font-normal">
+            <span className="font-normal">
               {t("POSTAL_ACKNOWLEDGEMENT_ISSUE_DESCRIPTION")}
             </span>
           </li>
           <li>
-            <span className="font-medium">
+            <span className="font-semibold text-[#3A3A3A]">
               {t("POSTAL_ACKNOWLEDGEMENT_DELIVERY")}
             </span>{" "}
-            <span className="text-lg font-normal">
+            <span className="font-normal">
               {t("POSTAL_ACKNOWLEDGEMENT_DELIVERY_DESCRIPTION")}
             </span>
           </li>
           <li>
-            <span className="font-medium">
+            <span className="font-semibold text-[#3A3A3A]">
               {t("AFFIDAVIT_UNDER_SECTION_223")}
             </span>{" "}
-            <span className="text-lg font-normal">
+            <span className="font-normal">
               {t("AFFIDAVIT_UNDER_SECTION_223_DESCRIPTION")}
             </span>
           </li>
           <li>
-            <span className="font-medium">{t("ANY_OTHER_DOCUMENT")}</span>{" "}
-            <span className="text-lg font-normal">
+            <span className="font-semibold text-[#3A3A3A]">
+              {t("ANY_OTHER_DOCUMENT")}
+            </span>{" "}
+            <span className="font-normal">
               {t("ANY_OTHER_DOCUMENT_DESCRIPTION")}
             </span>
           </li>
