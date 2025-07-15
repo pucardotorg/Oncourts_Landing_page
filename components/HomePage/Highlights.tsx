@@ -24,14 +24,16 @@ const HighlightItem: React.FC<HighlightItemProps> = ({
   label,
   isMobile = false,
 }) => (
-  <div className="flex flex-col items-center justify-center px-4 text-center">
+  <div
+    className={`flex flex-col items-center justify-center px-4 text-center  ${isMobile ? "gap-[5px]" : "gap-[17.44px] py-[36px] border-r border-[#E2E8F0] last:border-r-0"}`}
+  >
     <span
-      className={`font-noto font-bold tracking-[-2.41px] text-center text-[#0F766E] self-stretch ${isMobile ? "text-[48px] leading-[78px]" : "text-[72.2755px] leading-[78px]"}`}
+      className={`text-center tracking-[-2.409px] font-bold text-[#0F766E] font-noto ${isMobile ? "text-[48px] leading-[78.298px] " : "text-[72.275px] leading-[78.298px]"}`}
     >
       {value || "\u00A0"}
     </span>
     <span
-      className={`font-roboto font-medium tracking-[-0.26px] text-center mt-4 text-[#0F172A] ${isMobile ? "text-[20px] leading-[24px]" : "text-[26px] leading-[30px]"}`}
+      className={`text-center text-[#0F172A] font-roboto font-[500] tracking-[-0.2px] ${isMobile ? "text-[20px] leading-[24px]" : "text-[26px] leading-[30px]"}`}
     >
       {label}
     </span>
@@ -121,7 +123,7 @@ const Highlights: React.FC = () => {
             {t("HIGHLIGHTS")}
           </h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {highlights.map((item, index) => (
             <HighlightItem
               key={index}

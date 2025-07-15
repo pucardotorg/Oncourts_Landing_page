@@ -158,7 +158,7 @@ const VideoTutorials: React.FC = () => {
                     </div>
 
                     <div className="p-4">
-                      <h3 className="font-roboto not-italic font-normal text-[15px] md:text-[26px] leading-[18px] md:leading-[32px] tracking-[-0.26px] text-[#0F172A]">
+                      <h3 className="font-roboto not-italic font-normal text-[15px] md:text-[26px] leading-[18px] md:leading-[32px] tracking-[-0.26px] text-[#0F172A] whitespace-nowrap overflow-hidden text-ellipsis">
                         {video.title}
                       </h3>
                     </div>
