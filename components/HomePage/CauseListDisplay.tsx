@@ -73,18 +73,18 @@ function CauseListDisplay({ date, pdfUrl, onDownload }: CauseListDisplayProps) {
       <div
         className={`flex flex-col items-center bg-white overflow-hidden ${isMobile ? "h-[253px] w-[95%]" : "w-[436px] h-[253px]"}`}
       >
-        <div className=" h-[194px] p-2 aspect-[1.64] relative bg-white">
+        <div className=" h-[194px] p-2 aspect-[1.64] relative bg-white w-[100%] border border-[#E2E8F0] rounded-[4px]">
           {pdfUrl ? (
             <>
               <PdfPreview
                 fileUrl={pdfUrl}
-                height={isMobile ? "194px" : "194px"}
+                height={"178px"}
                 width={isMobile ? "90%" : "436px"}
                 scrollable={false}
               />
               <button
                 onClick={() => setShowPreview(true)}
-                className={`absolute bottom-0 z-10 ${isMobile ? "right-8" : "right-6"}`}
+                className={`absolute bottom-3 z-10 right-3 `}
               >
                 <svgIcons.PreviewIcon />
               </button>
@@ -95,8 +95,8 @@ function CauseListDisplay({ date, pdfUrl, onDownload }: CauseListDisplayProps) {
             </div>
           )}
         </div>
-        <div className="flex items-center justify-between w-full py-3 border-t border-gray-100">
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between w-full py-3 border-t border-gray-100 bg-[#F0FDFA]">
+          <div className="flex items-center gap-2 h-[42px]">
             <span className="flex-shrink-0">
               <svgIcons.SmallFileIcon />
             </span>
@@ -107,7 +107,7 @@ function CauseListDisplay({ date, pdfUrl, onDownload }: CauseListDisplayProps) {
           {pdfUrl && (
             <button
               onClick={onDownload}
-              className="flex-shrink-0 text-teal-600 hover:text-teal-700 p-2 rounded-full hover:bg-teal-50 transition-colors"
+              className={`flex-shrink-0 text-teal-600 hover:text-teal-700 p-2  flex items-center justify-center bg-[white] px-[12px] border border-[#E2E8F0] hover:bg-teal-50 transition-colors ${isMobile ? "rounded-[12px]" : "rounded-[4px]"}`}
             >
               <svgIcons.SmallDownloadIcon />
             </button>
