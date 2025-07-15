@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 
 interface FullscreenButtonProps {
   url: string;
@@ -8,6 +9,7 @@ interface FullscreenButtonProps {
   size?: number;
   className?: string;
   videoId?: string;
+  imageAlt?: string;
 }
 
 const FullscreenButton: React.FC<FullscreenButtonProps> = ({
@@ -18,55 +20,63 @@ const FullscreenButton: React.FC<FullscreenButtonProps> = ({
   size = 80,
   className = "",
   videoId,
+  imageAlt = "Fullscreen content",
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const originalVideoRef = useRef<HTMLIFrameElement | null>(null);
   
+  // Determine content type (video or image)
+  const isYouTubeVideo = videoId || url.includes("youtube.com") || url.includes("youtu.be");
+  
   // Extract videoId from URL if not provided directly
   const extractedVideoId = videoId || (() => {
-    if (!url) return "";
+    if (!url || !isYouTubeVideo) return "";
     const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i);
     return match ? match[1] : "";
   })();
   
-  // Find the original video iframe when fullscreen button is clicked
+  // Handle fullscreen button click
   const handleFullscreenClick = () => {
-    // Find the closest iframe element (the original YouTube video)
-    const parentElement = document.querySelector(`iframe[src*="${extractedVideoId}"]`) as HTMLIFrameElement | null;
-    if (parentElement) {
-      originalVideoRef.current = parentElement;
-      
-      // Store the original src to restore it later
-      originalVideoRef.current.dataset.originalSrc = originalVideoRef.current.src;
-      
-      // Pause the original video by replacing the src with a paused version
-      // This effectively stops the video from playing
-      originalVideoRef.current.src = "about:blank";
+    if (isYouTubeVideo) {
+      // Find the closest iframe element (the original YouTube video)
+      const parentElement = document.querySelector(`iframe[src*="${extractedVideoId}"]`) as HTMLIFrameElement | null;
+      if (parentElement) {
+        originalVideoRef.current = parentElement;
+        
+        // Store the original src to restore it later
+        originalVideoRef.current.dataset.originalSrc = originalVideoRef.current.src;
+        
+        // Pause the original video by replacing the src with a paused version
+        // This effectively stops the video from playing
+        originalVideoRef.current.src = "about:blank";
+      }
     }
     
     setIsModalOpen(true);
   };
   
-  // Restore the original video when modal is closed
+  // Handle modal close
   const handleCloseModal = () => {
     setIsModalOpen(false);
     
-    // Restore the original video src after a short delay
-    setTimeout(() => {
-      if (originalVideoRef.current && originalVideoRef.current.dataset.originalSrc) {
-        originalVideoRef.current.src = originalVideoRef.current.dataset.originalSrc;
-      }
-    }, 100);
+    if (isYouTubeVideo) {
+      // Restore the original video src after a short delay
+      setTimeout(() => {
+        if (originalVideoRef.current && originalVideoRef.current.dataset.originalSrc) {
+          originalVideoRef.current.src = originalVideoRef.current.dataset.originalSrc;
+        }
+      }, 100);
+    }
   };
   
   // Clean up if component unmounts while modal is open
   useEffect(() => {
     return () => {
-      if (isModalOpen && originalVideoRef.current && originalVideoRef.current.dataset.originalSrc) {
+      if (isModalOpen && isYouTubeVideo && originalVideoRef.current && originalVideoRef.current.dataset.originalSrc) {
         originalVideoRef.current.src = originalVideoRef.current.dataset.originalSrc;
       }
     };
-  }, [isModalOpen]);
+  }, [isModalOpen, isYouTubeVideo]);
   return (
     <>
       <button
@@ -101,13 +111,28 @@ const FullscreenButton: React.FC<FullscreenButtonProps> = ({
       {isModalOpen && (
         <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
           <div className="relative w-full h-full">
-            <iframe
-              className="w-full h-full"
-              src={`https://www.youtube.com/embed/${extractedVideoId}?autoplay=1&rel=0`}
-              title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
+            {isYouTubeVideo ? (
+              <iframe
+                className="w-full h-full"
+                src={`https://www.youtube.com/embed/${extractedVideoId}?autoplay=1&rel=0`}
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="relative w-full h-full">
+                  <Image 
+                    src={url} 
+                    alt={imageAlt}
+                    fill
+                    className="object-contain"
+                    sizes="100vw"
+                    priority
+                  />
+                </div>
+              </div>
+            )}
             <button
               className="absolute top-4 right-4 text-white hover:text-gray-300 focus:outline-none bg-black bg-opacity-50 p-2 rounded-full"
               onClick={handleCloseModal}
