@@ -84,115 +84,38 @@ const MobileHeader = () => {
       </header>
 
       {isMenuOpen && (
-        <div className="fixed top-[73px] left-0 w-full h-[calc(100vh-73px)] bg-white z-50 overflow-y-auto -mt-[1px]">
-          <nav className="py-4">
-            <Link
-              href="/"
-              className="mx-[10px] block px-6 py-3 text-[20px] text-[#3A3A3A] font-roboto"
-              onClick={handleNavigation}
-            >
-              {t("HOME")}
-            </Link>
-
-            <div className="flex flex-col center justify-center">
-              <button
-                onClick={() => toggleSection("ABOUT_US")}
-                className={`mx-[10px] px-6 py-3 text-left text-[20px] text-[#3A3A3A] font-roboto flex justify-between items-center hover:border-opacity-100 ${expandedSection === "ABOUT_US" ? "border-b border-[#00A7A7] border-opacity-0" : ""}`}
+        <div className="fixed top-[73px] left-0 w-full h-[calc(100vh-73px)] z-50 overflow-hidden">
+          <div className="h-full overflow-y-auto">
+            <nav className="py-4 bg-white">
+              <Link
+                href="/"
+                className="mx-[10px] block px-6 py-3 text-[20px] text-[#3A3A3A] font-roboto"
+                onClick={handleNavigation}
               >
-                <span
-                  className={`${expandedSection === "ABOUT_US" ? "text-[#0F766E]" : ""}`}
-                >
-                  {t("ABOUT_US")}
-                </span>
-                <span className={`text-[#00A7A7]`}>
-                  {expandedSection === "ABOUT_US" ? (
-                    <svgIcons.UpArrowIcon fill="#0F766E" />
-                  ) : (
-                    <svgIcons.DownArrowIcon />
-                  )}
-                </span>
-              </button>
-              {expandedSection === "ABOUT_US" && (
-                <div className="">
-                  {MENU_ITEMS.ABOUT_US.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="block px-10 py-3 text-[18px] text-[#3A3A3A] font-roboto"
-                      onClick={handleNavigation}
-                    >
-                      {t(item.label)}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+                {t("HOME")}
+              </Link>
 
-            <div className="flex flex-col center justify-center">
-              <button
-                onClick={() => toggleSection("SERVICES")}
-                className={`mx-[10px] px-6 py-3 text-left text-[20px] text-[#3A3A3A] font-roboto flex justify-between items-center hover:border-opacity-100 ${expandedSection === "SERVICES" ? "border-b border-[#00A7A7]" : ""}`}
-              >
-                <span
-                  className={`${expandedSection === "SERVICES" ? "text-[#0F766E]" : ""}`}
+              <div className="flex flex-col center justify-center">
+                <button
+                  onClick={() => toggleSection("ABOUT_US")}
+                  className={`mx-[10px] px-6 py-3 text-left text-[20px] text-[#3A3A3A] font-roboto flex justify-between items-center hover:border-opacity-100 ${expandedSection === "ABOUT_US" ? "border-b border-[#00A7A7] border-opacity-0" : ""}`}
                 >
-                  {t("SERVICES")}
-                </span>
-                <span className={`text-[#00A7A7]`}>
-                  {expandedSection === "SERVICES" ? (
-                    <svgIcons.UpArrowIcon fill="#0F766E" />
-                  ) : (
-                    <svgIcons.DownArrowIcon />
-                  )}
-                </span>
-              </button>
-              {expandedSection === "SERVICES" && (
-                <div className="">
-                  {MENU_ITEMS.SERVICES.map((item) =>
-                    item.subItems ? (
-                      <div
-                        key={item.label}
-                        className="flex flex-col center justify-center"
-                      >
-                        <button
-                          onClick={() => toggleSubItem(item.label)}
-                          className={`px-[30px] mx-[10px] py-3 text-[18px] text-[#3A3A3A] font-roboto flex justify-between items-center ${expandedSubItems.includes(item.label) ? "border-b border-[#00A7A7]" : ""}`}
-                        >
-                          <span
-                            className={`${expandedSubItems.includes(item.label) ? "text-[#0F766E]" : ""}`}
-                          >
-                            {t(item.label)}
-                          </span>
-                          <span className="text-[#00A7A7]">
-                            {expandedSubItems.includes(item.label) ? (
-                              <svgIcons.UpArrowIcon fill="#0F766E" />
-                            ) : (
-                              <svgIcons.DownArrowIcon />
-                            )}
-                          </span>
-                        </button>
-                        {expandedSubItems.includes(item.label) && (
-                          <div className="mx-[10px] pl-[0px]">
-                            {item.subItems.map((subItem) => (
-                              <Link
-                                key={subItem.href}
-                                href={subItem.href}
-                                className="block px-10 py-3 text-[18px] text-[#3A3A3A] font-roboto"
-                                target={subItem.target}
-                                rel={
-                                  subItem.target === "_blank"
-                                    ? "noopener noreferrer"
-                                    : undefined
-                                }
-                                onClick={handleNavigation}
-                              >
-                                {t(subItem.label)}
-                              </Link>
-                            ))}
-                          </div>
-                        )}
-                      </div>
+                  <span
+                    className={`${expandedSection === "ABOUT_US" ? "text-[#0F766E]" : ""}`}
+                  >
+                    {t("ABOUT_US")}
+                  </span>
+                  <span className={`text-[#00A7A7]`}>
+                    {expandedSection === "ABOUT_US" ? (
+                      <svgIcons.UpArrowIcon fill="#0F766E" />
                     ) : (
+                      <svgIcons.DownArrowIcon />
+                    )}
+                  </span>
+                </button>
+                {expandedSection === "ABOUT_US" && (
+                  <div className="">
+                    {MENU_ITEMS.ABOUT_US.map((item) => (
                       <Link
                         key={item.href}
                         href={item.href}
@@ -201,61 +124,141 @@ const MobileHeader = () => {
                       >
                         {t(item.label)}
                       </Link>
-                    )
-                  )}
-                </div>
-              )}
-            </div>
+                    ))}
+                  </div>
+                )}
+              </div>
 
-            <div className="flex flex-col center justify-center">
-              <button
-                onClick={() => toggleSection("SUPPORT")}
-                className={`mx-[10px] px-6 py-3 text-left text-[20px] text-[#3A3A3A] font-roboto flex justify-between items-center hover:border-opacity-100 ${expandedSection === "SUPPORT" ? "border-b border-[#00A7A7] border-opacity-0" : ""}`}
-              >
-                <span
-                  className={`${expandedSection === "SUPPORT" ? "text-[#0F766E]" : ""}`}
+              <div className="flex flex-col center justify-center">
+                <button
+                  onClick={() => toggleSection("SERVICES")}
+                  className={`mx-[10px] px-6 py-3 text-left text-[20px] text-[#3A3A3A] font-roboto flex justify-between items-center hover:border-opacity-100 ${expandedSection === "SERVICES" ? "border-b border-[#00A7A7]" : ""}`}
                 >
-                  {t("SUPPORT")}
-                </span>
-                <span className={`text-[#00A7A7]`}>
-                  {expandedSection === "SUPPORT" ? (
-                    <svgIcons.UpArrowIcon fill="#0F766E" />
-                  ) : (
-                    <svgIcons.DownArrowIcon />
-                  )}
-                </span>
-              </button>
-              {expandedSection === "SUPPORT" && (
-                <div className="">
-                  {MENU_ITEMS.SUPPORT.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="block px-10 py-3 text-[18px] text-[#3A3A3A] font-roboto"
-                      onClick={handleNavigation}
-                    >
-                      {t(item.label)}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-            <Link
-              href="/notices"
-              className="mx-[10px] block px-6 py-3 text-[20px] text-[#3A3A3A] font-roboto"
-              onClick={handleNavigation}
-            >
-              {t("NOTICES")}
-            </Link>
+                  <span
+                    className={`${expandedSection === "SERVICES" ? "text-[#0F766E]" : ""}`}
+                  >
+                    {t("SERVICES")}
+                  </span>
+                  <span className={`text-[#00A7A7]`}>
+                    {expandedSection === "SERVICES" ? (
+                      <svgIcons.UpArrowIcon fill="#0F766E" />
+                    ) : (
+                      <svgIcons.DownArrowIcon />
+                    )}
+                  </span>
+                </button>
+                {expandedSection === "SERVICES" && (
+                  <div className="">
+                    {MENU_ITEMS.SERVICES.map((item) =>
+                      item.subItems ? (
+                        <div
+                          key={item.label}
+                          className="flex flex-col center justify-center"
+                        >
+                          <button
+                            onClick={() => toggleSubItem(item.label)}
+                            className={`px-[30px] mx-[10px] py-3 text-[18px] text-[#3A3A3A] font-roboto flex justify-between items-center ${expandedSubItems.includes(item.label) ? "border-b border-[#00A7A7]" : ""}`}
+                          >
+                            <span
+                              className={`${expandedSubItems.includes(item.label) ? "text-[#0F766E]" : ""}`}
+                            >
+                              {t(item.label)}
+                            </span>
+                            <span className="text-[#00A7A7]">
+                              {expandedSubItems.includes(item.label) ? (
+                                <svgIcons.UpArrowIcon fill="#0F766E" />
+                              ) : (
+                                <svgIcons.DownArrowIcon />
+                              )}
+                            </span>
+                          </button>
+                          {expandedSubItems.includes(item.label) && (
+                            <div className="mx-[10px] pl-[0px]">
+                              {item.subItems.map((subItem) => (
+                                <Link
+                                  key={subItem.href}
+                                  href={subItem.href}
+                                  className="block px-10 py-3 text-[18px] text-[#3A3A3A] font-roboto"
+                                  target={subItem.target}
+                                  rel={
+                                    subItem.target === "_blank"
+                                      ? "noopener noreferrer"
+                                      : undefined
+                                  }
+                                  onClick={handleNavigation}
+                                >
+                                  {t(subItem.label)}
+                                </Link>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="block px-10 py-3 text-[18px] text-[#3A3A3A] font-roboto"
+                          onClick={handleNavigation}
+                        >
+                          {t(item.label)}
+                        </Link>
+                      )
+                    )}
+                  </div>
+                )}
+              </div>
 
-            <Link
-              href="/"
-              className="mx-[10px] block px-6 py-3 text-[20px] text-[#3A3A3A] font-roboto"
-              onClick={handleNavigation}
-            >
-              {t("DASHBOARD")}
-            </Link>
-          </nav>
+              <Link
+                href="/notices"
+                className="mx-[10px] block px-6 py-3 text-[20px] text-[#3A3A3A] font-roboto"
+                onClick={handleNavigation}
+              >
+                {t("NOTICES")}
+              </Link>
+
+              <Link
+                href="/"
+                className="mx-[10px] block px-6 py-3 text-[20px] text-[#3A3A3A] font-roboto"
+                onClick={handleNavigation}
+              >
+                {t("DASHBOARD")}
+              </Link>
+              <div className="flex flex-col center justify-center">
+                <button
+                  onClick={() => toggleSection("SUPPORT")}
+                  className={`mx-[10px] px-6 py-3 text-left text-[20px] text-[#3A3A3A] font-roboto flex justify-between items-center hover:border-opacity-100 ${expandedSection === "SUPPORT" ? "border-b border-[#00A7A7] border-opacity-0" : ""}`}
+                >
+                  <span
+                    className={`${expandedSection === "SUPPORT" ? "text-[#0F766E]" : ""}`}
+                  >
+                    {t("SUPPORT")}
+                  </span>
+                  <span className={`text-[#00A7A7]`}>
+                    {expandedSection === "SUPPORT" ? (
+                      <svgIcons.UpArrowIcon fill="#0F766E" />
+                    ) : (
+                      <svgIcons.DownArrowIcon />
+                    )}
+                  </span>
+                </button>
+                {expandedSection === "SUPPORT" && (
+                  <div className="">
+                    {MENU_ITEMS.SUPPORT.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block px-10 py-3 text-[18px] text-[#3A3A3A] font-roboto"
+                        onClick={handleNavigation}
+                      >
+                        {t(item.label)}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </nav>
+            <div className="h-[30px] bg-[#E5E5E5]"></div>
+          </div>
         </div>
       )}
     </>
