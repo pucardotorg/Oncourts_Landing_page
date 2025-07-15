@@ -12,6 +12,8 @@ interface QuestionProps {
   isOpen: boolean;
   onToggle: () => void;
   isMobile?: boolean;
+  id: number;
+  setQuestionRef: (el: HTMLDivElement | null, id: number) => void;
 }
 
 const Question: React.FC<QuestionProps> = ({
@@ -20,36 +22,89 @@ const Question: React.FC<QuestionProps> = ({
   isOpen,
   onToggle,
   isMobile,
-}) => (
-  <div className="border-b border-[#CBD5E1]">
-    <button className="w-full py-6 text-left" onClick={onToggle}>
-      <div className="flex items-start justify-between">
-        <span
-          className={`font-sans font-medium tracking-[0.01em] text-[#3A3A3A] pr-8 ${isMobile ? "text-[20px] leading-[24px]" : "text-[26px] leading-[36px]"}`}
-        >
-          {question}
-        </span>
-        <span className={`flex-shrink-0  ${isMobile ? "" : "mt-[0.5em]"}`}>
-          {isOpen ? <svgIcons.UpArrowIcon /> : <svgIcons.DownArrowIcon />}
-        </span>
-      </div>
-    </button>
-    {isOpen && (
-      <div className="pb-6">
-        <div
-          className={`font-sans  tracking-[0.01em] text-[#64748B] ${isMobile ? "text-[15px] leading-[18px]" : "text-[20px] leading-[28px]"}`}
-        >
-          {answer}
+  id,
+  setQuestionRef,
+}) => {
+  return (
+    <div
+      ref={(el) => setQuestionRef(el, id)}
+      className="border-b border-[#CBD5E1]"
+    >
+      <button
+        className="w-full py-6 text-left"
+        onClick={(e) => {
+          e.preventDefault();
+          onToggle();
+        }}
+      >
+        <div className="flex items-start justify-between">
+          <span
+            className={`font-sans font-medium tracking-[0.01em] text-[#3A3A3A] pr-8 ${isMobile ? "text-[20px] leading-[24px]" : "text-[26px] leading-[36px]"}`}
+          >
+            {question}
+          </span>
+          <span className={`flex-shrink-0  ${isMobile ? "" : "mt-[0.5em]"}`}>
+            {isOpen ? <svgIcons.UpArrowIcon /> : <svgIcons.DownArrowIcon />}
+          </span>
+        </div>
+      </button>
+      <div
+        className={`overflow-hidden transition-all duration-300 ${isOpen ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"}`}
+      >
+        <div className="pb-6">
+          <div
+            className={`font-sans tracking-[0.01em] text-[#64748B] ${isMobile ? "text-[15px] leading-[18px]" : "text-[20px] leading-[28px]"}`}
+          >
+            {answer}
+          </div>
         </div>
       </div>
-    )}
-  </div>
-);
+    </div>
+  );
+};
 
 const QuestionsSection: React.FC = () => {
   const { t } = useSafeTranslation();
   const [openQuestionId, setOpenQuestionId] = useState<number | null>(null);
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const questionsRef = React.useRef<{ [key: number]: HTMLDivElement | null }>(
+    {}
+  );
+
+  const handleQuestionToggle = (id: number) => {
+    const isClosing = openQuestionId === id;
+    setOpenQuestionId(isClosing ? null : id);
+
+    setTimeout(() => {
+      const element = questionsRef.current[id];
+      if (!isClosing && element) {
+        const rect = element.getBoundingClientRect();
+        const scrollPadding = 80;
+        const scrollY = window.scrollY;
+        const elementTop = scrollY + rect.top;
+        const elementBottom = elementTop + element.scrollHeight;
+
+        const viewportTop = scrollY;
+        const viewportBottom = scrollY + window.innerHeight;
+
+        const isFullyVisible =
+          elementTop >= viewportTop && elementBottom <= viewportBottom;
+
+        if (!isFullyVisible) {
+          const maxScrollable = document.body.scrollHeight - window.innerHeight;
+          const targetScroll = Math.min(
+            elementTop - scrollPadding,
+            maxScrollable
+          );
+
+          window.scrollTo({
+            top: targetScroll,
+            behavior: "smooth",
+          });
+        }
+      }
+    }, 350);
+  };
 
   const questions = [
     {
@@ -284,12 +339,12 @@ const QuestionsSection: React.FC = () => {
           {questions.map((q) => (
             <Question
               key={q.id}
+              id={q.id}
               question={q.question}
               answer={q.answer}
               isOpen={openQuestionId === q.id}
-              onToggle={() =>
-                setOpenQuestionId(openQuestionId === q.id ? null : q.id)
-              }
+              onToggle={() => handleQuestionToggle(q.id)}
+              setQuestionRef={(el, id) => (questionsRef.current[id] = el)}
               isMobile={isMobile}
             />
           ))}
