@@ -52,13 +52,16 @@ const InfoBanner: React.FC = () => {
 
   const message = messages?.[0];
   const MessageContent = () => (
-    <div className="flex items-center space-x-2 px-4">
-      <svgIcons.ClockIcon2 width={isMobile ? "22" : "32"} />
-      <h4
-        className={`text-[ #3A3A3A] font-sans font-medium  tracking-[0.01em] text-center ${isMobile ? "text-[15px] leading-[18px]" : "text-[20px] leading-[28px]"}`}
-      >
-        {message}
-      </h4>
+    <div className="flex items-center">
+      <div className="flex items-center space-x-2 px-4">
+        <svgIcons.ClockIcon2 width={isMobile ? "22" : "32"} />
+        <h4
+          className={`text-[#3A3A3A] font-sans font-medium tracking-[0.01em] text-center ${isMobile ? "text-[15px] leading-[18px]" : "text-[20px] leading-[28px]"}`}
+        >
+          {message}
+        </h4>
+      </div>
+      <div className="h-[28px] w-[1px] bg-[#CBD5E1]"></div>
     </div>
   );
 
@@ -68,7 +71,7 @@ const InfoBanner: React.FC = () => {
 
   return (
     <div
-      className={`flex items-center  bg-[#F0FDFA] border-b border-[#E5E7EB] py-2 overflow-hidden ${isMobile ? "h-[43px]" : "h-[68px]"}`}
+      className={`flex items-center bg-[#F0FDFA] border-b border-t border-[#E2E8F0] py-2 overflow-hidden ${isMobile ? "h-[43px]" : "h-[68px]"}`}
     >
       <div className="relative flex whitespace-nowrap animate-marquee">
         <MessageContent />

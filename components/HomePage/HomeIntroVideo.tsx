@@ -102,7 +102,7 @@ const HomeIntroVideo = () => {
 
                 {loginDropdownOpen && (
                   <div
-                    className="w-max absolute left-0 top-full mt-1 bg-white rounded-md shadow-lg z-[9999] min-w-[135px]"
+                    className="w-max absolute left-0 top-full mt-1 bg-white border-[2px] border-[#E2E8F0] rounded-[12px] shadow-lg z-[9999] min-w-[135px]"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <div
@@ -111,7 +111,7 @@ const HomeIntroVideo = () => {
                       onMouseLeave={() => setShowCitizenTooltip(false)}
                     >
                       <button
-                        className="px-4 py-3 text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-2 text-sm hover:text-[#0F766E] w-full"
+                        className="px-4 text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-2 text-sm hover:text-[#0F766E] w-full"
                         onClick={() => {
                           window.open(APP_URLS.CITIZEN_DRISTI, "_blank");
                           setLoginDropdownOpen(false);
@@ -120,8 +120,8 @@ const HomeIntroVideo = () => {
                         <span
                           className={
                             isMobile
-                              ? "text-center font-roboto font-medium text-[14px] leading-[20px] text-[#0F766E]"
-                              : "font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]"
+                              ? "py-3 border-b border-[#CBD5E1] text-center font-roboto font-medium text-[14px] leading-[20px] text-[#3A3A3A]"
+                              : "py-3 border-b border-[#CBD5E1] font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]"
                           }
                         >
                           {" "}
@@ -144,7 +144,7 @@ const HomeIntroVideo = () => {
                       onMouseLeave={() => setShowEmployeeTooltip(false)}
                     >
                       <button
-                        className="px-4 py-3 text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-2 text-sm hover:text-[#0F766E] w-full"
+                        className="px-4 text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-2 text-sm hover:text-[#0F766E] w-full"
                         onClick={() => {
                           window.open(APP_URLS.EMPLOYEE_USER, "_blank");
                           setLoginDropdownOpen(false);
@@ -153,8 +153,8 @@ const HomeIntroVideo = () => {
                         <span
                           className={
                             isMobile
-                              ? "text-center font-roboto font-medium text-[14px] leading-[20px] text-[#0F766E]"
-                              : "font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]"
+                              ? "py-3 text-center font-roboto font-medium text-[14px] leading-[20px] text-[#3A3A3A]"
+                              : "py-3 font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]"
                           }
                         >
                           {t("JUDGE_STAFF_LOGIN")}
