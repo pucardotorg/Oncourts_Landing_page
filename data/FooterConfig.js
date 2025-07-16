@@ -4,6 +4,8 @@ export const FooterConfig = {
     alt: "OnCourts Logo",
     width: 290,
     height: 182,
+    smallWidth: 111,
+    smallHeight: 70,
   },
   quickLinks: [
     { label: "ABOUT_ON_COURTS", url: "/about" },

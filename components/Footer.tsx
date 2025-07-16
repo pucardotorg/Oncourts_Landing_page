@@ -2,9 +2,12 @@ import Image from "next/image";
 import { FooterConfig } from "../data/FooterConfig"; // Ensure path is correct
 import Link from "next/link";
 import { useSafeTranslation } from "../hooks/useSafeTranslation";
+import { useMediaQuery } from "@mui/material";
 
 const Footer: React.FC = () => {
   const { t } = useSafeTranslation();
+  const isMobile = useMediaQuery("(max-width:640px)");
+
   return (
     <footer className="px-8 md:px-16 py-10 font-roboto bg-footerBg text-white w-full mt-auto">
       <div
@@ -13,12 +16,22 @@ const Footer: React.FC = () => {
       >
         <div>
           {/* Left Section: Logo */}
-          <div className="flex flex-col md:items-start">
+          <div
+            className={`flex flex-col md:items-start ${isMobile ? "w-[70%] border-b border-[#CBD5E1] py-4" : ""}`}
+          >
             <Image
               src={FooterConfig.logo.imageUrl}
               alt={FooterConfig.logo.alt}
-              width={FooterConfig.logo.width}
-              height={FooterConfig.logo.height}
+              width={
+                isMobile
+                  ? FooterConfig.logo.smallWidth
+                  : FooterConfig.logo.width
+              }
+              height={
+                isMobile
+                  ? FooterConfig.logo.smallHeight
+                  : FooterConfig.logo.height
+              }
             />
           </div>
         </div>
