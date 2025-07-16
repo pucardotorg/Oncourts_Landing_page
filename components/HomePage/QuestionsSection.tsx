@@ -126,28 +126,24 @@ const QuestionsSection: React.FC = () => {
     },
     {
       id: 1,
-      question:
-        "How can I view tasks I need to complete to move my case forward?",
+      question: t("TASKS_I_NEED_TO_COMPLETE_TO_CASE_FORWARD"),
       answer: (
         <div className="space-y-4 text-[#1E293B]">
           <p>
-            You can access pending tasks by logging into the{" "}
+            {t("TASKS_I_NEED_TO_COMPLETE_TO_CASE_FORWARD_ANS_PART_1")}
             <Link
               href={APP_URLS.CITIZEN_DRISTI}
               className="text-[#1D4ED8] hover:underline"
               target="_blank"
               rel="noopener noreferrer"
             >
-              ON Court portal
-            </Link>{" "}
-            and navigating to the &quot;All Pending Tasks&quot; section on the
-            right-side panel in the homepage. Alternatively, you can use the{" "}
+              {t("ON_COURT_PORTAL")}
+            </Link>
+            {t("TASKS_I_NEED_TO_COMPLETE_TO_CASE_FORWARD_ANS_PART_2")}
             <Link href="/search" className="text-[#1D4ED8] hover:underline">
-              Case Search
-            </Link>{" "}
-            section under the Services tab to review pending payments, such as
-            online fees or stamp and envelope submissions (applicable for RPAD
-            channel only) related notices, summons, or warrants.
+              {t("CASE_SEARCH")}
+            </Link>
+            {t("TASKS_I_NEED_TO_COMPLETE_TO_CASE_FORWARD_ANS_PART_3")}
           </p>
         </div>
       ),
