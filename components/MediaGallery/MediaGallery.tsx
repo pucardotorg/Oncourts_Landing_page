@@ -1,37 +1,68 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
-import { galleryImages, GalleryImage } from "../../data/GalleryConfig";
+import { galleryImages } from "../../data/GalleryConfig";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useMediaQuery } from "@mui/material";
 
 const MediaGallery: React.FC = () => {
-  const [currentImage, setCurrentImage] = useState<GalleryImage>(
-    galleryImages[0]
-  );
-
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const autoSlideTimer = useRef<NodeJS.Timeout>();
   const isMobile = useMediaQuery("(max-width: 640px)");
 
-  const handlePrevious = () => {
-    const currentIndex = galleryImages.findIndex(
-      (img) => img.id === currentImage.id
+  const currentImage = galleryImages[currentImageIndex];
+
+  const handlePrevious = useCallback(() => {
+    setCurrentImageIndex((prev) =>
+      prev === 0 ? galleryImages.length - 1 : prev - 1
     );
-    const previousIndex =
-      currentIndex === 0 ? galleryImages.length - 1 : currentIndex - 1;
-    setCurrentImage(galleryImages[previousIndex]);
+  }, []);
+
+  const handleNext = useCallback(() => {
+    setCurrentImageIndex((prev) =>
+      prev === galleryImages.length - 1 ? 0 : prev + 1
+    );
+  }, []);
+
+  const handleThumbnailClick = (index: number) => {
+    setCurrentImageIndex(index);
   };
 
-  const handleNext = () => {
-    const currentIndex = galleryImages.findIndex(
-      (img) => img.id === currentImage.id
-    );
-    const nextIndex =
-      currentIndex === galleryImages.length - 1 ? 0 : currentIndex + 1;
-    setCurrentImage(galleryImages[nextIndex]);
-  };
+  // Auto-slide effect
+  useEffect(() => {
+    if (!isPaused) {
+      autoSlideTimer.current = setInterval(handleNext, 5000);
+    }
+    return () => {
+      if (autoSlideTimer.current) {
+        clearInterval(autoSlideTimer.current);
+      }
+    };
+  }, [handleNext, isPaused]);
 
-  const handleThumbnailClick = (image: GalleryImage) => {
-    setCurrentImage(image);
-  };
+  const handleTouchStart = useCallback(() => {
+    setIsPaused(true);
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    setIsPaused(false);
+  }, []);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden && !isPaused) {
+        if (autoSlideTimer.current) {
+          clearInterval(autoSlideTimer.current);
+        }
+        autoSlideTimer.current = setInterval(handleNext, 5000);
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [handleNext, isPaused]);
 
   return (
     <section className="pt-8 pb-24 bg-white">
@@ -66,18 +97,33 @@ const MediaGallery: React.FC = () => {
               {galleryImages.map((_, index) => (
                 <div
                   key={index}
-                  className={`h-2 rounded-full flex-1 transition-all duration-300 ${index === galleryImages.findIndex((img) => img.id === currentImage.id) ? "bg-white" : "bg-white/40"}`}
+                  className={`h-2 rounded-full flex-1 transition-all duration-300 ${index === currentImageIndex ? "bg-white" : "bg-white/40"}`}
                 />
               ))}
             </div>
           </div>
 
-          <div className="relative w-full h-full">
+          <div
+            className="relative w-full h-full"
+            onContextMenu={(e) => e.preventDefault()}
+            onMouseDown={handleTouchStart}
+            onMouseUp={handleTouchEnd}
+            onMouseLeave={handleTouchEnd}
+            onTouchStart={(e) => {
+              e.preventDefault();
+              handleTouchStart();
+            }}
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              handleTouchEnd();
+            }}
+            onTouchCancel={handleTouchEnd}
+          >
             <Image
               src={currentImage.src}
               alt={currentImage.alt}
               fill
-              className={`object-cover ${isMobile ? "" : "rounded-t-[12px]"}`}
+              className={`object-cover select-none pointer-events-none ${isMobile ? "" : "rounded-t-[12px]"}`}
               priority
             />
           </div>
@@ -122,7 +168,11 @@ const MediaGallery: React.FC = () => {
             return (
               <button
                 key={image.id}
-                onClick={() => handleThumbnailClick(image)}
+                onClick={() =>
+                  handleThumbnailClick(
+                    galleryImages.findIndex((img) => img.id === image.id)
+                  )
+                }
                 className={`relative aspect-video w-full overflow-hidden transition-all ${isMobile ? "" : borderRadius} ${currentImage.id === image.id ? "ring-2 ring-[#3A3A3A]" : ""}`}
               >
                 <Image
