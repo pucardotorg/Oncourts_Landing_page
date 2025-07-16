@@ -24,6 +24,7 @@
     "@typescript-eslint/parser": "^8.14.0",
     "axios": "^1.7.7",
     "date-fns": "^2.30.0",
+    "dom-to-image": "^2.6.0",
     "font-awesome": "^4.7.0",
     "framer-motion": "^10.0.0",
     "html2canvas": "^1.4.1",
