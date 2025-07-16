@@ -197,7 +197,7 @@ const HomeIntroVideo = () => {
                   <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-[99999]">
                     <Tooltip
                       text={t(
-                        "Log in to manage cases, issue orders, and support courtroom proceedings"
+                        "Check next hearing date, case history, stage, and more."
                       )}
                     />
                   </div>
