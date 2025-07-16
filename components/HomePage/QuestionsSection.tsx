@@ -12,6 +12,8 @@ interface QuestionProps {
   isOpen: boolean;
   onToggle: () => void;
   isMobile?: boolean;
+  id: number;
+  setQuestionRef: (el: HTMLDivElement | null, id: number) => void;
 }
 
 const Question: React.FC<QuestionProps> = ({
@@ -20,36 +22,89 @@ const Question: React.FC<QuestionProps> = ({
   isOpen,
   onToggle,
   isMobile,
-}) => (
-  <div className="border-b border-[#CBD5E1]">
-    <button className="w-full py-6 text-left" onClick={onToggle}>
-      <div className="flex items-start justify-between">
-        <span
-          className={`font-sans font-medium tracking-[0.01em] text-[#3A3A3A] pr-8 ${isMobile ? "text-[20px] leading-[24px]" : "text-[26px] leading-[36px]"}`}
-        >
-          {question}
-        </span>
-        <span className={`flex-shrink-0  ${isMobile ? "" : "mt-[0.5em]"}`}>
-          {isOpen ? <svgIcons.UpArrowIcon /> : <svgIcons.DownArrowIcon />}
-        </span>
-      </div>
-    </button>
-    {isOpen && (
-      <div className="pb-6">
-        <div
-          className={`font-sans  tracking-[0.01em] text-[#64748B] ${isMobile ? "text-[15px] leading-[18px]" : "text-[20px] leading-[28px]"}`}
-        >
-          {answer}
+  id,
+  setQuestionRef,
+}) => {
+  return (
+    <div
+      ref={(el) => setQuestionRef(el, id)}
+      className="border-b border-[#CBD5E1]"
+    >
+      <button
+        className="w-full py-6 text-left"
+        onClick={(e) => {
+          e.preventDefault();
+          onToggle();
+        }}
+      >
+        <div className="flex items-start justify-between">
+          <span
+            className={`font-sans font-medium tracking-[0.01em] text-[#3A3A3A] pr-8 ${isMobile ? "text-[20px] leading-[24px]" : "text-[26px] leading-[36px]"}`}
+          >
+            {question}
+          </span>
+          <span className={`flex-shrink-0  ${isMobile ? "" : "mt-[0.5em]"}`}>
+            {isOpen ? <svgIcons.UpArrowIcon /> : <svgIcons.DownArrowIcon />}
+          </span>
+        </div>
+      </button>
+      <div
+        className={`overflow-hidden transition-all duration-300 ${isOpen ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"}`}
+      >
+        <div className="pb-6">
+          <div
+            className={`font-sans tracking-[0.01em] text-[#64748B] ${isMobile ? "text-[15px] leading-[18px]" : "text-[20px] leading-[28px]"}`}
+          >
+            {answer}
+          </div>
         </div>
       </div>
-    )}
-  </div>
-);
+    </div>
+  );
+};
 
 const QuestionsSection: React.FC = () => {
   const { t } = useSafeTranslation();
   const [openQuestionId, setOpenQuestionId] = useState<number | null>(null);
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const questionsRef = React.useRef<{ [key: number]: HTMLDivElement | null }>(
+    {}
+  );
+
+  const handleQuestionToggle = (id: number) => {
+    const isClosing = openQuestionId === id;
+    setOpenQuestionId(isClosing ? null : id);
+
+    setTimeout(() => {
+      const element = questionsRef.current[id];
+      if (!isClosing && element) {
+        const rect = element.getBoundingClientRect();
+        const scrollPadding = 80;
+        const scrollY = window.scrollY;
+        const elementTop = scrollY + rect.top;
+        const elementBottom = elementTop + element.scrollHeight;
+
+        const viewportTop = scrollY;
+        const viewportBottom = scrollY + window.innerHeight;
+
+        const isFullyVisible =
+          elementTop >= viewportTop && elementBottom <= viewportBottom;
+
+        if (!isFullyVisible) {
+          const maxScrollable = document.body.scrollHeight - window.innerHeight;
+          const targetScroll = Math.min(
+            elementTop - scrollPadding,
+            maxScrollable
+          );
+
+          window.scrollTo({
+            top: targetScroll,
+            behavior: "smooth",
+          });
+        }
+      }
+    }, 350);
+  };
 
   const questions = [
     {
@@ -63,7 +118,7 @@ const QuestionsSection: React.FC = () => {
               {t("CASE_SEARCH")}
             </Link>
             {t("WHERE_CHECK_HEARING_DETAILS_ANSWER_2")}
-            <strong>{t("VIEW_DETAILS")}</strong>
+            <span className="font-bold">{t("VIEW_DETAILS")}</span>
             {t("WHERE_CHECK_HEARING_DETAILS_ANSWER_3")}
           </p>
         </div>
@@ -71,28 +126,24 @@ const QuestionsSection: React.FC = () => {
     },
     {
       id: 1,
-      question:
-        "How can I view tasks I need to complete to move my case forward?",
+      question: t("TASKS_I_NEED_TO_COMPLETE_TO_CASE_FORWARD"),
       answer: (
         <div className="space-y-4 text-[#1E293B]">
           <p>
-            You can access pending tasks by logging into the{" "}
+            {t("TASKS_I_NEED_TO_COMPLETE_TO_CASE_FORWARD_ANS_PART_1")}
             <Link
               href={APP_URLS.CITIZEN_DRISTI}
               className="text-[#1D4ED8] hover:underline"
               target="_blank"
               rel="noopener noreferrer"
             >
-              ON Court portal
-            </Link>{" "}
-            and navigating to the &quot;All Pending Tasks&quot; section on the
-            right-side panel in the homepage. Alternatively, you can use the{" "}
+              {t("ON_COURT_PORTAL")}
+            </Link>
+            {t("TASKS_I_NEED_TO_COMPLETE_TO_CASE_FORWARD_ANS_PART_2")}
             <Link href="/search" className="text-[#1D4ED8] hover:underline">
-              Case Search
-            </Link>{" "}
-            section under the Services tab to review pending payments, such as
-            online fees or stamp and envelope submissions (applicable for RPAD
-            channel only) related notices, summons, or warrants.
+              {t("CASE_SEARCH")}
+            </Link>
+            {t("TASKS_I_NEED_TO_COMPLETE_TO_CASE_FORWARD_ANS_PART_3")}
           </p>
         </div>
       ),
@@ -156,48 +207,54 @@ const QuestionsSection: React.FC = () => {
           <p className="mb-4">List of documents required for e-filing:</p>
           <ol className="list-decimal pl-8 space-y-4">
             <li>
-              <strong>Proof of identity:</strong> PAN Card, Aadhar card,
-              Passport, Driving license, Voter ID, Ration card or Bank passbook
+              <span className="font-bold">Proof of identity:</span> PAN Card,
+              Aadhar card, Passport, Driving license, Voter ID, Ration card or
+              Bank passbook
             </li>
             <li>
-              <strong>Dishonored Cheque:</strong> A copy of the dishonored
-              cheque on the basis which this case is being filed
+              <span className="font-bold">Dishonored Cheque:</span> A copy of
+              the dishonored cheque on the basis which this case is being filed
             </li>
             <li>
-              <strong>Cheque Return Memo:</strong> The document received from
-              the bank that has the information that the cheque has bounced
+              <span className="font-bold">Cheque Return Memo:</span> The
+              document received from the bank that has the information that the
+              cheque has bounced
             </li>
             <li>
-              <strong>Legal Demand Notice:</strong> Any intimation you provided
-              to the respondent to informing them that their cheque had bounced
-              and they still owed you the cheque amount
+              <span className="font-bold">Legal Demand Notice:</span> Any
+              intimation you provided to the respondent to informing them that
+              their cheque had bounced and they still owed you the cheque amount
             </li>
             <li>
-              <strong>
+              <span className="font-bold">
                 Postal acknowledgement (Issue of legal demand notice):
-              </strong>{" "}
+              </span>{" "}
               The acknowledgement provided by the postal department when sending
               the letter/RPAD/anything else containing legal demand notice (see
               number 4 in the list) to the accused
             </li>
             <li>
-              <strong>
+              <span className="font-bold">
                 Postal acknowledgement (Delivery of legal demand notice):
-              </strong>{" "}
+              </span>{" "}
               The acknowledgement provided by the postal department when the
               letter/RPAD/anything else containing legal demand notice (see
               number 4 in the list) is received by the accused
             </li>
             <li>
-              <strong>Affidavit under section 223 of BNSS:</strong> Affidavit
-              under section 223 of BNSS must be there in the infobox at the
-              start of filing
+              <span className="font-bold">
+                Affidavit under section 223 of BNSS:
+              </span>{" "}
+              Affidavit under section 223 of BNSS must be there in the infobox
+              at the start of filing
             </li>
             <li>
-              <strong>Any other document you deem necessary:</strong> Please
-              include any additional documents you believe will strengthen your
-              case and that will be crucial in substantiating your claims when
-              filing the complaint
+              <span className="font-bold">
+                Any other document you deem necessary:
+              </span>{" "}
+              Please include any additional documents you believe will
+              strengthen your case and that will be crucial in substantiating
+              your claims when filing the complaint
             </li>
           </ol>
         </div>
@@ -278,12 +335,12 @@ const QuestionsSection: React.FC = () => {
           {questions.map((q) => (
             <Question
               key={q.id}
+              id={q.id}
               question={q.question}
               answer={q.answer}
               isOpen={openQuestionId === q.id}
-              onToggle={() =>
-                setOpenQuestionId(openQuestionId === q.id ? null : q.id)
-              }
+              onToggle={() => handleQuestionToggle(q.id)}
+              setQuestionRef={(el, id) => (questionsRef.current[id] = el)}
               isMobile={isMobile}
             />
           ))}
