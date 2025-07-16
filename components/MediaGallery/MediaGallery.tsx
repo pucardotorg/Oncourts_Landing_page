@@ -31,7 +31,7 @@ const MediaGallery: React.FC = () => {
   // Auto-slide effect
   useEffect(() => {
     if (!isPaused) {
-      autoSlideTimer.current = setInterval(handleNext, 3000);
+      autoSlideTimer.current = setInterval(handleNext, 5000);
     }
     return () => {
       if (autoSlideTimer.current) {
@@ -54,7 +54,7 @@ const MediaGallery: React.FC = () => {
         if (autoSlideTimer.current) {
           clearInterval(autoSlideTimer.current);
         }
-        autoSlideTimer.current = setInterval(handleNext, 3000);
+        autoSlideTimer.current = setInterval(handleNext, 5000);
       }
     };
 
