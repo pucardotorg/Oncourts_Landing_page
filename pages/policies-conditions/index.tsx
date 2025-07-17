@@ -14,7 +14,7 @@ const Policies = () => {
           <section
             key={section.id}
             id={section.id}
-            className="md:px-16 px-6 space-y-6"
+            className="md:px-16 px-6 space-y-6 scroll-mt-24"
           >
             <SectionHeading
               title={t(section.title)}
