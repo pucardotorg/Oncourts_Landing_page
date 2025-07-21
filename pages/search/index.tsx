@@ -5,13 +5,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import SearchTabs from "../../components/search/SearchTabs";
