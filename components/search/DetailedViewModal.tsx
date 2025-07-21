@@ -317,6 +317,9 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
     if (visibleItems.length === 0) {
       return <p className="text-[16px] font-normal">NA</p>;
     }
+    if (visibleItems.length === 0) {
+      return <p className="text-[16px] font-normal">NA</p>;
+    }
     return (
       <>
         {visibleItems.map((item, idx) => (
