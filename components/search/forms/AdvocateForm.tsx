@@ -3,6 +3,7 @@ import { TextField, RadioButton } from "../../ui/form";
 import CustomDropdown from "../../ui/form/CustomDropdown";
 
 interface AdvocateFormProps {
+  isMobile: boolean;
   advocateSearchMethod: string;
   barCode: string;
   stateCode: string;
@@ -16,6 +17,7 @@ interface AdvocateFormProps {
 }
 
 const AdvocateForm: React.FC<AdvocateFormProps> = ({
+  isMobile,
   advocateSearchMethod,
   barCode,
   stateCode,
@@ -28,6 +30,8 @@ const AdvocateForm: React.FC<AdvocateFormProps> = ({
   onNameChange,
 }) => {
   const radioOptions = [
+    { id: "bar_code", label: "BAR_CODE" },
+    { id: "advocate_name", label: "ADVOCATE_NAME" },
     { id: "bar_code", label: "BAR_CODE" },
     { id: "advocate_name", label: "ADVOCATE_NAME" },
   ];
@@ -50,19 +54,19 @@ const AdvocateForm: React.FC<AdvocateFormProps> = ({
   const yearOptions = generateYearOptions();
 
   return (
-    <div className="col-span-4">
+    <React.Fragment>
       <RadioButton
         name="advocateSearchMethod"
         label="SELECT_METHOD"
         value={advocateSearchMethod}
         onChange={onMethodChange}
         options={radioOptions}
-        className="flex items-center gap-4"
-        inline={true}
+        className={`flex ${isMobile ? "flex-col gap-3" : "items-center gap-4"}`}
+        inline={isMobile ? false : true}
       />
 
       {advocateSearchMethod === "bar_code" ? (
-        <div className="grid grid-cols-3 gap-4 mt-4">
+        <div className={`${isMobile ? "" : "grid grid-cols-3 gap-4"} mt-4`}>
           <TextField
             label="STATE_CODE"
             value={stateCode}
@@ -86,8 +90,8 @@ const AdvocateForm: React.FC<AdvocateFormProps> = ({
           />
         </div>
       ) : (
-        <div className="grid grid-cols-3 gap-4 mt-4">
-          <div className="col-span-1">
+        <div className={isMobile ? "" : "grid grid-cols-3 gap-4 mt-4"}>
+          <div className={isMobile ? "" : "col-span-1"}>
             <TextField
               label="NAME"
               value={advocateName}
@@ -99,7 +103,7 @@ const AdvocateForm: React.FC<AdvocateFormProps> = ({
           </div>
         </div>
       )}
-    </div>
+    </React.Fragment>
   );
 };
 

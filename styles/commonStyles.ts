@@ -31,13 +31,13 @@ export const animations = `
 
 export const commonStyles = {
   // Layout
-  container: "max-w-screen mx-auto py-6 px-20 bg-white",
+  container: "max-w-screen mx-auto py-4 px-6 md:py-6 md:px-20 bg-white",
 
   // Typography
   heading: {
     primary: "text-center mb-6 text-6xl font-libre text-gray-800",
     secondary: "text-2xl font-semibold mb-4",
-    accent: "text-xl font-medium text-[#EA580C] italic font-[Roboto]",
+    accent: "text-xl font-medium text-[#EA580C] italic font-roboto",
   },
 
   // Form elements

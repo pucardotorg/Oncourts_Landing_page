@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import DatePickerComponent from "../ui/form/DatePickerComponent";
 import {
   CaseStage,
   CaseStatus,
@@ -9,6 +8,7 @@ import {
 } from "../../types";
 import CustomDropdown from "../ui/form/CustomDropdown";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
+import CustomDatePicker from "../ui/form/CustomDatePicker";
 
 interface AdditionalFiltersProps {
   selectedTab: string;
@@ -37,6 +37,9 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
     ...filterState,
     courtName: courtOptions[0]?.name || "",
   });
+  // State to control the opening of date pickers
+  const [fromDateOpen, setFromDateOpen] = useState(false);
+  const [toDateOpen, setToDateOpen] = useState(false);
 
   // Update local filters when parent filterState changes
   useEffect(() => {
@@ -69,6 +72,18 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
   // Apply all filters at once when search button is clicked
   const applyFilters = () => {
     onApplyFilters(localFilters);
+  };
+
+  // Function to handle calendar icon click for the "From" date picker
+  const handleFromDateIconClick = () => {
+    setFromDateOpen(!fromDateOpen);
+    setToDateOpen(false); // Close the other date picker if open
+  };
+
+  // Function to handle calendar icon click for the "To" date picker
+  const handleToDateIconClick = () => {
+    setToDateOpen(!toDateOpen);
+    setFromDateOpen(false); // Close the other date picker if open
   };
 
   return (
@@ -130,31 +145,57 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
             />
 
             <div className="col-span-2">
-              <label className="block text-lg font-[Roboto] font-medium text-[#0A0A0A] mb-1">
+              <label className="block text-lg font-roboto font-medium text-[#0A0A0A] mb-1">
                 {t("NEXT_HEARING_DATE")}
               </label>
               <div className="flex items-center gap-1">
                 <div className="flex-1">
-                  <DatePickerComponent
-                    label=""
-                    value={localFilters.hearingDateFrom || ""}
-                    onChange={(value) =>
-                      handleLocalFilterChange("hearingDateFrom", value)
+                  <CustomDatePicker
+                    selected={
+                      localFilters.hearingDateFrom
+                        ? new Date(localFilters.hearingDateFrom)
+                        : null
                     }
-                    className="bg-[#F8FAFC] border-[#94A3B8] "
+                    onChange={(date: Date | null) =>
+                      handleLocalFilterChange(
+                        "hearingDateFrom",
+                        date ? date.toISOString().split("T")[0] : ""
+                      )
+                    }
+                    isOpen={fromDateOpen}
+                    onIconClick={handleFromDateIconClick}
+                    onClickOutside={() => setFromDateOpen(false)}
+                    padding="px-1"
+                    borderRadius="rounded-md"
+                    borderColor="border-[#94A3B8]"
+                    backgroundColor="bg-[#F8FAFC]"
                   />
                 </div>
 
-                <span className="text-[#0A0A0A] text-lg font-[Roboto] font-medium">To</span>
+                <span className="text-[#0A0A0A] text-lg font-roboto font-medium">
+                  To
+                </span>
 
                 <div className="flex-1">
-                  <DatePickerComponent
-                    label=""
-                    value={localFilters.hearingDateTo || ""}
-                    onChange={(value) =>
-                      handleLocalFilterChange("hearingDateTo", value)
+                  <CustomDatePicker
+                    selected={
+                      localFilters.hearingDateTo
+                        ? new Date(localFilters.hearingDateTo)
+                        : null
                     }
-                    className="bg-[#F8FAFC] border-[#94A3B8]"
+                    onChange={(date: Date | null) =>
+                      handleLocalFilterChange(
+                        "hearingDateTo",
+                        date ? date.toISOString().split("T")[0] : ""
+                      )
+                    }
+                    isOpen={toDateOpen}
+                    onIconClick={handleToDateIconClick}
+                    onClickOutside={() => setToDateOpen(false)}
+                    padding="px-1"
+                    borderRadius="rounded-lg"
+                    borderColor="border-[#94A3B8]"
+                    backgroundColor="bg-[#F8FAFC]"
                   />
                 </div>
               </div>

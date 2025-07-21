@@ -5,6 +5,13 @@ import React, {
   useRef,
   useState,
 } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import SearchTabs from "../../components/search/SearchTabs";
@@ -25,9 +32,17 @@ import { newCaseSearchConfig } from "../../data/newCaseSearchConfig";
 import { commonStyles, animations } from "../../styles/commonStyles";
 import DetailedViewModal from "../../components/search/DetailedViewModal";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
+import { useMediaQuery } from "@mui/material";
+import ExpandableCard from "../../components/TableRow/ExpandableCard";
+import { FiSearch } from "react-icons/fi";
+import MobileFilters from "../../components/search/MobileFilters";
+import Pagination from "../../components/Utils/Pagination";
 
 const SearchForCase = () => {
   const { t } = useSafeTranslation();
+  const router = useRouter();
+  const isMobile = useMediaQuery("(max-width:640px)");
+  const [showMobileFilter, setShowMobileFilter] = useState(false);
   const [selectedTab, setSelectedTab] = useState("case_number");
   const [showViewDetailedModal, setShowViewDetailedModal] = useState(false);
   const [selectedCase, setSelectedCase] = useState<CaseResult>({
@@ -64,7 +79,6 @@ const SearchForCase = () => {
   const [caseStageOptions, setCaseStageOptions] = useState<CaseStage[]>([]);
   const [caseStatusOptions, setCaseStatusOptions] = useState<CaseStatus[]>([]);
   const [caseTypeOptions, setCaseTypeOptions] = useState<CaseType[]>([]);
-
   // Use useMemo to create stable references to default states
   const defaultFormState = useMemo(
     () => ({
@@ -106,10 +120,8 @@ const SearchForCase = () => {
   const [searchResults, setSearchResults] = useState<CaseResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const router = useRouter();
-
   // Ref to track initial API calls and prevent duplicate calls
-  const initialLoadRef = useRef<boolean>(false);
+  const initialLoadRef = useRef(false);
 
   const getCourtOptions = useCallback(async () => {
     try {
@@ -196,26 +208,38 @@ const SearchForCase = () => {
 
   // Centralized handler to update filter state and trigger search
   const handleFilterChangeAndSearch = (newFilterState: FilterState) => {
+    setOffset(0);
     setFilterState(newFilterState);
-    handleSubmit(newFilterState);
+    handleSubmit(0, newFilterState);
   };
 
   // Centralized handler to reset filter state and trigger search
   const handleResetFiltersAndSearch = () => {
     if (selectedTab === "all" && courtOptions.length > 0) {
       const defaultCourt = courtOptions[0]?.name || "";
+      setOffset(0);
       handleResetFilters({
         ...defaultFilterState,
         courtName: defaultCourt,
       });
-      handleSubmit({
+      handleSubmit(0, {
         ...defaultFilterState,
-        courtName: defaultCourt,
       });
     } else {
       handleResetFilters();
-      handleSubmit(defaultFilterState);
+      handleSubmit(0, defaultFilterState);
     }
+  };
+
+  const areFiltersApplied = () => {
+    return (
+      filterState.caseType !== defaultFilterState.caseType ||
+      filterState.hearingDateFrom !== defaultFilterState.hearingDateFrom ||
+      filterState.hearingDateTo !== defaultFilterState.hearingDateTo ||
+      filterState.caseSubStage !== defaultFilterState.caseSubStage ||
+      filterState.caseStatus !== defaultFilterState.caseStatus ||
+      filterState.yearOfFiling !== defaultFilterState.yearOfFiling
+    );
   };
 
   // Handle tab change
@@ -260,7 +284,7 @@ const SearchForCase = () => {
       results,
       totalCount: count,
       error,
-    } = await searchCases("all", { offset, limit });
+    } = await searchCases("all", { offset: 0, limit });
 
     if (error) {
       setErrorNotification({
@@ -319,6 +343,9 @@ const SearchForCase = () => {
     setFormState({
       ...defaultFormState,
       selectedCourt: courtOptions.length > 0 ? courtOptions[0]?.name || "" : "",
+      ...(selectedTab === "advocate" && {
+        advocateSearchMethod: formState.advocateSearchMethod,
+      }),
     });
     // Reset pagination
     setOffset(0);
@@ -330,19 +357,30 @@ const SearchForCase = () => {
   const handleNextPage = () => {
     if (offset + limit < totalCount) {
       setOffset(offset + limit);
-      handleSubmit(); // Re-fetch with new offset
+      handleSubmit(offset + limit); // Re-fetch with new offset
+      // Scroll to top of page
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 200);
     }
   };
 
   const handlePrevPage = () => {
     if (offset - limit >= 0) {
       setOffset(offset - limit);
-      handleSubmit(); // Re-fetch with new offset
+      handleSubmit(offset - limit); // Re-fetch with new offset
+      // Scroll to top of page
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 200);
     }
   };
 
   // Submit form
-  const handleSubmit = async (filterStateOverride?: FilterState) => {
+  const handleSubmit = async (
+    offsetOverride: number,
+    filterStateOverride?: FilterState
+  ) => {
     // Check if form is valid before submission
     if (!isFormValid(selectedTab, formState)) {
       return;
@@ -361,7 +399,7 @@ const SearchForCase = () => {
       selectedTab,
       {
         ...formState,
-        offset,
+        offset: offsetOverride,
         limit,
       },
       filterStateOverride || filterState
@@ -444,7 +482,7 @@ const SearchForCase = () => {
         <style dangerouslySetInnerHTML={{ __html: animations }} />
       </Head>
       <h1
-        className={commonStyles.heading.primary}
+        className={`text-center mb-6 font-libre text-gray-800 ${isMobile ? "text-4xl" : "text-6xl"}`}
         style={{ color: commonStyles.colors.text, fontFamily: "Baskerville" }}
       >
         {t(newCaseSearchConfig?.heading)}
@@ -454,6 +492,7 @@ const SearchForCase = () => {
         {/* Search Tabs */}
         <SearchTabs
           t={t}
+          isMobile={isMobile}
           selectedTab={selectedTab}
           onTabChange={handleTabChange}
           tabs={newCaseSearchConfig.tabs}
@@ -463,6 +502,7 @@ const SearchForCase = () => {
         {selectedTab !== "all" && (
           <SearchForm
             t={t}
+            isMobile={isMobile}
             selectedTab={selectedTab}
             formState={{
               ...formState,
@@ -519,14 +559,78 @@ const SearchForCase = () => {
         </div>
       )}
       {/* Additional Filters */}
-      {(selectedTab === "all" ||
-        (searchResults?.length > 0 &&
-          ["advocate", "litigant"].includes(selectedTab))) && (
-        <AdditionalFilters
-          selectedTab={selectedTab}
+      {!isMobile &&
+        (selectedTab === "all" ||
+          (searchResults?.length > 0 &&
+            ["advocate", "litigant"].includes(selectedTab))) && (
+          <AdditionalFilters
+            selectedTab={selectedTab}
+            filterState={filterState}
+            onApplyFilters={handleFilterChangeAndSearch}
+            onResetFilters={handleResetFiltersAndSearch}
+            courtOptions={courtOptions}
+            caseStageOptions={caseStageOptions}
+            caseTypeOptions={caseTypeOptions}
+            caseStatusOptions={caseStatusOptions}
+          />
+        )}
+
+      {/* Case title search bar with filter icon */}
+      {isMobile && (selectedTab === "all" || searchResults?.length > 0) && (
+        <div className="mb-4">
+          <div className="flex justify-between items-center">
+            <h2 className="py-2 font-['Baskerville'] font-semibold text-3xl text-[#0F172A]">
+              {t("CASE_DETAILS")}
+            </h2>
+            <button
+              onClick={() => setShowMobileFilter(true)}
+              className={`p-2 rounded-full relative ${areFiltersApplied() ? "bg-teal-600 border border-teal-700" : "bg-white border border-teal-200"}`}
+              aria-label="Open filters"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className={`${areFiltersApplied() ? "text-[#FCC037]" : "text-black"}`}
+              >
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+              </svg>
+            </button>
+          </div>
+          <div className="relative mt-2">
+            <input
+              type="text"
+              placeholder={t("SEARCH_BY_CASE_TITLE")}
+              value={filterState.caseTitle || ""}
+              onChange={(e) =>
+                setFilterState({ ...filterState, caseTitle: e.target.value })
+              }
+              className="w-full pl-10 pr-4 py-2 font-roboto font-medium text-[#64748B] bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+            />
+            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#334155]" />
+            <button
+              onClick={() => handleFilterChangeAndSearch(filterState)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-teal-700 font-medium"
+            >
+              {t("SEARCH")}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Filter Modal */}
+      {showMobileFilter && isMobile && (
+        <MobileFilters
           filterState={filterState}
           onApplyFilters={handleFilterChangeAndSearch}
           onResetFilters={handleResetFiltersAndSearch}
+          setShowMobileFilter={setShowMobileFilter}
           courtOptions={courtOptions}
           caseStageOptions={caseStageOptions}
           caseTypeOptions={caseTypeOptions}
@@ -535,8 +639,47 @@ const SearchForCase = () => {
       )}
 
       {/* Case Details Table with built-in pagination */}
-      {(selectedTab === "all" || searchResults?.length > 0) && (
+      {isMobile &&
+        (selectedTab === "all" || searchResults?.length > 0) &&
+        searchResults?.map((caseResult, index) => {
+          const caseData = {
+            caseNumber:
+              caseResult.stNumber ||
+              caseResult.cmpNumber ||
+              caseResult.filingNumber ||
+              "",
+            nextHearingDate: caseResult.nextHearingDate || "",
+            caseTitle: caseResult.caseTitle || "",
+            purpose: caseResult.purpose || "",
+          };
+
+          return (
+            <ExpandableCard
+              t={t}
+              index={index}
+              key={index}
+              caseData={caseData}
+              onViewDetails={() => handleViewCaseDetails(caseResult)}
+            />
+          );
+        })}
+      {isMobile &&
+        totalCount > 0 &&
+        searchResults?.length > 0 &&
+        ["all", "advocate", "litigant"].includes(selectedTab) && (
+          <Pagination
+            currentStartIndex={offset + 1}
+            totalItems={totalCount}
+            itemsPerPage={limit}
+            onPrevPage={handlePrevPage}
+            onNextPage={handleNextPage}
+            isFirstPage={offset === 0}
+            isLastPage={offset + limit >= totalCount}
+          />
+        )}
+      {!isMobile && (selectedTab === "all" || searchResults?.length > 0) && (
         <CaseDetailsTable
+          t={t}
           selectedTab={selectedTab}
           searchResults={searchResults}
           onViewCaseDetails={handleViewCaseDetails}
@@ -551,6 +694,7 @@ const SearchForCase = () => {
       )}
       {showViewDetailedModal && (
         <DetailedViewModal
+          isMobile={isMobile}
           tenantId={tenantId}
           onClose={() => setShowViewDetailedModal(false)}
           caseResult={selectedCase}

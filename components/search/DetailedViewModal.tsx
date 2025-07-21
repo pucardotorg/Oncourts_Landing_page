@@ -14,12 +14,14 @@ import { formatDate } from "../../utils/formatDate";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 interface DetailedViewModalProps {
+  isMobile: boolean;
   tenantId: string;
   onClose: () => void;
   caseResult: CaseResult;
 }
 
 const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
+  isMobile,
   tenantId,
   onClose,
   caseResult,
@@ -315,6 +317,9 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
     if (visibleItems.length === 0) {
       return <p className="text-[16px] font-normal">NA</p>;
     }
+    if (visibleItems.length === 0) {
+      return <p className="text-[16px] font-normal">NA</p>;
+    }
     return (
       <>
         {visibleItems.map((item, idx) => (
@@ -353,13 +358,42 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
       }
 
       const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+      
+      // Check if device is iOS
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !("MSStream" in window);
 
-      window.open(url, "_blank");
-
-      setTimeout(() => {
-        window.URL.revokeObjectURL(url);
-      }, 5000);
+      if (isIOS) {
+        // For iOS, create a temporary anchor element and trigger a download
+        // Get filename from content-disposition header or create a default one
+        const fileName = `order-${orderId}.pdf`;
+        
+        // Create a temporary anchor element
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        
+        // Create a download URL and set attributes
+        const url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = fileName;
+        
+        // Programmatically click the link to trigger download
+        a.click();
+        
+        // Clean up
+        setTimeout(() => {
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, 100);
+      } else {
+        // For other devices, use the standard window.open method
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, "_blank");
+        
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+        }, 5000);
+      }
     } catch (error) {
       console.error("Error downloading file:", error);
     }
@@ -376,15 +410,48 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div
             ref={modalContentRef}
-            className="bg-white rounded-lg w-[70%] relative overflow-hidden max-h-[90vh] flex flex-col"
+            className={`bg-white rounded-lg relative overflow-hidden flex flex-col max-h-[90vh] ${isMobile ? "w-[90%]" : "w-[70%]"}`}
           >
             <div className="sticky top-0 z-50 bg-white border-b-2 border-[#E2E8F0] px-6 py-4 flex justify-between items-center">
-              <div className="font-[Roboto] text-xl font-bold text-[#0F172A]">
+              <div className="font-roboto text-xl font-bold text-[#0F172A]">
                 {t("DETAILED_VIEW")} |{" "}
                 <span className="text-[#0F766E]">{caseResult.caseTitle}</span>
               </div>
 
               <div className="font-[Inter] flex items-center gap-2">
+                {!isMobile && (
+                  <button
+                    className="flex items-center gap-1 px-3 py-1 bg-teal-600 text-[#334155] border-2 border-[#E2E8F0] rounded-md text-sm hover:bg-teal-700 transition"
+                    onClick={() => downloadAsPDF(pdfConfig, modalContentRef)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
+                    </svg>
+                    {t("DOWNLOAD_PDF")}
+                  </button>
+                )}
+                <button
+                  className="text-3xl font-medium text-gray-700 w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-full transition"
+                  onClick={onClose}
+                >
+                  &times;
+                </button>
+              </div>
+            </div>
+
+            <div className="overflow-y-auto px-3 md:px-6 pt-4 pb-8 space-y-6">
+              {isMobile && (
                 <button
                   className="flex items-center gap-1 px-3 py-1 bg-teal-600 text-[#334155] border-2 border-[#E2E8F0] rounded-md text-sm hover:bg-teal-700 transition"
                   onClick={() => downloadAsPDF(pdfConfig, modalContentRef)}
@@ -405,18 +472,10 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                   </svg>
                   {t("DOWNLOAD_PDF")}
                 </button>
-                <button
-                  className="text-3xl font-medium text-gray-700 w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-full transition"
-                  onClick={onClose}
-                >
-                  &times;
-                </button>
-              </div>
-            </div>
-
-            <div className="overflow-y-auto px-6 pt-4 pb-8 space-y-6">
-              <div className="font-[Roboto] grid grid-cols-2 md:grid-cols-5 gap-y-2 bg-[#F7F5F3] p-4 rounded-md text-sm">
-                <div className="flex flex-col border-r pr-4">
+              )}
+              {/* Case Details - Mobile First Card Layout */}
+              <div className="font-roboto grid grid-cols-1 md:grid-cols-5 gap-1 bg-[#F7F5F3] p-4 rounded-md text-sm">
+                <div className="flex flex-col md:border-r pr-4 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
                     {t("CASE_NUMBER")}
                   </span>
@@ -424,7 +483,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     {caseResult.stNumber || caseResult.cmpNumber}
                   </span>
                 </div>
-                <div className="flex flex-col border-r pr-4 pl-2">
+                <div className="flex flex-col md:border-r pr-4 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
                     {t("CNR_NUMBER")}
                   </span>
@@ -432,7 +491,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     {caseResult.cnrNumber}
                   </span>
                 </div>
-                <div className="flex flex-col border-r pr-4 pl-2">
+                <div className="flex flex-col md:border-r pr-4 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
                     {t("FILING_NUMBER")}
                   </span>
@@ -440,7 +499,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     {caseResult.filingNumber}
                   </span>
                 </div>
-                <div className="flex flex-col border-r pr-4 pl-2">
+                <div className="flex flex-col md:border-r pr-4 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
                     {t("FILING_DATE")}
                   </span>
@@ -457,8 +516,8 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                   </span>
                 </div>
               </div>
-              <div className="font-[Roboto] flex bg-[#F7F5F3] p-4 rounded-md text-sm">
-                <div className="w-1/5 flex flex-col border-r pr-4">
+              <div className="font-roboto flex md:flex-row flex-col gap-3 bg-[#F7F5F3] p-4 rounded-md text-sm">
+                <div className="md:w-1/5 flex flex-col md:border-r md:pl-0 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
                     {t("MAGISTRATE")}
                   </span>
@@ -466,7 +525,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     {magistrateName}
                   </span>
                 </div>
-                <div className="w-4/5 flex flex-col pl-2">
+                <div className="md:w-4/5 flex flex-col md:pl-0 pl-2">
                   <span className="text-sm font-base text-[#77787B]">
                     {t("COURT_NAME")}
                   </span>
@@ -480,7 +539,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 <h2 className="font-[Baskerville] text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
                   {t("LITIGANT_DETAILS")}
                 </h2>
-                <div className="font-[Roboto] grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="font-roboto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div className="pr-2 border-r">
                     <p className="text-[16px] font-bold text-[#0A0A0A]">
                       {t("COMPLAINANTS")}
@@ -524,8 +583,8 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 <h2 className="font-[Baskerville] text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
                   {t("KEY_DETAILS")}
                 </h2>
-                <div className="font-[Roboto] grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2 pr-4 border-r">
+                <div className="font-roboto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                  <div className="space-y-2 pr-0 md:pr-4 border-b pb-2 md:pb-0 md:border-b-0 md:border-r">
                     <div className="flex justify-between gap-4">
                       <span className="flex-1 text-[16px] font-bold text-[#0A0A0A]">
                         {t("NEXT_HEARING_DATE")}
@@ -551,7 +610,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                       </span>
                     </div>
                   </div>
-                  <div className="space-y-2 pl-4">
+                  <div className="space-y-2 pl-0 md:pl-4">
                     <div className="flex justify-between gap-4">
                       <span className="flex-1 text-[16px] font-bold text-[#0A0A0A]">
                         {t("CASE_STAGE")}
@@ -586,18 +645,19 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                   {t("ORDER_HISTORY")}
                 </h2>
                 {internalLoading ? (
-                  <div className="font-[Roboto] text-center py-4">
+                  <div className="font-roboto text-center py-4">
                     {t("LOADING_ORDER_HISTORY")}
                   </div>
                 ) : error ? (
-                  <div className="font-[Roboto] text-center py-4 text-red-500">
+                  <div className="font-roboto text-center py-4 text-red-500">
                     {t(error)}
                   </div>
                 ) : (
                   <>
                     {orderHistory.length > 0 ? (
                       <>
-                        <table className="w-full text-[16px] text-left">
+                        {/* Desktop Order History Table View */}
+                        <table className="hidden md:table w-full text-[16px] text-left">
                           <thead>
                             <tr className="font-[Baskerville] font-bold text-[#0B0C0C] border-b border-[#BBBBBD]">
                               <th className="px-2 py-1">{t("S_NO")}</th>
@@ -615,7 +675,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                             {orderHistory.map((item, idx) => (
                               <tr
                                 key={idx}
-                                className="font-[Roboto] font-normal text-[#0A0A0A] border-b border-[#E8E8E8]"
+                                className="font-roboto font-normal text-[#0A0A0A] border-b border-[#E8E8E8]"
                               >
                                 <td className="px-2 py-2">
                                   {showAllOrders
@@ -642,6 +702,64 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                             ))}
                           </tbody>
                         </table>
+
+                        {/* Mobile Order History Card View */}
+                        <div className="md:hidden space-y-4">
+                          {orderHistory.map((item, idx) => (
+                            <div
+                              key={idx}
+                              className="border rounded-md p-3 bg-white shadow-sm"
+                            >
+                              <table className="w-full font-roboto text-base mb-2 table-fixed">
+                                <tbody>
+                                  <tr>
+                                    <td className="py-1 font-[Baskerville] font-bold text-[#0B0C0C] w-1/3">
+                                      {t("S_NO")}
+                                    </td>
+                                    <td className="py-1 w-2/3">
+                                      {showAllOrders
+                                        ? currentOrderPage * ordersPerPage +
+                                          idx +
+                                          1
+                                        : idx + 1}
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td className="py-1 font-[Baskerville] font-bold text-[#0B0C0C] w-1/3">
+                                      {t("DATE")}
+                                    </td>
+                                    <td className="py-1 w-2/3">
+                                      {formatDate(item.date)}
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td className="py-1 font-[Baskerville] font-bold text-[#0B0C0C] w-1/3">
+                                      {t("BUSINESS_OF_THE_DAY")}
+                                    </td>
+                                    <td className="py-1 w-2/3">
+                                      {item.businessOfTheDay}
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td className="py-1 font-[Baskerville] font-bold text-[#0B0C0C] w-1/3">
+                                      {t("VIEW_ORDER")}
+                                    </td>
+                                    <td className="py-1 w-2/3">
+                                      <button
+                                        onClick={() =>
+                                          openFileInNewTab(item.orderId)
+                                        }
+                                        className="px-2 py-1 font-[Inter] border text-[#334155] font-medium rounded-md bg-[#F8FAFC] border-[#CBD5E1] hover:bg-gray-100"
+                                      >
+                                        {t("VIEW")}
+                                      </button>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          ))}
+                        </div>
 
                         {showAllOrders && totalOrders > ordersPerPage && (
                           <Pagination
@@ -672,7 +790,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                         )}
                       </>
                     ) : (
-                      <div className="font-[Roboto] text-center py-4">
+                      <div className="font-roboto text-center py-4">
                         {t("NO_ORDER_HISTORY_AVAILABLE")}
                       </div>
                     )}
@@ -681,7 +799,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
 
                 {/* Only show 'See more Orders' button if there are more than initial orders to show */}
                 {!showAllOrders && orderHistory.length > 4 && (
-                  <div className="font-[Roboto] mt-2 mb-8">
+                  <div className="font-roboto mt-2 mb-8">
                     <button
                       onClick={() => {
                         setShowAllOrders(true);
@@ -716,20 +834,21 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                     {t("PROCESS_PAYMENT_PENDING_TASKS")}
                   </h2>
                   {internalLoading ? (
-                    <div className="font-[Roboto] text-center py-4">
+                    <div className="font-roboto text-center py-4">
                       {t("LOADING_PAYMENT_TASKS")}
                     </div>
                   ) : error ? (
-                    <div className="font-[Roboto] text-center py-4 text-red-500">
+                    <div className="font-roboto text-center py-4 text-red-500">
                       {t(error)}
                     </div>
                   ) : (
                     <>
                       {paymentTasks.length > 0 ? (
                         <>
-                          <table className="w-full text-[16px] text-left">
+                          {/* Desktop Payment Tasks Table View */}
+                          <table className="hidden md:table w-full text-[16px] text-left">
                             <thead>
-                              <tr className="font-[Baskerville] text-[#0B0C0C] border-b border-[#BBBBBD]">
+                              <tr className="font-[Baskerville] font-bold text-[#0B0C0C] border-b border-[#BBBBBD]">
                                 <th className="px-2 py-1">{t("S_NO")}</th>
                                 <th className="px-2 py-1">{t("TASK")}</th>
                                 <th className="px-2 py-1">{t("DUE_DATE")}</th>
@@ -743,7 +862,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                               {paymentTasks.map((task, idx) => (
                                 <tr
                                   key={idx}
-                                  className="font-[Roboto] border-b border-[#E8E8E8]"
+                                  className="font-roboto border-b border-[#E8E8E8]"
                                 >
                                   <td className="px-2 py-2">
                                     {currentTaskPage * tasksPerPage + idx + 1}
@@ -786,6 +905,89 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                               ))}
                             </tbody>
                           </table>
+
+                          {/* Mobile Payment Tasks Card View */}
+                          <div className="md:hidden space-y-4">
+                            {paymentTasks.map((task, idx) => (
+                              <div
+                                key={idx}
+                                className="border rounded-md p-3 bg-white shadow-sm"
+                              >
+                                <table className="w-full font-roboto text-base mb-2 table-fixed">
+                                  <tbody>
+                                    <tr>
+                                      <td className="py-1 font-[Baskerville] font-bold text-[#0B0C0C] w-1/3">
+                                        {t("S_NO")}
+                                      </td>
+                                      <td className="py-1 w-2/3">
+                                        {currentTaskPage * tasksPerPage +
+                                          idx +
+                                          1}
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td className="py-1 font-[Baskerville] font-bold text-[#0B0C0C] w-1/3">
+                                        {t("TASK")}
+                                      </td>
+                                      <td className="py-1 w-2/3">
+                                        {t(task?.task)}
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td className="py-1 font-[Baskerville] font-bold text-[#0B0C0C] w-1/3">
+                                        {t("DUE_DATE")}
+                                      </td>
+                                      <td className="py-1 w-2/3">
+                                        {formatDate(task?.dueDate)}
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td className="py-1 font-[Baskerville] font-bold text-[#0B0C0C] w-1/3">
+                                        {t("DAYS_REMAINING")}
+                                      </td>
+                                      <td className="py-1 text-red-600 font-medium w-2/3">{`${task?.daysRemaining} Days`}</td>
+                                    </tr>
+                                    <tr>
+                                      <td className="py-1 font-[Baskerville] font-bold text-[#0B0C0C] w-1/3">
+                                        {t("INFO")}
+                                      </td>
+                                      <td className="py-1 w-2/3">
+                                        <div className="relative inline-block">
+                                          <button
+                                            className="w-6 h-6 flex items-center justify-center"
+                                            onTouchStart={() =>
+                                              setHoveredIconId(idx)
+                                            }
+                                            onTouchEnd={() =>
+                                              setHoveredIconId(null)
+                                            }
+                                            onMouseEnter={() =>
+                                              setHoveredIconId(idx)
+                                            }
+                                            onMouseLeave={() =>
+                                              setHoveredIconId(null)
+                                            }
+                                          >
+                                            <FiInfo
+                                              className="text-[#334155]"
+                                              size={14}
+                                            />
+                                          </button>
+                                          {hoveredIconId === idx && (
+                                            <div className="absolute bottom-full left-0 mb-2 p-2 bg-[#3A3A3A] text-white text-center text-sm rounded-md w-48 z-10">
+                                              {t(
+                                                "LOGIN_TO_THE_PORTAL_TO_MAKE_THE_ONLINE_PAYMENT"
+                                              )}
+                                            </div>
+                                          )}
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            ))}
+                          </div>
 
                           {totalTasks > tasksPerPage && (
                             <Pagination

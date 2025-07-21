@@ -26,13 +26,24 @@ module.exports = {
         tealShadow: "oklch(77.7% 0.152 181.912)",
         peach: "#FFEDD5",
         darkBrown: "#9A3412",
-        pistachio: " #DCFCE7",
+        pistachio: "#DCFCE7",
         darkGreen: "#166534",
+      },
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-25%)" },
+        },
+      },
+      animation: {
+        marquee: "marquee 15s linear infinite",
       },
       fontFamily: {
         raleway: ["Raleway", "sans-serif"],
         noto: ["Noto Sans", "sans-serif"],
         roboto: ["Roboto", "sans-serif"],
+        libre: ['"Libre Baskerville"', "serif"],
+        noto: ['"Noto Sans"', "sans-serif"],
       },
     },
   },
