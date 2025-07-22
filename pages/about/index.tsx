@@ -26,7 +26,7 @@ export default function About() {
       {/* Main content in requested sequence */}
       <Vision />
       <GuidingPrinciples />
-      <Technology />
+      {/* <Technology />' */}
       <ONCourtsExperience />
       <Benefits />
       <Jurisdiction isMobile={isMobile} />
