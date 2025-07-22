@@ -3,10 +3,28 @@ import { FooterConfig } from "../data/FooterConfig"; // Ensure path is correct
 import Link from "next/link";
 import { useSafeTranslation } from "../hooks/useSafeTranslation";
 import { useMediaQuery } from "@mui/material";
+import { useMemo } from "react";
 
 const Footer: React.FC = () => {
   const { t } = useSafeTranslation();
   const isMobile = useMediaQuery("(max-width:640px)");
+
+  // Get formatted date based on time condition
+  const formattedDate = useMemo(() => {
+    const now = new Date();
+    const hours = now.getHours();
+
+    // If time is after 5 PM (17:00), use current date, otherwise use previous day
+    const dateToUse =
+      hours >= 17 ? now : new Date(now.setDate(now.getDate() - 1));
+
+    // Format as dd/mm/yyyy
+    const day = String(dateToUse.getDate()).padStart(2, "0");
+    const month = String(dateToUse.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+    const year = dateToUse.getFullYear();
+
+    return `${day}/${month}/${year}`;
+  }, []);
 
   return (
     <footer className="px-8 md:px-16 py-10 font-roboto bg-footerBg text-white w-full mt-auto">
@@ -125,7 +143,7 @@ const Footer: React.FC = () => {
       {/* Copyright Section */}
       <div className="mt-6">
         <div className="text-center text-[15px] md:text-[17px]">
-          {t(FooterConfig.copyright)}
+          {t(FooterConfig.copyright)} {formattedDate}
         </div>
       </div>
     </footer>
