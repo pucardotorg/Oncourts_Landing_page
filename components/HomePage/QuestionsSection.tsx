@@ -39,7 +39,7 @@ const Question: React.FC<QuestionProps> = ({
       >
         <div className="flex items-start justify-between">
           <span
-            className={`font-roboto font-medium tracking-[0.01em] text-[#3A3A3A] pr-8 ${isMobile ? "text-[20px] leading-[24px]" : "text-[26px] leading-[36px]"}`}
+            className={`font-roboto font-medium tracking-[-0.26px] text-[#3A3A3A] pr-8 ${isMobile ? "text-[20px] leading-[24px]" : "text-[26px] leading-[36px]"}`}
           >
             {question}
           </span>
@@ -53,7 +53,7 @@ const Question: React.FC<QuestionProps> = ({
       >
         <div className="pb-6">
           <div
-            className={`font-roboto tracking-[0.01em] text-[#64748B] ${isMobile ? "text-[15px] leading-[18px]" : "text-[20px] leading-[28px]"}`}
+            className={`font-roboto tracking-[-0.2px] text-[#64748B] ${isMobile ? "text-[15px] leading-[18px]" : "text-[20px] leading-[28px]"}`}
           >
             {answer}
           </div>
