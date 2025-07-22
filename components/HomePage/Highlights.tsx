@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
-import { svgIcons } from "../../data/svgIcons";
 import { transformImpactGlance } from "../../TransformData/transformResponseData";
 import { useMediaQuery } from "@mui/material";
-import router from "next/router";
 
 interface HighlightItemProps {
   value: string;
