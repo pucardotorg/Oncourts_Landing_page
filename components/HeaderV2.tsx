@@ -171,12 +171,12 @@ function HeaderV2(): JSX.Element {
               t={t}
             />
 
-            <NavItem
+            {/* <NavItem
               href="/"
               label="DASHBOARD" // "Dashboard"
               isActive={router.pathname === "/dashboard"}
               t={t}
-            />
+            /> */}
 
             <div className="relative">
               <NavItem
