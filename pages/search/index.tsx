@@ -476,7 +476,10 @@ const SearchForCase = () => {
       </Head>
       <h1
         className={`text-center mb-6 font-libre text-gray-800 ${isMobile ? "text-4xl" : "text-6xl"}`}
-        style={{ color: commonStyles.colors.text, fontFamily: "Baskerville" }}
+        style={{
+          color: commonStyles.colors.text,
+          WebkitTextStrokeWidth: "0.5px",
+        }}
       >
         {t(newCaseSearchConfig?.heading)}
       </h1>
