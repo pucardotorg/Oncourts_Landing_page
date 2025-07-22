@@ -142,6 +142,8 @@ const HelpResources = () => {
                     {item.href ? (
                       <a
                         href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="text-[#0F766E] font-semibold"
                       >
                         {t(item.content)}
