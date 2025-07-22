@@ -1,7 +1,6 @@
 import React from "react";
 import SectionHeading from "../common/SectionHeading";
 import Image from "next/image";
-import FullscreenButton from "../common/FullscreenButton";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 export default function Vision() {
