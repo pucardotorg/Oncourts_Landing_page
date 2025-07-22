@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Image from "next/image";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import { useRouter } from "next/router";
 import { svgIcons } from "../../data/svgIcons";
@@ -12,6 +13,7 @@ const HomeIntroVideo = () => {
   const router = useRouter();
   const [loginDropdownOpen, setLoginDropdownOpen] = useState(false);
   const [showFullscreen, setShowFullscreen] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [showCitizenTooltip, setShowCitizenTooltip] = useState(false);
   const [showEmployeeTooltip, setShowEmployeeTooltip] = useState(false);
   const [showSearchTooltip, setShowSearchTooltip] = useState(false);
@@ -207,17 +209,41 @@ const HomeIntroVideo = () => {
           </div>
 
           {/* Right Video Section */}
-          <div
-            className={` ${isMobile ? "w-full h-[90%]" : "w-[90%] h-[50%]"}`}
-          >
-            <div className="relative rounded-md overflow-hidden shadow-lg aspect-video">
-              <iframe
-                className="w-full h-full"
-                src={`https://www.youtube.com/embed/${videoId}?rel=0`}
-                title="ON Courts Video"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
+          <div className="w-full md:w-1/2 relative">
+            <div className="relative rounded-lg overflow-hidden shadow-lg aspect-video">
+              {!isPlaying ? (
+                <div
+                  className="relative w-full h-full cursor-pointer group"
+                  onClick={() => setIsPlaying(true)}
+                >
+                  <Image
+                    src="/images/introVideoThumbnail.png"
+                    alt="Police Station Map"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white bg-opacity-80 group-hover:bg-opacity-100 flex items-center justify-center transition-all duration-300">
+                      <svg
+                        className="w-8 h-8 md:w-10 md:h-10 text-emerald-700"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <iframe
+                  className="w-full h-full"
+                  src={`https://www.youtube.com/embed/${videoId}?rel=0&autoplay=1`}
+                  title="ON Courts Video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              )}
             </div>
           </div>
         </div>
