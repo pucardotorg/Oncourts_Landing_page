@@ -19,7 +19,7 @@ export default function Vision() {
             <p className="mb-5">{t("VISION_DESCRIPTION_1")}</p>
             <p className="mb-5">{t("VISION_DESCRIPTION_2")}</p>
             <a
-              href="https://pucar.gitbook.io/dristi/dristi-platform/release-notes"
+              href="https://docs.google.com/document/d/109ZayX_-WRr87k69m3GSEiqtgSnziWtnW08SxUZEIGQ/edit?tab=t.0#heading=h.hxgglwufvkno"
               className="inline-flex items-center bg-[#0F766E] text-white text-lg md:text-[28px] font-medium py-3 px-6 rounded-md hover:bg-[#0F766E]/80 transition-colors"
               target="_blank"
               rel="noopener noreferrer"
