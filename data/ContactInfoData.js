@@ -12,6 +12,7 @@ export const contactInfoData = [
     icon: "HelpDeskIcon",
     title: "",
     content: "IN_PERSON_HELPDESK",
+    href: "https://maps.google.com/?q=Kerala+High+Court",
   },
   {
     icon: "ClockIcon",
