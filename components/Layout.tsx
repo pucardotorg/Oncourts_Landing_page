@@ -3,6 +3,7 @@ import Head from "next/head";
 import Footer from "./Footer";
 import { Raleway } from "next/font/google";
 import { Roboto } from "next/font/google";
+import { Libre_Baskerville } from "next/font/google";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -12,6 +13,11 @@ const roboto = Roboto({
 const raleway = Raleway({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+const libreBaskerville = Libre_Baskerville({
+  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 // import { useInitStore } from "../libraries/services";
@@ -76,7 +82,7 @@ const Layout: React.FC<LayoutProps> = ({
   }
   return (
     <DigitInitializer stateCode={stateCode} enabledModules={enabledModules}>
-      <div className={`${roboto.className} ${raleway.className}`}>
+      <div className={`${roboto.className} ${raleway.className} ${libreBaskerville.className}`}>
         <Head>
           <title>24x7 OnCourts</title>
           <meta
