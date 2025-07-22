@@ -44,7 +44,7 @@ export default function Vision() {
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               ></iframe>
-              <div className="absolute bottom-3 right-3">
+              {/* <div className="absolute bottom-3 right-3">
                 <FullscreenButton
                   url={`https://www.youtube.com/watch?v=${videoId}`}
                   videoId={videoId}
@@ -53,7 +53,7 @@ export default function Vision() {
                   backgroundColor="rgba(0,0,0,0.5)"
                   size={40}
                 />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
