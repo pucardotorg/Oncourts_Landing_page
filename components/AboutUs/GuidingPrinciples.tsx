@@ -23,7 +23,7 @@ export default function GuidingPrinciples() {
 
   return (
     <div className="py-16 bg-[#F0FDFA]" id="guiding-principles-section">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto max-w-[95%] px-4">
         <SectionHeading title={t("GUIDING_PRINCIPLES")} />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-5">
           {principles.map((principle, index) => (
