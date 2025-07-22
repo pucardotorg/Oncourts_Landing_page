@@ -150,7 +150,7 @@ const MediaGallery: React.FC = () => {
             <ChevronRightIcon className="w-6 h-6 text-[white] hover:text-[black]" />
           </button>
           <button
-            className="absolute bottom-12 right-12 z-99999"
+            className={`absolute  z-99999 ${isMobile ? "bottom-6 right-6" : "bottom-12 right-12"}`}
             onClick={() => {
               setModalOpen(true);
             }}
@@ -206,14 +206,36 @@ const MediaGallery: React.FC = () => {
         <div
           className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4"
           onClick={() => setModalOpen(false)}
+          onContextMenu={(e) => e.preventDefault()}
+            onMouseDown={handleTouchStart}
+            onMouseUp={handleTouchEnd}
+            onMouseLeave={handleTouchEnd}
+            onTouchStart={(e) => {
+              e.preventDefault();
+              handleTouchStart();
+            }}
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              handleTouchEnd();
+            }}
+            onTouchCancel={handleTouchEnd}
         >
           <div
             className="relative max-w-[90vw] max-h-[90vh] w-auto h-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              className="absolute -top-12 right-0 text-white hover:text-gray-300 p-2"
-              onClick={() => setModalOpen(false)}
+              className="absolute -top-12 right-0 text-white hover:text-gray-300 p-2 z-[60]"
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                setModalOpen(false);
+              }}
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                setModalOpen(false);
+              }}
             >
               <XMarkIcon className="w-8 h-8" />
             </button>
@@ -231,18 +253,30 @@ const MediaGallery: React.FC = () => {
             </div>
             {/* Navigation arrows */}
             <button
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-full"
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-full z-[60]"
               onClick={(e) => {
                 e.stopPropagation();
+                e.preventDefault();
+                handlePrevious();
+              }}
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
                 handlePrevious();
               }}
             >
               <ChevronLeftIcon className="w-6 h-6" />
             </button>
             <button
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-full"
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-full z-[60]"
               onClick={(e) => {
                 e.stopPropagation();
+                e.preventDefault();
+                handleNext();
+              }}
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
                 handleNext();
               }}
             >
