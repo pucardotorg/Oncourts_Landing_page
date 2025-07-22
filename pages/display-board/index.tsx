@@ -145,7 +145,7 @@ export default function DisplayBoard() {
 
   useEffect(() => {
     fetchCasesForDate(selectedDate, searchValue);
-  }, [fetchCasesForDate, selectedDate]);
+  }, [fetchCasesForDate, searchValue, selectedDate]);
 
   useEffect(() => {
     // If selected date from calendar is today's date and current time is in between 11 AM and 5 PM
