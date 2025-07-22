@@ -18,7 +18,7 @@ const TableRowCard: React.FC<TableRowCardProps> = ({
   const caseTitle = entries.find(([key]) => key === "CASE_TITLE");
 
   return (
-    <div className="font-[Baskerville] rounded-md border border-slate-200 bg-white p-5 mb-6 shadow-sm w-full">
+    <div className="font-libre rounded-md border border-slate-200 bg-white p-5 mb-6 shadow-sm w-full">
       {caseTitle && (
         <div
           key={"CASE_TITLE"}

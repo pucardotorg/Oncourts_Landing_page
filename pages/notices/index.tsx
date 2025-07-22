@@ -210,7 +210,7 @@ const Notices: React.FC = () => {
   };
 
   return (
-    <div className="max-w-screen min-h-screen mx-auto py-4 px-4 md:py-6 md:px-20 bg-white font-roboto">
+    <div className="max-w-screen min-h-screen mx-auto py-4 px-4 md:py-6 md:px-20 bg-white">
       <Head>
         <title>{t("NOTICES")}</title>
       </Head>
@@ -246,6 +246,9 @@ const Notices: React.FC = () => {
           <button
             onClick={handleSearch}
             className={`${isMobile ? "w-10 h-10 flex items-center justify-center" : "md:px-3 px-1 text-lg"} font-[Inter] font-medium text-[#0F766E] hover:text-green-800 bg-white rounded-lg border border-[#0F766E]`}
+            style={{
+              WebkitTextStrokeWidth: "0.5px",
+            }}
             aria-label={t("SEARCH")}
           >
             {isMobile ? <FiSearch className="h-5 w-5" /> : t("SEARCH")}
@@ -253,6 +256,9 @@ const Notices: React.FC = () => {
           <button
             onClick={handleReset}
             className={`${isMobile ? "w-10 h-10 flex items-center justify-center" : "md:px-3 px-1 text-lg"} font-[Inter] font-medium text-[#64748B] hover:text-green-800 bg-white rounded-lg border border-[#64748B]`}
+            style={{
+              WebkitTextStrokeWidth: "0.5px",
+            }}
             aria-label={t("RESET")}
           >
             {isMobile ? <FiRefreshCw className="h-5 w-5" /> : t("RESET")}
@@ -265,7 +271,7 @@ const Notices: React.FC = () => {
       {!isMobile && noticesList.length > 0 && (
         <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-[#E2E8F0]">
           <table className="w-full">
-            <thead className="text-[#0F172A] text-[22px] font-semibold font-[Baskerville] bg-[#F8FAFC] border-b border-[#E2E8F0]">
+            <thead className="text-[#0F172A] text-[22px] font-semibold font-libre bg-[#F8FAFC] border-b border-[#E2E8F0]">
               <tr>
                 <th className="py-3 px-4 text-left w-[10%]">{t("SL_NO")}</th>
                 <th className="py-3 px-4 text-left w-[50%]">{t("TITLE")}</th>
@@ -323,7 +329,7 @@ const Notices: React.FC = () => {
           >
             <div className="grid grid-cols-1 gap-4">
               <div className="grid grid-cols-2 items-center">
-                <div className="font-[Baskerville] text-[14px] text-[#0F172A] font-semibold">
+                <div className="font-libre text-[14px] text-[#0F172A] font-semibold">
                   {t("TITLE")}:
                 </div>
                 <div className="text-[14px] text-[#334155]">
@@ -340,7 +346,7 @@ const Notices: React.FC = () => {
                 </div>
               </div>
               <div className="grid grid-cols-2 items-center">
-                <div className="font-[Baskerville] text-[14px] text-[#0F172A] font-semibold">
+                <div className="font-libre text-[14px] text-[#0F172A] font-semibold">
                   {t("DATE_OF_ISSUE")}:
                 </div>
                 <div className="text-[14px] text-[#334155]">
@@ -348,11 +354,14 @@ const Notices: React.FC = () => {
                 </div>
               </div>
               <div className="grid grid-cols-2 items-center">
-                <div className="font-[Baskerville] text-[14px] text-[#0F172A] font-semibold">
+                <div className="font-libre text-[14px] text-[#0F172A] font-semibold">
                   {t("ACTION")}:
                 </div>
                 <button
                   className="shadow-[0_2px_10px_rgba(0,0,0,0.1)] w-fit font-[Inter] inline-flex items-center justify-center gap-2 py-2 px-6 bg-[#F8FAFC] text-[#334155] text-[14px] border-2 border-[#CBD5E1] rounded-xl hover:bg-gray-50 font-medium"
+                  style={{
+                    WebkitTextStrokeWidth: "0.5px",
+                  }}
                   aria-label={`${t("DOWNLOAD")} ${notice.title}`}
                   onClick={() =>
                     downloadFile(notice.fileStoreId, `${notice.title}.pdf`)

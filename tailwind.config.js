@@ -42,7 +42,7 @@ module.exports = {
         raleway: ["Raleway", "sans-serif"],
         noto: ["Noto Sans", "sans-serif"],
         roboto: ["Roboto"],
-        noto: ["Noto Sans", "sans-serif"],
+        noto: ['"Noto Sans"', "sans-serif"],
       },
     },
   },

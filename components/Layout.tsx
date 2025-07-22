@@ -82,9 +82,7 @@ const Layout: React.FC<LayoutProps> = ({
   }
   return (
     <DigitInitializer stateCode={stateCode} enabledModules={enabledModules}>
-      <div
-        className={`${roboto.className} ${raleway.className} ${libreBaskerville.className}`}
-      >
+      <div className={`${roboto.className} ${raleway.className} ${libreBaskerville.className}`}>
         <Head>
           <title>24x7 OnCourts</title>
           <meta
