@@ -41,12 +41,18 @@ const HomeIntroVideo = () => {
           <div className="text-center md:text-left md:w-1/2 text-[20px] lg:text-[22px] font-roboto font-normal text-[#334155]">
             <div>
               <h1
-                className={`font-libre not-italic font-normal  text-[#3A3A3A] ${isMobile ? "text-center text-[32px] leading-[42px] border-b border-[#CBD5E1] pb-2" : "text-[64px] leading-[78px]"}`}
+                className={`font-libre not-italic font-normal  text-[#3A3A3A] ${isMobile ? "text-center text-[32px] leading-[42px] border-b border-[#CBD5E1] pb-2" : "text-[64px] leading-[78px] pb-[24px]"}`}
+                style={
+                  {
+                    WebkitTextStrokeWidth: "0.5px",
+                    WebkitTextStrokeColor: "#000",
+                  } as React.CSSProperties
+                }
               >
                 {t("TAKING_COURT_TO_PEOPLE")}
               </h1>
               <p
-                className={`font-roboto not-italic font-normal text-[#334155]  tracking-normal ${isMobile ? "text-center text-[17px] leading-[22px]" : "text-[28px] leading-[36px]"}`}
+                className={`font-roboto not-italic font-normal text-[#334155]  tracking-normal ${isMobile ? "text-center text-[17px] leading-[22px] pt-[24px] pb-[30px]" : "text-[28px] leading-[36px] pt-[24px] pb-[30px]"}`}
               >
                 {t("COURT_DESCRIPTION")}
               </p>
