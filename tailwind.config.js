@@ -41,7 +41,7 @@ module.exports = {
       fontFamily: {
         raleway: ["Raleway", "sans-serif"],
         noto: ["Noto Sans", "sans-serif"],
-        roboto: ["Roboto", "sans-serif"],
+        roboto: ["Roboto"],
         libre: ['"Libre Baskerville"', "serif"],
         noto: ['"Noto Sans"', "sans-serif"],
       },

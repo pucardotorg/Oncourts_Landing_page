@@ -2,6 +2,12 @@ import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Footer from "./Footer";
 import { Raleway } from "next/font/google";
+import { Roboto } from "next/font/google";
+
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+});
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -70,7 +76,7 @@ const Layout: React.FC<LayoutProps> = ({
   }
   return (
     <DigitInitializer stateCode={stateCode} enabledModules={enabledModules}>
-      <div className={raleway.className}>
+      <div className={`${roboto.className} ${raleway.className}`}>
         <Head>
           <title>24x7 OnCourts</title>
           <meta

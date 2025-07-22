@@ -358,28 +358,29 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
       }
 
       const blob = await response.blob();
-      
+
       // Check if device is iOS
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !("MSStream" in window);
+      const isIOS =
+        /iPad|iPhone|iPod/.test(navigator.userAgent) && !("MSStream" in window);
 
       if (isIOS) {
         // For iOS, create a temporary anchor element and trigger a download
         // Get filename from content-disposition header or create a default one
         const fileName = `order-${orderId}.pdf`;
-        
+
         // Create a temporary anchor element
-        const a = document.createElement('a');
-        a.style.display = 'none';
+        const a = document.createElement("a");
+        a.style.display = "none";
         document.body.appendChild(a);
-        
+
         // Create a download URL and set attributes
         const url = window.URL.createObjectURL(blob);
         a.href = url;
         a.download = fileName;
-        
+
         // Programmatically click the link to trigger download
         a.click();
-        
+
         // Clean up
         setTimeout(() => {
           document.body.removeChild(a);
@@ -389,7 +390,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
         // For other devices, use the standard window.open method
         const url = window.URL.createObjectURL(blob);
         window.open(url, "_blank");
-        
+
         setTimeout(() => {
           window.URL.revokeObjectURL(url);
         }, 5000);

@@ -12,7 +12,7 @@ const CustomCard: React.FC<CustomCardProps> = ({ title, description }) => {
         {title}
       </span>
       <div className="border-b border-[#CBD5E1] my-2 w-[80%]"></div>
-      <p className="text-[20px] font-normal text-[#3A3A3A]">{description}</p>
+      <p className="text-[20px] font-normal text-[#334155]">{description}</p>
     </div>
   );
 };

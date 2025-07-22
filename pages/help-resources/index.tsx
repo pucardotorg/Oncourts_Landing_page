@@ -31,7 +31,7 @@ const HelpResources = () => {
       </Head>
 
       <div className="py-8 md:py-12 bg-white">
-        <div className="w-full md:w-[90%] mx-auto">
+        <div className="w-full md:w-[98%] mx-auto">
           <div className="px-6 md:px-20">
             <SectionHeading
               title={t("HELP_RESOURCES")}
