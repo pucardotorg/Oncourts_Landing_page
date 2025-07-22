@@ -178,6 +178,11 @@ function HomeCauseLists(): JSX.Element {
         <div className="flex mb-12 items-center justify-center">
           <h2
             className={`px-[30px] pb-2 text-center font-libre font-normal  text-[#3A3A3A] border-b border-[#CBD5E1] ${isMobile ? "text-[32px] leading-[40px] w-[90%]" : "text-[40px] leading-[48px]"}`}
+            style={
+              {
+                WebkitTextStrokeWidth: "0.5px",
+              } as React.CSSProperties
+            }
           >
             Cause List
           </h2>
@@ -220,6 +225,11 @@ function HomeCauseLists(): JSX.Element {
               <svgIcons.OpenInNewTabIcon width={isMobile ? "16" : "30"} />
               <span
                 className={`h-[32px] font-roboto font-medium leading-[32px] tracking-[-0.56px] text-center text-[#0F766E] ${isMobile ? "text-[16px]" : "text-[28px]"}`}
+                style={
+                  {
+                    WebkitTextStrokeWidth: "0.5px",
+                  } as React.CSSProperties
+                }
               >
                 {t("View Cause List Display")}
               </span>

@@ -39,7 +39,7 @@ const Question: React.FC<QuestionProps> = ({
       >
         <div className="flex items-start justify-between">
           <span
-            className={`font-sans font-medium tracking-[0.01em] text-[#3A3A3A] pr-8 ${isMobile ? "text-[20px] leading-[24px]" : "text-[26px] leading-[36px]"}`}
+            className={`font-roboto font-medium tracking-[-0.26px] text-[#3A3A3A] pr-8 ${isMobile ? "text-[20px] leading-[24px]" : "text-[26px] leading-[36px]"}`}
           >
             {question}
           </span>
@@ -53,7 +53,7 @@ const Question: React.FC<QuestionProps> = ({
       >
         <div className="pb-6">
           <div
-            className={`font-sans tracking-[0.01em] text-[#64748B] ${isMobile ? "text-[15px] leading-[18px]" : "text-[20px] leading-[28px]"}`}
+            className={`font-roboto tracking-[-0.2px] text-[#64748B] ${isMobile ? "text-[15px] leading-[18px]" : "text-[20px] leading-[28px]"}`}
           >
             {answer}
           </div>
@@ -327,6 +327,11 @@ const QuestionsSection: React.FC = () => {
         <div className="flex center justify-center">
           <h2
             className={`px-12 pb-2 font-libre font-normal text-center text-[#3A3A3A] mb-12 border-b border-b-[#CBD5E1] ${isMobile ? "text-[32px] leading-[42px] max-w-[90%] " : "text-[40px] leading-[48px]"}`}
+            style={
+              {
+                WebkitTextStrokeWidth: "0.5px",
+              } as React.CSSProperties
+            }
           >
             {t("FREQUENTLY_ASKED_QUESTIONS")}
           </h2>
@@ -353,6 +358,11 @@ const QuestionsSection: React.FC = () => {
             <svgIcons.OpenInNewTabIcon width={isMobile ? "16" : "30"} />
             <span
               className={`h-[32px] font-roboto font-medium leading-[32px] tracking-[-0.56px] text-center text-[#0F766E] ${isMobile ? "text-[16px]" : "text-[28px]"}`}
+              style={
+                {
+                  WebkitTextStrokeWidth: "0.5px",
+                } as React.CSSProperties
+              }
             >
               {t("Help & Support")}
             </span>

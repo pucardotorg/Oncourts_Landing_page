@@ -117,6 +117,11 @@ const Highlights: React.FC = () => {
         <div className="flex items-center justify-center mb-8">
           <h2
             className={`px-12 pb-2 font-libre font-normal  tracking-normal text-center align-middle text-[#3A3A3A] border-b border-[#CBD5E1] ${isMobile ? "text-[32px] leading-[40px] w-[90%]" : "text-[40px] leading-[48px]"}`}
+            style={
+              {
+                WebkitTextStrokeWidth: "0.5px",
+              } as React.CSSProperties
+            }
           >
             {t("HIGHLIGHTS")}
           </h2>
