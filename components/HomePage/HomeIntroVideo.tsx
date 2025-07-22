@@ -36,12 +36,12 @@ const HomeIntroVideo = () => {
 
   return (
     <div className="py-10 md:py-16 bg-white" id="vision-section">
-      <div className="container mx-auto px-5">
-        <div className="flex flex-col md:flex-row gap-8 md:gap-10 items-stretch">
-          <div className="text-center md:text-left md:w-1/2 text-[20px] lg:text-[22px] font-roboto font-normal text-[#334155]">
+      <div className="container mx-auto px-5 max-w-[95%]">
+        <div className="flex flex-col md:flex-row gap-auto md:gap-[40px] items-stretch">
+          <div className="text-center md:text-left md:w-1/2 text-[20px] lg:text-[22px] font-normal text-[#334155]">
             <div>
               <h1
-                className={`font-libre not-italic font-normal  text-[#3A3A3A] ${isMobile ? "text-center text-[32px] leading-[42px] border-b border-[#CBD5E1] pb-2" : "text-[64px] leading-[78px] pb-[24px]"}`}
+                className={`font-libre font-normal  text-[#3A3A3A] ${isMobile ? "text-center text-[32px] leading-[42px] border-b border-[#CBD5E1] pb-2" : "text-[64px] leading-[78px] pb-[24px]"}`}
                 style={
                   {
                     WebkitTextStrokeWidth: "0.5px",
@@ -52,7 +52,7 @@ const HomeIntroVideo = () => {
                 {t("TAKING_COURT_TO_PEOPLE")}
               </h1>
               <p
-                className={`font-roboto not-italic font-normal text-[#334155]  tracking-normal ${isMobile ? "text-center text-[17px] leading-[22px] pt-[24px] pb-[30px]" : "text-[28px] leading-[36px] pt-[24px] pb-[30px]"}`}
+                className={`font-roboto font-normal text-[#334155]  tracking-normal ${isMobile ? "text-center text-[17px] leading-[22px] pt-[24px] pb-[30px]" : "text-[28px] leading-[36px] pt-[24px] pb-[30px]"}`}
               >
                 {t("COURT_DESCRIPTION")}
               </p>
@@ -68,6 +68,11 @@ const HomeIntroVideo = () => {
                         isMobile
                           ? "text-center font-roboto font-medium text-[14px] leading-[20px] text-white"
                           : "h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-white"
+                      }
+                      style={
+                        {
+                          WebkitTextStrokeWidth: "0.5px",
+                        } as React.CSSProperties
                       }
                     >
                       {t("LOGIN")}
@@ -106,6 +111,11 @@ const HomeIntroVideo = () => {
                                 ? "py-3 border-b border-[#CBD5E1] text-center font-roboto font-medium text-[14px] leading-[20px] text-[#3A3A3A]"
                                 : "py-3 border-b border-[#CBD5E1] font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]"
                             }
+                            style={
+                              {
+                                WebkitTextStrokeWidth: "0.5px",
+                              } as React.CSSProperties
+                            }
                           >
                             {" "}
                             {t("ADVOCATE_LITIGANT_LOGIN")}
@@ -139,6 +149,11 @@ const HomeIntroVideo = () => {
                                 ? "py-3 text-center font-roboto font-medium text-[14px] leading-[20px] text-[#3A3A3A]"
                                 : "py-3 font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]"
                             }
+                            style={
+                              {
+                                WebkitTextStrokeWidth: "0.5px",
+                              } as React.CSSProperties
+                            }
                           >
                             {t("JUDGE_STAFF_LOGIN")}
                           </span>
@@ -170,6 +185,11 @@ const HomeIntroVideo = () => {
                         isMobile
                           ? "text-center font-roboto font-medium text-[14px] leading-[20px] text-[#0F766E]"
                           : "h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-[#0F766E]"
+                      }
+                      style={
+                        {
+                          WebkitTextStrokeWidth: "0.5px",
+                        } as React.CSSProperties
                       }
                     >
                       {" "}
