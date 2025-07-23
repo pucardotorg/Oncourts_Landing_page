@@ -358,11 +358,6 @@ const QuestionsSection: React.FC = () => {
             <svgIcons.OpenInNewTabIcon width={isMobile ? "16" : "30"} />
             <span
               className={`h-[32px] font-roboto font-medium leading-[32px] tracking-[-0.56px] text-center text-[#0F766E] ${isMobile ? "text-[16px]" : "text-[28px]"}`}
-              style={
-                {
-                  WebkitTextStrokeWidth: "0.5px",
-                } as React.CSSProperties
-              }
             >
               {t("Help & Support")}
             </span>
