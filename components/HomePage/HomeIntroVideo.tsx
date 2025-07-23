@@ -69,11 +69,6 @@ const HomeIntroVideo = () => {
                           ? "text-center font-roboto font-medium text-[14px] leading-[20px] text-white"
                           : "h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-white"
                       }
-                      style={
-                        {
-                          WebkitTextStrokeWidth: "0.5px",
-                        } as React.CSSProperties
-                      }
                     >
                       {t("LOGIN")}
                     </span>
@@ -111,11 +106,6 @@ const HomeIntroVideo = () => {
                                 ? "py-3 border-b border-[#CBD5E1] text-center font-roboto font-medium text-[14px] leading-[20px] text-[#3A3A3A]"
                                 : "py-3 border-b border-[#CBD5E1] font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]"
                             }
-                            style={
-                              {
-                                WebkitTextStrokeWidth: "0.5px",
-                              } as React.CSSProperties
-                            }
                           >
                             {" "}
                             {t("ADVOCATE_LITIGANT_LOGIN")}
@@ -149,11 +139,6 @@ const HomeIntroVideo = () => {
                                 ? "py-3 text-center font-roboto font-medium text-[14px] leading-[20px] text-[#3A3A3A]"
                                 : "py-3 font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]"
                             }
-                            style={
-                              {
-                                WebkitTextStrokeWidth: "0.5px",
-                              } as React.CSSProperties
-                            }
                           >
                             {t("JUDGE_STAFF_LOGIN")}
                           </span>
@@ -185,11 +170,6 @@ const HomeIntroVideo = () => {
                         isMobile
                           ? "text-center font-roboto font-medium text-[14px] leading-[20px] text-[#0F766E]"
                           : "h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-[#0F766E]"
-                      }
-                      style={
-                        {
-                          WebkitTextStrokeWidth: "0.5px",
-                        } as React.CSSProperties
                       }
                     >
                       {" "}

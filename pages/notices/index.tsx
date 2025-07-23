@@ -246,9 +246,6 @@ const Notices: React.FC = () => {
           <button
             onClick={handleSearch}
             className={`${isMobile ? "w-10 h-10 flex items-center justify-center" : "md:px-3 px-1 text-lg"} font-[Inter] font-medium text-[#0F766E] hover:text-green-800 bg-white rounded-lg border border-[#0F766E]`}
-            style={{
-              WebkitTextStrokeWidth: "0.5px",
-            }}
             aria-label={t("SEARCH")}
           >
             {isMobile ? <FiSearch className="h-5 w-5" /> : t("SEARCH")}
@@ -256,9 +253,6 @@ const Notices: React.FC = () => {
           <button
             onClick={handleReset}
             className={`${isMobile ? "w-10 h-10 flex items-center justify-center" : "md:px-3 px-1 text-lg"} font-[Inter] font-medium text-[#64748B] hover:text-green-800 bg-white rounded-lg border border-[#64748B]`}
-            style={{
-              WebkitTextStrokeWidth: "0.5px",
-            }}
             aria-label={t("RESET")}
           >
             {isMobile ? <FiRefreshCw className="h-5 w-5" /> : t("RESET")}
@@ -359,9 +353,6 @@ const Notices: React.FC = () => {
                 </div>
                 <button
                   className="shadow-[0_2px_10px_rgba(0,0,0,0.1)] w-fit font-[Inter] inline-flex items-center justify-center gap-2 py-2 px-6 bg-[#F8FAFC] text-[#334155] text-[14px] border-2 border-[#CBD5E1] rounded-xl hover:bg-gray-50 font-medium"
-                  style={{
-                    WebkitTextStrokeWidth: "0.5px",
-                  }}
                   aria-label={`${t("DOWNLOAD")} ${notice.title}`}
                   onClick={() =>
                     downloadFile(notice.fileStoreId, `${notice.title}.pdf`)
