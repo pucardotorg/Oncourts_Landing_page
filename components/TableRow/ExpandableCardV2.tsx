@@ -27,7 +27,9 @@ const ExpandableCardV2: React.FC<ExpandableCardV2Props> = ({ caseData }) => {
   const statusColor = getStatusStyle(caseData.status || "");
 
   return (
-    <div className={`border-b  border-[#E2E8F0] px-0 mt-0 border-l border-r`}>
+    <div
+      className={`border-b  border-[#E2E8F0] px-0 mt-0 border-l border-r font-roboto`}
+    >
       <div
         className={`grid grid-cols-[45%_45%_10%] items-center px-[5px] cursor-pointer h-[41px] relative ${isExpanded ? "bg-[#F0FDFA]" : ""}`}
         onClick={toggleExpand}
@@ -81,7 +83,7 @@ const ExpandableCardV2: React.FC<ExpandableCardV2Props> = ({ caseData }) => {
               <div className="font-roboto font-semibold text-[14.07px] leading-[20px] text-[#0F172A]">
                 {t("ADVOCATE")}:
               </div>
-              <div className="text-[14.07px] leading-[20px] text-[#334155]">
+              <div className="text-[14.07px] leading-[20px] text-[#334155] font-bold ">
                 {caseData?.advocates || ""}
               </div>
               <div></div>

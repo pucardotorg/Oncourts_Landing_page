@@ -53,7 +53,7 @@ const Question: React.FC<QuestionProps> = ({
       >
         <div className="pb-6">
           <div
-            className={`font-roboto tracking-[-0.2px] text-[#64748B] ${isMobile ? "text-[15px] leading-[18px]" : "text-[20px] leading-[28px]"}`}
+            className={`font-roboto tracking-[-0.2px] text-[#334155] ${isMobile ? "text-[15px] leading-[18px]" : "text-[20px] leading-[28px]"}`}
           >
             {answer}
           </div>
@@ -111,7 +111,7 @@ const QuestionsSection: React.FC = () => {
       id: 0,
       question: t("WHERE_CHECK_HEARING_DETAILS"),
       answer: (
-        <div className="space-y-4 text-[#1E293B]">
+        <div className="space-y-4 text-[#334155]">
           <p>
             {t("WHERE_CHECK_HEARING_DETAILS_ANSWER_1")}
             <Link href="/search" className="text-[#1D4ED8] hover:underline">
@@ -128,7 +128,7 @@ const QuestionsSection: React.FC = () => {
       id: 1,
       question: t("TASKS_I_NEED_TO_COMPLETE_TO_CASE_FORWARD"),
       answer: (
-        <div className="space-y-4 text-[#1E293B]">
+        <div className="space-y-4 text-[#334155]">
           <p>
             {t("TASKS_I_NEED_TO_COMPLETE_TO_CASE_FORWARD_ANS_PART_1")}
             <Link
@@ -153,7 +153,7 @@ const QuestionsSection: React.FC = () => {
       question:
         "How can I check if my cases are scheduled for hearing on a specific day?",
       answer: (
-        <div className="space-y-4 text-[#1E293B]">
+        <div className="space-y-4 text-[#334155]">
           <p>
             You can use the{" "}
             <Link
@@ -180,7 +180,7 @@ const QuestionsSection: React.FC = () => {
       id: 3,
       question: "Can I join my hearing online?",
       answer: (
-        <div className="space-y-4 text-[#1E293B]">
+        <div className="space-y-4 text-[#334155]">
           <p>
             Yes. You can join your hearing online by clicking the &apos;Join
             Hearing&apos; button available in the{" "}
@@ -203,7 +203,7 @@ const QuestionsSection: React.FC = () => {
       id: 4,
       question: "What documents are required for e-filing?",
       answer: (
-        <div className="space-y-6 text-[#1E293B]">
+        <div className="space-y-6 text-[#334155]">
           <p className="mb-4">List of documents required for e-filing:</p>
           <ol className="list-decimal pl-8 space-y-4">
             <li>
@@ -264,7 +264,7 @@ const QuestionsSection: React.FC = () => {
       id: 5,
       question: "What documents are required for Bail?",
       answer: (
-        <div className="space-y-6 text-[#1E293B]">
+        <div className="space-y-6 text-[#334155]">
           <p className="mb-4">List of documents required for Bail:</p>
           <ol className="list-decimal pl-8 space-y-4">
             <li>Bail Application (System generated)</li>
@@ -282,7 +282,7 @@ const QuestionsSection: React.FC = () => {
       question:
         "Are there videos or guides to help me understand how to use the platform (e.g., filing, application submission, payments)?",
       answer: (
-        <div className="space-y-6 text-[#1E293B]">
+        <div className="space-y-6 text-[#334155]">
           <p>
             Yes. You can access step-by-step user guides and short video
             tutorials to learn how to file cases, submit applications, make
