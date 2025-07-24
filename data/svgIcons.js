@@ -134,10 +134,10 @@ const SearchIcon = () => (
   </svg>
 );
 
-const SearchIcon2 = () => (
+const SearchIcon2 = ({ width = "20", height = "20" }) => (
   <svg
-    width="20"
-    height="20"
+    width={width}
+    height={height}
     viewBox="0 0 32 33"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -565,10 +565,10 @@ const DownloadIcon = () => (
   </svg>
 );
 
-const VideoCallIcon = () => (
+const VideoCallIcon = ({ width = "18", height = "18" }) => (
   <svg
-    width="18"
-    height="18"
+    width={width}
+    height={height}
     viewBox="0 0 27 26"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -582,10 +582,10 @@ const VideoCallIcon = () => (
   </svg>
 );
 
-const RefreshIcon = () => (
+const RefreshIcon = ({ width = "22", height = "22" }) => (
   <svg
-    width="22"
-    height="22"
+    width={width}
+    height={height}
     viewBox="0 0 26 26"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -599,10 +599,10 @@ const RefreshIcon = () => (
   </svg>
 );
 
-const DownloadIcon2 = () => (
+const DownloadIcon2 = ({ width = "16", height = "16" }) => (
   <svg
-    width="16"
-    height="16"
+    width={width}
+    height={height}
     viewBox="0 0 27 27"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -646,6 +646,50 @@ const InfoIcon = ({ width = "34" }) => {
         <clipPath id="clip0_2198_12114">
           <path
             d="M0.000976562 23.5C0.000976562 10.798 10.298 0.500977 23 0.500977C35.702 0.500977 45.999 10.798 45.999 23.5C45.999 36.202 35.702 46.499 23 46.499C10.298 46.499 0.000976562 36.202 0.000976562 23.5Z"
+            fill="white"
+          />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+};
+
+const InfoIconMobile = () => {
+  return (
+    <svg
+      width="37"
+      height="38"
+      viewBox="0 0 37 38"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clip-path="url(#clip0_2761_49772)">
+        <circle
+          opacity="0.2"
+          cx="18.498"
+          cy="18.8926"
+          r="18.498"
+          fill="#2563EB"
+        />
+        <circle cx="18.498" cy="18.8926" r="6.16602" fill="#2563EB" />
+        <rect
+          x="12.332"
+          y="12.7266"
+          width="13.8735"
+          height="12.332"
+          fill="#D3E0FB"
+        />
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M18.4958 7.58789C12.2525 7.58789 7.19141 12.649 7.19141 18.8923C7.19141 25.1355 12.2525 30.1966 18.4958 30.1966C24.739 30.1966 29.8001 25.1355 29.8001 18.8923C29.8001 12.649 24.739 7.58789 18.4958 7.58789ZM18.4958 13.7539C17.9282 13.7539 17.4681 14.214 17.4681 14.7816C17.4681 15.3491 17.9282 15.8092 18.4958 15.8092H18.506C19.0736 15.8092 19.5337 15.3491 19.5337 14.7816C19.5337 14.214 19.0736 13.7539 18.506 13.7539H18.4958ZM19.5234 18.8923C19.5234 18.3247 19.0633 17.8646 18.4958 17.8646C17.9282 17.8646 17.4681 18.3247 17.4681 18.8923V23.0029C17.4681 23.5705 17.9282 24.0306 18.4958 24.0306C19.0633 24.0306 19.5234 23.5705 19.5234 23.0029V18.8923Z"
+          fill="#2563EB"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_2761_49772">
+          <path
+            d="M0 18.8926C0 8.67639 8.28186 0.394531 18.498 0.394531C28.7142 0.394531 36.9961 8.67639 36.9961 18.8926C36.9961 29.1088 28.7142 37.3906 18.498 37.3906C8.28186 37.3906 0 29.1088 0 18.8926Z"
             fill="white"
           />
         </clipPath>
@@ -892,11 +936,11 @@ const SmallDownloadIcon = () => {
   );
 };
 
-const CalendarIcon = () => {
+const CalendarIcon = ({ width = "w-5", height = "h-5" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className={`h-5 w-5`}
+      className={`${height} ${width}`}
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -945,4 +989,5 @@ export const svgIcons = {
   SmallFileIcon,
   SmallDownloadIcon,
   CalendarIcon,
+  InfoIconMobile,
 };

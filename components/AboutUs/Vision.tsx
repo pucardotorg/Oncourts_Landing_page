@@ -20,7 +20,7 @@ export default function Vision() {
             <p className="mb-5">{t("VISION_DESCRIPTION_2")}</p>
             <a
               href="https://drive.google.com/file/d/1lUJA_CbDuRUd3Rk7Sn6Ws2NiI6L4d5aM/view"
-              className="inline-flex items-center bg-[#0F766E] text-white text-lg md:text-[28px] font-medium py-3 px-6 rounded-md hover:bg-[#0F766E]/80 transition-colors"
+              className="inline-flex items-center bg-[#0F766E] text-white text-lg md:text-[28px] md:leading-[32px] md:tracking-[-0.56px] font-medium py-3 px-6 rounded-md hover:bg-[#0F766E]/80 transition-colors"
               target="_blank"
               rel="noopener noreferrer"
             >
