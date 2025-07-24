@@ -184,7 +184,7 @@ function HomeCauseLists(): JSX.Element {
               } as React.CSSProperties
             }
           >
-            Cause List
+            {t("CAUSE_LIST_TITLE")}
           </h2>
         </div>
         <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-[60px]">
@@ -193,6 +193,7 @@ function HomeCauseLists(): JSX.Element {
               date={leftCauseList.date}
               pdfUrl={leftCauseList.pdfUrl}
               onDownload={() => downloadPdf(leftCauseList.date)}
+              t={t}
             />
           )}
           {rightCauseList && (
@@ -200,6 +201,7 @@ function HomeCauseLists(): JSX.Element {
               date={rightCauseList.date}
               pdfUrl={rightCauseList.pdfUrl}
               onDownload={() => downloadPdf(rightCauseList.date)}
+              t={t}
             />
           )}
         </div>
@@ -208,8 +210,8 @@ function HomeCauseLists(): JSX.Element {
           <p
             className={`font-roboto font-normal leading-[26px] tracking-[-0.2px] text-[#334155] ${isMobile ? "text-[15px]" : "text-[20px]"}`}
           >
-            Cause list for the next day will be available after{" "}
-            <strong>05:00 PM</strong>
+            {t("CAUSE_LIST_INFO")}
+            <strong>{t("CAUSE_LIST_INFO_TIME")}</strong>
           </p>
         </div>
         <div className="flex justify-center mt-8">
@@ -226,12 +228,12 @@ function HomeCauseLists(): JSX.Element {
               <span
                 className={`h-[32px] font-roboto font-medium leading-[32px] tracking-[-0.56px] text-center text-[#0F766E] ${isMobile ? "text-[16px]" : "text-[28px]"}`}
               >
-                {t("View Cause List Display")}
+                {t("VIEW_CAUSE_LIST_DISPLAY")}
               </span>
             </button>
             {showTooltip && !isMobile && (
               <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-[99999]">
-                <Tooltip text="Track real-time progress of today's listed cases" />
+                <Tooltip text={t("VIEW_CAUSE_LIST_DISPLAY_TOOLTIP")} />
               </div>
             )}
           </div>

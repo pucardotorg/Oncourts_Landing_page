@@ -8,6 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useMediaQuery } from "@mui/material";
 import { svgIcons } from "../../data/svgIcons";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 const MediaGallery: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -15,6 +16,7 @@ const MediaGallery: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const autoSlideTimer = useRef<NodeJS.Timeout>();
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const { t } = useSafeTranslation();
 
   const currentImage = galleryImages[currentImageIndex];
 
@@ -77,19 +79,17 @@ const MediaGallery: React.FC = () => {
           <h1
             className={`text-[#3A3A3A] font-libre mb-[20px] border-b border-[#CBD5E1] pb-[10px] ${isMobile ? "text-[32px] leading-[40px] mx-[50px]" : "text-[64px] leading-[70px] mx-[60px]"}`}
           >
-            Media Gallery
+            {t("MEDIA_GALLERY_HEADER")}
           </h1>
           <h2
             className={` font-libre font-normal text-center text-[#3A3A3A] mb-4 px-4 ${isMobile ? "text-[24px] leading-[34px]" : "text-[40px] leading-[48px] "}`}
           >
-            Courtroom, ON Court Kollam
+            {t("MEDIA_GALLERY_SUB_HEADER")}
           </h2>
           <p
             className={`font-roboto font-normal tracking-[-0.56px] text-center text-[#334155] px-4 mb-8 ${isMobile ? "text-[17px] leading-[22px]" : "text-[28px] leading-[40px]"}`}
           >
-            With a waiting area and help desk, the ON Court is designed to be
-            people-centric. Equipped with state of art equipment, it enables
-            quality virtual and hybrid hearing experience for users.
+            {t("MEDIA_GALLERY_DESCRIPTION")}
           </p>
         </div>
 
@@ -207,18 +207,18 @@ const MediaGallery: React.FC = () => {
           className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4"
           onClick={() => setModalOpen(false)}
           onContextMenu={(e) => e.preventDefault()}
-            onMouseDown={handleTouchStart}
-            onMouseUp={handleTouchEnd}
-            onMouseLeave={handleTouchEnd}
-            onTouchStart={(e) => {
-              e.preventDefault();
-              handleTouchStart();
-            }}
-            onTouchEnd={(e) => {
-              e.preventDefault();
-              handleTouchEnd();
-            }}
-            onTouchCancel={handleTouchEnd}
+          onMouseDown={handleTouchStart}
+          onMouseUp={handleTouchEnd}
+          onMouseLeave={handleTouchEnd}
+          onTouchStart={(e) => {
+            e.preventDefault();
+            handleTouchStart();
+          }}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            handleTouchEnd();
+          }}
+          onTouchCancel={handleTouchEnd}
         >
           <div
             className="relative max-w-[90vw] max-h-[90vh] w-auto h-auto"
