@@ -17,7 +17,7 @@ const FAQItem: React.FC<FAQItemProps> = ({
         className="flex justify-between items-center py-4 cursor-pointer"
         onClick={onClick}
       >
-        <h3 className="text-xl md:text-[26px] font-medium text-[#3A3A3A]">
+        <h3 className="text-xl md:text-[26px] font-medium text-[#3A3A3A] tracking-[-0.26px]">
           {question}
         </h3>
         <div className="text-teal-600">
@@ -51,7 +51,7 @@ const FAQItem: React.FC<FAQItemProps> = ({
         </div>
       </div>
       {isOpen && (
-        <div className="pb-6 text-[15px] md:text-xl text-[#334155]">
+        <div className="pb-6 text-[15px] md:text-xl text-[#334155] tracking-[-0.2px] ">
           {answer}
         </div>
       )}
