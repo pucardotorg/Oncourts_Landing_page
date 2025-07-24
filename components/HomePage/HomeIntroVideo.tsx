@@ -113,11 +113,7 @@ const HomeIntroVideo = () => {
                         </button>
                         {showCitizenTooltip && !isMobile && (
                           <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-[99999]">
-                            <Tooltip
-                              text={t(
-                                "Log in to file cases, submit applications and more"
-                              )}
-                            />
+                            <Tooltip text={t("CITIZEN_LOGIN_TOOLTIP")} />
                           </div>
                         )}
                       </div>
@@ -145,11 +141,7 @@ const HomeIntroVideo = () => {
                         </button>
                         {showEmployeeTooltip && !isMobile && (
                           <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-[99999]">
-                            <Tooltip
-                              text={t(
-                                "Log in to manage cases, issue orders, and support courtroom proceedings"
-                              )}
-                            />
+                            <Tooltip text={t("JUDGE_STAFF_LOGIN_TOOLTIP")} />
                           </div>
                         )}
                       </div>
@@ -178,11 +170,7 @@ const HomeIntroVideo = () => {
                   </button>
                   {showSearchTooltip && !isMobile && (
                     <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-[99999]">
-                      <Tooltip
-                        text={t(
-                          "Check next hearing date, case history, stage, and more."
-                        )}
-                      />
+                      <Tooltip text={t("CASE_SEARCH_TOOLTIP")} />
                     </div>
                   )}
                 </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 interface VideoTutorial {
   id: string;
@@ -22,47 +23,47 @@ interface VideoCategory {
 const videoCategories: VideoCategory[] = [
   {
     id: "general",
-    title: "General Videos",
+    title: "GENERAL_VIDEOS",
     videos: [
       {
         id: "user-registration",
-        title: "User Registration & Login",
+        title: "USER_REGISTRATION_AND_LOGIN",
         category: "general",
         videoId: "ka7KPcPVDe0",
       },
       {
         id: "home-screen",
-        title: "Home Screen",
+        title: "HOME_SCREEN_VIDEO_TUTORIAL",
         category: "general",
         videoId: "YqmvFNhjDdk",
       },
       {
         id: "view-case",
-        title: "View a Case",
+        title: "VIEW_A_CASE_VIDEO_TUTORIAL",
         category: "general",
         videoId: "5kmtfjHpEJQ",
       },
       {
         id: "submissions-extensions-and-responses",
-        title: "Submissions, Extensions and Responses",
+        title: "SUBMISSIONS_EXTENSIONS_AND_RESPONSES_VIDEO_TUTORIAL",
         category: "general",
         videoId: "smP5T8V9MCc",
       },
       {
         id: "calendar-management-scheduling-and-rescheduling",
-        title: "Calendar Management, Scheduling & Rescheduling",
+        title: "CALENDAR_MANAGEMENT_SCHEDULING_AND_RESCHEDULING_VIDEO_TUTORIAL",
         category: "general",
         videoId: "DXCcVvkkMqs",
       },
       {
         id: "hearing-management",
-        title: "Hearing Management",
+        title: "HEARING_MANAGEMENT_VIDEO_TUTORIAL",
         category: "general",
         videoId: "aYOEFSMzGgw",
       },
       {
         id: "order-and-judgement",
-        title: "Orders & Judgements",
+        title: "ORDER_AND_JUDGEMENT_VIDEO_TUTORIAL",
         category: "general",
         videoId: "u-HqgM1tLtA",
       },
@@ -70,23 +71,23 @@ const videoCategories: VideoCategory[] = [
   },
   {
     id: "complainant",
-    title: "Complainant Side",
+    title: "COMPLAINANT_SIDE",
     videos: [
       {
         id: "file-case-complainant",
-        title: "File a Case",
+        title: "FILE_CASE_COMPLAINANT_VIDEO_TUTORIAL",
         category: "complainant",
         videoId: "p9Ey6Ea3AXg",
       },
       {
         id: "defect-correction",
-        title: "Defect Correction",
+        title: "DEFECT_CORRECTION_VIDEO_TUTORIAL",
         category: "complainant",
         videoId: "_aJ0qYYebKA",
       },
       {
         id: "process-management",
-        title: "Process Management",
+        title: "PROCESS_MANAGEMENT_VIDEO_TUTORIAL",
         category: "complainant",
         videoId: "RYF-krKyLBU",
       },
@@ -94,17 +95,17 @@ const videoCategories: VideoCategory[] = [
   },
   {
     id: "accused",
-    title: "Accused Side",
+    title: "ACCUSED_SIDE",
     videos: [
       {
         id: "join-case",
-        title: "Join a Case",
+        title: "JOIN_CASE_VIDEO_TUTORIAL",
         category: "accused",
         videoId: "w_gL0YsG8X0",
       },
       {
         id: "bail",
-        title: "Bail",
+        title: "BAIL_VIDEO_TUTORIAL",
         category: "accused",
         videoId: "2VxsJI_eqgY",
       },
@@ -113,17 +114,17 @@ const videoCategories: VideoCategory[] = [
 ];
 
 const VideoTutorials: React.FC = () => {
+  const { t } = useSafeTranslation();
   return (
     <div className="py-8 bg-white px-4">
       <div className="w-[95%] md:w-[90%] mx-auto">
         {/* Page Title */}
         <div className="text-center mb-12 border-b border-[#E5E7EB] pb-6">
           <h1 className="font-libre not-italic font-normal text-[40px] md:text-[64px] leading-[46px] md:leading-[70px] text-center tracking-[-0.8px] text-[#3A3A3A]">
-            Video Tutorials
+            {t("VIDEO_TUTORIALS_HEADER")}
           </h1>
           <p className="mt-4 font-roboto not-italic font-normal text-[20px] md:text-[28px] leading-[28px] md:leading-[40px] text-center tracking-[-0.56px] text-[#334155]">
-            Learn how to navigate ON Court through easy-to-follow instructional
-            videos
+            {t("VIDEO_TUTORIALS_DESCRIPTION")}
           </p>
         </div>
 
@@ -132,7 +133,7 @@ const VideoTutorials: React.FC = () => {
           {videoCategories.map((category) => (
             <div key={category.id} className="mb-8">
               <h2 className="font-libre not-italic font-normal text-[32px] md:text-[48px] leading-[40px] md:leading-[56px] text-[#3A3A3A] mb-6 md:mb-8">
-                {category.title}
+                {t(category.title)}
               </h2>
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-x-8 md:gap-y-10">
                 {category.videos.map((video) => (
@@ -159,7 +160,7 @@ const VideoTutorials: React.FC = () => {
 
                     <div className="p-4">
                       <h3 className="font-roboto not-italic font-normal text-[15px] md:text-[26px] leading-[18px] md:leading-[32px] tracking-[-0.26px] text-[#0F172A] whitespace-nowrap overflow-hidden text-ellipsis">
-                        {video.title}
+                        {t(video.title)}
                       </h3>
                     </div>
                   </div>
