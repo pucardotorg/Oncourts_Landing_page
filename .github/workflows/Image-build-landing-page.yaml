@@ -28,9 +28,9 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       # Login to Azure Container Registry
-      - name: Login to Azure Container Registry
+      - name: Login to Docker Registry
         if: (github.event_name == 'push' && (startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/release/') || startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v'))) || github.event_name == 'workflow_dispatch'
-        run: docker login -u pucarsolutionsdev -p ${{ secrets.ACR_PASSWORD }} pucarsolutionsdev.azurecr.io
+        run: docker login -u venkatramireddyb -p ${{ secrets.ACR_PASSWORD }}
       - name: Set Version from Tag or Branch
         id: set_version
         run: |
@@ -50,9 +50,9 @@ jobs:
         if: (github.event_name == 'push' && (startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/release/') || startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v'))) || github.event_name == 'workflow_dispatch'
         run: |
           docker build \
-          --build-arg NEXT_PUBLIC_ONCOURTS_API_ENDPOINT=https://dristi-kerala-uat.pucar.org \
-          -t pucarsolutionsdev.azurecr.io/oncourts-landing-page:${{ env.VERSION }}-${{ env.COMMIT_ID }} .
-          docker push pucarsolutionsdev.azurecr.io/oncourts-landing-page:${{ env.VERSION }}-${{ env.COMMIT_ID }}
+          --build-arg NEXT_PUBLIC_ONCOURTS_API_ENDPOINT=https://oncourts-staging.kerala.gov.in \
+          -t docker.io/venkatramireddyb/oncourts-landing-page:${{ env.VERSION }}-${{ env.COMMIT_ID }} .
+          docker push docker.io/venkatramireddyb/oncourts-landing-page:${{ env.VERSION }}-${{ env.COMMIT_ID }}
   Workflow_Trigger:
     if: (github.event_name == 'push' && (startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/release') || startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v'))) || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
