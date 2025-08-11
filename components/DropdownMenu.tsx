@@ -73,9 +73,9 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
 
   return (
     <div
-      className={`absolute z-50 top-[59px] min-w-[200px] bg-white shadow-lg whitespace-nowrap ${isLast ? "right-0" : "left-0"}`}
+      className={`absolute z-50 top-[59px] min-w-[200px] bg-white shadow-lg ${isLast ? "right-0" : "left-0"}`}
     >
-      <span className="text-[#3A3A3A]font-sans font-medium text-[20px] leading-[28px] tracking-[0.01em]">
+      <span className="text-[#3A3A3A] font-sans font-medium text-[20px] leading-[28px] tracking-[0.01em]">
         {items.map(renderDropdownItem)}
       </span>
     </div>
