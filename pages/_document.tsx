@@ -1,5 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
-import { GA_MEASUREMENT_ID, GLOBAL_CONFIG_URL } from "../lib/constants";
+import { GA_MEASUREMENT_ID } from "../lib/constants";
 
 class MyDocument extends Document {
   render() {
@@ -25,13 +25,6 @@ class MyDocument extends Document {
                 gtag('js', new Date());
                 gtag('config', '${GA_MEASUREMENT_ID}');
               `,
-            }}
-          />
-          <script
-            src={GLOBAL_CONFIG_URL}
-            defer
-            onError={() => {
-              console.warn("External globalconfig.js failed, falling back to local config");
             }}
           />
           {/* Inline fallback script */}
