@@ -61,7 +61,11 @@ const HomeIntroVideo = () => {
               >
                 <div className="relative login-dropdown">
                   <button
-                    className={`cursor-default box-border flex flex-row items-center justify-center gap-4  bg-[#0F766E] border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px] w-[135px] px-[12px] py-2" : "h-[69px] w-[241px] px-4 py-8"}`}
+                   onClick={(e) => {
+                     e.stopPropagation();
+                     setLoginDropdownOpen(!loginDropdownOpen);
+                   }}
+                    className={`cursor-pointer cursor-default box-border flex flex-row items-center justify-center gap-4  bg-[#0F766E] border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px] w-[135px] px-[12px] py-2" : "h-[69px] w-[241px] px-4 py-8"}`}
                   >
                     <span
                       className={
@@ -73,11 +77,7 @@ const HomeIntroVideo = () => {
                       {t("LOGIN")}
                     </span>
                     <span
-                      className="cursor-pointer"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setLoginDropdownOpen(!loginDropdownOpen);
-                      }}
+                     
                     >
                       <svgIcons.DownArrowIcon fill="#fff" />
                     </span>

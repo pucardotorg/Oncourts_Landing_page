@@ -737,13 +737,16 @@ export default function DisplayBoard() {
             className="case-search-filter-section flex justify-between items-center mb-[16px]"
             style={{ height: "51px" }}
           >
-            <h2 className="w-[462px] h-[45px] text-[36px] font-roboto font-medium leading-[44.41px] tracking-[-0.38px] flex justify-center items-center gap-[8px]">
-              {t("CASE_SCHEDULE_HEADING")} |{" "}
-              <span className="text-[#0F766E]">
+            <div className="flex items-center">
+              <h2 className="text-[36px] font-roboto font-medium tracking-[-0.38px] flex items-center">
+                {t("CASE_SCHEDULE_HEADING")}
+              </h2>
+              <h2 className="text-[36px] font-roboto font-medium tracking-[-0.38px] mx-2">|</h2>
+              <h2 className="text-[36px] text-[#0F766E] font-roboto font-medium tracking-[-0.38px] whitespace-nowrap">
                 {formattedDateV2(selectedDate)}
-              </span>
-            </h2>
-            <div className="h-[51px] p-0 flex flex-row justify-start items-start gap-[10px] relative">
+              </h2>
+            </div>
+            <div className="h-[51px] p-0 flex flex-row justify-start items-center gap-[10px] relative">
               <div className="bg-[#f8fafc] h-[50.75px] font-roboto w-[483px] rounded-[9.52px] py-[12.69px] flex flex-row flex-nowrap justify-start items-center gap-[12.69px] relative">
                 <span className="absolute inset-y-0 ml-[15px] flex items-center text-gray-500">
                   <svgIcons.SearchIcon2 width="32" height="32" />
