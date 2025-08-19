@@ -107,7 +107,8 @@ function CauseListDisplay({
               <svgIcons.SmallFileIcon />
             </span>
             <span className="font-roboto font-medium text-[20px] leading-[24px] tracking-[-0.2px] text-[#334155] truncate max-w-[300px]">
-              {`${formattedDate}${pdfUrl ? "_causelist.pdf" : ""}`}
+              {`${formattedDate}`} 
+              {/* ${pdfUrl ? "_causelist.pdf" : ""}`} */}
             </span>
           </div>
           {pdfUrl && (
