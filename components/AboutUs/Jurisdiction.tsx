@@ -24,7 +24,7 @@ export default function Jurisdiction({ isMobile }: { isMobile: boolean }) {
             {/* Map image with markers */}
             <div className="relative">
               <Image
-                src="/images/policeStationMapUpdated.png"
+                src="/images/policeStationsLocations.png"
                 alt="Kollam District Map with Police Stations"
                 width={1200}
                 height={800}
@@ -35,7 +35,7 @@ export default function Jurisdiction({ isMobile }: { isMobile: boolean }) {
               {/* Fullscreen button */}
               <div className="absolute right-1 md:right-3 bottom-3 md:bottom-12">
                 <FullscreenButton
-                  url="/images/policeStationMapUpdated.png"
+                  url="/images/policeStationsLocations.png"
                   iconColor="#0F766E"
                   borderColor="#E2E8F0"
                   backgroundColor="white"
