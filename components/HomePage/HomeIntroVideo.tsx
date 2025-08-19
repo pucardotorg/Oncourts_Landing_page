@@ -37,7 +37,7 @@ const HomeIntroVideo = () => {
   return (
     <div className="py-10 md:py-16 bg-white" id="vision-section">
       <div className="container mx-auto px-5 max-w-[95%]">
-        <div className="flex flex-col md:flex-row gap-auto md:gap-[40px] items-stretch">
+        <div className="flex flex-col md:flex-row gap-auto md:gap-[6rem] items-stretch lg:gap-[8rem]">
           <div className="text-center md:text-left md:w-1/2 text-[20px] lg:text-[22px] font-normal text-[#334155]">
             <div>
               <h1
