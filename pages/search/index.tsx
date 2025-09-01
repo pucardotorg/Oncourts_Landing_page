@@ -140,7 +140,7 @@ const SearchForCase = () => {
                   masterDetails: [
                     { name: "SubStage" },
                     { name: "casetype" },
-                    { name: "casestatus" },
+                    { name: "landingpagestatus" },
                   ],
                 },
               ],
@@ -181,8 +181,9 @@ const SearchForCase = () => {
           const caseTypes: CaseType[] = data.MdmsRes["case"].casetype;
           setCaseTypeOptions(caseTypes);
         }
-        if (data.MdmsRes["case"].casestatus) {
-          const caseStatuses: CaseStatus[] = data.MdmsRes["case"].casestatus;
+        if (data.MdmsRes["case"].landingpagestatus) {
+          const caseStatuses: CaseStatus[] =
+            data.MdmsRes["case"].landingpagestatus;
           setCaseStatusOptions(caseStatuses);
         }
       }
