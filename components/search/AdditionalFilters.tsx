@@ -29,7 +29,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
   courtOptions,
   caseStageOptions,
   caseTypeOptions,
-  // caseStatusOptions,
+  caseStatusOptions,
 }) => {
   const { t } = useSafeTranslation();
   // Local state to track filter changes before applying them
@@ -217,7 +217,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
               className="bg-[#F8FAFC] border-[#94A3B8]"
             />
 
-            {/* <CustomDropdown
+            <CustomDropdown
               label="CASE_STATUS"
               placeHolder="SELECT_CASE_STATUS"
               value={localFilters.caseStatus}
@@ -229,7 +229,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
                 })) || []
               }
               className="bg-[#F8FAFC] border-[#94A3B8]"
-            /> */}
+            />
 
             <CustomDropdown
               label="YEAR_OF_FILING"
