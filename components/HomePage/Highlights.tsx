@@ -136,7 +136,7 @@ const Highlights: React.FC = () => {
         <div className={`flex justify-center ${isMobile ? "mt-6" : "mt-12"}`}>
           <button
             className={`flex flex-row items-center justify-center px-4 md:px-[16px] gap-[12px] bg-white border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px]" : "h-[69px]"}`}
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/dashboard")}
           >
             <svgIcons.OpenInNewTabIcon width={isMobile ? "16" : "30"} />
             <span
