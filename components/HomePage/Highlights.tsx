@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
+import { svgIcons } from "../../data/svgIcons";
 import { transformImpactGlance } from "../../TransformData/transformResponseData";
 import { useMediaQuery } from "@mui/material";
+import router from "next/router";
 
 interface HighlightItemProps {
   value: string;
@@ -136,10 +138,10 @@ const Highlights: React.FC = () => {
             />
           ))}
         </div>
-        {/* <div className={`flex justify-center ${isMobile ? "mt-6" : "mt-12"}`}>
+        <div className={`flex justify-center ${isMobile ? "mt-6" : "mt-12"}`}>
           <button
             className={`flex flex-row items-center justify-center px-4 md:px-[16px] gap-[12px] bg-white border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px]" : "h-[69px]"}`}
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/dashboard")}
           >
             <svgIcons.OpenInNewTabIcon width={isMobile ? "16" : "30"} />
             <span
@@ -148,7 +150,7 @@ const Highlights: React.FC = () => {
               {t("VIEW_DETAILED_DASHBOARD")}
             </span>
           </button>
-        </div> */}
+        </div>
       </div>
     </section>
   );
