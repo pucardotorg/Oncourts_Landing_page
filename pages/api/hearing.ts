@@ -2,13 +2,20 @@ import { API_ENDPOINTS } from "../../lib/config";
 
 export default async function handler(req, res) {
   try {
-    const { tenantId, fromDate, toDate, searchText } = req.body;
+    const {
+      tenantId,
+      fromDate,
+      toDate,
+      searchText,
+      isHearingSerialNumberSorting = false,
+    } = req.body;
 
     const payload = {
       tenantId,
       fromDate,
       toDate,
       searchText,
+      isHearingSerialNumberSorting,
     };
 
     const response = await fetch(API_ENDPOINTS.OPENAPI.HEARING, {

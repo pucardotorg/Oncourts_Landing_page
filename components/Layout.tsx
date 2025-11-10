@@ -14,6 +14,11 @@ const raleway = Raleway({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
+ 
+const libreBaskerville = Libre_Baskerville({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ["latin"],
@@ -30,6 +35,7 @@ interface LayoutProps {
 import dynamic from "next/dynamic";
 import { commonStyles } from "../styles/commonStyles";
 import HeaderV2 from "./HeaderV2";
+import { useRouter } from "next/router";
 
 const DigitInitializer = dynamic(() => import("./DigitInitializer"), {
   ssr: false,
@@ -42,6 +48,8 @@ const Layout: React.FC<LayoutProps> = ({
 }) => {
   const [digitReady, setDigitReady] = useState(false);
   const [stateCode, setStateCode] = useState("pb");
+  const router = useRouter();
+  const isLiveRoute = router?.pathname === "/live-causelist";
 
   const enabledModules = [
     "DRISTI",
@@ -96,9 +104,13 @@ const Layout: React.FC<LayoutProps> = ({
           <link rel="icon" href="/images/logo.png" />
         </Head>
         <div className="flex flex-col min-h-screen">
-          <HeaderV2 />
-          <main className="flex-grow md:pt-[73px]">{children}</main>
-          <Footer />
+          {isLiveRoute ? null : <HeaderV2 />}
+          <main
+            className={isLiveRoute ? "flex-grow" : "flex-grow md:pt-[73px]"}
+          >
+            {children}
+          </main>
+          {isLiveRoute ? null : <Footer />}
         </div>
       </div>
     </DigitInitializer>
