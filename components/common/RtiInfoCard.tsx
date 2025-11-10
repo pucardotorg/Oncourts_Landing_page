@@ -23,7 +23,7 @@ const RtiInfoCard: React.FC<InfoCardProps> = ({ t, items, className = "" }) => {
             key={index}
             className={`${index !== items.length - 1 ? "border-b border-[#E2E8F0]" : ""}`}
           >
-            <div className="p-4 flex items-center font-[Baskerville] text-[#0F172A] font-semibold text-xl border-b border-[#E2E8F0] bg-[#F8FAFC]">
+            <div className="p-4 flex items-center font-libre text-[#0F172A] font-semibold text-xl border-b border-[#E2E8F0] bg-[#F8FAFC]">
               {item.icon && <span className="mr-2">{item.icon}</span>}
               {t(item.label)}
             </div>

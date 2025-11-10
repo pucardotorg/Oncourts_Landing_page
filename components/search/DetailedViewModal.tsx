@@ -317,6 +317,9 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
     if (visibleItems.length === 0) {
       return <p className="text-[16px] font-normal">NA</p>;
     }
+    if (visibleItems.length === 0) {
+      return <p className="text-[16px] font-normal">NA</p>;
+    }
     return (
       <>
         {visibleItems.map((item, idx) => (
@@ -355,28 +358,29 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
       }
 
       const blob = await response.blob();
-      
+
       // Check if device is iOS
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !("MSStream" in window);
+      const isIOS =
+        /iPad|iPhone|iPod/.test(navigator.userAgent) && !("MSStream" in window);
 
       if (isIOS) {
         // For iOS, create a temporary anchor element and trigger a download
         // Get filename from content-disposition header or create a default one
         const fileName = `order-${orderId}.pdf`;
-        
+
         // Create a temporary anchor element
-        const a = document.createElement('a');
-        a.style.display = 'none';
+        const a = document.createElement("a");
+        a.style.display = "none";
         document.body.appendChild(a);
-        
+
         // Create a download URL and set attributes
         const url = window.URL.createObjectURL(blob);
         a.href = url;
         a.download = fileName;
-        
+
         // Programmatically click the link to trigger download
         a.click();
-        
+
         // Clean up
         setTimeout(() => {
           document.body.removeChild(a);
@@ -386,7 +390,6 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
         // For other devices, use the standard window.open method
         const url = window.URL.createObjectURL(blob);
         window.open(url, "_blank");
-        
         setTimeout(() => {
           window.URL.revokeObjectURL(url);
         }, 5000);
@@ -533,7 +536,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
               </div>
 
               <div className="bg-[#F7F5F3] p-6 rounded-md text-sm">
-                <h2 className="font-[Baskerville] text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
+                <h2 className="font-libre text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
                   {t("LITIGANT_DETAILS")}
                 </h2>
                 <div className="font-roboto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -577,7 +580,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
               </div>
 
               <div className="bg-[#F7F5F3] p-6 rounded-md text-sm">
-                <h2 className="font-[Baskerville] text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
+                <h2 className="font-libre text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
                   {t("KEY_DETAILS")}
                 </h2>
                 <div className="font-roboto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -638,7 +641,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
 
               <div className="border rounded-md p-6 bg-white">
                 {/* Order History Section */}
-                <h2 className="font-[Baskerville] text-xl font-bold mb-3">
+                <h2 className="font-libre text-xl font-bold mb-3">
                   {t("ORDER_HISTORY")}
                 </h2>
                 {internalLoading ? (
@@ -656,7 +659,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                         {/* Desktop Order History Table View */}
                         <table className="hidden md:table w-full text-[16px] text-left">
                           <thead>
-                            <tr className="font-[Baskerville] font-bold text-[#0B0C0C] border-b border-[#BBBBBD]">
+                            <tr className="font-libre font-bold text-[#0B0C0C] border-b border-[#BBBBBD]">
                               <th className="px-2 py-1">{t("S_NO")}</th>
                               <th className="px-2 py-1">{t("DATE")}</th>
                               <th className="px-2 py-1">
@@ -710,7 +713,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                               <table className="w-full font-roboto text-base mb-2 table-fixed">
                                 <tbody>
                                   <tr>
-                                    <td className="py-1 font-[Baskerville] font-bold text-[#0B0C0C] w-1/3">
+                                    <td className="py-1 font-libre font-bold text-[#0B0C0C] w-1/3">
                                       {t("S_NO")}
                                     </td>
                                     <td className="py-1 w-2/3">
@@ -722,7 +725,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                                     </td>
                                   </tr>
                                   <tr>
-                                    <td className="py-1 font-[Baskerville] font-bold text-[#0B0C0C] w-1/3">
+                                    <td className="py-1 font-libre font-bold text-[#0B0C0C] w-1/3">
                                       {t("DATE")}
                                     </td>
                                     <td className="py-1 w-2/3">
@@ -730,7 +733,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                                     </td>
                                   </tr>
                                   <tr>
-                                    <td className="py-1 font-[Baskerville] font-bold text-[#0B0C0C] w-1/3">
+                                    <td className="py-1 font-libre font-bold text-[#0B0C0C] w-1/3">
                                       {t("BUSINESS_OF_THE_DAY")}
                                     </td>
                                     <td className="py-1 w-2/3">
@@ -738,7 +741,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                                     </td>
                                   </tr>
                                   <tr>
-                                    <td className="py-1 font-[Baskerville] font-bold text-[#0B0C0C] w-1/3">
+                                    <td className="py-1 font-libre font-bold text-[#0B0C0C] w-1/3">
                                       {t("VIEW_ORDER")}
                                     </td>
                                     <td className="py-1 w-2/3">
@@ -827,7 +830,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
 
                 {/* Process Payment Pending Tasks Section */}
                 <div id="pendingTasksSection">
-                  <h2 className="font-[Baskerville] text-xl font-bold mt-6 mb-3">
+                  <h2 className="font-libre text-xl font-bold mt-6 mb-3">
                     {t("PROCESS_PAYMENT_PENDING_TASKS")}
                   </h2>
                   {internalLoading ? (
@@ -845,7 +848,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                           {/* Desktop Payment Tasks Table View */}
                           <table className="hidden md:table w-full text-[16px] text-left">
                             <thead>
-                              <tr className="font-[Baskerville] font-bold text-[#0B0C0C] border-b border-[#BBBBBD]">
+                              <tr className="font-libre font-bold text-[#0B0C0C] border-b border-[#BBBBBD]">
                                 <th className="px-2 py-1">{t("S_NO")}</th>
                                 <th className="px-2 py-1">{t("TASK")}</th>
                                 <th className="px-2 py-1">{t("DUE_DATE")}</th>
@@ -913,7 +916,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                                 <table className="w-full font-roboto text-base mb-2 table-fixed">
                                   <tbody>
                                     <tr>
-                                      <td className="py-1 font-[Baskerville] font-bold text-[#0B0C0C] w-1/3">
+                                      <td className="py-1 font-libre font-bold text-[#0B0C0C] w-1/3">
                                         {t("S_NO")}
                                       </td>
                                       <td className="py-1 w-2/3">
@@ -923,7 +926,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td className="py-1 font-[Baskerville] font-bold text-[#0B0C0C] w-1/3">
+                                      <td className="py-1 font-libre font-bold text-[#0B0C0C] w-1/3">
                                         {t("TASK")}
                                       </td>
                                       <td className="py-1 w-2/3">
@@ -931,7 +934,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td className="py-1 font-[Baskerville] font-bold text-[#0B0C0C] w-1/3">
+                                      <td className="py-1 font-libre font-bold text-[#0B0C0C] w-1/3">
                                         {t("DUE_DATE")}
                                       </td>
                                       <td className="py-1 w-2/3">
@@ -939,13 +942,13 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td className="py-1 font-[Baskerville] font-bold text-[#0B0C0C] w-1/3">
+                                      <td className="py-1 font-libre font-bold text-[#0B0C0C] w-1/3">
                                         {t("DAYS_REMAINING")}
                                       </td>
                                       <td className="py-1 text-red-600 font-medium w-2/3">{`${task?.daysRemaining} Days`}</td>
                                     </tr>
                                     <tr>
-                                      <td className="py-1 font-[Baskerville] font-bold text-[#0B0C0C] w-1/3">
+                                      <td className="py-1 font-libre font-bold text-[#0B0C0C] w-1/3">
                                         {t("INFO")}
                                       </td>
                                       <td className="py-1 w-2/3">

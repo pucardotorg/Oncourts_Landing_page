@@ -98,7 +98,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
         {searchResults.length > 0 ? (
           <table className="min-w-full">
             <thead className="bg-[#F8FAFC]">
-              <tr className="font-[Baskerville] font-semibold text-[18px] text-left text-[#0F172A]">
+              <tr className="font-libre font-semibold text-[18px] text-left text-[#0F172A]">
                 <th scope="col" className="p-3 w-2/6">
                   {t("CASE_TITLE")}
                 </th>

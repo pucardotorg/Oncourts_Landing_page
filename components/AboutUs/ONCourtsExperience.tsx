@@ -20,7 +20,7 @@ export default function ONCourtsExperience() {
   ];
   return (
     <div className="py-16 bg-[#F0FDFA]" id="experience-section">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto max-w-[95%] px-4">
         <SectionHeading title={t("ON_COURTS_EXPERIENCE")} />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-5">

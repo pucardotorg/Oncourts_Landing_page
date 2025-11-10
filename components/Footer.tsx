@@ -59,7 +59,7 @@ const Footer: React.FC = () => {
             <h3 className="text-[15px] md:text-[17px] font-normal mb-2">
               {t("QUICK_LINKS")}
             </h3>
-            <div className="grid grid-cols-1 gap-y-4">
+            <div className="grid grid-cols-1 gap-y-4 leading-[24px] tracking-[-0.2px]">
               {FooterConfig.quickLinks.map((link, index) => (
                 <Link
                   key={index}
@@ -79,7 +79,7 @@ const Footer: React.FC = () => {
             <h3 className="text-[15px] md:text-[17px] font-normal mb-2">
               {t("HELP_RESOURCES")}
             </h3>
-            <div className="grid grid-cols-1 gap-y-4">
+            <div className="grid grid-cols-1 gap-y-4 leading-[24px] tracking-[-0.2px]">
               {FooterConfig.helpResources.map((link, index) => (
                 <Link
                   key={index}
@@ -99,7 +99,7 @@ const Footer: React.FC = () => {
             <h3 className="text-[15px] md:text-[17px] font-normal mb-2">
               {t("INFORMATION_PRIVACY")}
             </h3>
-            <div className="grid grid-cols-1 gap-y-4">
+            <div className="grid grid-cols-1 gap-y-4 leading-[24px] tracking-[-0.2px]">
               {FooterConfig.informationPrivacy.map((link, index) => (
                 <Link
                   key={index}
@@ -119,7 +119,7 @@ const Footer: React.FC = () => {
             <h3 className="text-[15px] md:text-[17px] font-normal mb-2">
               {t("EXTERNAL_LINKS")}
             </h3>
-            <div className="grid grid-cols-1 gap-y-4">
+            <div className="grid grid-cols-1 gap-y-4 leading-[24px] tracking-[-0.2px]">
               {FooterConfig.externalLinks.map((link, index) => (
                 <Link
                   key={index}

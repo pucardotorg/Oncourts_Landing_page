@@ -31,7 +31,7 @@ const ExpandableCard: React.FC<ExpandableCardProps> = ({
       {/* Header section - always visible */}
       {/* Labels row */}
       {index === 0 && (
-        <div className="grid grid-cols-2 bg-[#F8FAFC] font-[Baskerville]">
+        <div className="grid grid-cols-2 bg-[#F8FAFC] font-libre">
           <div className="p-3 border-r border-b border-[#E2E8F0]">
             <div className="text-[14px] text-[#0F172A] font-semibold">
               {t("CASE_NUMBER")}

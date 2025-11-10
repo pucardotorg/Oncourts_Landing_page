@@ -90,7 +90,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
     <div className="mt-6 bg-white rounded-lg shadow-sm overflow-visible border border-[#E2E8F0]">
       <div className="p-4 bg-[#F8FAFC]">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-[Baskerville] font-semibold text-[#0F172A]">
+          <h2 className="text-2xl font-libre font-semibold text-[#0F172A]">
             {t("FILTER")}
           </h2>
 

@@ -210,7 +210,7 @@ const Notices: React.FC = () => {
   };
 
   return (
-    <div className="max-w-screen min-h-screen mx-auto py-4 px-4 md:py-6 md:px-20 bg-white font-roboto">
+    <div className="max-w-screen min-h-screen mx-auto py-4 px-4 md:py-6 md:px-20 bg-white">
       <Head>
         <title>{t("NOTICES")}</title>
       </Head>
@@ -265,7 +265,7 @@ const Notices: React.FC = () => {
       {!isMobile && noticesList.length > 0 && (
         <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-[#E2E8F0]">
           <table className="w-full">
-            <thead className="text-[#0F172A] text-[22px] font-semibold font-[Baskerville] bg-[#F8FAFC] border-b border-[#E2E8F0]">
+            <thead className="text-[#0F172A] text-[22px] font-semibold font-libre bg-[#F8FAFC] border-b border-[#E2E8F0]">
               <tr>
                 <th className="py-3 px-4 text-left w-[10%]">{t("SL_NO")}</th>
                 <th className="py-3 px-4 text-left w-[50%]">{t("TITLE")}</th>
@@ -323,7 +323,7 @@ const Notices: React.FC = () => {
           >
             <div className="grid grid-cols-1 gap-4">
               <div className="grid grid-cols-2 items-center">
-                <div className="font-[Baskerville] text-[14px] text-[#0F172A] font-semibold">
+                <div className="font-libre text-[14px] text-[#0F172A] font-semibold">
                   {t("TITLE")}:
                 </div>
                 <div className="text-[14px] text-[#334155]">
@@ -340,7 +340,7 @@ const Notices: React.FC = () => {
                 </div>
               </div>
               <div className="grid grid-cols-2 items-center">
-                <div className="font-[Baskerville] text-[14px] text-[#0F172A] font-semibold">
+                <div className="font-libre text-[14px] text-[#0F172A] font-semibold">
                   {t("DATE_OF_ISSUE")}:
                 </div>
                 <div className="text-[14px] text-[#334155]">
@@ -348,7 +348,7 @@ const Notices: React.FC = () => {
                 </div>
               </div>
               <div className="grid grid-cols-2 items-center">
-                <div className="font-[Baskerville] text-[14px] text-[#0F172A] font-semibold">
+                <div className="font-libre text-[14px] text-[#0F172A] font-semibold">
                   {t("ACTION")}:
                 </div>
                 <button

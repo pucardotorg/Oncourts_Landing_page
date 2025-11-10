@@ -15,7 +15,10 @@ const SectionHeading: React.FC<SectionHeadingProps> = ({
 }) => {
   return (
     <div
-      className={`${fontSize} font-medium text-center mb-8 font-[Baskerville] text-[#3A3A3A] ${className}`}
+      className={`${fontSize} font-medium text-center mb-8 font-libre text-[#3A3A3A] ${className}`}
+      style={{
+        WebkitTextStrokeWidth: "0.5px",
+      }}
     >
       <span className="inline-block pb-3">{title}</span>
       {showBorder && (
