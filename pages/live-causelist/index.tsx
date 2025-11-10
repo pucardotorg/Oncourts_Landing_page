@@ -186,9 +186,7 @@ export default function LiveCauselist() {
   const isMobile = useMediaQuery("(max-width:640px)");
 
   // Selected date: auto (no date selector)
-  const [selectedDate] = useState<string>(() =>
-    computeAutoDate()
-  );
+  const [selectedDate] = useState<string>(() => computeAutoDate());
 
   // Two datasets: status-sorted for top cards, index-sorted for paginated table
   const [sortedHearingsData, setSortedHearingsData] = useState<HearingItem[]>(
@@ -442,21 +440,19 @@ export default function LiveCauselist() {
       <div className="text-[22px] leading-[26px] font-medium text-[#0A0A0A] pt-1">
         <span>{item?.serialNumber || ""}.</span>
       </div>
-      <div className="flex flex-col justify-between items-start gap-[14.71px] w-[100%]">
+      <div className="flex flex-col justify-between items-start gap-[14.71px] w-[90%]">
         {/* Case name section */}
-        <div className="flex flex-col w-[90%] gap-[6px]">
+        <div className="flex flex-col w-[100%] gap-[6px]">
           <span className="font-medium mr-1 text-[14px] leading-[16px] text-[#77787B]">
             {t("CASE_NAME")}
           </span>
           <span className="leading-[26px] font-bold text-[22px] text-[#0A0A0A] truncate block w-full">
-            {index === 1
-              ? "jkgh fgfoghh fgfgihoi fgfgh jjjjjj  kkkkkkkkkkkkkkkk"
-              : item.caseTitle || "-"}
+            {item.caseTitle || ""}
           </span>
         </div>
 
         {/* advocates section*/}
-        <div className="flex flex-col max-w-[90%] w-full gap-[6px]">
+        <div className="flex flex-col max-w-[100%] w-[100%] gap-[6px]">
           <span className="font-medium  mr-1 text-[14px] leading-[16px] text-[#77787B]">
             {t("ADVOCATES")}
           </span>
@@ -466,7 +462,7 @@ export default function LiveCauselist() {
         </div>
 
         {/* Case number section */}
-        <div className="flex flex-col w-[90%] gap-[6px]">
+        <div className="flex flex-col w-[100%] gap-[6px]">
           <span className="font-medium mr-1 text-[14px] leading-[16px] text-[#77787B]">
             {t("CASE_NUMBER")}
           </span>
