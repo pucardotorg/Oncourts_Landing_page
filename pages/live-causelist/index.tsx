@@ -186,7 +186,7 @@ export default function LiveCauselist() {
   const isMobile = useMediaQuery("(max-width:640px)");
 
   // Selected date: auto (no date selector)
-  const [selectedDate, setSelectedDate] = useState<string>(() =>
+  const [selectedDate] = useState<string>(() =>
     computeAutoDate()
   );
 
