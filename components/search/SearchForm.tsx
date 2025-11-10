@@ -109,7 +109,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
       {/* Action Buttons */}
       <div
-        className={`font-[Baskerville] font-medium 
+        className={`font-[Inter] font-medium 
           ${isMobile ? "grid grid-cols-2 gap-2" : "flex justify-end col-span-full md:col-span-2 lg:col-span-4 gap-4"}
           `}
       >

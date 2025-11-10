@@ -31,7 +31,7 @@ const HelpResources = () => {
       </Head>
 
       <div className="py-8 md:py-12 bg-white">
-        <div className="w-full md:w-[90%] mx-auto">
+        <div className="w-full md:w-[98%] mx-auto">
           <div className="px-6 md:px-20">
             <SectionHeading
               title={t("HELP_RESOURCES")}
@@ -40,15 +40,17 @@ const HelpResources = () => {
               showBorder={false}
             />
 
-            <div className="font-roboto font-normal text-xl md:text-2xl flex flex-col md:flex-row mb-12 gap-6">
-              <div className="md:w-[70%] text-[#334155] content-center text-center md:text-left">
+            <div className="font-normal text-xl md:text-2xl flex flex-col md:flex-row mb-12 gap-6">
+              <div className="font-roboto md:w-[70%] text-[#334155] content-center text-center md:text-left">
                 {t("ACCESS_EVERYTHING_YOU_NEED")}
               </div>
-              <div className="flex flex-row gap-6 md:w-[30%] bg-[#F8FAFC] p-6 rounded-xl shadow-sm border border-[#CBD5E1] items-center justify-center">
-                <span className="text-[72px] font-bold text-[#0F766E]">7</span>
-                <span className="text-3xl text-[#334155]">
-                  {t("DAYS_TO_SUPPORT_RESOLUTION")}
+              <div className="flex flex-row gap-4 md:w-[30%] bg-[#F8FAFC] p-4 lg:py-[12px] lg:px-[24px] rounded-[23.31px] shadow-sm items-center justify-center drop-shadow-[0px_2.003px_6.009px_rgba(0,0,0,0.1)]">
+                <span className="font-roboto text-[60px] sm:text-[80px] lg:text-[102.30px] lg:leading-[141.11px] font-bold text-[#0F766E] shrink-0">
+                  7
                 </span>
+                <div className="font-libre text-lg sm:text-xl md:text-2xl lg:text-[34.96px] lg:leading-[46px] text-[#334155] break-words hyphens-none">
+                  {t("DAYS_TO_SUPPORT_RESOLUTION")}
+                </div>
               </div>
             </div>
 

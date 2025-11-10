@@ -40,6 +40,10 @@ interface CustomDatePickerProps {
   iconColor?: string;
   backgroundColor?: string;
   height?: string;
+  width?: string;
+  fontStyle?: string;
+  iconWidth?: string;
+  iconHeight?: string;
 }
 
 const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
@@ -56,6 +60,10 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   padding = "",
   backgroundColor = "bg-white",
   height = "h-10",
+  width = "w-auto",
+  fontStyle = "font-base",
+  iconWidth = "w-5",
+  iconHeight = "h-5",
 }) => {
   // Initialize with a normalized date (noon time) if selected is provided
   const initialDate = selected
@@ -84,14 +92,14 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   }, [selected]);
   return (
     <div
-      className={`${padding} relative ${borderRadius} border-[1.5px] ${borderColor}`}
+      className={`${padding} relative ${borderRadius} border-[1.5px] ${borderColor} ${width}`}
     >
-      <div className="custom-date-picker-wrapper">
+      <div className="custom-date-picker-wrapper w-full">
         {/* Input field that displays the selected date */}
         <input
           type="text"
           readOnly
-          className={`w-full ${height} pl-3 pr-10 py-2 font-roboto text-base ${backgroundColor} focus:outline-none focus:ring-0 ${className}`}
+          className={`w-full ${height} pl-3 pr-10 py-2 font-roboto ${fontStyle} ${backgroundColor} focus:outline-none focus:ring-0 ${className}`}
           placeholder={placeholderText}
           value={formatDate(internalDate, dateFormat)}
           onClick={onIconClick}
@@ -136,7 +144,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
         className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer z-10"
         onClick={onIconClick}
       >
-        <svgIcons.CalendarIcon />
+        <svgIcons.CalendarIcon width={iconWidth} height={iconHeight} />
       </div>
     </div>
   );

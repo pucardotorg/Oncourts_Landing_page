@@ -127,7 +127,7 @@ const RTIAuthorities = () => {
             <div className="overflow-x-auto shadow-md rounded-lg mb-8">
               <table className="min-w-full bg-white border-collapse">
                 <thead>
-                  <tr className="font-[Baskerville] bg-[#F8FAFC] text-[#0F172A] text-left text-xl md:text-[22px] border border-[#E2E8F0]">
+                  <tr className="font-libre bg-[#F8FAFC] text-[#0F172A] text-left text-xl md:text-[22px] border border-[#E2E8F0]">
                     <th className="py-3 px-4 font-semibold">{t("SL_NO")}</th>
                     <th className="py-3 px-4 font-semibold">
                       {t("DESIGNATED_AUTHORITY")}
