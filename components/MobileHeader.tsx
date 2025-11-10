@@ -216,13 +216,13 @@ const MobileHeader = () => {
                 {t("NOTICES")}
               </Link>
 
-              {/* <Link
+              <Link
                 href="/"
                 className="mx-[10px] block px-6 py-3 text-[20px] text-[#3A3A3A] font-roboto"
                 onClick={handleNavigation}
               >
                 {t("DASHBOARD")}
-              </Link> */}
+              </Link>
               <div className="flex flex-col center justify-center">
                 <button
                   onClick={() => toggleSection("SUPPORT")}
