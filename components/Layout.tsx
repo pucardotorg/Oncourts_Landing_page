@@ -14,11 +14,6 @@ const raleway = Raleway({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
- 
-const libreBaskerville = Libre_Baskerville({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ["latin"],
@@ -90,7 +85,9 @@ const Layout: React.FC<LayoutProps> = ({
   }
   return (
     <DigitInitializer stateCode={stateCode} enabledModules={enabledModules}>
-      <div className={`${roboto.className} ${raleway.className} ${libreBaskerville.className}`}>
+      <div
+        className={`${roboto.className} ${raleway.className} ${libreBaskerville.className}`}
+      >
         <Head>
           <title>24x7 OnCourts</title>
           <meta
