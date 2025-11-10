@@ -1,7 +1,6 @@
 import React from "react";
 import Vision from "../../components/AboutUs/Vision";
 import GuidingPrinciples from "../../components/AboutUs/GuidingPrinciples";
-import Technology from "../../components/AboutUs/Technology";
 import ONCourtsExperience from "../../components/AboutUs/ONCourtsExperience";
 import Benefits from "../../components/AboutUs/Benefits";
 import Jurisdiction from "../../components/AboutUs/Jurisdiction";
@@ -26,7 +25,7 @@ export default function About() {
       {/* Main content in requested sequence */}
       <Vision />
       <GuidingPrinciples />
-      <Technology />
+      {/* <Technology />' */}
       <ONCourtsExperience />
       <Benefits />
       <Jurisdiction isMobile={isMobile} />

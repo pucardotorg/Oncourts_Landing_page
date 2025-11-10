@@ -96,7 +96,7 @@ const PersonCard: React.FC<PersonCardProps> = ({
         >
           <h3
             className={`
-            text-base md:text-xl lg:text-[24px] font-medium font-[Baskerville] w-full text-center break-words
+            text-base md:text-xl lg:text-[24px] font-medium font-libre w-full text-center break-words
             ${isHovered ? "text-[#0F766E]" : "text-[#0F766E]"}
             transition-colors duration-300
           `}

@@ -54,7 +54,7 @@ export const getFaqs = (t) => [
     answer: (
       <p>
         {t("YOU_CAN_ACCESS_PENDING_TASKS_BY_LOGGING_INTO_PORTAL")}{" "}
-        {t("NAVIGATING_TO_ALL_PENDING_TASKS_SECTION")}
+        {t("NAVIGATING_TO_ALL_PENDING_TASKS_SECTION")}{" "}
         <Link href="/search" className="text-[#1D4ED8] underline">
           {t("CASE_SEARCH")}
         </Link>{" "}

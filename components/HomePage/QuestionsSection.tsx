@@ -39,7 +39,7 @@ const Question: React.FC<QuestionProps> = ({
       >
         <div className="flex items-start justify-between">
           <span
-            className={`font-sans font-medium tracking-[0.01em] text-[#3A3A3A] pr-8 ${isMobile ? "text-[20px] leading-[24px]" : "text-[26px] leading-[36px]"}`}
+            className={`font-roboto font-medium tracking-[-0.26px] text-[#3A3A3A] pr-8 ${isMobile ? "text-[20px] leading-[24px]" : "text-[26px] leading-[36px]"}`}
           >
             {question}
           </span>
@@ -53,7 +53,7 @@ const Question: React.FC<QuestionProps> = ({
       >
         <div className="pb-6">
           <div
-            className={`font-sans tracking-[0.01em] text-[#64748B] ${isMobile ? "text-[15px] leading-[18px]" : "text-[20px] leading-[28px]"}`}
+            className={`font-roboto tracking-[-0.2px] text-[#334155] ${isMobile ? "text-[15px] leading-[18px]" : "text-[20px] leading-[28px] font-normal"}`}
           >
             {answer}
           </div>
@@ -111,7 +111,7 @@ const QuestionsSection: React.FC = () => {
       id: 0,
       question: t("WHERE_CHECK_HEARING_DETAILS"),
       answer: (
-        <div className="space-y-4 text-[#1E293B]">
+        <div className="space-y-4 text-[#334155]">
           <p>
             {t("WHERE_CHECK_HEARING_DETAILS_ANSWER_1")}
             <Link href="/search" className="text-[#1D4ED8] hover:underline">
@@ -128,7 +128,7 @@ const QuestionsSection: React.FC = () => {
       id: 1,
       question: t("TASKS_I_NEED_TO_COMPLETE_TO_CASE_FORWARD"),
       answer: (
-        <div className="space-y-4 text-[#1E293B]">
+        <div className="space-y-4 text-[#334155]">
           <p>
             {t("TASKS_I_NEED_TO_COMPLETE_TO_CASE_FORWARD_ANS_PART_1")}
             <Link
@@ -150,111 +150,112 @@ const QuestionsSection: React.FC = () => {
     },
     {
       id: 2,
-      question:
-        "How can I check if my cases are scheduled for hearing on a specific day?",
+      question: t(
+        "HOW_CAN_I_CHECK_IF_MY_CASES_ARE_SCHEDULED_FOR_HEARING_ON_A_SPECIFIC_DAY"
+      ),
       answer: (
-        <div className="space-y-4 text-[#1E293B]">
+        <div className="space-y-4 text-[#334155]">
           <p>
-            You can use the{" "}
+            {t(
+              "HOW_CAN_I_CHECK_IF_MY_CASES_ARE_SCHEDULED_FOR_HEARING_ON_A_SPECIFIC_DAY_ANS_PART_1"
+            )}
             <Link
               href="/display-board"
               className="text-[#1D4ED8] hover:underline"
             >
-              Cause List Display
+              {t("DISPLAY_CAUSELIST_HEADING")}
             </Link>{" "}
-            to view all cases listed for a chosen date. You can also search the
-            cases by case number, case title or advocate name in this section.
+            {t(
+              "HOW_CAN_I_CHECK_IF_MY_CASES_ARE_SCHEDULED_FOR_HEARING_ON_A_SPECIFIC_DAY_ANS_PART_2"
+            )}
           </p>
           <p>
-            Alternatively, you can access the{" "}
+            {t(
+              "HOW_CAN_I_CHECK_IF_MY_CASES_ARE_SCHEDULED_FOR_HEARING_ON_A_SPECIFIC_DAY_ANS_PART_3"
+            )}
             <Link href="/search" className="text-[#1D4ED8] hover:underline">
-              Case Search
+              {t("CASE_SEARCH")}
             </Link>{" "}
-            section under the Services tab to check the next hearing dates for
-            all your cases.
+            {t(
+              "HOW_CAN_I_CHECK_IF_MY_CASES_ARE_SCHEDULED_FOR_HEARING_ON_A_SPECIFIC_DAY_ANS_PART_4"
+            )}
           </p>
         </div>
       ),
     },
     {
       id: 3,
-      question: "Can I join my hearing online?",
+      question: t("CAN_I_JOIN_MY_HEARING_ONLINE"),
       answer: (
-        <div className="space-y-4 text-[#1E293B]">
+        <div className="space-y-4 text-[#334155]">
           <p>
-            Yes. You can join your hearing online by clicking the &apos;Join
-            Hearing&apos; button available in the{" "}
+            {t("CAN_I_JOIN_MY_HEARING_ONLINE_ANS_PART_1")}
             <Link
               href="/display-board"
               className="text-[#1D4ED8] hover:underline"
             >
-              Cause List Display
+              {t("DISPLAY_CAUSELIST_HEADING")}
             </Link>{" "}
-            section of the website.
+            {t("CAN_I_JOIN_MY_HEARING_ONLINE_ANS_PART_2")}
           </p>
-          <p>
-            You can also use the Cause List Display to check the live status of
-            hearings and see which case is currently being heard.
-          </p>
+          <p>{t("CAN_I_JOIN_MY_HEARING_ONLINE_ANS_PART_3")}</p>
         </div>
       ),
     },
     {
       id: 4,
-      question: "What documents are required for e-filing?",
+      question: t("WHAT_DOCUMENTS_ARE_REQUIRED_FOR_E_FILING"),
       answer: (
-        <div className="space-y-6 text-[#1E293B]">
-          <p className="mb-4">List of documents required for e-filing:</p>
+        <div className="space-y-6 text-[#334155]">
+          <p className="mb-4">
+            {t("WHAT_DOCUMENTS_ARE_REQUIRED_FOR_E_FILING_ANS_LIST")}
+          </p>
           <ol className="list-decimal pl-8 space-y-4">
             <li>
-              <span className="font-bold">Proof of identity:</span> PAN Card,
-              Aadhar card, Passport, Driving license, Voter ID, Ration card or
-              Bank passbook
-            </li>
-            <li>
-              <span className="font-bold">Dishonored Cheque:</span> A copy of
-              the dishonored cheque on the basis which this case is being filed
-            </li>
-            <li>
-              <span className="font-bold">Cheque Return Memo:</span> The
-              document received from the bank that has the information that the
-              cheque has bounced
-            </li>
-            <li>
-              <span className="font-bold">Legal Demand Notice:</span> Any
-              intimation you provided to the respondent to informing them that
-              their cheque had bounced and they still owed you the cheque amount
+              <span className="font-bold">
+                {t("DOCUMENTS_LIST_PROOF_OF_IDENTITY")}
+              </span>{" "}
+              {t("DOCUMENTS_LIST_PROOF_OF_IDENTITY_DESCRIPTION")}
             </li>
             <li>
               <span className="font-bold">
-                Postal acknowledgement (Issue of legal demand notice):
+                {t("DOCUMENTS_LIST_DISHONORED_CHEQUE")}
               </span>{" "}
-              The acknowledgement provided by the postal department when sending
-              the letter/RPAD/anything else containing legal demand notice (see
-              number 4 in the list) to the accused
+              {t("DOCUMENTS_LIST_DISHONORED_CHEQUE_DESCRIPTION")}
             </li>
             <li>
               <span className="font-bold">
-                Postal acknowledgement (Delivery of legal demand notice):
+                {t("DOCUMENTS_LIST_CHEQUE_RETURN_MEMO")}
               </span>{" "}
-              The acknowledgement provided by the postal department when the
-              letter/RPAD/anything else containing legal demand notice (see
-              number 4 in the list) is received by the accused
+              {t("DOCUMENTS_LIST_CHEQUE_RETURN_MEMO_DESCRIPTION")}
             </li>
             <li>
               <span className="font-bold">
-                Affidavit under section 223 of BNSS:
+                {t("DOCUMENTS_LIST_LEGAL_DEMAND_NOTICE")}
               </span>{" "}
-              Affidavit under section 223 of BNSS must be there in the infobox
-              at the start of filing
+              {t("DOCUMENTS_LIST_LEGAL_DEMAND_NOTICE_DESCRIPTION")}
             </li>
             <li>
               <span className="font-bold">
-                Any other document you deem necessary:
+                {t("DOCUMENTS_LIST_POSTAL_ACKNOWLEDGEMENT_ISSUE")}
               </span>{" "}
-              Please include any additional documents you believe will
-              strengthen your case and that will be crucial in substantiating
-              your claims when filing the complaint
+              {t("DOCUMENTS_LIST_POSTAL_ACKNOWLEDGEMENT_ISSUE_DESCRIPTION")}
+            </li>
+            <li>
+              <span className="font-bold">
+                {t("DOCUMENTS_LIST_POSTAL_ACKNOWLEDGEMENT_DELIVERY")}
+              </span>{" "}
+              {t("DOCUMENTS_LIST_POSTAL_ACKNOWLEDGEMENT_DELIVERY_DESCRIPTION")}
+            </li>
+            <li>
+              <span className="font-bold">{t("DOCUMENTS_LIST_AFFIDAVIT")}</span>{" "}
+              {t("DOCUMENTS_LIST_AFFIDAVIT_DESCRIPTION")}
+            </li>
+            <li>
+              <span className="font-bold">
+                {t("DOCUMENTS_LIST_OTHER_DOCUMENT")}
+              </span>{" "}
+              {t("DOCUMENTS_LIST_OTHER_DOCUMENT_DESCRIPTION")}
             </li>
           </ol>
         </div>
@@ -262,55 +263,63 @@ const QuestionsSection: React.FC = () => {
     },
     {
       id: 5,
-      question: "What documents are required for Bail?",
+      question: t("WHAT_DOCUMENTS_ARE_REQUIRED_FOR_BAIL"),
       answer: (
-        <div className="space-y-6 text-[#1E293B]">
-          <p className="mb-4">List of documents required for Bail:</p>
+        <div className="space-y-6 text-[#334155]">
+          <p className="mb-4">
+            {t("WHAT_DOCUMENTS_ARE_REQUIRED_FOR_BAIL_ANS_LIST")}
+          </p>
           <ol className="list-decimal pl-8 space-y-4">
-            <li>Bail Application (System generated)</li>
-            <li>ID proofs for surety(s)</li>
-            <li>Tax receipts for surety(s)</li>
-            <li>Affidavits for surety(s) (System Generated)</li>
-            <li>Bail Bond</li>
-            <li>Any other document you deem necessary</li>
+            <li>{t("WHAT_DOCUMENTS_ARE_REQUIRED_FOR_BAIL_ANS_LIST_1")}</li>
+            <li>{t("WHAT_DOCUMENTS_ARE_REQUIRED_FOR_BAIL_ANS_LIST_2")}</li>
+            <li>{t("WHAT_DOCUMENTS_ARE_REQUIRED_FOR_BAIL_ANS_LIST_3")}</li>
+            <li>{t("WHAT_DOCUMENTS_ARE_REQUIRED_FOR_BAIL_ANS_LIST_4")}</li>
+            <li>{t("WHAT_DOCUMENTS_ARE_REQUIRED_FOR_BAIL_ANS_LIST_5")}</li>
+            <li>{t("WHAT_DOCUMENTS_ARE_REQUIRED_FOR_BAIL_ANS_LIST_6")}</li>
           </ol>
         </div>
       ),
     },
     {
       id: 6,
-      question:
-        "Are there videos or guides to help me understand how to use the platform (e.g., filing, application submission, payments)?",
+      question: t(
+        "ARE_THERE_VIDEOS_OR_GUIDES_TO_HELP_ME_UNDERSTAND_HOW_TO_USE_THE_PLATFORM"
+      ),
       answer: (
-        <div className="space-y-6 text-[#1E293B]">
+        <div className="space-y-6 text-[#334155]">
           <p>
-            Yes. You can access step-by-step user guides and short video
-            tutorials to learn how to file cases, submit applications, make
-            payments, and more.
+            {t(
+              "ARE_THERE_VIDEOS_OR_GUIDES_TO_HELP_ME_UNDERSTAND_HOW_TO_USE_THE_PLATFORM_ANS_PART_1"
+            )}
           </p>
           <p>
-            These resources are available under the Support tab in the
-            navigation menu. You can also use the direct links below:
+            {t(
+              "ARE_THERE_VIDEOS_OR_GUIDES_TO_HELP_ME_UNDERSTAND_HOW_TO_USE_THE_PLATFORM_ANS_PART_2"
+            )}
           </p>
           <ol className="list-decimal pl-8 space-y-4">
             <li>
-              User Guide for Advocates and Clerks:{" "}
+              {t(
+                "ARE_THERE_VIDEOS_OR_GUIDES_TO_HELP_ME_UNDERSTAND_HOW_TO_USE_THE_PLATFORM_ANS_PART_3"
+              )}
               <Link
                 href="https://drive.google.com/file/d/1j4mIw0K2F8m_urJE-zbu-oeluiOL-8Pg/view?usp=sharing"
                 className="text-[#1D4ED8] hover:underline"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Link
+                {t("LINK")}
               </Link>
             </li>
             <li>
-              Video tutorials for Advocates and Clerks:{" "}
+              {t(
+                "ARE_THERE_VIDEOS_OR_GUIDES_TO_HELP_ME_UNDERSTAND_HOW_TO_USE_THE_PLATFORM_ANS_PART_4"
+              )}
               <Link
                 href="/video-tutorials"
                 className="text-[#1D4ED8] hover:underline"
               >
-                Link
+                {t("LINK")}
               </Link>
             </li>
           </ol>
@@ -327,6 +336,11 @@ const QuestionsSection: React.FC = () => {
         <div className="flex center justify-center">
           <h2
             className={`px-12 pb-2 font-libre font-normal text-center text-[#3A3A3A] mb-12 border-b border-b-[#CBD5E1] ${isMobile ? "text-[32px] leading-[42px] max-w-[90%] " : "text-[40px] leading-[48px]"}`}
+            style={
+              {
+                WebkitTextStrokeWidth: "0.5px",
+              } as React.CSSProperties
+            }
           >
             {t("FREQUENTLY_ASKED_QUESTIONS")}
           </h2>
@@ -354,7 +368,7 @@ const QuestionsSection: React.FC = () => {
             <span
               className={`h-[32px] font-roboto font-medium leading-[32px] tracking-[-0.56px] text-center text-[#0F766E] ${isMobile ? "text-[16px]" : "text-[28px]"}`}
             >
-              {t("Help & Support")}
+              {t("VIEW_HELP_RESOURCES")}
             </span>
           </button>
         </div>

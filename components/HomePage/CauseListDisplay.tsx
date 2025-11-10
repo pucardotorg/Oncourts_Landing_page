@@ -9,9 +9,15 @@ interface CauseListDisplayProps {
   date: string;
   pdfUrl: string | null;
   onDownload: () => void;
+  t: (key: string) => string;
 }
 
-function CauseListDisplay({ date, pdfUrl, onDownload }: CauseListDisplayProps) {
+function CauseListDisplay({
+  date,
+  pdfUrl,
+  onDownload,
+  t,
+}: CauseListDisplayProps) {
   const [showPreview, setShowPreview] = useState(false);
   const formattedDate = format(new Date(date), "dd/MM/yyyy");
   const isMobile = useMediaQuery("(max-width: 640px)");
@@ -36,8 +42,8 @@ function CauseListDisplay({ date, pdfUrl, onDownload }: CauseListDisplayProps) {
             className={`bg-white rounded-lg  flex flex-col ${isMobile ? "h-[95%] w-[95%]" : "h-[90vh] w-[70%]"}`}
           >
             <div className="flex justify-between items-center p-4 border-b">
-              <h3 className="text-lg font-medium text-gray-900">
-                Cause List - {formattedDate}
+              <h3 className="text-lg font-medium text-gray-900 font-roboto">
+                {t("CAUSE_LIST_DISPLAY_TITLE_WITH_DATE")} {formattedDate}
               </h3>
               <div className="flex items-center space-x-2">
                 <button
@@ -91,7 +97,7 @@ function CauseListDisplay({ date, pdfUrl, onDownload }: CauseListDisplayProps) {
             </>
           ) : (
             <div className="flex items-center justify-center h-full text-[#DC2626]">
-              Hearing not scheduled for this date
+              {t("HEARING_NOT_SCHEDULED_FOR_THIS_DATE")}
             </div>
           )}
         </div>
@@ -101,7 +107,8 @@ function CauseListDisplay({ date, pdfUrl, onDownload }: CauseListDisplayProps) {
               <svgIcons.SmallFileIcon />
             </span>
             <span className="font-roboto font-medium text-[20px] leading-[24px] tracking-[-0.2px] text-[#334155] truncate max-w-[300px]">
-              {`${formattedDate}${pdfUrl ? "_causelist.pdf" : ""}`}
+              {`${formattedDate}`} 
+              {/* ${pdfUrl ? "_causelist.pdf" : ""}`} */}
             </span>
           </div>
           {pdfUrl && (
