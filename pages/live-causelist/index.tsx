@@ -1,0 +1,678 @@
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useSafeTranslation } from "../../hooks/useSafeTranslation";
+import { useMediaQuery } from "@mui/material";
+import Image from "next/image";
+import { svgIcons } from "../../data/svgIcons";
+
+// Types aligned with DisplayBoard
+interface HearingItem {
+  hearingNumber?: string;
+  caseTitle?: string;
+  advocate?: {
+    complainant?: string[];
+    accused?: string[];
+  };
+  hearingType?: string;
+  status?: string;
+  caseNumber?: string;
+  serialNumber?: number;
+}
+
+// API response shape for /api/hearing
+interface HearingResponse {
+  openHearings?: HearingItem[];
+}
+
+// Configurable single interval (in ms) used for both fetching and pagination rotation
+const updateInterval = 5000; // 5 seconds
+
+export const getStatusStyle = (status: string) => {
+  switch (status) {
+    case "IN_PROGRESS":
+      return "bg-pistachio text-darkGreen";
+    case "SCHEDULED":
+      return "bg-peach text-darkBrown";
+    default:
+      return "bg-gray-100 text-gray-700";
+  }
+};
+
+export const getTopCardBackgroundColor = (status: string) => {
+  switch (status) {
+    case "IN_PROGRESS":
+      return "bg-[#E4F2E4] border border-[#E8E8E8]";
+    case "SCHEDULED":
+      return "bg-[#FFFAF6] border border-[#E8E8E8]";
+    default:
+      return "bg-[#E8E8E8] border border-[#E8E8E8]";
+  }
+};
+
+const getTopCardStatusTextBackgroundColor = (
+  index: number,
+  status: string,
+  topFour: HearingItem[],
+  key: string
+) => {
+  const info = { text: "", style: "" };
+  if (status === "IN_PROGRESS") {
+    info.style = "bg-[#15803D] border border-[ #16A34A]";
+    info.text = "IN_PROGRESS";
+    return info[key];
+  }
+  switch (index) {
+    case 0:
+      if (status === "SCHEDULED") {
+        info.style = "bg-[#0F3B8C] border border-[ #0F3B8C]";
+        info.text = "NEXT";
+        return info[key];
+      } else {
+        info.style = "bg-white";
+        info.text = status;
+        return info[key];
+      }
+    case 1:
+      if (status === "SCHEDULED") {
+        if (topFour?.[0]?.status === "IN_PROGRESS") {
+          info.style = "bg-[#0F3B8C] border border-[ #0F3B8C]";
+          info.text = "NEXT";
+          return info[key];
+        } else if (topFour?.[0]?.status === "SCHEDULED") {
+          info.style = "bg-[#6B21A8] border border-[ #6B21A8]";
+          info.text = "UPCOMING";
+          return info[key];
+        }
+      } else {
+        info.style = "bg-white";
+        info.text = status;
+        return info[key];
+      }
+    case 2:
+      if (status === "SCHEDULED") {
+        if (topFour?.[1]?.status === "IN_PROGRESS") {
+          info.style = "bg-[#0F3B8C] border border-[ #0F3B8C]";
+          info.text = "NEXT";
+          return info[key];
+        } else if (topFour?.[1]?.status === "SCHEDULED") {
+          info.style = "bg-[#6B21A8] border border-[ #6B21A8]";
+          info.text = "UPCOMING";
+          return info[key];
+        }
+      } else {
+        info.style = "bg-white";
+        info.text = status;
+        return info[key];
+      }
+    case 3:
+      if (status === "SCHEDULED") {
+        if (topFour?.[2]?.status === "IN_PROGRESS") {
+          info.style = "bg-[#0F3B8C] border border-[ #0F3B8C]";
+          info.text = "NEXT";
+          return info[key];
+        } else if (topFour?.[2]?.status === "SCHEDULED") {
+          info.style = "bg-[#6B21A8] border border-[ #6B21A8]";
+          info.text = "UPCOMING";
+          return info[key];
+        }
+      } else {
+        info.style = "bg-white";
+        info.text = status;
+        return info[key];
+      }
+    default:
+      return "";
+  }
+};
+
+const formattedDateDisplay = (dateStr: string) => {
+  const date = new Date(dateStr);
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = date.toLocaleString("en-GB", { month: "short" });
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+};
+
+function calculateLastRefreshDay(refreshedAt: string | number | Date): string {
+  const refreshDate = new Date(refreshedAt);
+  const today = new Date();
+
+  // Normalize both to midnight for date comparison
+  const refreshDay = new Date(
+    refreshDate.getFullYear(),
+    refreshDate.getMonth(),
+    refreshDate.getDate()
+  );
+  const todayDay = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
+
+  const diffInTime = todayDay.getTime() - refreshDay.getTime();
+  const diffInDays = diffInTime / (1000 * 60 * 60 * 24);
+
+  // Format time with hours, minutes, seconds, and AM/PM
+  let hours = refreshDate.getHours();
+  const minutes = refreshDate.getMinutes().toString().padStart(2, "0");
+  const seconds = refreshDate.getSeconds().toString().padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12 || 12; // convert to 12-hour format
+  const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes}:${seconds} ${ampm}`;
+
+  if (diffInDays === 0) {
+    return `Today at ${formattedTime}`;
+  } else if (diffInDays === 1) {
+    return `Yesterday at ${formattedTime}`;
+  } else {
+    const dd = String(refreshDate.getDate()).padStart(2, "0");
+    const mm = String(refreshDate.getMonth() + 1).padStart(2, "0");
+    const yyyy = refreshDate.getFullYear();
+    return `on ${dd}/${mm}/${yyyy} at ${formattedTime}`;
+  }
+}
+
+const computeAutoDate = () => {
+  const now = new Date();
+  const hour = now.getHours();
+  const minutes = now.getMinutes();
+  if (hour > 17 || (hour === 17 && minutes >= 0)) {
+    now.setDate(now.getDate() + 1);
+  }
+  return now.toISOString().split("T")[0];
+};
+
+export default function LiveCauselist() {
+  const { t } = useSafeTranslation();
+  const isMobile = useMediaQuery("(max-width:640px)");
+
+  // Selected date: auto (no date selector)
+  const [selectedDate, setSelectedDate] = useState<string>(() =>
+    computeAutoDate()
+  );
+
+  // Two datasets: status-sorted for top cards, index-sorted for paginated table
+  const [sortedHearingsData, setSortedHearingsData] = useState<HearingItem[]>(
+    []
+  );
+  const [indexedHearingsData, setIndexedHearingsData] = useState<HearingItem[]>(
+    []
+  );
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [refreshedAt, setRefreshedAt] = useState("");
+
+  // Pagination for bottom section (12 per page after the top 4)
+  const [currentPage, setCurrentPage] = useState(0); // 0-based for the bottom pages
+
+  const tenantId = useMemo(() => localStorage.getItem("tenant-id") || "kl", []);
+
+  // Core fetcher with toggle for serial-number sorting
+  const fetchHearings = useCallback(
+    async (dateStr: string, isHearingSerialNumberSorting: boolean) => {
+      const fromDate = new Date(dateStr).setHours(0, 0, 0, 0);
+      const toDate = new Date(dateStr).setHours(23, 59, 59, 999);
+
+      const payload = {
+        tenantId,
+        fromDate,
+        toDate,
+        searchText: "",
+        isHearingSerialNumberSorting,
+      };
+
+      try {
+        const response = await fetch("/api/hearing", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          // Swallow error and return empty to avoid breaking the UI
+          const text = await response.text().catch(() => "");
+          console.warn("/api/hearing non-OK:", response.status, text);
+          return [] as HearingItem[];
+        }
+
+        const contentType = response.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+          const text = await response.text().catch(() => "");
+          console.warn(
+            "/api/hearing unexpected content-type:",
+            contentType,
+            text
+          );
+          return [] as HearingItem[];
+        }
+
+        const data: HearingResponse = await response.json().catch((e) => {
+          console.warn("/api/hearing JSON parse failed:", e);
+          return { openHearings: [] } as HearingResponse;
+        });
+        const hearings: HearingItem[] = data?.openHearings || [];
+        return hearings;
+      } catch (err) {
+        // Network or other failures — return empty to keep UI stable
+        console.warn("/api/hearing request failed:", err);
+        return [] as HearingItem[];
+      }
+    },
+    [tenantId]
+  );
+
+  // Fetch both datasets together
+  const fetchBothForDate = useCallback(
+    async (dateStr: string) => {
+      try {
+        setLoading(true);
+        // Run both calls in parallel and tolerate one failing
+        const results = await Promise.allSettled([
+          fetchHearings(dateStr, false),
+          fetchHearings(dateStr, true),
+        ]);
+
+        const sorted =
+          results[0].status === "fulfilled"
+            ? results[0].value
+            : ([] as HearingItem[]);
+        const indexed =
+          results[1].status === "fulfilled"
+            ? results[1].value
+            : ([] as HearingItem[]);
+
+        // Update state only if we have something, else keep previous to avoid flicker
+        if (sorted.length > 0) setSortedHearingsData(sorted);
+        if (indexed.length > 0) setIndexedHearingsData(indexed);
+
+        // Manage error state: only set when both are empty
+        if (sorted.length === 0 && indexed.length === 0) {
+          setError("SOMETHING_WENT_WRONG_TRY_LATER_OR_REFRESH");
+        } else {
+          setError("");
+        }
+
+        return { sorted, indexed };
+      } catch (err) {
+        console.warn("Error in fetchBothForDate:", err);
+        // Keep old data, set error state
+        setError("SOMETHING_WENT_WRONG_TRY_LATER_OR_REFRESH");
+        return { sorted: [] as HearingItem[], indexed: [] as HearingItem[] };
+      } finally {
+        setRefreshedAt(new Date().toLocaleString());
+        setLoading(false);
+      }
+    },
+    [fetchHearings]
+  );
+
+  useEffect(() => {
+    fetchBothForDate(selectedDate);
+  }, [fetchBothForDate, selectedDate]);
+
+  // Auto refresh: mimic DisplayBoard rules but without date picker
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    let timeoutToStart: NodeJS.Timeout | null = null;
+
+    const startAutoRefresh = () => {
+      interval = setInterval(async () => {
+        const now = new Date();
+        const currentMinutes = now.getHours() * 60 + now.getMinutes();
+        const endMinutes = 17 * 60; // 5 PM
+        const isPastFivePM = currentMinutes >= endMinutes;
+
+        try {
+          const { sorted } = await fetchBothForDate(selectedDate);
+          const stillHasPending = sorted?.some((h) => h.status !== "COMPLETED");
+
+          if (isPastFivePM || !stillHasPending) {
+            if (interval) {
+              clearInterval(interval);
+              interval = null;
+            }
+          }
+        } catch (e) {
+          console.error("Auto refresh API error:", e);
+        }
+      }, updateInterval);
+    };
+
+    const init = () => {
+      const now = new Date();
+      const currentDateStr = now.toISOString().split("T")[0];
+      const isToday = selectedDate === currentDateStr;
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      const startMinutes = 11 * 60; // 11 AM
+      const endMinutes = 17 * 60; // 5 PM
+
+      const shouldStart = () =>
+        sortedHearingsData?.some((h) => h.status !== "COMPLETED");
+
+      // Only auto-refresh for today
+      if (!isToday) return;
+
+      if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
+        if (shouldStart() || Boolean(error)) startAutoRefresh();
+      } else if (
+        currentMinutes < startMinutes &&
+        (sortedHearingsData?.length > 0 || Boolean(error))
+      ) {
+        const diffMs = (startMinutes - currentMinutes) * 60 * 1000;
+        timeoutToStart = setTimeout(() => startAutoRefresh(), diffMs);
+      }
+    };
+
+    init();
+
+    return () => {
+      if (interval) clearInterval(interval);
+      if (timeoutToStart) clearTimeout(timeoutToStart);
+    };
+  }, [selectedDate, fetchBothForDate, sortedHearingsData, error]);
+
+  // Page rotation for bottom list (uses the same updateInterval)
+  useEffect(() => {
+    const id = setInterval(() => {
+      setCurrentPage((prev) => {
+        const total = Math.max(
+          1,
+          Math.ceil(Math.max(0, sortedHearingsData.length) / 12)
+        );
+        return total <= 1 ? 0 : (prev + 1) % total;
+      });
+    }, updateInterval);
+
+    return () => clearInterval(id);
+  }, [sortedHearingsData.length]);
+
+  useEffect(() => {
+    const totalPages = Math.max(
+      1,
+      Math.ceil(Math.max(0, sortedHearingsData.length) / 12)
+    );
+    setCurrentPage((p) => (p >= totalPages ? totalPages - 1 : p));
+  }, [sortedHearingsData.length]);
+
+  // Data slices
+  const topFour = sortedHearingsData.slice(0, 4);
+  const totalBottomPages = Math.max(
+    1,
+    Math.ceil(Math.max(0, sortedHearingsData.length) / 12)
+  );
+  const pageStart = currentPage * 12;
+  const currentBottom = indexedHearingsData.slice(pageStart, pageStart + 12);
+  const leftCol = currentBottom.slice(0, 6);
+  const rightCol = currentBottom.slice(6, 12);
+
+  const advocates = useCallback((hearingItem: HearingItem) => {
+    const parts: string[] = [];
+    if (hearingItem?.advocate?.complainant?.length) {
+      const count = hearingItem.advocate.complainant.length;
+      const suffix =
+        count === 2 ? " + 1 Other" : count > 2 ? ` + ${count - 1} others` : "";
+      parts.push(`${hearingItem.advocate.complainant[0]} (C)${suffix}`);
+    }
+    if (hearingItem?.advocate?.accused?.length) {
+      const count = hearingItem.advocate.accused.length;
+      const suffix =
+        count === 2 ? " + 1 Other" : count > 2 ? ` + ${count - 1} others` : "";
+      parts.push(`${hearingItem.advocate.accused[0]} (A)${suffix}`);
+    }
+    return (
+      <>
+        {parts.map((p, i) => (
+          <p
+            key={i}
+            className={`text-[22.2px] leading-[26px] ${i === 1 ? "pt-[8px]" : ""}`}
+          >
+            {p}
+          </p>
+        ))}
+      </>
+    );
+  }, []);
+
+  const TopCard: React.FC<{ item: HearingItem; index: number }> = ({
+    item,
+    index,
+  }) => (
+    <div
+      className={`flex font-roboto rounded-[4px] border border-[#E8E8E8] p-4 gap-2 ${getTopCardBackgroundColor(item.status || "")}`}
+    >
+      <div className="text-[22px] leading-[26px] font-medium text-[#0A0A0A] pt-1">
+        <span>{item?.serialNumber || ""}.</span>
+      </div>
+      <div className="flex flex-col justify-between items-start gap-[14.71px] w-[100%]">
+        {/* Case name section */}
+        <div className="flex flex-col w-[90%] gap-[6px]">
+          <span className="font-medium mr-1 text-[14px] leading-[16px] text-[#77787B]">
+            {t("CASE_NAME")}
+          </span>
+          <span className="leading-[26px] font-bold text-[22px] text-[#0A0A0A] truncate block w-full">
+            {index === 1
+              ? "jkgh fgfoghh fgfgihoi fgfgh jjjjjj  kkkkkkkkkkkkkkkk"
+              : item.caseTitle || "-"}
+          </span>
+        </div>
+
+        {/* advocates section*/}
+        <div className="flex flex-col max-w-[90%] w-full gap-[6px]">
+          <span className="font-medium  mr-1 text-[14px] leading-[16px] text-[#77787B]">
+            {t("ADVOCATES")}
+          </span>
+          <span className="font-bold text-[22px] text-[#0A0A0A]">
+            {advocates(item)}
+          </span>
+        </div>
+
+        {/* Case number section */}
+        <div className="flex flex-col w-[90%] gap-[6px]">
+          <span className="font-medium mr-1 text-[14px] leading-[16px] text-[#77787B]">
+            {t("CASE_NUMBER")}
+          </span>
+          <div className="leading-[26px] flex items-center justify-between flex-wrap">
+            <span className="font-bold text-[22px] text-[#0A0A0A]">
+              {item.caseNumber || "-"}
+            </span>
+            <span
+              className={`px-4 py-1 rounded-full text-[19px] font-medium ${getTopCardStatusTextBackgroundColor(index, item.status || "", topFour, "style")} ${item.status === "IN_PROGRESS" || item.status === "SCHEDULED" ? "text-white" : ""}`}
+            >
+              {t(
+                getTopCardStatusTextBackgroundColor(
+                  index,
+                  item.status || "",
+                  topFour,
+                  "text"
+                )
+              )}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const Row: React.FC<{
+    item: HearingItem;
+    serial: number;
+    section: "left" | "right";
+  }> = ({ item, serial }) => {
+    const isInProgress = item?.status === "SCHEDULED";
+    const style = `${isInProgress ? "bg-[#ECF3FD] border-[#E2E8F0] text-black" : "bg-[#E8E8E8] border-[#CBD5E1] text-black"}`;
+    const statusStyle = `${isInProgress ? "bg-[#9E400A] border-[0.5px] border-[#EA580C] text-white" : "bg-white text-black"}`;
+
+    return (
+      <div
+        className={`grid grid-cols-[60px_1.5fr_4fr_1.2fr] gap-x-[2px] font-roboto font-medium text-[22px] h-full`}
+      >
+        <div className={`pl-[10px] h-full flex items-center ${style}`}>
+          {serial}.
+        </div>
+        <div className={`pl-[10px] h-full flex items-center truncate ${style}`}>
+          {item.caseNumber || "-"}
+        </div>
+        <div className={`pl-[10px] h-full flex items-center truncate ${style}`}>
+          <span className="truncate block max-w-full">
+            {item.caseTitle || "-"}
+          </span>
+        </div>
+        <div className={`h-full flex items-center justify-center ${style}`}>
+          <span
+            className={`px-4 py-1 rounded-full text-[19.04px] leading-[29.29px] ${statusStyle}`}
+          >
+            {t(item.status || "")}
+          </span>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col max-w-full mx-auto px-4 sm:px-6 py-4 bg-white">
+      <header className="w-full h-[73px] py-2 flex justify-between items-center  top-0 left-0 right-0 bg-white z-50">
+        {/* <Link href="/" className="flex-shrink-0"> */}
+        <div className="flex items-center gap-4">
+          <Image
+            src="/images/emblem.png"
+            alt={t("EMBLEM")}
+            width={123}
+            height={73}
+            className="h-[54.73px] w-[33px]"
+          />
+          <Image
+            src="/images/logo.png"
+            alt={t("ONCOURTS_LOGO")}
+            width={123}
+            height={73}
+            className="h-[54.73px] w-[91px]"
+          />
+        </div>
+        {/* Date + case schedule */}
+        {leftCol?.length > 0 && (
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <span className="">
+                <svgIcons.RefreshIcon2 />
+              </span>
+              <span className="font-roboto italic font-medium text-[24px]">{`${t("Last refreshed")} ${calculateLastRefreshDay(refreshedAt)}`}</span>
+            </div>
+          </div>
+        )}
+
+        {/* </Link> */}
+      </header>
+
+      {/* Date + case schedule */}
+      <div className="flex items-center justify-center mb-3">
+        <div className="flex items-center gap-4 text-[#007E7E] border-b-[2px] border-[#F7F5F3] ">
+          <h2 className="text-left text-[32px] 3xl:text-[169.22px] font-roboto font-medium">
+            {t("24X7_ON_COURTS_CAUSELIST")}
+          </h2>
+          <span className="text-[22px] font-roboto font-bold">|</span>
+          <span className="text-[32px] font-roboto font-medium">
+            {formattedDateDisplay(selectedDate)}
+          </span>
+        </div>
+      </div>
+
+      {/* Top four big boxes */}
+      <div className={`grid gap-4 ${isMobile ? "grid-cols-1" : "grid-cols-4"}`}>
+        {topFour.length === 0 && (
+          <div className="col-span-full text-[#DC2626] font-roboto font-medium text-[18px]">
+            {loading
+              ? t("COMMON_LOADING")
+              : t("NO_CASE_SCHEDULED_FOR_THIS_DATE")}
+          </div>
+        )}
+        {topFour.map((item, idx) => (
+          <TopCard key={`${item.caseNumber}-${idx}`} item={item} index={idx} />
+        ))}
+      </div>
+
+      {/* Divider */}
+      {leftCol?.length > 0 && (
+        <div className="my-3 border-t border-[#E8E8E8]" />
+      )}
+
+      {/* Bottom paginated section: 12 per page, split 6/6 */}
+      {leftCol?.length > 0 && (
+        <div className="rounded flex flex-col flex-1">
+          {/* headers for both columns */}
+          <div
+            className="grid grid-cols-2 gap-x-[19.61px] text-[#0A0A0A] font-roboto text-[24px]"
+            style={{ position: "sticky", top: 0 }}
+          >
+            <div className="grid grid-cols-[60px_1.5fr_4fr_1.2fr] gap-x-[2px] items-center mb-[5px]">
+              <span className="bg-[#F7F5F3] py-2 pl-[5px]">{t("S_NO")}</span>
+              <span className="bg-[#F7F5F3] py-2 pl-[10px] truncate">
+                {t("CASE_NUMBER")}
+              </span>
+              <span className="bg-[#F7F5F3] py-2 pl-[10px]">
+                {t("CASE_NAME")}
+              </span>
+              <span className="bg-[#F7F5F3] text-center py-2">
+                {t("HEARING_STATUS")}
+              </span>
+            </div>
+            {rightCol?.length > 0 && (
+              <div className="grid grid-cols-[60px_1.5fr_4fr_1.2fr] gap-x-[2px] items-center mb-[5px]">
+                <span className="bg-[#F7F5F3] py-2 pl-[5px]">{t("S_NO")}</span>
+                <span className="bg-[#F7F5F3] py-2 pl-[10px] truncate">
+                  {t("CASE_NUMBER")}
+                </span>
+                <span className="bg-[#F7F5F3] py-2 pl-[10px]">
+                  {t("CASE_NAME")}
+                </span>
+                <span className="bg-[#F7F5F3] text-center py-2">
+                  {t("HEARING_STATUS")}
+                </span>
+              </div>
+            )}
+          </div>
+
+          <div className="flex-1 grid grid-cols-2 gap-x-[19.61px]">
+            {/* Left 6 */}
+            <div className="grid grid-rows-6 h-full gap-y-[5px]">
+              {leftCol.map((item, i) => {
+                return (
+                  <Row
+                    key={`${item?.caseNumber}-${i}`}
+                    item={item}
+                    serial={item?.serialNumber ?? pageStart + i + 1}
+                    section="left"
+                  />
+                );
+              })}
+            </div>
+            {/* Right 6 */}
+            <div className="grid grid-rows-6 h-full gap-y-[5px]">
+              {rightCol.map((item, i) => (
+                <Row
+                  key={`${item?.caseNumber}-${i}`}
+                  item={item}
+                  serial={item?.serialNumber ?? pageStart + 6 + i + 1}
+                  section="right"
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Footer page indicator */}
+          <div className="flex items-center gap-4 py-4 font-roboto text-[24px]">
+            <span className="h-px bg-[#E8E8E8] flex-1" aria-hidden="true" />
+            <span className="whitespace-nowrap font-medium">
+              {t("PAGE")} {totalBottomPages === 0 ? 0 : currentPage + 1} :{" "}
+              {indexedHearingsData.length === 0 ? 0 : pageStart + 1}-
+              {Math.min(
+                pageStart + currentBottom.length,
+                indexedHearingsData.length
+              )}{" "}
+              {t("OF")} {indexedHearingsData.length}
+            </span>
+            <span className="h-px bg-[#E8E8E8] flex-1" aria-hidden="true" />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
