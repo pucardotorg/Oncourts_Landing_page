@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
-import { useMediaQuery } from "@mui/material";
 import Image from "next/image";
 import { svgIcons } from "../../data/svgIcons";
 
@@ -22,9 +21,6 @@ interface HearingItem {
 interface HearingResponse {
   openHearings?: HearingItem[];
 }
-
-// Configurable single interval (in ms) used for both fetching and pagination rotation
-const updateInterval = 5000; // 5 seconds
 
 export const getStatusStyle = (status: string) => {
   switch (status) {
@@ -51,7 +47,7 @@ export const getTopCardBackgroundColor = (status: string) => {
 const getTopCardStatusTextBackgroundColor = (
   index: number,
   status: string,
-  topFour: HearingItem[],
+  inCompletedHearings: HearingItem[],
   key: string
 ) => {
   const info = { text: "", style: "" };
@@ -73,11 +69,11 @@ const getTopCardStatusTextBackgroundColor = (
       }
     case 1:
       if (status === "SCHEDULED") {
-        if (topFour?.[0]?.status === "IN_PROGRESS") {
+        if (inCompletedHearings?.[0]?.status === "IN_PROGRESS") {
           info.style = "bg-[#0F3B8C] border border-[ #0F3B8C]";
           info.text = "NEXT";
           return info[key];
-        } else if (topFour?.[0]?.status === "SCHEDULED") {
+        } else if (inCompletedHearings?.[0]?.status === "SCHEDULED") {
           info.style = "bg-[#6B21A8] border border-[ #6B21A8]";
           info.text = "UPCOMING";
           return info[key];
@@ -89,11 +85,11 @@ const getTopCardStatusTextBackgroundColor = (
       }
     case 2:
       if (status === "SCHEDULED") {
-        if (topFour?.[1]?.status === "IN_PROGRESS") {
+        if (inCompletedHearings?.[1]?.status === "IN_PROGRESS") {
           info.style = "bg-[#0F3B8C] border border-[ #0F3B8C]";
           info.text = "NEXT";
           return info[key];
-        } else if (topFour?.[1]?.status === "SCHEDULED") {
+        } else if (inCompletedHearings?.[1]?.status === "SCHEDULED") {
           info.style = "bg-[#6B21A8] border border-[ #6B21A8]";
           info.text = "UPCOMING";
           return info[key];
@@ -105,11 +101,11 @@ const getTopCardStatusTextBackgroundColor = (
       }
     case 3:
       if (status === "SCHEDULED") {
-        if (topFour?.[2]?.status === "IN_PROGRESS") {
+        if (inCompletedHearings?.[2]?.status === "IN_PROGRESS") {
           info.style = "bg-[#0F3B8C] border border-[ #0F3B8C]";
           info.text = "NEXT";
           return info[key];
-        } else if (topFour?.[2]?.status === "SCHEDULED") {
+        } else if (inCompletedHearings?.[2]?.status === "SCHEDULED") {
           info.style = "bg-[#6B21A8] border border-[ #6B21A8]";
           info.text = "UPCOMING";
           return info[key];
@@ -183,10 +179,13 @@ const computeAutoDate = () => {
 
 export default function LiveCauselist() {
   const { t } = useSafeTranslation();
-  const isMobile = useMediaQuery("(max-width:640px)");
+  // Configurable single interval (in ms) used for both fetching and pagination rotation
+  const defaultUpdateInterval = 5000; // 5 seconds
 
   // Selected date: auto (no date selector)
-  const [selectedDate] = useState<string>(() => computeAutoDate());
+  const [selectedDate, setSelectedDate] = useState<string>(() =>
+    computeAutoDate()
+  );
 
   // Two datasets: status-sorted for top cards, index-sorted for paginated table
   const [sortedHearingsData, setSortedHearingsData] = useState<HearingItem[]>(
@@ -198,11 +197,55 @@ export default function LiveCauselist() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [refreshedAt, setRefreshedAt] = useState("");
+  const [updateInterval, setUpdateInterval] = useState(defaultUpdateInterval);
 
   // Pagination for bottom section (12 per page after the top 4)
   const [currentPage, setCurrentPage] = useState(0); // 0-based for the bottom pages
 
   const tenantId = useMemo(() => localStorage.getItem("tenant-id") || "kl", []);
+
+  const getRefreshInterval = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `/egov-mdms-service/v1/_search?tenantId=${tenantId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            MdmsCriteria: {
+              tenantId: tenantId,
+              moduleDetails: [
+                {
+                  moduleName: "LandingPage",
+                  masterDetails: [{ name: "LiveCauseListRefetchTimeInterval" }],
+                },
+              ],
+            },
+            RequestInfo: {
+              apiId: "Rainmaker",
+              msgId: `${Date.now()}|en_IN`,
+            },
+          }),
+        }
+      );
+      const data = await response.json();
+      const refreshInterval =
+        data?.MdmsRes?.["LandingPage"]?.LiveCauseListRefetchTimeInterval?.[0]
+          ?.timeInSecs;
+      if (Boolean(refreshInterval)) {
+        setUpdateInterval(refreshInterval * 1000);
+      }
+    } catch (error) {
+      console.error("Error fetching court options:", error);
+    }
+  }, [tenantId]);
+
+  useEffect(() => {
+    getRefreshInterval();
+  }, []);
 
   // Core fetcher with toggle for serial-number sorting
   const fetchHearings = useCallback(
@@ -311,6 +354,7 @@ export default function LiveCauselist() {
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
     let timeoutToStart: NodeJS.Timeout | null = null;
+    let timeoutToNextDay: NodeJS.Timeout | null = null;
 
     const startAutoRefresh = () => {
       interval = setInterval(async () => {
@@ -323,16 +367,45 @@ export default function LiveCauselist() {
           const { sorted } = await fetchBothForDate(selectedDate);
           const stillHasPending = sorted?.some((h) => h.status !== "COMPLETED");
 
+          // stop auto-refresh if past 5 PM or all completed
           if (isPastFivePM || !stillHasPending) {
             if (interval) {
               clearInterval(interval);
               interval = null;
             }
+
+            // if it's past 5:02:00 PM, schedule data fetch for next-day
+            if (isPastFivePM) scheduleNextDayFetch();
           }
         } catch (e) {
           console.error("Auto refresh API error:", e);
         }
       }, updateInterval);
+    };
+
+    const triggerNextDayFetch = async () => {
+      const now = new Date();
+      now.setDate(now.getDate() + 1);
+      const updatedSelectedDate = now.toISOString().split("T")[0];
+      setSelectedDate(updatedSelectedDate);
+      await fetchBothForDate(updatedSelectedDate);
+    };
+
+    const scheduleNextDayFetch = () => {
+      const now = new Date();
+
+      // Target = today 5:02:00 PM
+      const target = new Date(now);
+      target.setHours(17, 2, 0, 0);
+
+      const diffMs = target.getTime() - now.getTime();
+
+      // If it's already past 5:02:00 PM, do nothing (or could fetch by hard refresh if desired)
+      if (diffMs <= 0) return;
+
+      timeoutToNextDay = setTimeout(() => {
+        triggerNextDayFetch();
+      }, diffMs);
     };
 
     const init = () => {
@@ -358,6 +431,7 @@ export default function LiveCauselist() {
         const diffMs = (startMinutes - currentMinutes) * 60 * 1000;
         timeoutToStart = setTimeout(() => startAutoRefresh(), diffMs);
       }
+      scheduleNextDayFetch();
     };
 
     init();
@@ -365,6 +439,7 @@ export default function LiveCauselist() {
     return () => {
       if (interval) clearInterval(interval);
       if (timeoutToStart) clearTimeout(timeoutToStart);
+      if (timeoutToNextDay) clearTimeout(timeoutToNextDay);
     };
   }, [selectedDate, fetchBothForDate, sortedHearingsData, error]);
 
@@ -391,8 +466,12 @@ export default function LiveCauselist() {
     setCurrentPage((p) => (p >= totalPages ? totalPages - 1 : p));
   }, [sortedHearingsData.length]);
 
-  // Data slices
-  const topFour = sortedHearingsData.slice(0, 4);
+  // only show top 4 in progress and scheduled and passed over hearings.
+  const inCompletedHearings = sortedHearingsData
+    .slice(0, 4)
+    .filter((h) =>
+      ["IN_PROGRESS", "SCHEDULED", "PASSED_OVER"].includes(h?.status || "")
+    );
   const totalBottomPages = Math.max(
     1,
     Math.ceil(Math.max(0, sortedHearingsData.length) / 12)
@@ -471,13 +550,13 @@ export default function LiveCauselist() {
               {item.caseNumber || "-"}
             </span>
             <span
-              className={`px-4 py-1 rounded-full text-[19px] font-medium ${getTopCardStatusTextBackgroundColor(index, item.status || "", topFour, "style")} ${item.status === "IN_PROGRESS" || item.status === "SCHEDULED" ? "text-white" : ""}`}
+              className={`px-4 py-1 rounded-full text-[19px] font-medium ${getTopCardStatusTextBackgroundColor(index, item.status || "", inCompletedHearings, "style")} ${item.status === "IN_PROGRESS" || item.status === "SCHEDULED" ? "text-white" : ""}`}
             >
               {t(
                 getTopCardStatusTextBackgroundColor(
                   index,
                   item.status || "",
-                  topFour,
+                  inCompletedHearings,
                   "text"
                 )
               )}
@@ -493,9 +572,11 @@ export default function LiveCauselist() {
     serial: number;
     section: "left" | "right";
   }> = ({ item, serial }) => {
-    const isInProgress = item?.status === "SCHEDULED";
-    const style = `${isInProgress ? "bg-[#ECF3FD] border-[#E2E8F0] text-black" : "bg-[#E8E8E8] border-[#CBD5E1] text-black"}`;
-    const statusStyle = `${isInProgress ? "bg-[#9E400A] border-[0.5px] border-[#EA580C] text-white" : "bg-white text-black"}`;
+    const isInProgressOrScheduled =
+      item?.status === "SCHEDULED" || item?.status === "IN_PROGRESS";
+
+    const style = `${isInProgressOrScheduled ? (serial % 2 === 0 ? "bg-[#ECF3FD] border-[#E2E8F0] text-[#007E7E]" : "bg-[#007E7E] border-[#CBD5E1] text-white") : "bg-[#E8E8E8] border-[#CBD5E1] text-black"}`;
+    const statusStyle = `${isInProgressOrScheduled ? "bg-[#9E400A] border-[0.5px] border-[#EA580C] text-white" : "bg-white text-black"}`;
 
     return (
       <div
@@ -570,24 +651,36 @@ export default function LiveCauselist() {
           </span>
         </div>
       </div>
-
       {/* Top four big boxes */}
-      <div className={`grid gap-4 ${isMobile ? "grid-cols-1" : "grid-cols-4"}`}>
-        {topFour.length === 0 && (
-          <div className="col-span-full text-[#DC2626] font-roboto font-medium text-[18px]">
-            {loading
-              ? t("COMMON_LOADING")
-              : t("NO_CASE_SCHEDULED_FOR_THIS_DATE")}
+      {sortedHearingsData.length === 0 ? (
+        loading ? (
+          <div className="flex justify-center items-center text-[#DC2626] font-roboto font-medium text-[18px]">
+            {t("COMMON_LOADING")}
           </div>
-        )}
-        {topFour.map((item, idx) => (
-          <TopCard key={`${item.caseNumber}-${idx}`} item={item} index={idx} />
-        ))}
-      </div>
+        ) : (
+          <div className="h-[27vh] flex justify-center items-center text-[#DC2626] font-roboto font-medium text-[44px]">
+            {t("NO_CASE_SCHEDULED_FOR_THE_DAY")}
+          </div>
+        )
+      ) : sortedHearingsData?.length > 0 && inCompletedHearings.length === 0 ? (
+        <div className="h-[27vh] flex justify-center items-center text-black font-roboto font-medium text-[44px]">
+          {t("ALL_HEARINGS_FOR_THE_DAY_HAVE_BEEN_COMPLETED")}
+        </div>
+      ) : (
+        <div className={`grid gap-4 grid-cols-4`}>
+          {inCompletedHearings.map((item, idx) => (
+            <TopCard
+              key={`${item.caseNumber}-${idx}`}
+              item={item}
+              index={idx}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Divider */}
       {leftCol?.length > 0 && (
-        <div className="my-3 border-t border-[#E8E8E8]" />
+        <div className="my-3 -mx-6 border-t-[1px] border-[#E8E8E8]" />
       )}
 
       {/* Bottom paginated section: 12 per page, split 6/6 */}
