@@ -183,7 +183,9 @@ export default function LiveCauselist() {
   const defaultUpdateInterval = 5000; // 5 seconds
 
   // Selected date: auto (no date selector)
-  const [selectedDate] = useState<string>(() => computeAutoDate());
+  const [selectedDate, setSelectedDate] = useState<string>(() =>
+    computeAutoDate()
+  );
 
   // Two datasets: status-sorted for top cards, index-sorted for paginated table
   const [sortedHearingsData, setSortedHearingsData] = useState<HearingItem[]>(
@@ -352,6 +354,7 @@ export default function LiveCauselist() {
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
     let timeoutToStart: NodeJS.Timeout | null = null;
+    let timeoutToNextDay: NodeJS.Timeout | null = null;
 
     const startAutoRefresh = () => {
       interval = setInterval(async () => {
@@ -364,16 +367,45 @@ export default function LiveCauselist() {
           const { sorted } = await fetchBothForDate(selectedDate);
           const stillHasPending = sorted?.some((h) => h.status !== "COMPLETED");
 
+          // stop auto-refresh if past 5 PM or all completed
           if (isPastFivePM || !stillHasPending) {
             if (interval) {
               clearInterval(interval);
               interval = null;
             }
+
+            // if it's past 5:02:00 PM, schedule data fetch for next-day
+            if (isPastFivePM) scheduleNextDayFetch();
           }
         } catch (e) {
           console.error("Auto refresh API error:", e);
         }
       }, updateInterval);
+    };
+
+    const triggerNextDayFetch = async () => {
+      const now = new Date();
+      now.setDate(now.getDate() + 1);
+      const updatedSelectedDate = now.toISOString().split("T")[0];
+      setSelectedDate(updatedSelectedDate);
+      await fetchBothForDate(updatedSelectedDate);
+    };
+
+    const scheduleNextDayFetch = () => {
+      const now = new Date();
+
+      // Target = today 5:02:00 PM
+      const target = new Date(now);
+      target.setHours(17, 2, 0, 0);
+
+      const diffMs = target.getTime() - now.getTime();
+
+      // If it's already past 5:02:00 PM, do nothing (or could fetch by hard refresh if desired)
+      if (diffMs <= 0) return;
+
+      timeoutToNextDay = setTimeout(() => {
+        triggerNextDayFetch();
+      }, diffMs);
     };
 
     const init = () => {
@@ -399,6 +431,7 @@ export default function LiveCauselist() {
         const diffMs = (startMinutes - currentMinutes) * 60 * 1000;
         timeoutToStart = setTimeout(() => startAutoRefresh(), diffMs);
       }
+      scheduleNextDayFetch();
     };
 
     init();
@@ -406,6 +439,7 @@ export default function LiveCauselist() {
     return () => {
       if (interval) clearInterval(interval);
       if (timeoutToStart) clearTimeout(timeoutToStart);
+      if (timeoutToNextDay) clearTimeout(timeoutToNextDay);
     };
   }, [selectedDate, fetchBothForDate, sortedHearingsData, error]);
 
