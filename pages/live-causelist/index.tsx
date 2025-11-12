@@ -128,11 +128,20 @@ const formattedDateDisplay = (dateStr: string) => {
   return `${day}-${month}-${year}`;
 };
 
+function getLocalISOString() {
+  const now = new Date();
+  const tzOffset = now.getTimezoneOffset() * 60000; // offset in ms
+  const localISOTime = new Date(now.getTime() - tzOffset)
+    .toISOString()
+    .slice(0, -1); // remove trailing 'Z'
+  return localISOTime;
+}
+
 function calculateLastRefreshDay(refreshedAt: string | number | Date): string {
   const refreshDate = new Date(refreshedAt);
   const today = new Date();
 
-  // Normalize both to midnight for date comparison
+  // Normalize both to midnight for local comparison
   const refreshDay = new Date(
     refreshDate.getFullYear(),
     refreshDate.getMonth(),
@@ -143,16 +152,15 @@ function calculateLastRefreshDay(refreshedAt: string | number | Date): string {
     today.getMonth(),
     today.getDate()
   );
+  const diffInDays =
+    (todayDay.getTime() - refreshDay.getTime()) / (1000 * 60 * 60 * 24);
 
-  const diffInTime = todayDay.getTime() - refreshDay.getTime();
-  const diffInDays = diffInTime / (1000 * 60 * 60 * 24);
-
-  // Format time with hours, minutes, seconds, and AM/PM
+  // Format time for display (local)
   let hours = refreshDate.getHours();
   const minutes = refreshDate.getMinutes().toString().padStart(2, "0");
   const seconds = refreshDate.getSeconds().toString().padStart(2, "0");
   const ampm = hours >= 12 ? "PM" : "AM";
-  hours = hours % 12 || 12; // convert to 12-hour format
+  hours = hours % 12 || 12;
   const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes}:${seconds} ${ampm}`;
 
   if (diffInDays === 0) {
@@ -196,7 +204,7 @@ export default function LiveCauselist() {
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [refreshedAt, setRefreshedAt] = useState("");
+  const [refreshedAt, setRefreshedAt] = useState<string>(getLocalISOString());
   const [updateInterval, setUpdateInterval] = useState(defaultUpdateInterval);
 
   // Pagination for bottom section (12 per page after the top 4)
@@ -339,7 +347,7 @@ export default function LiveCauselist() {
         setError("SOMETHING_WENT_WRONG_TRY_LATER_OR_REFRESH");
         return { sorted: [] as HearingItem[], indexed: [] as HearingItem[] };
       } finally {
-        setRefreshedAt(new Date().toLocaleString());
+        setRefreshedAt(getLocalISOString());
         setLoading(false);
       }
     },
