@@ -508,7 +508,7 @@ export default function LiveCauselist() {
         {parts.map((p, i) => (
           <p
             key={i}
-            className={`text-[22.2px] leading-[26px] ${i === 1 ? "pt-[8px]" : ""}`}
+            className={`text-[clamp(14.30px,calc(14.30px+((22.2-14.30)*((100vw-1200px)/662))),22.2px)] leading-[clamp(16.76px,calc(16.76px+((26-16.76)*((100vw-1200px)/662))),26px)] ${i === 1 ? "pt-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)]" : ""}`}
           >
             {p}
           </p>
@@ -522,43 +522,67 @@ export default function LiveCauselist() {
     index,
   }) => (
     <div
-      className={`flex font-roboto rounded-[4px] border border-[#E8E8E8] p-4 gap-2 ${getTopCardBackgroundColor(item.status || "")}`}
+      className={`flex font-roboto rounded-[4px] border border-[#E8E8E8] p-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] gap-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)] ${getTopCardBackgroundColor(item.status || "")}`}
     >
-      <div className="text-[22px] leading-[26px] font-medium text-[#0A0A0A] pt-1">
+      <div
+        className={`text-[clamp(14.18px,calc(14.18px+((22-14.18)*((100vw-1200px)/662))),22px)] leading-[clamp(16.76px,calc(16.76px+((26-16.76)*((100vw-1200px)/662))),26px)] font-medium text-[#0A0A0A] pt-1`}
+      >
         <span>{item?.serialNumber || ""}.</span>
       </div>
-      <div className="flex flex-col justify-between items-start gap-[14.71px] w-[90%]">
+      <div
+        className={`flex flex-col justify-between items-start gap-[clamp(9.48px,calc(9.48px+((14.71-9.48)*((100vw-1200px)/662))),14.71px)] w-[90%]`}
+      >
         {/* Case name section */}
-        <div className="flex flex-col w-[100%] gap-[6px]">
-          <span className="font-medium mr-1 text-[14px] leading-[16px] text-[#77787B]">
+        <div
+          className={`flex flex-col w-[100%] gap-[clamp(3.87px,calc(3.87px+((6-3.87)*((100vw-1200px)/662))),6px)]`}
+        >
+          <span
+            className={`font-medium mr-1 text-[clamp(9.02px,calc(9.02px+((14-9.02)*((100vw-1200px)/662))),14px)] leading-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] text-[#77787B]`}
+          >
             {t("CASE_NAME")}
           </span>
-          <span className="leading-[26px] font-bold text-[22px] text-[#0A0A0A] truncate block w-full">
+          <span
+            className={`leading-[clamp(16.76px,calc(16.76px+((26-16.76)*((100vw-1200px)/662))),26px)] font-bold text-[clamp(14.18px,calc(14.18px+((22-14.18)*((100vw-1200px)/662))),22px)] text-[#0A0A0A] truncate block w-full`}
+          >
             {item.caseTitle || ""}
           </span>
         </div>
 
         {/* advocates section*/}
-        <div className="flex flex-col max-w-[100%] w-[100%] gap-[6px]">
-          <span className="font-medium  mr-1 text-[14px] leading-[16px] text-[#77787B]">
+        <div
+          className={`flex flex-col max-w-[100%] w-[100%] gap-[clamp(3.87px,calc(3.87px+((6-3.87)*((100vw-1200px)/662))),6px)]`}
+        >
+          <span
+            className={`font-medium  mr-1 text-[clamp(9.02px,calc(9.02px+((14-9.02)*((100vw-1200px)/662))),14px)] leading-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] text-[#77787B]`}
+          >
             {t("ADVOCATES")}
           </span>
-          <span className="font-bold text-[22px] text-[#0A0A0A]">
+          <span
+            className={`font-bold text-[clamp(14.18px,calc(14.18px+((22-14.18)*((100vw-1200px)/662))),22px)] text-[#0A0A0A]`}
+          >
             {advocates(item)}
           </span>
         </div>
 
         {/* Case number section */}
-        <div className="flex flex-col w-[100%] gap-[6px]">
-          <span className="font-medium mr-1 text-[14px] leading-[16px] text-[#77787B]">
+        <div
+          className={`flex flex-col w-[100%] gap-[clamp(3.87px,calc(3.87px+((6-3.87)*((100vw-1200px)/662))),6px)]`}
+        >
+          <span
+            className={`font-medium mr-1 text-[clamp(9.02px,calc(9.02px+((14-9.02)*((100vw-1200px)/662))),14px)] leading-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] text-[#77787B]`}
+          >
             {t("CASE_NUMBER")}
           </span>
-          <div className="leading-[26px] flex items-center justify-between flex-wrap">
-            <span className="font-bold text-[22px] text-[#0A0A0A]">
+          <div
+            className={`leading-[clamp(18.87px,calc(18.87px+((29.29-18.87)*((100vw-1200px)/662))),29.29px)] flex items-center justify-between flex-wrap`}
+          >
+            <span
+              className={`font-bold text-[clamp(14.18px,calc(14.18px+((22-14.18)*((100vw-1200px)/662))),22px)] text-[#0A0A0A]`}
+            >
               {item.caseNumber || "-"}
             </span>
             <span
-              className={`px-4 py-1 rounded-full text-[19px] font-medium ${getTopCardStatusTextBackgroundColor(index, item.status || "", inCompletedHearings, "style")} ${item.status === "IN_PROGRESS" || item.status === "SCHEDULED" ? "text-white" : ""}`}
+              className={`px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] py-0 rounded-full text-[clamp(12.28px,calc(12.28px+((19.04-12.28)*((100vw-1200px)/662))),19.04px)] font-medium ${getTopCardStatusTextBackgroundColor(index, item.status || "", inCompletedHearings, "style")} ${item.status === "IN_PROGRESS" || item.status === "SCHEDULED" ? "text-white" : ""}`}
             >
               {t(
                 getTopCardStatusTextBackgroundColor(
@@ -588,22 +612,28 @@ export default function LiveCauselist() {
 
     return (
       <div
-        className={`grid grid-cols-[60px_1.5fr_4fr_1.2fr] gap-x-[2px] font-roboto font-medium text-[22px] h-full`}
+        className={`grid grid-cols-[clamp(38.67px,calc(38.67px+((60-38.67)*((100vw-1200px)/662))),60px)_1.8fr_4fr_1.4fr] gap-x-[clamp(1.29px,calc(1.29px+((2-1.29)*((100vw-1200px)/662))),2px)] font-roboto font-medium text-[clamp(14.18px,calc(14.18px+((22-14.18)*((100vw-1200px)/662))),22px)] h-full`}
       >
-        <div className={`pl-[10px] h-full flex items-center ${style}`}>
+        <div
+          className={`pl-[clamp(6.44px,calc(6.44px+((10-6.44)*((100vw-1200px)/662))),10px)] h-full flex items-center ${style}`}
+        >
           {serial}.
         </div>
-        <div className={`pl-[10px] h-full flex items-center truncate ${style}`}>
+        <div
+          className={`pl-[clamp(6.44px,calc(6.44px+((10-6.44)*((100vw-1200px)/662))),10px)] h-full flex items-center truncate ${style}`}
+        >
           {item.caseNumber || "-"}
         </div>
-        <div className={`pl-[10px] h-full flex items-center truncate ${style}`}>
+        <div
+          className={`pl-[clamp(6.44px,calc(6.44px+((10-6.44)*((100vw-1200px)/662))),10px)] h-full flex items-center truncate ${style}`}
+        >
           <span className="truncate block max-w-full">
             {item.caseTitle || "-"}
           </span>
         </div>
         <div className={`h-full flex items-center justify-center ${style}`}>
           <span
-            className={`px-4 py-1 rounded-full text-[19.04px] leading-[29.29px] ${statusStyle}`}
+            className={`px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] py-0 rounded-full text-[clamp(12.28px,calc(12.28px+((19.04-12.28)*((100vw-1200px)/662))),19.04px)] leading-[clamp(18.87px,calc(18.87px+((29.29-18.87)*((100vw-1200px)/662))),29.29px)] ${statusStyle}`}
           >
             {t(item.status || "")}
           </span>
@@ -613,33 +643,33 @@ export default function LiveCauselist() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col max-w-full mx-auto px-4 sm:px-6 py-4 bg-white">
+    <div className="min-h-screen flex flex-col max-w-full mx-auto px-[clamp(12.8px,calc(0.8px+0.8163vw),16px)] sm:px-6 py-[clamp(12.8px,calc(0.8px+0.8163vw),16px)] bg-white">
       <header className="w-full h-[73px] py-2 flex justify-between items-center  top-0 left-0 right-0 bg-white z-50">
         {/* <Link href="/" className="flex-shrink-0"> */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-[clamp(12.8px,calc(0.8px+0.8163vw),16px)]">
           <Image
             src="/images/emblem.png"
             alt={t("EMBLEM")}
             width={123}
             height={73}
-            className="h-[54.73px] w-[33px]"
+            className="h-[clamp(35.29px,calc(35.29px+((54.73-35.29)*((100vw-1200px)/662))),54.73px)] w-[clamp(21.27px,calc(21.27px+((33-21.27)*((100vw-1200px)/662))),33px)]"
           />
           <Image
             src="/images/logo.png"
             alt={t("ONCOURTS_LOGO")}
             width={123}
             height={73}
-            className="h-[54.73px] w-[91px]"
+            className="h-[clamp(35.29px,calc(35.29px+((54.73-35.29)*((100vw-1200px)/662))),54.73px)] w-[clamp(58.65px,calc(58.65px+((91-58.65)*((100vw-1200px)/662))),91px)]"
           />
         </div>
         {/* Date + case schedule */}
         {leftCol?.length > 0 && (
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between mb-[clamp(7.73px,calc(7.73px+((12-7.73)*((100vw-1200px)/662))),12px)]">
+            <div className="flex items-center gap-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)]">
               <span className="">
                 <svgIcons.RefreshIcon2 />
               </span>
-              <span className="font-roboto italic font-medium text-[24px]">{`${t("Last refreshed")} ${calculateLastRefreshDay(refreshedAt)}`}</span>
+              <span className="font-roboto italic font-medium text-[clamp(15.47px,calc(15.47px+((24-15.47)*((100vw-1200px)/662))),24px)]">{`${t("Last refreshed")} ${calculateLastRefreshDay(refreshedAt)}`}</span>
             </div>
           </div>
         )}
@@ -648,13 +678,15 @@ export default function LiveCauselist() {
       </header>
 
       {/* Date + case schedule */}
-      <div className="flex items-center justify-center mb-3">
-        <div className="flex items-center gap-4 text-[#007E7E] border-b-[2px] border-[#F7F5F3] ">
-          <h2 className="text-left text-[32px] 3xl:text-[169.22px] font-roboto font-medium">
+      <div className="flex items-center justify-center mb-[clamp(7.73px,calc(7.73px+((12-7.73)*((100vw-1200px)/662))),12px)]">
+        <div className="flex items-center gap-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] text-[#007E7E] border-b-[2px] border-[#F7F5F3] ">
+          <h2 className="text-left text-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] 3xl:text-[169.22px] font-roboto font-bold">
             {t("24X7_ON_COURTS_CAUSELIST")}
           </h2>
-          <span className="text-[22px] font-roboto font-bold">|</span>
-          <span className="text-[32px] font-roboto font-medium">
+          <span className="text-[clamp(14.18px,calc(14.18px+((22-14.18)*((100vw-1200px)/662))),22px)] font-roboto font-bold">
+            |
+          </span>
+          <span className="text-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] font-roboto font-bold">
             {formattedDateDisplay(selectedDate)}
           </span>
         </div>
@@ -662,20 +694,22 @@ export default function LiveCauselist() {
       {/* Top four big boxes */}
       {sortedHearingsData.length === 0 ? (
         loading ? (
-          <div className="flex justify-center items-center text-[#DC2626] font-roboto font-medium text-[18px]">
+          <div className="flex justify-center items-center text-[#DC2626] font-roboto font-medium text-[clamp(11.60px,calc(11.60px+((18-11.60)*((100vw-1200px)/662))),18px)]">
             {t("COMMON_LOADING")}
           </div>
         ) : (
-          <div className="h-[27vh] flex justify-center items-center text-[#DC2626] font-roboto font-medium text-[44px]">
+          <div className="h-[27vh] flex justify-center items-center text-[#DC2626] font-roboto font-medium text-[clamp(28.36px,calc(28.36px+((44-28.36)*((100vw-1200px)/662))),44px)]">
             {t("NO_CASE_SCHEDULED_FOR_THE_DAY")}
           </div>
         )
       ) : sortedHearingsData?.length > 0 && inCompletedHearings.length === 0 ? (
-        <div className="h-[27vh] flex justify-center items-center text-black font-roboto font-medium text-[44px]">
+        <div className="h-[27vh] flex justify-center items-center text-black font-roboto font-medium text-[clamp(28.36px,calc(28.36px+((44-28.36)*((100vw-1200px)/662))),44px)]">
           {t("ALL_HEARINGS_FOR_THE_DAY_HAVE_BEEN_COMPLETED")}
         </div>
       ) : (
-        <div className={`grid gap-4 grid-cols-4`}>
+        <div
+          className={`grid gap-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] grid-cols-4`}
+        >
           {inCompletedHearings.map((item, idx) => (
             <TopCard
               key={`${item.caseNumber}-${idx}`}
@@ -696,40 +730,44 @@ export default function LiveCauselist() {
         <div className="rounded flex flex-col flex-1">
           {/* headers for both columns */}
           <div
-            className="grid grid-cols-2 gap-x-[19.61px] text-[#0A0A0A] font-roboto text-[24px]"
+            className="grid grid-cols-2 gap-x-[clamp(12.64px,calc(12.64px+((19.61-12.64)*((100vw-1200px)/662))),19.61px)] text-[#0A0A0A] font-roboto text-[clamp(15.47px,calc(15.47px+((24-15.47)*((100vw-1200px)/662))),24px)]"
             style={{ position: "sticky", top: 0 }}
           >
-            <div className="grid grid-cols-[60px_1.5fr_4fr_1.2fr] gap-x-[2px] items-center mb-[5px]">
-              <span className="bg-[#F7F5F3] py-2 pl-[5px]">{t("S_NO")}</span>
-              <span className="bg-[#F7F5F3] py-2 pl-[10px] truncate">
+            <div className="grid grid-cols-[clamp(38.67px,calc(38.67px+((60-38.67)*((100vw-1200px)/662))),60px)_1.8fr_4fr_1.4fr] gap-x-[clamp(1.29px,calc(1.29px+((2-1.29)*((100vw-1200px)/662))),2px)] items-center mb-[clamp(3.22px,calc(3.22px+((5-3.22)*((100vw-1200px)/662))),5px)]">
+              <span className="bg-[#F7F5F3] py-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)] pl-[clamp(3.22px,calc(3.22px+((5-3.22)*((100vw-1200px)/662))),5px)]">
+                {t("S_NO")}
+              </span>
+              <span className="bg-[#F7F5F3] py-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)] pl-[clamp(6.44px,calc(6.44px+((10-6.44)*((100vw-1200px)/662))),10px)] truncate">
                 {t("CASE_NUMBER")}
               </span>
-              <span className="bg-[#F7F5F3] py-2 pl-[10px]">
+              <span className="bg-[#F7F5F3] py-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)] pl-[clamp(6.44px,calc(6.44px+((10-6.44)*((100vw-1200px)/662))),10px)]">
                 {t("CASE_NAME")}
               </span>
-              <span className="bg-[#F7F5F3] text-center py-2">
+              <span className="bg-[#F7F5F3] text-center py-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)]">
                 {t("HEARING_STATUS")}
               </span>
             </div>
             {rightCol?.length > 0 && (
-              <div className="grid grid-cols-[60px_1.5fr_4fr_1.2fr] gap-x-[2px] items-center mb-[5px]">
-                <span className="bg-[#F7F5F3] py-2 pl-[5px]">{t("S_NO")}</span>
-                <span className="bg-[#F7F5F3] py-2 pl-[10px] truncate">
+              <div className="grid grid-cols-[clamp(38.67px,calc(38.67px+((60-38.67)*((100vw-1200px)/662))),60px)_1.8fr_4fr_1.4fr] gap-x-[clamp(1.29px,calc(1.29px+((2-1.29)*((100vw-1200px)/662))),2px)] items-center mb-[clamp(3.22px,calc(3.22px+((5-3.22)*((100vw-1200px)/662))),5px)]">
+                <span className="bg-[#F7F5F3] py-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)] pl-[clamp(3.22px,calc(3.22px+((5-3.22)*((100vw-1200px)/662))),5px)]">
+                  {t("S_NO")}
+                </span>
+                <span className="bg-[#F7F5F3] py-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)] pl-[clamp(6.44px,calc(6.44px+((10-6.44)*((100vw-1200px)/662))),10px)] truncate">
                   {t("CASE_NUMBER")}
                 </span>
-                <span className="bg-[#F7F5F3] py-2 pl-[10px]">
+                <span className="bg-[#F7F5F3] py-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)] pl-[clamp(6.44px,calc(6.44px+((10-6.44)*((100vw-1200px)/662))),10px)]">
                   {t("CASE_NAME")}
                 </span>
-                <span className="bg-[#F7F5F3] text-center py-2">
+                <span className="bg-[#F7F5F3] text-center py-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)]">
                   {t("HEARING_STATUS")}
                 </span>
               </div>
             )}
           </div>
 
-          <div className="flex-1 grid grid-cols-2 gap-x-[19.61px]">
+          <div className="flex-1 grid grid-cols-2 gap-x-[clamp(12.64px,calc(12.64px+((19.61-12.64)*((100vw-1200px)/662))),19.61px)]">
             {/* Left 6 */}
-            <div className="grid grid-rows-6 h-full gap-y-[5px]">
+            <div className="grid grid-rows-6 h-full gap-y-[clamp(3.22px,calc(3.22px+((5-3.22)*((100vw-1200px)/662))),5px)]">
               {leftCol.map((item, i) => {
                 return (
                   <Row
@@ -742,7 +780,7 @@ export default function LiveCauselist() {
               })}
             </div>
             {/* Right 6 */}
-            <div className="grid grid-rows-6 h-full gap-y-[5px]">
+            <div className="grid grid-rows-6 h-full gap-y-[clamp(3.22px,calc(3.22px+((5-3.22)*((100vw-1200px)/662))),5px)]">
               {rightCol.map((item, i) => (
                 <Row
                   key={`${item?.caseNumber}-${i}`}
@@ -755,7 +793,7 @@ export default function LiveCauselist() {
           </div>
 
           {/* Footer page indicator */}
-          <div className="flex items-center gap-4 py-4 font-roboto text-[24px]">
+          <div className="flex items-center gap-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] py-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] font-roboto text-[clamp(15.47px,calc(15.47px+((24-15.47)*((100vw-1200px)/662))),24px)]">
             <span className="h-px bg-[#E8E8E8] flex-1" aria-hidden="true" />
             <span className="whitespace-nowrap font-medium">
               {t("PAGE")} {totalBottomPages === 0 ? 0 : currentPage + 1} :{" "}
