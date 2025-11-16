@@ -43,7 +43,22 @@ const HighlightItem: React.FC<HighlightItemProps> = ({
 const Highlights: React.FC = () => {
   const { t } = useSafeTranslation();
   const [stats, setStats] = useState<DashboardMetricsNew>();
+  const [lastUpdated, setLastUpdated] = useState<Date>(getLastUpdateTime());
   const isMobile = useMediaQuery("(max-width: 640px)");
+  
+  // Function to determine last update time (either today at 5PM or yesterday at 5PM)
+  function getLastUpdateTime(): Date {
+    const now = new Date();
+    const today = new Date(now);
+    today.setHours(17, 0, 0, 0); // Set to 5:00:00.000 PM today
+    
+    // If current time is before 5PM, use yesterday's date at 5PM
+    if (now.getHours() < 17) {
+      today.setDate(today.getDate() - 1);
+    }
+    
+    return today;
+  }
 
   const fetchImpactGlance = async () => {
     try {
@@ -52,6 +67,7 @@ const Highlights: React.FC = () => {
 
       const transformed = transformImpactGlance(data);
       setStats(transformed?.stats || []);
+      setLastUpdated(getLastUpdateTime());
     } catch (error) {
       console.error("Failed to fetch Whats New data", error);
     }
@@ -116,17 +132,21 @@ const Highlights: React.FC = () => {
   return (
     <section className={`w-full bg-white ${isMobile ? "py-4" : "py-16"}`}>
       <div className="max-w-[1440px] mx-auto px-6">
-        <div className="flex items-center justify-center mb-8">
+        <div className="relative flex flex-col items-center mb-8">
           <h2
-            className={`px-12 pb-2 font-libre font-normal  tracking-normal text-center align-middle text-[#3A3A3A] border-b border-[#CBD5E1] ${isMobile ? "text-[32px] leading-[40px] w-[90%]" : "text-[40px] leading-[48px]"}`}
-            style={
-              {
-                WebkitTextStrokeWidth: "0.5px",
-              } as React.CSSProperties
-            }
+            className={`px-12 pb-2 font-libre font-normal tracking-normal text-center align-middle text-[#3A3A3A] border-b border-[#CBD5E1] ${isMobile ? "text-[32px] leading-[40px] w-[90%]" : "text-[40px] leading-[48px]"}`}
           >
             {t("HIGHLIGHTS")}
           </h2>
+          <div className={`absolute ${isMobile ? "bottom-[-24px] text-center w-full" : "top-0 right-0"}`}>
+            <span
+              style={{
+                color: "#2563EB",
+                fontFamily: "Inter, sans-serif",
+              }}>
+              {`${t("LAST_UPDATED_ON")} ${lastUpdated.toLocaleDateString('en-GB', {day: 'numeric', month: 'numeric', year: 'numeric'})}, 5:00 PM`}
+            </span>
+          </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {highlights.map((item, index) => (

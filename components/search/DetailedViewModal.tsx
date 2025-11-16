@@ -390,7 +390,6 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
         // For other devices, use the standard window.open method
         const url = window.URL.createObjectURL(blob);
         window.open(url, "_blank");
-
         setTimeout(() => {
           window.URL.revokeObjectURL(url);
         }, 5000);
