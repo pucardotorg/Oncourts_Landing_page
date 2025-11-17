@@ -15,7 +15,7 @@ const SectionHeading: React.FC<SectionHeadingProps> = ({
 }) => {
   return (
     <div
-      className={`${fontSize} font-medium text-center mb-8 font-libre text-[#3A3A3A] ${className}`}
+      className={`${fontSize} font-medium text-center mb-8 md:mb-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] md:text-[clamp(25.79px,calc(25.79px+((40-25.79)*((100vw-1200px)/662))),40px)] md:leading-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] font-libre text-[#3A3A3A] ${className}`}
       style={{
         WebkitTextStrokeWidth: "0.5px",
       }}

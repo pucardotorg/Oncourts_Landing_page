@@ -22,10 +22,13 @@ export default function GuidingPrinciples() {
   ];
 
   return (
-    <div className="py-16 bg-[#F0FDFA]" id="guiding-principles-section">
+    <div
+      className="py-16 md:py-[clamp(41.3px,calc(41.3px+((64-41.3)*((100vw-1200px)/662))),64px)] bg-[#F0FDFA]"
+      id="guiding-principles-section"
+    >
       <div className="container mx-auto max-w-[95%] px-4">
         <SectionHeading title={t("GUIDING_PRINCIPLES")} />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-[clamp(25.79px,calc(25.79px+((40-25.79)*((100vw-1200px)/662))),40px)] mt-5 md:mt-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)]">
           {principles.map((principle, index) => (
             <CustomCard
               key={index}

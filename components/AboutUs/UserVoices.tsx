@@ -73,16 +73,16 @@ const UserVoices: React.FC = () => {
       <div className="container mx-auto px-0 md:px-4 relative z-10">
         {/* Carousel Container */}
         <div
-          className="mx-auto bg-white border border-[#E2E8F0] md:rounded-xl shadow-xl p-8 overflow-hidden"
+          className="mx-auto bg-white border border-[#E2E8F0] md:rounded-xl shadow-xl p-8 md:p-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] overflow-hidden"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
           <SectionHeading title={t("USER_VOICES")} />
 
           {/* Testimonial */}
-          <div className="mt-20 flex flex-col items-center transition-opacity duration-500">
+          <div className="mt-20 md:mt-[clamp(51.9px,calc(51.9px+((80-51.9)*((100vw-1200px)/662))),80px)] flex flex-col items-center transition-opacity duration-500">
             {/* Avatar row with navigation - 3 column grid for desktop, different layout for mobile */}
-            <div className="grid grid-cols-12 items-center mb-10 py-4 gap-4 w-full">
+            <div className="grid grid-cols-12 items-center mb-10 md:mb-[clamp(25.79px,calc(25.79px+((40-25.79)*((100vw-1200px)/662))),40px)] py-4 md:py-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] gap-4 md:gap-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] w-full">
               {/* Left column with previous button */}
               <div className="col-span-1 flex justify-center">
                 <button
@@ -92,7 +92,7 @@ const UserVoices: React.FC = () => {
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8"
+                    className="h-8 w-8 md:h-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] md:w-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)]"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -215,7 +215,7 @@ const UserVoices: React.FC = () => {
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8"
+                    className="h-8 w-8 md:h-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] md:w-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)]"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -232,7 +232,7 @@ const UserVoices: React.FC = () => {
             </div>
 
             {/* Name and designation */}
-            <div className="mt-8 flex justify-center items-center text-[#3A3A3A] font-medium font-roboto text-[24px] md:text-[28px] w-full mb-3">
+            <div className="mt-8 flex justify-center items-center text-[#3A3A3A] font-medium font-roboto text-[24px] md:text-[clamp(18.05px,calc(18.05px+((28-18.05)*((100vw-1200px)/662))),28px)] w-full mb-3">
               <div className="flex w-full max-w-2xl">
                 <div className="w-[47.5%] text-right">
                   {testimonials[activeIndex].name}
@@ -244,16 +244,16 @@ const UserVoices: React.FC = () => {
               </div>
             </div>
             {/* Quote */}
-            <p className="text-[19px] md:text-[21px] text-center text-[#334155] font-roboto max-w-4xl">
+            <p className="text-[19px] md:text-[clamp(13.54px,calc(13.54px+((21-13.54)*((100vw-1200px)/662))),21px)] text-center text-[#334155] font-roboto max-w-4xl">
               {t(testimonials[activeIndex].quote)}
             </p>
 
             {/* Navigation dots */}
-            <div className="flex space-x-2 mt-8">
+            <div className="flex space-x-2 md:space-x-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)] mt-8 md:mt-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)]">
               {testimonials.map((_, idx) => (
                 <button
                   key={idx}
-                  className={`h-3 w-3 rounded-full transition-all ${
+                  className={`h-3 w-3 md:h-[clamp(7.73px,calc(7.73px+((12-7.73)*((100vw-1200px)/662))),12px)] md:w-[clamp(7.73px,calc(7.73px+((12-7.73)*((100vw-1200px)/662))),12px)] rounded-full transition-all ${
                     idx === activeIndex ? "bg-[#3A3A3A]" : "bg-[#64748B]"
                   }`}
                   onClick={() => goToSlide(idx)}
