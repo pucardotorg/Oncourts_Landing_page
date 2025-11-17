@@ -79,7 +79,7 @@ function CauseListDisplay({
       <div
         className={`flex flex-col items-center bg-white overflow-hidden ${isMobile ? "h-[253px] w-[95%]" : "w-[436px] h-[253px]"}`}
       >
-        <div className=" h-[194px] p-2 aspect-[1.64] relative bg-white w-[100%] border border-[#E2E8F0] rounded-[4px]">
+        <div className=" h-[200px] p-2 aspect-[1.64] relative bg-white w-[100%] border border-[#E2E8F0] rounded-[4px]">
           {pdfUrl ? (
             <>
               <PdfPreview
@@ -96,25 +96,31 @@ function CauseListDisplay({
               </button>
             </>
           ) : (
-            <div className="flex items-center justify-center h-full text-[#DC2626]">
+            <div className="flex items-center justify-center h-[200px] text-[#DC2626]">
               {t("HEARING_NOT_SCHEDULED_FOR_THIS_DATE")}
             </div>
           )}
         </div>
-        <div className="flex items-center justify-between w-full py-3 border-t border-gray-100 bg-[#F0FDFA]">
-          <div className="flex items-center gap-2 h-[42px]">
+        <div
+          className={`flex items-center justify-between w-full py-[clamp(9.66px,calc(9.66px+((12-9.66)*((100vw-1200px)/662))),12px)] border-t border-gray-100 bg-[#F0FDFA]`}
+        >
+          <div
+            className={`flex items-center gap-[clamp(2.58px,calc(2.58px+((8-2.58)*((100vw-1200px)/662))),8px)] h-[clamp(27.07px,calc(27.07px+((42-27.07)*((100vw-1200px)/662))),42px)]`}
+          >
             <span className="flex-shrink-0">
               <svgIcons.SmallFileIcon />
             </span>
-            <span className="font-roboto font-medium text-[20px] leading-[24px] tracking-[-0.2px] text-[#334155] truncate max-w-[300px]">
-              {`${formattedDate}`} 
+            <span
+              className={`font-roboto font-medium text-[clamp(12.88px,calc(12.88px+((20-12.88)*((100vw-1200px)/662))),20px)] leading-[clamp(15.47px,calc(15.47px+((24-15.47)*((100vw-1200px)/662))),24px)] tracking-[-0.2px] text-[#334155] truncate max-w-[300px]`}
+            >
+              {`${formattedDate}`}
               {/* ${pdfUrl ? "_causelist.pdf" : ""}`} */}
             </span>
           </div>
           {pdfUrl && (
             <button
               onClick={onDownload}
-              className={`flex-shrink-0 text-teal-600 hover:text-teal-700 p-2  flex items-center justify-center bg-[white] px-[12px] border border-[#E2E8F0] hover:bg-teal-50 transition-colors ${isMobile ? "rounded-[12px]" : "rounded-[4px]"}`}
+              className={`flex-shrink-0 text-teal-600 hover:text-teal-700 ${isMobile ? "p-2" : "px-[clamp(7.73px,calc(7.73px+((12-7.73)*((100vw-1200px)/662))),12px)] py-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)]"} flex items-center justify-center bg-[white] border border-[#E2E8F0] hover:bg-teal-50 transition-colors ${isMobile ? "rounded-[12px]" : "rounded-[4px]"}`}
             >
               <svgIcons.SmallDownloadIcon />
             </button>
