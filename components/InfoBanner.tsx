@@ -53,15 +53,28 @@ const InfoBanner: React.FC = () => {
   const message = messages?.[0];
   const MessageContent = () => (
     <div className="flex items-center">
-      <div className="flex items-center space-x-2 px-4">
-        <svgIcons.ClockIcon2 width={isMobile ? "22" : "32"} />
+      <div className="flex items-center space-x-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)] px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)]">
+        <svgIcons.ClockIcon2
+          width={
+            isMobile
+              ? "22px"
+              : "clamp(20.62px, calc(20.62px + ((32 - 20.62) * ((100vw - 1200px) / 662))), 32px)"
+          }
+        />
+
         <h4
-          className={`text-[#3A3A3A] font-sans font-medium tracking-[0.01em] text-center ${isMobile ? "text-[15px] leading-[18px]" : "text-[20px] leading-[28px]"}`}
+          className={`text-[#3A3A3A] font-sans font-medium tracking-[0.01em] text-center ${
+            isMobile
+              ? "text-[15px] leading-[18px]"
+              : "text-[clamp(12.88px,calc(12.88px+((20-12.88)*((100vw-1200px)/662))),20px)] leading-[clamp(18.05px,calc(18.05px+((28-18.05)*((100vw-1200px)/662))),28px)]"
+          }`}
         >
           {message}
         </h4>
       </div>
-      <div className="h-[28px] w-[1px] bg-[#CBD5E1]"></div>
+      <div
+        className={`${isMobile ? "h-[28px]" : "h-[clamp(18.06px,calc(18.06px+((28-18.06)*((100vw-1200px)/662))),28px)]"} w-[1px] bg-[#CBD5E1]`}
+      ></div>
     </div>
   );
 
@@ -71,7 +84,11 @@ const InfoBanner: React.FC = () => {
 
   return (
     <div
-      className={`flex items-center bg-[#F0FDFA] border-b border-t border-[#E2E8F0] py-2 overflow-hidden ${isMobile ? "h-[43px]" : "h-[68px]"}`}
+      className={`flex items-center bg-[#F0FDFA] border-b border-t border-[#E2E8F0] ${
+        isMobile
+          ? "py-2 h-[43px]"
+          : "py-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)] h-[clamp(43.85px,calc(43.85px+((68-43.85)*((100vw-1200px)/662))),68px)]"
+      } overflow-hidden`}
     >
       <div className="relative flex whitespace-nowrap animate-marquee">
         <MessageContent />
