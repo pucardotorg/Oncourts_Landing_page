@@ -83,7 +83,7 @@ const ExpandableCardV2: React.FC<ExpandableCardV2Props> = ({ caseData }) => {
               <div className="font-roboto font-semibold text-[14.07px] leading-[20px] text-[#0F172A]">
                 {t("ADVOCATE")}:
               </div>
-              <div className="text-[14.07px] leading-[20px] text-[#334155] font-bold ">
+              <div>
                 {caseData?.advocates || ""}
               </div>
               <div></div>
