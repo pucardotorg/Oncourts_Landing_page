@@ -66,7 +66,8 @@ const SectionHeading: React.FC<SectionHeadingProps> = ({
   const slope = 1862 - 1200; // 662
 
   // sensible line-height: 1 for large headings, slightly larger for small
-  const lineHeight = fontSize === "text-5xl" ? 1 : "1.5";
+  const lineHeight =
+    fontSize === "text-5xl" ? 1 : fontSize === "text-[40px]" ? "2rem" : "1.5";
 
   return (
     <div
