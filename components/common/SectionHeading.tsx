@@ -13,13 +13,30 @@ const SectionHeading: React.FC<SectionHeadingProps> = ({
   showBorder = true,
   className = "",
 }) => {
+  // Map Tailwind font size tokens to pixel values (Tailwind default scale)
+  const fontPxMap: Record<string, number> = {
+    "text-6xl": 60,
+    "text-5xl": 48,
+    "text-4xl": 36,
+    "text-3xl": 30,
+    "text-2xl": 24,
+    "text-xl": 20,
+    "text-lg": 18,
+    "text-base": 16,
+  };
+
+  const maxPx = fontPxMap[fontSize] || 48;
+  const minPx = parseFloat(((maxPx * 1200) / 1862).toFixed(2));
+
   return (
     <div
-      className={`${fontSize} font-medium text-center mb-8 md:mb-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] md:text-[clamp(25.79px,calc(25.79px+((40-25.79)*((100vw-1200px)/662))),40px)] md:leading-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] font-libre text-[#3A3A3A] ${className}`}
-      style={{
-        WebkitTextStrokeWidth: "0.5px",
-      }}
-    >
+  className={`font-medium text-center mb-8 font-libre text-[#3A3A3A] ${className}`}
+  style={{
+    fontSize: `clamp(${minPx}px, calc(${minPx}px + (${maxPx - minPx}) * ((100vw - 1200px) / 662)), ${maxPx}px)`,
+    lineHeight: `${fontSize === "text-5xl" ? 1 : "2.5rem"}`,
+    WebkitTextStrokeWidth: "0.5px",
+  }}
+>
       <span className="inline-block pb-3">{title}</span>
       {showBorder && (
         <div className="border-b border-[#CBD5E1] w-full md:w-[40%] mx-auto mt-1"></div>

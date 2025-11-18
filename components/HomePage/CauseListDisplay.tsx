@@ -77,7 +77,7 @@ function CauseListDisplay({
       )}
 
       <div
-        className={`flex flex-col items-center bg-white overflow-hidden ${isMobile ? "h-[253px] w-[95%]" : "w-[436px] h-[253px]"}`}
+        className={`flex flex-col items-center bg-white overflow-hidden ${isMobile ? "h-auto w-[95%]" : "w-[436px] h-auto"}`}
       >
         <div className=" h-[200px] p-2 aspect-[1.64] relative bg-white w-[100%] border border-[#E2E8F0] rounded-[4px]">
           {pdfUrl ? (

@@ -61,7 +61,7 @@ const People = () => {
           <SectionHeading
             title={t("PEOPLE")}
             fontSize="text-5xl"
-            className="mb-12 md:mb-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)]"
+            // className="mb-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)]"
             showBorder={false}
           />
 

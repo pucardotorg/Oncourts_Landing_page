@@ -210,7 +210,7 @@ const Notices: React.FC = () => {
   };
 
   return (
-    <div className="max-w-screen min-h-screen mx-auto py-4 px-4 md:py-6 md:px-20 bg-white">
+    <div className="max-w-screen min-h-screen mx-auto py-4 px-4 md:py-[clamp(15.47px,calc(15.47px+((24-15.47)*((100vw-1200px)/662))),24px)] md:px-[clamp(51.9px,calc(51.9px+((80-51.9)*((100vw-1200px)/662))),80px)] bg-white">
       <Head>
         <title>{t("NOTICES")}</title>
       </Head>
@@ -220,20 +220,20 @@ const Notices: React.FC = () => {
           <div className={commonStyles.loading.spinner}></div>
         </div>
       )}
-      <div className="pt-4 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div className="pt-4 md:pt-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] flex flex-col md:flex-row justify-between items-center gap-4 md:gap-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)]">
         <SectionHeading
           title={t("NOTICES")}
           className="!text-left !mb-0"
           showBorder={false}
         />
         {/* Search Bar */}
-        <div className="relative text-base flex gap-2">
+        <div className="relative text-base flex gap-2 md:gap-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)]">
           <input
             type="text"
             placeholder={t("SEARCH")}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-            className="md:pl-10 pl-4 pr-4 py-1 font-roboto text-lg font-medium text-[#64748B] bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="md:pl-[clamp(25.79px,calc(25.79px+((40-25.79)*((100vw-1200px)/662))),40px)] pl-4 pr-4 py-1 font-roboto text-lg md:text-[clamp(13.54px,calc(13.54px+((18-13.54)*((100vw-1200px)/662))),18px)] font-medium text-[#64748B] bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 handleSearch();
@@ -241,48 +241,56 @@ const Notices: React.FC = () => {
             }}
           />
           {!isMobile && (
-            <FiSearch className="absolute h-5 w-5 left-3 top-1/2 transform -translate-y-1/2 text-[#334155]" />
+            <FiSearch className="absolute h-5 w-5 md:h-[clamp(12.88px,calc(12.88px+((20-12.88)*((100vw-1200px)/662))),20px)] md:w-[clamp(12.88px,calc(12.88px+((20-12.88)*((100vw-1200px)/662))),20px)] left-3 top-1/2 transform -translate-y-1/2 text-[#334155]" />
           )}
           <button
             onClick={handleSearch}
-            className={`${isMobile ? "w-10 h-10 flex items-center justify-center" : "md:px-3 px-1 text-lg"} font-[Inter] font-medium text-[#0F766E] hover:text-green-800 bg-white rounded-lg border border-[#0F766E]`}
+            className={`${isMobile ? "w-10 h-10 flex items-center justify-center" : "md:px-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-1 md:text-[clamp(13.54px,calc(13.54px+((18-13.54)*((100vw-1200px)/662))),18px)]"} font-[Inter] font-medium text-[#0F766E] hover:text-green-800 bg-white rounded-lg border border-[#0F766E]`}
             aria-label={t("SEARCH")}
           >
             {isMobile ? <FiSearch className="h-5 w-5" /> : t("SEARCH")}
           </button>
           <button
             onClick={handleReset}
-            className={`${isMobile ? "w-10 h-10 flex items-center justify-center" : "md:px-3 px-1 text-lg"} font-[Inter] font-medium text-[#64748B] hover:text-green-800 bg-white rounded-lg border border-[#64748B]`}
+            className={`${isMobile ? "w-10 h-10 flex items-center justify-center" : "md:px-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-1 md:text-[clamp(13.54px,calc(13.54px+((18-13.54)*((100vw-1200px)/662))),18px)]"} font-[Inter] font-medium text-[#64748B] hover:text-green-800 bg-white rounded-lg border border-[#64748B]`}
             aria-label={t("RESET")}
           >
             {isMobile ? <FiRefreshCw className="h-5 w-5" /> : t("RESET")}
           </button>
         </div>
       </div>
-      <div className="border-b border-[#CBD5E1] w-full mx-auto mb-4 mt-4 md:mt-2"></div>
+      <div className="border-b border-[#CBD5E1] w-full mx-auto mb-4 mt-4 md:mt-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)]"></div>
 
       {/* Notices Table */}
       {!isMobile && noticesList.length > 0 && (
         <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-[#E2E8F0]">
           <table className="w-full">
-            <thead className="text-[#0F172A] text-[22px] font-semibold font-libre bg-[#F8FAFC] border-b border-[#E2E8F0]">
+            <thead className="text-[#0F172A] text-[22px] md:text-[clamp(16.75px,calc(16.75px+((22-16.75)*((100vw-1200px)/662))),22px)] font-semibold font-libre bg-[#F8FAFC] border-b border-[#E2E8F0]">
               <tr>
-                <th className="py-3 px-4 text-left w-[10%]">{t("SL_NO")}</th>
-                <th className="py-3 px-4 text-left w-[50%]">{t("TITLE")}</th>
-                <th className="py-3 px-4 text-left w-[20%]">
+                <th className="py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] text-left w-[10%]">
+                  {t("SL_NO")}
+                </th>
+                <th className="py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] text-left w-[50%]">
+                  {t("TITLE")}
+                </th>
+                <th className="py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] text-left w-[20%]">
                   {t("DATE_OF_ISSUE")}
                 </th>
-                <th className="py-3 px-4 text-left w-[20%]">{t("ACTION")}</th>
+                <th className="py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] text-left w-[20%]">
+                  {t("ACTION")}
+                </th>
               </tr>
             </thead>
-            <tbody className="text-[22px] text-[#334155] font-roboto bg-white">
+            <tbody className="text-[22px] md:text-[clamp(16.75px,calc(16.75px+((22-16.75)*((100vw-1200px)/662))),22px)] text-[#334155] font-roboto bg-white">
               {noticesList.map((notice, index) => (
                 <tr
                   key={index}
                   className={`border-b border-[#E2E8F0] ${index % 2 === 1 ? "bg-[#F8FAFC]" : ""}`}
                 >
-                  <td className="py-3 px-4">{index + 1}</td>
-                  <td className="py-3 px-4">
+                  <td className="py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)]">
+                    {index + 1}
+                  </td>
+                  <td className="py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)]">
                     <a
                       href="#"
                       className="text-blue-600 hover:underline"
@@ -294,12 +302,12 @@ const Notices: React.FC = () => {
                       {notice.title}
                     </a>
                   </td>
-                  <td className="py-3 px-4">
+                  <td className="py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)]">
                     {formatDate(notice.publishedDate)}
                   </td>
-                  <td className="py-3 px-4 text-left">
+                  <td className="py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] text-left">
                     <button
-                      className="shadow-[0_2px_10px_rgba(0,0,0,0.1)] font-[Inter] inline-flex items-center justify-center gap-2 py-2 px-6 bg-[#F8FAFC] text-[#334155] text-[20px] border-2 border-[#CBD5E1] rounded-xl hover:bg-gray-50 font-medium"
+                      className="shadow-[0_2px_10px_rgba(0,0,0,0.1)] font-[Inter] inline-flex items-center justify-center gap-2 md:py-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)] py-2 md:px-[clamp(19.32px,calc(19.32px+((24-19.32)*((100vw-1200px)/662))),24px)] px-6 bg-[#F8FAFC] text-[#334155] text-[20px] md:text-[clamp(12.88px,calc(12.88px+((20-12.88)*((100vw-1200px)/662))),20px)] border-2 border-[#CBD5E1] rounded-xl hover:bg-gray-50 font-medium"
                       aria-label={`${t("DOWNLOAD")} ${notice.title}`}
                       onClick={() =>
                         downloadFile(notice.fileStoreId, `${notice.title}.pdf`)
