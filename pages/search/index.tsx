@@ -476,7 +476,11 @@ const SearchForCase = () => {
         <style dangerouslySetInnerHTML={{ __html: animations }} />
       </Head>
       <h1
-        className={`text-center mb-6 font-libre text-gray-800 ${isMobile ? "text-4xl" : "text-6xl"}`}
+        className={`text-center mb-6 font-libre text-gray-800 ${
+          isMobile
+            ? "text-4xl"
+            : "text-[clamp(38.68px,calc(38.68px+((60-38.68)*((100vw-1200px)/662))),60px)] leading-[1]"
+        }`}
         style={{
           color: commonStyles.colors.text,
           WebkitTextStrokeWidth: "0.5px",

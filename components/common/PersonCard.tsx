@@ -81,7 +81,7 @@ const PersonCard: React.FC<PersonCardProps> = ({
               ${isHovered ? "opacity-100" : "opacity-0 pointer-events-none"}
             `}
             >
-              <p className="text-white text-sm md:text-lg font-roboto text-center">
+              <p className="text-white text-sm md:text-[clamp(12.88px,calc(12.88px+((18-12.88)*((100vw-1200px)/662))),18px)] font-roboto text-center">
                 {t(description)}
               </p>
             </div>
@@ -91,19 +91,19 @@ const PersonCard: React.FC<PersonCardProps> = ({
         {/* Text container with fixed height based on the tallest card */}
         <div
           ref={textRef}
-          className="py-3 px-2 flex flex-col justify-center items-center overflow-auto"
+          className="py-3 md:py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-2 md:px-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)] flex flex-col justify-center items-center overflow-auto"
           style={{ height: cardHeight ? `${cardHeight}px` : "auto" }}
         >
           <h3
             className={`
-            text-base md:text-xl lg:text-[24px] font-medium font-libre w-full text-center break-words
+            text-base md:text-[clamp(16.75px,calc(16.75px+((24-16.75)*((100vw-1200px)/662))),24px)] font-medium font-libre w-full text-center break-words
             ${isHovered ? "text-[#0F766E]" : "text-[#0F766E]"}
             transition-colors duration-300
           `}
           >
             {name}
           </h3>
-          <p className="text-sm md:text-base lg:text-[20px] font-roboto text-[#3A3A3A] text-center w-full break-words">
+          <p className="text-sm md:text-[clamp(12.88px,calc(12.88px+((20-12.88)*((100vw-1200px)/662))),20px)] font-roboto text-[#3A3A3A] text-center w-full break-words">
             {t(title)}
           </p>
         </div>

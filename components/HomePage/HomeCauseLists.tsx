@@ -173,11 +173,11 @@ function HomeCauseLists(): JSX.Element {
   }, [leftCauseList?.pdfUrl, rightCauseList?.pdfUrl]);
 
   return (
-    <div className="py-12 bg-[#F0FDFA]">
-      <div className="max-w-[1440px] mx-auto px-4 md:px-6">
-        <div className="flex mb-12 items-center justify-center">
+    <div className="py-[clamp(24.77px,calc(24.77px+((48-24.77)*((100vw-1200px)/662))),48px)] bg-[#F0FDFA]">
+      <div className="max-w-[1440px] mx-auto px-4 md:px-[clamp(15.47px,calc(15.47px+((24-15.47)*((100vw-1200px)/662))),24px)]">
+        <div className="flex mb-[clamp(15.47px,calc(15.47px+((48-15.47)*((100vw-1200px)/662))),48px)] items-center justify-center">
           <h2
-            className={`px-[30px] pb-2 text-center font-libre font-normal  text-[#3A3A3A] border-b border-[#CBD5E1] ${isMobile ? "text-[32px] leading-[40px] w-[90%]" : "text-[40px] leading-[48px]"}`}
+            className={`px-[clamp(18.75px,calc(18.75px+((30-18.75)*((100vw-1200px)/662))),30px)] pb-2 text-center font-libre font-normal  text-[#3A3A3A] border-b border-[#CBD5E1] ${isMobile ? "text-[32px] leading-[40px] w-[90%]" : "text-[clamp(25.79px,calc(25.79px+((40-25.79)*((100vw-1200px)/662))),40px)] leading-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)]"}`}
             style={
               {
                 WebkitTextStrokeWidth: "0.5px",
@@ -187,7 +187,7 @@ function HomeCauseLists(): JSX.Element {
             {t("CAUSE_LIST_TITLE")}
           </h2>
         </div>
-        <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-[60px]">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-[clamp(38.67px,calc(38.67px+((60-38.67)*((100vw-1200px)/662))),60px)]">
           {leftCauseList && (
             <CauseListDisplay
               date={leftCauseList.date}
@@ -205,10 +205,16 @@ function HomeCauseLists(): JSX.Element {
             />
           )}
         </div>
-        <div className="flex items-center justify-center mt-8 gap-2">
-          <svgIcons.InfoIcon width={isMobile ? "64" : "34"} />
+        <div className="flex items-center justify-center mt-8 gap-[clamp(1.29px,calc(1.29px+((8-1.29)*((100vw-1200px)/662))),8px)]">
+          {isMobile ? (
+            <svgIcons.InfoIcon width="64" />
+          ) : (
+            <div className="w-[clamp(21.93px,calc(21.93px+((34-21.93)*((100vw-1200px)/662))),34px)] h-auto">
+              <svgIcons.InfoIcon width="100%" />
+            </div>
+          )}
           <p
-            className={`font-roboto font-normal leading-[26px] tracking-[-0.2px] text-[#334155] ${isMobile ? "text-[15px]" : "text-[20px]"}`}
+            className={`font-roboto font-normal tracking-[-0.2px] text-[#334155] ${isMobile ? "text-[15px] leading-[22px]" : "text-[clamp(12.88px,calc(12.88px+((20-12.88)*((100vw-1200px)/662))),20px)] leading-[clamp(16.76px,calc(16.76px+((26-16.76)*((100vw-1200px)/662))),26px)]"}`}
           >
             {t("CAUSE_LIST_INFO")}
             <strong>{t("CAUSE_LIST_INFO_TIME")}</strong>
@@ -221,12 +227,18 @@ function HomeCauseLists(): JSX.Element {
             onMouseLeave={() => setShowTooltip(false)}
           >
             <button
-              className={`flex flex-row items-center justify-center px-4 md:px-[16px] gap-[12px] bg-white border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px]" : "h-[69px]"}`}
+              className={`flex flex-row items-center justify-center px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] ${isMobile ? "gap-[12px]" : "gap-[clamp(7.73px,calc(7.73px+((12-7.73)*((100vw-1200px)/662))),12px)]"} bg-white border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px]" : "h-[clamp(44.48px,calc(44.48px+((69-44.48)*((100vw-1200px)/662))),69px)]"}`}
               onClick={() => router.push("/display-board")}
             >
-              <svgIcons.OpenInNewTabIcon width={isMobile ? "16" : "30"} />
+              {isMobile ? (
+                <svgIcons.OpenInNewTabIcon width="16" />
+              ) : (
+                <div className="w-[clamp(19.32px,calc(19.32px+((30-19.32)*((100vw-1200px)/662))),30px)] h-auto">
+                  <svgIcons.OpenInNewTabIcon width="100%" />
+                </div>
+              )}
               <span
-                className={`h-[32px] font-roboto font-medium leading-[32px] tracking-[-0.56px] text-center text-[#0F766E] ${isMobile ? "text-[16px]" : "text-[28px]"}`}
+                className={`font-roboto font-medium tracking-[-0.56px] text-center text-[#0F766E] ${isMobile ? "h-[24px] leading-[24px] text-[16px]" : "h-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] leading-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] text-[clamp(18.05px,calc(18.05px+((28-18.05)*((100vw-1200px)/662))),28px)]"}`}
               >
                 {t("VIEW_CAUSE_LIST_DISPLAY")}
               </span>

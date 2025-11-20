@@ -103,7 +103,11 @@ const Layout: React.FC<LayoutProps> = ({
         <div className="flex flex-col min-h-screen">
           {isLiveRoute ? null : <HeaderV2 />}
           <main
-            className={isLiveRoute ? "flex-grow" : "flex-grow md:pt-[73px]"}
+            className={
+              isLiveRoute
+                ? "flex-grow"
+                : "flex-grow md:pt-[clamp(47.04px,calc(47.04px+((73-47.04)*((100vw-1200px)/662))),73px)]"
+            }
           >
             {children}
           </main>
