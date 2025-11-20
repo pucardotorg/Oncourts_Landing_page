@@ -48,7 +48,7 @@ const RTIAuthorities = () => {
       </Head>
 
       <div className="bg-white min-h-screen">
-        <div className="w-[90%] py-8 md:py-12 mx-auto">
+        <div className="w-[90%] py-8 md:py-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] mx-auto">
           <SectionHeading
             title={t("RTI_AUTHORITIES_HEADING")}
             fontSize="text-4xl"
@@ -127,17 +127,21 @@ const RTIAuthorities = () => {
             <div className="overflow-x-auto shadow-md rounded-lg mb-8">
               <table className="min-w-full bg-white border-collapse">
                 <thead>
-                  <tr className="font-libre bg-[#F8FAFC] text-[#0F172A] text-left text-xl md:text-[22px] border border-[#E2E8F0]">
-                    <th className="py-3 px-4 font-semibold">{t("SL_NO")}</th>
-                    <th className="py-3 px-4 font-semibold">
+                  <tr className="font-libre bg-[#F8FAFC] text-[#0F172A] text-left text-xl md:text-[clamp(16.75px,calc(16.75px+((22-16.75)*((100vw-1200px)/662))),22px)] border border-[#E2E8F0]">
+                    <th className="py-3 md:py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] font-semibold">
+                      {t("SL_NO")}
+                    </th>
+                    <th className="py-3 md:py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] font-semibold">
                       {t("DESIGNATED_AUTHORITY")}
                     </th>
-                    <th className="py-3 px-4 font-semibold">{t("NAME")}</th>
-                    <th className="py-3 px-4 font-semibold">
+                    <th className="py-3 md:py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] font-semibold">
+                      {t("NAME")}
+                    </th>
+                    <th className="py-3 md:py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] font-semibold">
                       <div className="!flex !flex-row !items-center gap-2">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
+                          className="h-6 w-6 md:h-[clamp(15.47px,calc(15.47px+((24-15.47)*((100vw-1200px)/662))),24px)] md:w-[clamp(15.47px,calc(15.47px+((24-15.47)*((100vw-1200px)/662))),24px)]"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -152,11 +156,11 @@ const RTIAuthorities = () => {
                         <span>{t("PHONE")}</span>
                       </div>
                     </th>
-                    <th className="py-3 px-4 font-semibold">
+                    <th className="py-3 md:py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] font-semibold">
                       <div className="!flex !flex-row !items-center gap-2">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
+                          className="h-6 w-6 md:h-[clamp(15.47px,calc(15.47px+((24-15.47)*((100vw-1200px)/662))),24px)] md:w-[clamp(15.47px,calc(15.47px+((24-15.47)*((100vw-1200px)/662))),24px)]"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -179,15 +183,23 @@ const RTIAuthorities = () => {
                       key={authority.id}
                       className="font-medium font-roboto text-[18px] md:text-[20px] text-[#334155] hover:bg-gray-50 border border-[#E2E8F0]"
                     >
-                      <td className="py-3 px-4">{authority.id}</td>
-                      <td className="py-3 px-4">{authority.designation}</td>
-                      <td className="py-3 px-4">
+                      <td className="py-3 md:py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)]">
+                        {authority.id}
+                      </td>
+                      <td className="py-3 md:py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)]">
+                        {authority.designation}
+                      </td>
+                      <td className="py-3 md:py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)]">
                         <div>
                           {authority.name}, {authority.title}
                         </div>
                       </td>
-                      <td className="py-3 px-4">{authority.phone}</td>
-                      <td className="py-3 px-4">{authority.email}</td>
+                      <td className="py-3 md:py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)]">
+                        {authority.phone}
+                      </td>
+                      <td className="py-3 md:py-[clamp(9.67px,calc(9.67px+((12-9.67)*((100vw-1200px)/662))),12px)] px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)]">
+                        {authority.email}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

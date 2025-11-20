@@ -134,7 +134,7 @@ const SearchIcon = () => (
   </svg>
 );
 
-const SearchIcon2 = ({ width = "20", height = "20" }) => (
+const SearchIcon2 = ({ width = "20px", height = "20px" } ) => (
   <svg
     width={width}
     height={height}
@@ -565,7 +565,7 @@ const DownloadIcon = () => (
   </svg>
 );
 
-const VideoCallIcon = ({ width = "18", height = "18" }) => (
+const VideoCallIcon = ({ width = "18px", height = "18px" }) => (
   <svg
     width={width}
     height={height}
@@ -698,7 +698,7 @@ const InfoIconMobile = () => {
   );
 };
 
-const ClockIcon2 = ({ width = "32" }) => (
+const ClockIcon2 = ({ width = "32px" }) => (
   <svg
     width={width}
     height={width}
@@ -707,8 +707,8 @@ const ClockIcon2 = ({ width = "32" }) => (
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M15.9997 4.00016C9.37226 4.00016 3.99967 9.37275 3.99967 16.0002C3.99967 22.6276 9.37226 28.0002 15.9997 28.0002C22.6271 28.0002 27.9997 22.6276 27.9997 16.0002C27.9997 9.37275 22.6271 4.00016 15.9997 4.00016ZM1.33301 16.0002C1.33301 7.89999 7.8995 1.3335 15.9997 1.3335C24.0999 1.3335 30.6663 7.89999 30.6663 16.0002C30.6663 24.1003 24.0999 30.6668 15.9997 30.6668C7.8995 30.6668 1.33301 24.1003 1.33301 16.0002ZM15.9997 6.66683C16.7361 6.66683 17.333 7.26378 17.333 8.00016V15.1761L21.9293 17.4743C22.5879 17.8036 22.8549 18.6045 22.5256 19.2631C22.1963 19.9218 21.3954 20.1887 20.7367 19.8594L15.4034 17.1927C14.9517 16.9669 14.6663 16.5052 14.6663 16.0002V8.00016C14.6663 7.26378 15.2633 6.66683 15.9997 6.66683Z"
       fill="#3A3A3A"
     />

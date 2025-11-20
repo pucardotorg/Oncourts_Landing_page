@@ -35,13 +35,16 @@ const HomeIntroVideo = () => {
   }, [loginDropdownOpen]);
 
   return (
-    <div className="py-10 md:py-16 bg-white" id="vision-section">
+    <div
+      className="py-10 md:py-[clamp(51.6px,calc(51.6px+((64-51.6)*((100vw-1200px)/662))),64px)] bg-white"
+      id="vision-section"
+    >
       <div className="container mx-auto px-5 max-w-[95%]">
-        <div className="flex flex-col md:flex-row gap-auto md:gap-[6rem] items-stretch lg:gap-[8rem]">
-          <div className="text-center md:text-left md:w-1/2 text-[20px] lg:text-[22px] font-normal text-[#334155]">
+        <div className="flex flex-col md:flex-row gap-auto md:gap-[clamp(73.2px,calc(73.2px+((128-73.2)*((100vw-1200px)/662))),128px)] items-stretch">
+          <div className="text-center md:text-left md:w-1/2 text-[20px] md:text-[clamp(20px,calc(20px+((22-20)*((100vw-1200px)/662))),22px)] font-normal text-[#334155]">
             <div>
               <h1
-                className={`font-libre font-normal  text-[#3A3A3A] ${isMobile ? "text-center text-[32px] leading-[42px] border-b border-[#CBD5E1] pb-2" : "text-[64px] leading-[78px] pb-[24px]"}`}
+                className={`font-libre font-normal  text-[#3A3A3A] ${isMobile ? "text-center text-[32px] leading-[42px] border-b border-[#CBD5E1] pb-2" : "text-[clamp(41.3px,calc(41.3px+((64-41.3)*((100vw-1200px)/662))),64px)] leading-[clamp(50.3px,calc(50.3px+((78-50.3)*((100vw-1200px)/662))),78px)] pb-[clamp(15.46px,calc(15.46px+((24-15.46)*((100vw-1200px)/662))),24px)]"}`}
                 style={
                   {
                     WebkitTextStrokeWidth: "0.5px",
@@ -52,33 +55,31 @@ const HomeIntroVideo = () => {
                 {t("TAKING_COURT_TO_PEOPLE")}
               </h1>
               <p
-                className={`font-roboto font-normal text-[#334155]  tracking-normal ${isMobile ? "text-center text-[17px] leading-[22px] pt-[24px] pb-[30px]" : "text-[28px] leading-[36px] pt-[24px] pb-[30px]"}`}
+                className={`font-roboto font-normal text-[#334155]  tracking-normal ${isMobile ? "text-center text-[17px] leading-[22px] pt-[24px] pb-[30px]" : "text-[clamp(18.05px,calc(18.05px+((28-18.05)*((100vw-1200px)/662))),28px)] leading-[clamp(23.18px,calc(23.18px+((36-23.18)*((100vw-1200px)/662))),36px)] pt-[clamp(15.46px,calc(15.46px+((24-15.46)*((100vw-1200px)/662))),24px)] pb-[clamp(19.33px,calc(19.33px+((30-19.33)*((100vw-1200px)/662))),30px)]"}`}
               >
                 {t("COURT_DESCRIPTION")}
               </p>
               <div
-                className={`flex flex-row gap-4 ${isMobile ? "justify-center" : ""}`}
+                className={`flex flex-row ${isMobile ? "justify-center gap-4" : "gap-[clamp(12.88px,calc(12.88px+((20-12.88)*((100vw-1200px)/662))),20px)]"}`}
               >
                 <div className="relative login-dropdown">
                   <button
-                   onClick={(e) => {
-                     e.stopPropagation();
-                     setLoginDropdownOpen(!loginDropdownOpen);
-                   }}
-                    className={`cursor-pointer cursor-default box-border flex flex-row items-center justify-center gap-4  bg-[#0F766E] border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px] w-[135px] px-[12px] py-2" : "h-[69px] w-[241px] px-4 py-8"}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setLoginDropdownOpen(!loginDropdownOpen);
+                    }}
+                    className={`cursor-pointer cursor-default box-border flex flex-row items-center justify-center ${isMobile ? "gap-4" : "gap-[clamp(12.88px,calc(12.88px+((20-12.88)*((100vw-1200px)/662))),20px)]"}  bg-[#0F766E] border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px] w-[135px] px-[12px] py-2" : "h-[clamp(44.48px,calc(44.48px+((69-44.48)*((100vw-1200px)/662))),69px)] w-[clamp(155.45px,calc(155.45px+((241-155.45)*((100vw-1200px)/662))),241px)] px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] py-[clamp(20.09px,calc(20.09px+((32-20.09)*((100vw-1200px)/662))),32px)]"}`}
                   >
                     <span
                       className={
                         isMobile
                           ? "text-center font-roboto font-medium text-[14px] leading-[20px] text-white"
-                          : "h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-white"
+                          : "h-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] font-roboto font-medium text-[clamp(18.05px,calc(18.05px+((28-18.05)*((100vw-1200px)/662))),28px)] leading-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] tracking-[-0.56px] text-white"
                       }
                     >
                       {t("LOGIN")}
                     </span>
-                    <span
-                     
-                    >
+                    <span>
                       <svgIcons.DownArrowIcon fill="#fff" />
                     </span>
                   </button>
@@ -94,7 +95,7 @@ const HomeIntroVideo = () => {
                         onMouseLeave={() => setShowCitizenTooltip(false)}
                       >
                         <button
-                          className="px-4 text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-2 text-sm hover:text-[#0F766E] w-full"
+                          className="px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)] text-sm hover:text-[#0F766E] w-full"
                           onClick={() => {
                             window.open(APP_URLS.CITIZEN_DRISTI, "_blank");
                             setLoginDropdownOpen(false);
@@ -104,7 +105,7 @@ const HomeIntroVideo = () => {
                             className={
                               isMobile
                                 ? "py-3 border-b border-[#CBD5E1] text-center font-roboto font-medium text-[14px] leading-[20px] text-[#3A3A3A]"
-                                : "py-3 border-b border-[#CBD5E1] font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]"
+                                : "py-3 border-b border-[#CBD5E1] font-roboto font-medium text-[clamp(15.47px,calc(15.47px+((24-15.47)*((100vw-1200px)/662))),24px)] leading-[clamp(18.05px,calc(18.05px+((28-18.05)*((100vw-1200px)/662))),28px)] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]"
                             }
                           >
                             {" "}
@@ -123,7 +124,7 @@ const HomeIntroVideo = () => {
                         onMouseLeave={() => setShowEmployeeTooltip(false)}
                       >
                         <button
-                          className="px-4 text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-2 text-sm hover:text-[#0F766E] w-full"
+                          className="px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] text-left text-[#3A3A3A] hover:bg-gray-50 transition-colors flex justify-center items-center gap-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)] text-sm hover:text-[#0F766E] w-full"
                           onClick={() => {
                             window.open(APP_URLS.EMPLOYEE_USER, "_blank");
                             setLoginDropdownOpen(false);
@@ -133,7 +134,7 @@ const HomeIntroVideo = () => {
                             className={
                               isMobile
                                 ? "py-3 text-center font-roboto font-medium text-[14px] leading-[20px] text-[#3A3A3A]"
-                                : "py-3 font-roboto font-medium text-[24px] leading-[28px] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]"
+                                : "py-3 font-roboto font-medium text-[clamp(15.47px,calc(15.47px+((24-15.47)*((100vw-1200px)/662))),24px)] leading-[clamp(18.05px,calc(18.05px+((28-18.05)*((100vw-1200px)/662))),28px)] tracking-[-0.24px] text-[#3A3A3A] hover:text-[#0F766E]"
                             }
                           >
                             {t("JUDGE_STAFF_LOGIN")}
@@ -154,14 +155,14 @@ const HomeIntroVideo = () => {
                   onMouseLeave={() => setShowSearchTooltip(false)}
                 >
                   <button
-                    className={`box-border text-[white] flex flex-row items-center justify-center gap-4  bg-[white] border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px] w-[135px] px-[12px] py-2" : "h-[69px] w-[241px] px-4 py-8"}`}
+                    className={`box-border text-[white] flex flex-row items-center justify-center ${isMobile ? "gap-4" : "gap-[clamp(12.88px,calc(12.88px+((20-12.88)*((100vw-1200px)/662))),20px)]"}  bg-[white] border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px] w-[135px] px-[12px] py-2" : "h-[clamp(44.48px,calc(44.48px+((69-44.48)*((100vw-1200px)/662))),69px)] w-[clamp(155.45px,calc(155.45px+((241-155.45)*((100vw-1200px)/662))),241px)] px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] py-[clamp(20.09px,calc(20.09px+((32-20.09)*((100vw-1200px)/662))),32px)]"}`}
                     onClick={() => router.push("/search")}
                   >
                     <span
                       className={
                         isMobile
                           ? "text-center font-roboto font-medium text-[14px] leading-[20px] text-[#0F766E]"
-                          : "h-[32px] font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-[#0F766E]"
+                          : "h-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] font-roboto font-medium text-[clamp(18.05px,calc(18.05px+((28-18.05)*((100vw-1200px)/662))),28px)] leading-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] tracking-[-0.56px] text-[#0F766E]"
                       }
                     >
                       {" "}
@@ -193,9 +194,9 @@ const HomeIntroVideo = () => {
                       priority
                     />
                     <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
-                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white bg-opacity-80 group-hover:bg-opacity-100 flex items-center justify-center transition-all duration-300">
+                      <div className="w-16 h-16 md:w-[clamp(51.57px,calc(51.57px+((80-51.57)*((100vw-1200px)/662))),80px)] md:h-[clamp(51.57px,calc(51.57px+((80-51.57)*((100vw-1200px)/662))),80px)] rounded-full bg-white bg-opacity-80 group-hover:bg-opacity-100 flex items-center justify-center transition-all duration-300">
                         <svg
-                          className="w-8 h-8 md:w-10 md:h-10 text-emerald-700"
+                          className="w-8 h-8 md:w-[clamp(25.79px,calc(25.79px+((40-25.79)*((100vw-1200px)/662))),40px)] md:h-[clamp(25.79px,calc(25.79px+((40-25.79)*((100vw-1200px)/662))),40px)] text-emerald-700"
                           fill="currentColor"
                           viewBox="0 0 24 24"
                         >

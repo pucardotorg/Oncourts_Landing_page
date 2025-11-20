@@ -10,7 +10,7 @@ export default function Benefits() {
     {
       heading: "LITIGANTS",
       icon: (
-        <div className="relative w-12 h-12 flex items-center justify-center">
+        <div className="relative w-12 h-12 md:w-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] md:h-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] flex items-center justify-center">
           <Image
             src="/images/person.svg"
             alt="Litigants Icon"
@@ -29,7 +29,7 @@ export default function Benefits() {
     {
       heading: "LAWYERS",
       icon: (
-        <div className="relative w-12 h-12 flex items-center justify-center">
+        <div className="relative w-12 h-12 md:w-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] md:h-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] flex items-center justify-center">
           <Image
             src="/images/advocate.svg"
             alt="Lawyers Icon"
@@ -48,7 +48,7 @@ export default function Benefits() {
     {
       heading: "JUDGE",
       icon: (
-        <div className="relative w-12 h-12 flex items-center justify-center">
+        <div className="relative w-12 h-12 md:w-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] md:h-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] flex items-center justify-center">
           <Image
             src="/images/judge.svg"
             alt="Judges Icon"
@@ -67,7 +67,7 @@ export default function Benefits() {
     {
       heading: "COURT_STAFF",
       icon: (
-        <div className="relative w-12 h-12 flex items-center justify-center">
+        <div className="relative w-12 h-12 md:w-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] md:h-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] flex items-center justify-center">
           <Image
             src="/images/justice.svg"
             alt="Registry Icon"
@@ -86,11 +86,14 @@ export default function Benefits() {
   ];
 
   return (
-    <div className="py-16 bg-white" id="benefits-section">
+    <div
+      className="py-16 md:py-[clamp(41.3px,calc(41.3px+((64-41.3)*((100vw-1200px)/662))),64px)] bg-white"
+      id="benefits-section"
+    >
       <div className="container mx-auto px-4">
         <SectionHeading title="Benefits" />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-[clamp(25.79px,calc(25.79px+((40-25.79)*((100vw-1200px)/662))),40px)] mt-12 md:mt-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)]">
           {benefitsData.map((benefit, index) => (
             <DetailCard
               t={t}

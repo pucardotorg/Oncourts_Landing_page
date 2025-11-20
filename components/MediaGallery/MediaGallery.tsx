@@ -73,21 +73,33 @@ const MediaGallery: React.FC = () => {
   }, [handleNext, isPaused]);
 
   return (
-    <section className="pt-8 pb-24 bg-white">
+    <section className="pt-8 md:pt-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] pb-24 md:pb-[clamp(61.89px,calc(61.89px+((96-61.89)*((100vw-1200px)/662))),96px)] bg-white">
       <div className={`w-[100vw] mx-auto px-4 ${isMobile ? "px-2" : "px-4"}`}>
         <div className="text-center mb-8">
           <h1
-            className={`text-[#3A3A3A] font-libre mb-[20px] border-b border-[#CBD5E1] pb-[10px] ${isMobile ? "text-[32px] leading-[40px] mx-[50px]" : "text-[64px] leading-[70px] mx-[60px]"}`}
+            className={`text-[#3A3A3A] font-libre mb-[20px] border-b border-[#CBD5E1] pb-[10px] ${
+              isMobile
+                ? "text-[32px] leading-[40px] mx-[50px]"
+                : "text-[clamp(41.3px,calc(41.3px+((64-41.3)*((100vw-1200px)/662))),64px)] leading-[clamp(45.1px,calc(45.1px+((70-45.1)*((100vw-1200px)/662))),70px)] mx-[clamp(38.67px,calc(38.67px+((60-38.67)*((100vw-1200px)/662))),60px)]"
+            }`}
           >
             {t("MEDIA_GALLERY_HEADER")}
           </h1>
           <h2
-            className={` font-libre font-normal text-center text-[#3A3A3A] mb-4 px-4 ${isMobile ? "text-[24px] leading-[34px]" : "text-[40px] leading-[48px] "}`}
+            className={` font-libre font-normal text-center text-[#3A3A3A] mb-4 px-4 ${
+              isMobile
+                ? "text-[24px] leading-[34px]"
+                : "text-[clamp(25.79px,calc(25.79px+((40-25.79)*((100vw-1200px)/662))),40px)] leading-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)]"
+            }`}
           >
             {t("MEDIA_GALLERY_SUB_HEADER")}
           </h2>
           <p
-            className={`font-roboto font-normal tracking-[-0.56px] text-center text-[#334155] px-4 mb-8 ${isMobile ? "text-[17px] leading-[22px]" : "text-[28px] leading-[40px]"}`}
+            className={`font-roboto font-normal tracking-[-0.56px] text-center text-[#334155] px-4 mb-8 ${
+              isMobile
+                ? "text-[17px] leading-[22px]"
+                : "text-[clamp(18.05px,calc(18.05px+((28-18.05)*((100vw-1200px)/662))),28px)] leading-[clamp(25.79px,calc(25.79px+((40-25.79)*((100vw-1200px)/662))),40px)]"
+            }`}
           >
             {t("MEDIA_GALLERY_DESCRIPTION")}
           </p>

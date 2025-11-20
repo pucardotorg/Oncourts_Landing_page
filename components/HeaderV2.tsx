@@ -88,20 +88,20 @@ function HeaderV2(): JSX.Element {
   }
 
   return (
-    <header className="w-full h-[73px] border-b border-[#94A3B8] px-[30px] py-2 flex justify-between items-center fixed top-0 left-0 right-0 bg-white z-50">
+    <header className="w-full h-[clamp(47.05px,calc(47.05px+((73-47.05)*((100vw-1200px)/662))),73px)] border-b border-[#94A3B8] px-[clamp(19.32px,calc(19.32px+((30-19.32)*((100vw-1200px)/662))),30px)] py-[clamp(5.16px,calc(5.16px+((8-5.16)*((100vw-1200px)/662))),8px)] flex justify-between items-center fixed top-0 left-0 right-0 bg-white z-50">
       <Link href="/" className="flex-shrink-0">
         <Image
           src="/images/logo.png"
           alt={t("ONCOURTS_LOGO")}
           width={123}
           height={73}
-          className="h-12 w-auto"
+          className="h-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] w-auto"
         />
       </Link>
       <nav className="flex">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-[clamp(41.3px,calc(41.3px+((64-41.3)*((100vw-1200px)/662))),64px)]">
           <div
-            className="flex items-center space-x-1"
+            className="flex items-center space-x-[clamp(2.58px,calc(2.58px+((4-2.58)*((100vw-1200px)/662))),4px)]"
             onClick={handleDropdownClick}
           >
             <NavItem

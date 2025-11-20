@@ -31,7 +31,7 @@ const Question: React.FC<QuestionProps> = ({
       className="border-b border-[#CBD5E1]"
     >
       <button
-        className="w-full py-6 text-left"
+        className="w-full text-left py-[clamp(15.46px,calc(15.46px+((24-15.46)*((100vw-1200px)/662))),24px)]"
         onClick={(e) => {
           e.preventDefault();
           onToggle();
@@ -39,7 +39,7 @@ const Question: React.FC<QuestionProps> = ({
       >
         <div className="flex items-start justify-between">
           <span
-            className={`font-roboto font-medium tracking-[-0.26px] text-[#3A3A3A] pr-8 ${isMobile ? "text-[20px] leading-[24px]" : "text-[26px] leading-[36px]"}`}
+            className={`font-roboto font-medium tracking-[-0.26px] text-[#3A3A3A] pr-8 ${isMobile ? "text-[20px] leading-[24px]" : "text-[clamp(16.75px,calc(16.75px+((26-16.75)*((100vw-1200px)/662))),26px)] leading-[clamp(23.18px,calc(23.18px+((36-23.18)*((100vw-1200px)/662))),36px)]"}`}
           >
             {question}
           </span>
@@ -53,7 +53,7 @@ const Question: React.FC<QuestionProps> = ({
       >
         <div className="pb-6">
           <div
-            className={`font-roboto tracking-[-0.2px] text-[#334155] ${isMobile ? "text-[15px] leading-[18px]" : "text-[20px] leading-[28px] font-normal"}`}
+            className={`font-roboto tracking-[-0.2px] text-[#334155] ${isMobile ? "text-[15px] leading-[18px]" : "text-[clamp(12.88px,calc(12.88px+((20-12.88)*((100vw-1200px)/662))),20px)] leading-[clamp(18.05px,calc(18.05px+((28-18.05)*((100vw-1200px)/662))),28px)] font-normal"}`}
           >
             {answer}
           </div>
@@ -330,12 +330,12 @@ const QuestionsSection: React.FC = () => {
 
   return (
     <section
-      className={`w-full bg-[#F0FDFA] pb-16 ${isMobile ? "pt-8" : "pt-12"}`}
+      className={`w-full bg-[#F0FDFA] ${isMobile ? "pt-8 pb-16" : "pt-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] pb-[clamp(41.3px,calc(41.3px+((64-41.3)*((100vw-1200px)/662))),64px)]"}`}
     >
       <div className="px-6 bg-[white]]">
         <div className="flex center justify-center">
           <h2
-            className={`px-12 pb-2 font-libre font-normal text-center text-[#3A3A3A] mb-12 border-b border-b-[#CBD5E1] ${isMobile ? "text-[32px] leading-[42px] max-w-[90%] " : "text-[40px] leading-[48px]"}`}
+            className={`pb-2 font-libre font-normal text-center text-[#3A3A3A] border-b border-b-[#CBD5E1] ${isMobile ? "px-12 text-[32px] leading-[42px] max-w-[90%] mb-12" : "px-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] text-[clamp(25.79px,calc(25.79px+((40-25.79)*((100vw-1200px)/662))),40px)] leading-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] mb-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)]"}`}
             style={
               {
                 WebkitTextStrokeWidth: "0.5px",
@@ -359,14 +359,22 @@ const QuestionsSection: React.FC = () => {
             />
           ))}
         </div>
-        <div className={`flex justify-center ${isMobile ? "mt-12" : "mt-12"}`}>
+        <div
+          className={`flex justify-center ${isMobile ? "mt-12" : "mt-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)]"}`}
+        >
           <button
-            className={`flex flex-row items-center justify-center px-4 md:px-[16px] gap-[12px] bg-white border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px]" : "h-[69px]"}`}
+            className={`flex flex-row items-center justify-center px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] ${isMobile ? "gap-[12px]" : "gap-[clamp(7.73px,calc(7.73px+((12-7.73)*((100vw-1200px)/662))),12px)]"} bg-white border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px]" : "h-[clamp(44.48px,calc(44.48px+((69-44.48)*((100vw-1200px)/662))),69px)]"}`}
             onClick={() => router.push("/help-resources")}
           >
-            <svgIcons.OpenInNewTabIcon width={isMobile ? "16" : "30"} />
+            {isMobile ? (
+              <svgIcons.OpenInNewTabIcon width="16" />
+            ) : (
+              <div className="w-[clamp(19.32px,calc(19.32px+((30-19.32)*((100vw-1200px)/662))),30px)] h-auto">
+                <svgIcons.OpenInNewTabIcon width="100%" />
+              </div>
+            )}
             <span
-              className={`h-[32px] font-roboto font-medium leading-[32px] tracking-[-0.56px] text-center text-[#0F766E] ${isMobile ? "text-[16px]" : "text-[28px]"}`}
+              className={`font-roboto font-medium tracking-[-0.56px] text-center text-[#0F766E] ${isMobile ? "h-[24px] leading-[24px] text-[16px]" : "h-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] leading-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] text-[clamp(18.05px,calc(18.05px+((28-18.05)*((100vw-1200px)/662))),28px)]"}`}
             >
               {t("VIEW_HELP_RESOURCES")}
             </span>

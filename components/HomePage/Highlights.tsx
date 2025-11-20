@@ -25,15 +25,27 @@ const HighlightItem: React.FC<HighlightItemProps> = ({
   isMobile = false,
 }) => (
   <div
-    className={`flex flex-col items-center justify-center px-4 text-center  ${isMobile ? "gap-[5px]" : "gap-[17.44px] py-[36px] border-r border-[#E2E8F0] last:border-r-0"}`}
+    className={`flex flex-col items-center justify-center px-4 text-center  ${
+      isMobile
+        ? "gap-[5px]"
+        : "gap-[clamp(11.23px,calc(11.23px+((17.44-11.23)*((100vw-1200px)/662))),17.44px)] py-[clamp(23.99px,calc(23.99px+((36-23.99)*((100vw-1200px)/662))),36px)] border-r border-[#E2E8F0] last:border-r-0"
+    }`}
   >
     <span
-      className={`text-center tracking-[-2.409px] font-bold text-[#0F766E] font-noto ${isMobile ? "text-[48px] leading-[78.298px] " : "text-[72.275px] leading-[78.298px]"}`}
+      className={`text-center tracking-[-2.409px] font-bold text-[#0F766E] font-noto ${
+        isMobile
+          ? "text-[48px] leading-[78.298px] "
+          : "text-[clamp(46.55px,calc(46.55px+((72.275-46.55)*((100vw-1200px)/662))),72.275px)] leading-[clamp(50.43px,calc(50.43px+((78.298-50.43)*((100vw-1200px)/662))),78.298px)]"
+      }`}
     >
       {value || "\u00A0"}
     </span>
     <span
-      className={`text-center text-[#0F172A] font-roboto font-[500] tracking-[-0.2px] ${isMobile ? "text-[20px] leading-[24px]" : "text-[26px] leading-[30px]"}`}
+      className={`text-center text-[#0F172A] font-roboto font-[500] tracking-[-0.2px] ${
+        isMobile
+          ? "text-[20px] leading-[24px]"
+          : "text-[clamp(16.75px,calc(16.75px+((26-16.75)*((100vw-1200px)/662))),26px)] leading-[clamp(19.33px,calc(19.33px+((30-19.33)*((100vw-1200px)/662))),30px)]"
+      }`}
     >
       {label}
     </span>
@@ -45,18 +57,18 @@ const Highlights: React.FC = () => {
   const [stats, setStats] = useState<DashboardMetricsNew>();
   const [lastUpdated, setLastUpdated] = useState<Date>(getLastUpdateTime());
   const isMobile = useMediaQuery("(max-width: 640px)");
-  
+
   // Function to determine last update time (either today at 5PM or yesterday at 5PM)
   function getLastUpdateTime(): Date {
     const now = new Date();
     const today = new Date(now);
     today.setHours(17, 0, 0, 0); // Set to 5:00:00.000 PM today
-    
+
     // If current time is before 5PM, use yesterday's date at 5PM
     if (now.getHours() < 17) {
       today.setDate(today.getDate() - 1);
     }
-    
+
     return today;
   }
 
@@ -130,25 +142,30 @@ const Highlights: React.FC = () => {
   ];
 
   return (
-    <section className={`w-full bg-white ${isMobile ? "py-4" : "py-16"}`}>
+    <section
+      className={`w-full bg-white ${isMobile ? "py-4" : "py-[clamp(41.3px,calc(41.3px+((64-41.3)*((100vw-1200px)/662))),64px)]"}`}
+    >
       <div className="max-w-[1440px] mx-auto px-6">
-        <div className="relative flex flex-col items-center mb-8">
+        <div className="relative flex flex-col items-center ${isMobile ? 'mb-8' : 'mb-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)]'}">
           <h2
-            className={`px-12 pb-2 font-libre font-normal tracking-normal text-center align-middle text-[#3A3A3A] border-b border-[#CBD5E1] ${isMobile ? "text-[32px] leading-[40px] w-[90%]" : "text-[40px] leading-[48px]"}`}
+            className={`px-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] pb-2 font-libre font-normal tracking-normal text-center align-middle text-[#3A3A3A] border-b border-[#CBD5E1] ${isMobile ? "text-[32px] leading-[40px] w-[90%]" : "text-[clamp(25.79px,calc(25.79px+((40-25.79)*((100vw-1200px)/662))),40px)] leading-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)]"}`}
           >
             {t("HIGHLIGHTS")}
           </h2>
-          <div className={`absolute ${isMobile ? "bottom-[-24px] text-center w-full" : "top-0 right-0"}`}>
+          <div
+            className={`absolute ${isMobile ? "bottom-[-24px] text-center w-full" : "top-0 right-0"}`}
+          >
             <span
               style={{
                 color: "#2563EB",
                 fontFamily: "Inter, sans-serif",
-              }}>
-              {`${t("LAST_UPDATED_ON")} ${lastUpdated.toLocaleDateString('en-GB', {day: 'numeric', month: 'numeric', year: 'numeric'})}, 5:00 PM`}
+              }}
+            >
+              {`${t("LAST_UPDATED_ON")} ${lastUpdated.toLocaleDateString("en-GB", { day: "numeric", month: "numeric", year: "numeric" })}, 5:00 PM`}
             </span>
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-[clamp(15.47px,calc(15.47px+((24-15.47)*((100vw-1200px)/662))),24px)]">
           {highlights.map((item, index) => (
             <HighlightItem
               key={index}
@@ -158,14 +175,22 @@ const Highlights: React.FC = () => {
             />
           ))}
         </div>
-        <div className={`flex justify-center ${isMobile ? "mt-6" : "mt-12"}`}>
+        <div
+          className={`flex justify-center ${isMobile ? "mt-6" : "mt-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)]"}`}
+        >
           <button
-            className={`flex flex-row items-center justify-center px-4 md:px-[16px] gap-[12px] bg-white border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px]" : "h-[69px]"}`}
+            className={`flex flex-row items-center justify-center px-4 md:px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] ${isMobile ? "gap-[12px]" : "gap-[clamp(7.73px,calc(7.73px+((12-7.73)*((100vw-1200px)/662))),12px)]"} bg-white border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px]" : "h-[clamp(44.48px,calc(44.48px+((69-44.48)*((100vw-1200px)/662))),69px)]"}`}
             onClick={() => router.push("/dashboard")}
           >
-            <svgIcons.OpenInNewTabIcon width={isMobile ? "16" : "30"} />
+            {isMobile ? (
+              <svgIcons.OpenInNewTabIcon width="16" />
+            ) : (
+              <div className="w-[clamp(19.32px,calc(19.32px+((30-19.32)*((100vw-1200px)/662))),30px)] h-auto">
+                <svgIcons.OpenInNewTabIcon width="100%" />
+              </div>
+            )}
             <span
-              className={`h-[32px] font-roboto font-medium leading-[32px] tracking-[-0.56px] text-center text-[#0F766E] ${isMobile ? "text-[16px]" : "text-[28px]"}`}
+              className={`font-roboto font-medium tracking-[-0.56px] text-center text-[#0F766E] ${isMobile ? "h-[24px] leading-[24px] text-[16px]" : "h-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] leading-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] text-[clamp(18.05px,calc(18.05px+((28-18.05)*((100vw-1200px)/662))),28px)]"}`}
             >
               {t("VIEW_DETAILED_DASHBOARD")}
             </span>

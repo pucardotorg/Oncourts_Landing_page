@@ -4,7 +4,11 @@ export const FooterConfig = {
     alt: "OnCourts Logo",
     width: 290,
     height: 182,
+    macWidth: 233,
+    laptopWidth: 260,
     smallWidth: 111,
+    macHeight: 163,
+    laptopHeight: 145,
     smallHeight: 70,
   },
   quickLinks: [
