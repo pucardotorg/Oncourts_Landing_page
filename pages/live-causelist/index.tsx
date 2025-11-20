@@ -680,7 +680,7 @@ export default function LiveCauselist() {
       {/* Date + case schedule */}
       <div className="flex items-center justify-center mb-[clamp(7.73px,calc(7.73px+((12-7.73)*((100vw-1200px)/662))),12px)]">
         <div className="flex items-center gap-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] text-[#007E7E] border-b-[2px] border-[#F7F5F3] ">
-          <h2 className="text-left text-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] 3xl:text-[169.22px] font-roboto font-bold">
+          <h2 className="text-left text-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] font-roboto font-bold">
             {t("24X7_ON_COURTS_CAUSELIST")}
           </h2>
           <span className="text-[clamp(14.18px,calc(14.18px+((22-14.18)*((100vw-1200px)/662))),22px)] font-roboto font-bold">
