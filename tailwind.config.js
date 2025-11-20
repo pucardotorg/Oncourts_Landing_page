@@ -16,7 +16,6 @@ module.exports = {
       xl: "1280px",
       "2xl": "1536px",
       // Big-screen breakpoints for large displays
-      "3xl": "1700px", // Full HD width and above
       hd: { raw: "(min-width: 1920px) and (min-height: 1080px)" }, // Explicitly target 1920x1080+ panels
     },
     extend: {
