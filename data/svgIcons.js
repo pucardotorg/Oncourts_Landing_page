@@ -134,7 +134,7 @@ const SearchIcon = () => (
   </svg>
 );
 
-const SearchIcon2 = ({ width = "20", height = "20" }) => (
+const SearchIcon2 = ({ width = "20px", height = "20px" } ) => (
   <svg
     width={width}
     height={height}
@@ -565,7 +565,7 @@ const DownloadIcon = () => (
   </svg>
 );
 
-const VideoCallIcon = ({ width = "18", height = "18" }) => (
+const VideoCallIcon = ({ width = "18px", height = "18px" }) => (
   <svg
     width={width}
     height={height}

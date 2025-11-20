@@ -14,17 +14,17 @@ const FAQItem: React.FC<FAQItemProps> = ({
   return (
     <div className="border-b border-[#CBD5E1]">
       <div
-        className="flex justify-between items-center py-4 cursor-pointer font-medium"
+        className="flex justify-between items-center py-4 md:py-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] cursor-pointer font-medium"
         onClick={onClick}
       >
-        <h3 className="text-xl md:text-[26px] font-medium text-[#3A3A3A] tracking-[-0.26px]">
+        <h3 className="text-xl md:text-[clamp(16.75px,calc(16.75px+((26-16.75)*((100vw-1200px)/662))),26px)] font-medium text-[#3A3A3A] tracking-[-0.26px]">
           {question}
         </h3>
         <div className="text-teal-600">
           {isOpen ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="h-5 w-5 md:h-[clamp(12.88px,calc(12.88px+((20-12.88)*((100vw-1200px)/662))),20px)] md:w-[clamp(12.88px,calc(12.88px+((20-12.88)*((100vw-1200px)/662))),20px)]"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -37,7 +37,7 @@ const FAQItem: React.FC<FAQItemProps> = ({
           ) : (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="h-5 w-5 md:h-[clamp(12.88px,calc(12.88px+((20-12.88)*((100vw-1200px)/662))),20px)] md:w-[clamp(12.88px,calc(12.88px+((20-12.88)*((100vw-1200px)/662))),20px)]"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -51,7 +51,7 @@ const FAQItem: React.FC<FAQItemProps> = ({
         </div>
       </div>
       {isOpen && (
-        <div className="pb-6 text-[15px] md:text-xl text-[#334155] tracking-[-0.2px] font-normal">
+        <div className="pb-6 md:pb-[clamp(15.47px,calc(15.47px+((24-15.47)*((100vw-1200px)/662))),24px)] text-[15px] md:text-[clamp(12.88px,calc(12.88px+((20-12.88)*((100vw-1200px)/662))),20px)] text-[#334155] tracking-[-0.2px] font-normal">
           {answer}
         </div>
       )}

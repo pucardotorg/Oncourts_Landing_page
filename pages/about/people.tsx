@@ -56,21 +56,21 @@ const People = () => {
         />
       </Head>
 
-      <div className="py-8 md:py-12 bg-[#F0FDFA]">
+      <div className="py-8 md:py-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)] bg-[#F0FDFA]">
         <div className="w-[80%] md:w-[90%] lg:w-[90%] mx-auto px-2 sm:px-4">
           <SectionHeading
             title={t("PEOPLE")}
             fontSize="text-5xl"
-            className="mb-12"
+            // className="mb-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)]"
             showBorder={false}
           />
 
           {/* High Court of Kerala Section */}
-          <div className="mb-16">
+          <div className="mb-16 md:mb-[clamp(41.3px,calc(41.3px+((64-41.3)*((100vw-1200px)/662))),64px)]">
             <SectionHeading
               title={t("HIGH_COURT_OF_KERALA")}
               fontSize="text-4xl"
-              className="mb-8"
+              className="mb-8 md:mb-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)]"
             />
             <div className="flex justify-center">
               <div
@@ -83,7 +83,7 @@ const People = () => {
                         ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
                         : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
                 } 
-                         gap-4 sm:gap-6 md:gap-8 justify-items-center mx-auto w-full`}
+                         gap-4 sm:gap-6 md:gap-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] justify-items-center mx-auto w-full`}
               >
                 {peopleData.chiefJustices.map((justice, index) => (
                   <PersonCard
@@ -101,15 +101,15 @@ const People = () => {
           </div>
 
           {/* 24x7 ON Court, Kollam Section */}
-          <div className="mb-16">
+          <div className="mb-16 md:mb-[clamp(41.3px,calc(41.3px+((64-41.3)*((100vw-1200px)/662))),64px)]">
             <SectionHeading
               title={t("24X7_ON_COURT_KOLLAM")}
               fontSize="text-4xl"
-              className="mb-8"
+              className="mb-8 md:mb-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)]"
             />
 
             {/* Magistrates */}
-            <div className="mb-12">
+            <div className="mb-12 md:mb-[clamp(30.95px,calc(30.95px+((48-30.95)*((100vw-1200px)/662))),48px)]">
               <div className="flex justify-center">
                 <div
                   className={`grid ${
@@ -121,7 +121,7 @@ const People = () => {
                           ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
                           : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
                   } 
-                         gap-4 sm:gap-6 md:gap-8 justify-items-center mx-auto w-full`}
+                         gap-4 sm:gap-6 md:gap-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] justify-items-center mx-auto w-full`}
                 >
                   {peopleData.oncourt.magistrates.map((magistrate, index) => (
                     <PersonCard
@@ -146,7 +146,7 @@ const People = () => {
             <SectionHeading
               title={t("FORMER_MAGISTRATES")}
               fontSize="text-4xl"
-              className="mb-8"
+              className="mb-8 md:mb-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)]"
             />
             <div className="flex justify-center">
               <div
@@ -159,7 +159,7 @@ const People = () => {
                         ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
                         : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
                 } 
-                         gap-4 sm:gap-6 md:gap-8 justify-items-center mx-auto w-full`}
+                         gap-4 sm:gap-6 md:gap-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] justify-items-center mx-auto w-full`}
               >
                 {peopleData.formerMagistrates.map((person, index) => (
                   <PersonCard
