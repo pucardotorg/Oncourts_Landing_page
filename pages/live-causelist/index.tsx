@@ -465,7 +465,7 @@ export default function LiveCauselist() {
       <div
         className={`flex font-roboto rounded-[4px] border border-[#E8E8E8] px-[clamp(8.59px,calc(8.59px+((16-8.59)*((100vw-1000px)/862))),16px)] py-[clamp(8.59px,calc(8.59px+((16-8.59)*((100vw-1000px)/862))),16px)] gap-[clamp(4.30px,calc(4.30px+((8-4.30)*((100vw-1000px)/862))),8px)] max-w-full overflow-hidden ${getTopCardBackgroundColor(item.status || "")}`}
       >
-        <div className="text-[clamp(11.82px,calc(11.82px+((22-11.82)*((100vw-1000px)/862))),22px)] leading-[clamp(13.96px,calc(13.96px+((26-13.96)*((100vw-1000px)/862))),26px)] font-medium text-[#0A0A0A] pt-[clamp(2.15px,calc(2.15px+((4-2.15)*((100vw-1000px)/862))),4px)]">
+        <div className="text-[clamp(11.82px,calc(11.82px+((22-11.82)*((100vw-1000px)/862))),22px)] leading-[clamp(11.82px,calc(11.82px+((22-11.82)*((100vw-1000px)/862))),22px)] font-medium text-[#0A0A0A]">
           <span>{item?.serialNumber || ""}.</span>
         </div>
         <div className="flex flex-col justify-between items-start gap-auto w-[95%]">
@@ -518,7 +518,6 @@ export default function LiveCauselist() {
   }> = ({ item, serial }) => {
     const isScheduled = item?.status === "SCHEDULED";
     const isInProgress = item?.status === "IN_PROGRESS";
-    const style = `${isScheduled || isInProgress ? "bg-[#F7F5F3]" : "bg-[#E8E8E8]"}`;
     const statusStyle = `${isInProgress ? "text-[#15803D]" : isScheduled ? "text-[#9E400A]" : "text-black"}`;
 
     return (
@@ -526,24 +525,24 @@ export default function LiveCauselist() {
         className={`grid grid-cols-[clamp(32.22px,calc(32.22px+((60-32.22)*((100vw-1000px)/862))),60px)_1.2fr_4fr_0.8fr] font-roboto font-medium items-left text-[clamp(11.82px,calc(11.82px+((22-11.82)*((100vw-1000px)/862))),22px)] h-full`}
       >
         <div
-          className={`pl-[clamp(7.90px,calc(7.90px+((14.7-7.90)*((100vw-1000px)/862))),14.7px)] h-full flex items-center ${style}`}
+          className={`pl-[clamp(7.90px,calc(7.90px+((14.7-7.90)*((100vw-1000px)/862))),14.7px)] h-full flex items-center bg-[#F7F5F3]`}
         >
           {serial}.
         </div>
         <div
-          className={`pl-[clamp(7.90px,calc(7.90px+((14.7-7.90)*((100vw-1000px)/862))),14.7px)] h-full flex items-center border-l-[2px] border-[#CBD5E1] border-opacity-60 ${style}`}
+          className={`pl-[clamp(7.90px,calc(7.90px+((14.7-7.90)*((100vw-1000px)/862))),14.7px)] h-full flex items-center border-l-[2px] border-[#CBD5E1] border-opacity-60 bg-[#F7F5F3]`}
         >
           {item.caseNumber || "-"}
         </div>
         <div
-          className={`pl-[clamp(7.90px,calc(7.90px+((14.7-7.90)*((100vw-1000px)/862))),14.7px)] h-full flex items-center border-l-[2px] border-[#CBD5E1] border-opacity-60 max-w-full overflow-hidden ${style}`}
+          className={`pl-[clamp(7.90px,calc(7.90px+((14.7-7.90)*((100vw-1000px)/862))),14.7px)] h-full flex items-center border-l-[2px] border-[#CBD5E1] border-opacity-60 max-w-full overflow-hidden bg-[#F7F5F3]`}
         >
           <span className="truncate block max-w-[99%]">
             {item.caseTitle || "-"}
           </span>
         </div>
         <div
-          className={`h-full flex items-center justify-left border-l-[2px] border-[#CBD5E1] border-opacity-60 ${style}`}
+          className={`h-full flex items-center justify-left border-l-[2px] border-[#CBD5E1] border-opacity-60 bg-[#F7F5F3]`}
         >
           <span
             className={`pl-[clamp(7.90px,calc(7.90px+((14.7-7.90)*((100vw-1000px)/862))),14.7px)] py-[clamp(2.15px,calc(2.15px+((4-2.15)*((100vw-1000px)/862))),4px)] rounded-full ${statusStyle}`}
@@ -557,7 +556,7 @@ export default function LiveCauselist() {
 
   return (
     <div className="min-h-screen flex flex-col max-w-full mx-auto px-[clamp(8.59px,calc(8.59px+((16-8.59)*((100vw-1000px)/862))),16px)] py-[clamp(8.59px,calc(8.59px+((16-8.59)*((100vw-1000px)/862))),16px)] bg-white">
-      <header className="w-full h-[clamp(39.24px,calc(39.24px+((73-39.24)*((100vw-1000px)/862))),73px)] py-[clamp(4.30px,calc(4.30px+((8-4.30)*((100vw-1000px)/862))),8px)] flex justify-between items-center  top-0 left-0 right-0 bg-white z-50">
+      <header className="w-full h-[clamp(39.24px,calc(39.24px+((73-39.24)*((100vw-1000px)/862))),73px)] flex justify-between items-center  top-0 left-0 right-0 bg-white z-50">
         <div className="flex items-center gap-[clamp(8.59px,calc(8.59px+((16-8.59)*((100vw-1000px)/862))),16px)]">
           <Image
             src="/images/emblem.png"
@@ -576,7 +575,7 @@ export default function LiveCauselist() {
         </div>
         {/* Date + case schedule */}
         {
-          <div className="flex items-center justify-between mb-[clamp(6.45px,calc(6.45px+((12-6.45)*((100vw-1000px)/862))),12px)]">
+          <div className="flex items-center justify-between mb-0">
             <div className="flex items-center gap-[clamp(4.30px,calc(4.30px+((8-4.30)*((100vw-1000px)/862))),8px)]">
               <span className="">
                 <svgIcons.RefreshIcon2 />
@@ -589,7 +588,7 @@ export default function LiveCauselist() {
 
       {/* Date + case schedule */}
       <div className="flex items-center justify-center mb-[clamp(6.45px,calc(6.45px+((12-6.45)*((100vw-1000px)/862))),12px)] border-b-[2.45px] border-[#F7F5F3] ">
-        <div className="flex items-center gap-[clamp(8.59px,calc(8.59px+((16-8.59)*((100vw-1000px)/862))),16px)] text-[#007E7E] ">
+        <div className="flex items-center gap-[clamp(8.59px,calc(8.59px+((16-8.59)*((100vw-1000px)/862))),16px)] text-[#007E7E] leading-[clamp(21.08px,calc(21.08px+((39.22-21.08)*((100vw-1000px)/862))),39.22px)] pb-[clamp(4.30px,calc(4.30px+((8-4.30)*((100vw-1000px)/862))),8px)]">
           <h2 className="text-left text-[clamp(21.08px,calc(21.08px+((39.22-21.08)*((100vw-1000px)/862))),39.22px)]  font-roboto font-medium">
             {t("24X7_ON_COURTS_CAUSELIST")}
           </h2>
