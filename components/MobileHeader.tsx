@@ -217,7 +217,7 @@ const MobileHeader = () => {
               </Link>
 
               <Link
-                href="/"
+                href="/dashboard"
                 className="mx-[10px] block px-6 py-3 text-[20px] text-[#3A3A3A] font-roboto"
                 onClick={handleNavigation}
               >
