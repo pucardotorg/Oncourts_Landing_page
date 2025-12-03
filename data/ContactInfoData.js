@@ -12,7 +12,7 @@ export const contactInfoData = [
     icon: "HelpDeskIcon",
     title: "",
     content: "IN_PERSON_HELPDESK",
-    href: "https://maps.google.com/?q=Kerala+High+Court",
+    href: "https://www.google.com/maps/place/24x7+ON+courts/@8.8930404,76.5743017,18z/data=!4m14!1m7!3m6!1s0x3b05fd005949c8dd:0xc8708f4a9f300b5c!2s24x7+ON+courts!8m2!3d8.8930386!4d76.5751556!16s%2Fg%2F11x8qmk6s1!3m5!1s0x3b05fd005949c8dd:0xc8708f4a9f300b5c!8m2!3d8.8930386!4d76.5751556!16s%2Fg%2F11x8qmk6s1?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D",
   },
   {
     icon: "ClockIcon",
