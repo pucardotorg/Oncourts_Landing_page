@@ -109,26 +109,24 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
       {/* Action Buttons */}
       <div
-        className={`font-[Inter] font-medium 
+        className={`
           ${isMobile ? "grid grid-cols-2 gap-2" : "flex justify-end col-span-full md:col-span-2 lg:col-span-4 gap-4"}
           `}
       >
         <button
           onClick={formState.handleClear}
-          className={`border border-gray-300 font-medium text-gray-700 hover:bg-gray-50 bg-white
-            ${isMobile ? "px-3 py-2 rounded-lg" : "px-20 py-2 text-lg rounded-md"}`}
+          className={`${commonStyles.button.secondary} font-roboto font-semibold ${
+            isMobile ? "w-full" : ""
+          }`}
         >
           {t(newCaseSearchConfig.buttons.clear)}
         </button>
         <button
           onClick={formState.handleSubmit}
           disabled={!formValid}
-          className={`border border-transparent shadow-sm font-medium text-white bg-[#0F766E] hover:bg-teal-700 focus:outline-none
-             ${
-               isMobile
-                 ? "px-3 py-2 rounded-lg"
-                 : "px-16 py-2 text-lg rounded-md"
-             } ${!formValid && commonStyles.button.disabled}`}
+          className={`${commonStyles.button.primary} font-roboto font-semibold ${
+            isMobile ? "w-full" : ""
+          } ${!formValid && commonStyles.button.disabled}`}
         >
           {t(newCaseSearchConfig.buttons.search)}
         </button>

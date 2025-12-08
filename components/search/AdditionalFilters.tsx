@@ -90,20 +90,20 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
     <div className="mt-6 bg-white rounded-lg shadow-sm overflow-visible border border-[#E2E8F0]">
       <div className="p-4 bg-[#F8FAFC]">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-libre font-semibold text-[#0F172A]">
+          <h2 className="text-[28px] font-roboto font-medium text-[#0F172A]">
             {t("FILTER")}
           </h2>
 
           <div className="flex gap-2">
             <button
               onClick={applyFilters}
-              className="px-2 text-lg font-[Inter] font-medium text-[#2563EB] hover:text-blue-800 bg-white rounded-lg border border-[#E2E8F0]"
+              className="px-2 text-[20px] font-roboto font-medium text-[#2563EB] hover:text-blue-800 bg-white rounded-lg border border-[#E2E8F0]"
             >
               {t("APPLY_FILTER")}
             </button>
             <button
               onClick={onResetFilters}
-              className="text-lg font-[Inter] font-medium text-[#64748B] hover:text-gray-800"
+              className="text-[20px] font-roboto font-medium text-[#64748B] hover:text-gray-800"
             >
               {t("RESET_ALL")}
             </button>

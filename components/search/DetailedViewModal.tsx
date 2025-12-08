@@ -418,10 +418,10 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 <span className="text-[#0F766E]">{caseResult.caseTitle}</span>
               </div>
 
-              <div className="font-[Inter] flex items-center gap-2">
+              <div className="font-roboto flex items-center gap-2">
                 {!isMobile && (
                   <button
-                    className="flex items-center gap-1 px-3 py-1 bg-teal-600 text-[#334155] border-2 border-[#E2E8F0] rounded-md text-sm hover:bg-teal-700 transition"
+                    className="flex items-center gap-1 px-3 py-1 bg-teal-600 text-[#334155] border-2 border-[#E2E8F0] rounded-md text-sm hover:bg-teal-700 transition font-roboto"
                     onClick={() => downloadAsPDF(pdfConfig, modalContentRef)}
                   >
                     <svg
@@ -453,7 +453,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
             <div className="overflow-y-auto px-3 md:px-6 pt-4 pb-8 space-y-6">
               {isMobile && (
                 <button
-                  className="flex items-center gap-1 px-3 py-1 bg-teal-600 text-[#334155] border-2 border-[#E2E8F0] rounded-md text-sm hover:bg-teal-700 transition"
+                  className="flex items-center gap-1 px-3 py-1 bg-teal-600 text-[#334155] border-2 border-[#E2E8F0] rounded-md text-sm hover:bg-teal-700 transition font-roboto font-semibold"
                   onClick={() => downloadAsPDF(pdfConfig, modalContentRef)}
                 >
                   <svg
@@ -536,7 +536,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
               </div>
 
               <div className="bg-[#F7F5F3] p-6 rounded-md text-sm">
-                <h2 className="font-libre text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
+                <h2 className="font-roboto text-[20px] font-medium text-[#334155] border-b pb-2 mb-3">
                   {t("LITIGANT_DETAILS")}
                 </h2>
                 <div className="font-roboto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -580,7 +580,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
               </div>
 
               <div className="bg-[#F7F5F3] p-6 rounded-md text-sm">
-                <h2 className="font-libre text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
+                <h2 className="font-roboto text-[20px] font-medium text-[#334155] border-b pb-2 mb-3">
                   {t("KEY_DETAILS")}
                 </h2>
                 <div className="font-roboto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -641,7 +641,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
 
               <div className="border rounded-md p-6 bg-white">
                 {/* Order History Section */}
-                <h2 className="font-libre text-xl font-bold mb-3">
+                <h2 className="font-roboto text-[20px] font-bold mb-3 text-[#0F172A]">
                   {t("ORDER_HISTORY")}
                 </h2>
                 {internalLoading ? (
@@ -659,13 +659,17 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                         {/* Desktop Order History Table View */}
                         <table className="hidden md:table w-full text-[16px] text-left">
                           <thead>
-                            <tr className="font-libre font-bold text-[#0B0C0C] border-b border-[#BBBBBD]">
-                              <th className="px-2 py-1">{t("S_NO")}</th>
-                              <th className="px-2 py-1">{t("DATE")}</th>
-                              <th className="px-2 py-1">
+                            <tr className="border-b border-[#BBBBBD]">
+                              <th className="px-2 py-1 font-roboto font-bold text-[13px] text-[#0B0C0C]">
+                                {t("S_NO")}
+                              </th>
+                              <th className="px-2 py-1 font-roboto font-bold text-[13px] text-[#0B0C0C]">
+                                {t("DATE")}
+                              </th>
+                              <th className="px-2 py-1 font-roboto font-bold text-[13px] text-[#0B0C0C]">
                                 {t("BUSINESS_OF_THE_DAY")}
                               </th>
-                              <th className="px-2 py-1 text-center">
+                              <th className="px-2 py-1 text-center font-roboto font-bold text-[13px] text-[#0B0C0C]">
                                 {t("VIEW_ORDER")}
                               </th>
                             </tr>
@@ -830,7 +834,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
 
                 {/* Process Payment Pending Tasks Section */}
                 <div id="pendingTasksSection">
-                  <h2 className="font-libre text-xl font-bold mt-6 mb-3">
+                  <h2 className="font-roboto text-[20px] font-bold mt-6 mb-3 text-[#0F172A]">
                     {t("PROCESS_PAYMENT_PENDING_TASKS")}
                   </h2>
                   {internalLoading ? (
@@ -848,11 +852,17 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                           {/* Desktop Payment Tasks Table View */}
                           <table className="hidden md:table w-full text-[16px] text-left">
                             <thead>
-                              <tr className="font-libre font-bold text-[#0B0C0C] border-b border-[#BBBBBD]">
-                                <th className="px-2 py-1">{t("S_NO")}</th>
-                                <th className="px-2 py-1">{t("TASK")}</th>
-                                <th className="px-2 py-1">{t("DUE_DATE")}</th>
-                                <th className="px-2 py-1">
+                              <tr className="border-b border-[#BBBBBD]">
+                                <th className="px-2 py-1 font-roboto font-bold text-[13px] text-[#0B0C0C]">
+                                  {t("S_NO")}
+                                </th>
+                                <th className="px-2 py-1 font-roboto font-bold text-[13px] text-[#0B0C0C]">
+                                  {t("TASK")}
+                                </th>
+                                <th className="px-2 py-1 font-roboto font-bold text-[13px] text-[#0B0C0C]">
+                                  {t("DUE_DATE")}
+                                </th>
+                                <th className="px-2 py-1 font-roboto font-bold text-[13px] text-[#0B0C0C]">
                                   {t("DAYS_REMAINING")}
                                 </th>
                                 <th className="px-2 py-1"></th>

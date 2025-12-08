@@ -60,7 +60,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
   return (
     <div className="mt-8">
       <div className="flex justify-between items-center mb-2">
-        <h2 className="font-['Baskerville'] font-semibold text-2xl leading-[31.72px] tracking-[0%] text-[#0F172A]">
+        <h2 className="font-roboto font-semibold text-[28px] leading-[31.72px] tracking-[0%] text-[#0F172A]">
           {t("CASE_DETAILS")}
         </h2>
         {["advocate", "litigant", "all"].includes(selectedTab) && (
@@ -80,13 +80,13 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#334155]" />
             <button
               onClick={handleSearch}
-              className="px-3 py-1.5 text-lg font-[Inter] font-medium text-[#0F766E] hover:text-green-800 bg-white rounded-lg border border-[#0F766E]"
+              className="px-3 py-1.5 text-[20px] font-roboto font-medium text-[#0F766E] hover:text-green-800 bg-white rounded-lg border border-[#0F766E]"
             >
               {t("SEARCH")}
             </button>
             <button
               onClick={handleReset}
-              className="px-3 py-1.5 text-lg font-[Inter] font-medium text-[#64748B] hover:text-green-800 bg-white rounded-lg border border-[#64748B]"
+              className="px-3 py-1.5 text-[20px] font-roboto font-medium text-[#64748B] hover:text-green-800 bg-white rounded-lg border border-[#64748B]"
             >
               {t("RESET")}
             </button>
@@ -99,19 +99,34 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
           <table className="min-w-full">
             <thead className="bg-[#F8FAFC]">
               <tr className="font-libre font-semibold text-[18px] text-left text-[#0F172A]">
-                <th scope="col" className="p-3 w-2/6">
+                <th
+                  scope="col"
+                  className="p-3 w-2/6 font-roboto font-semibold text-[22px]"
+                >
                   {t("CASE_TITLE")}
                 </th>
-                <th scope="col" className="p-3 w-1/6">
+                <th
+                  scope="col"
+                  className="p-3 w-1/6 font-roboto font-semibold text-[22px]"
+                >
                   {t("CASE_NUMBER")}
                 </th>
-                <th scope="col" className="p-3 w-1/6">
+                <th
+                  scope="col"
+                  className="p-3 w-1/6 font-roboto font-semibold text-[22px]"
+                >
                   {t("NEXT_HEARING_DATE")}
                 </th>
-                <th scope="col" className="p-3 w-1/6">
+                <th
+                  scope="col"
+                  className="p-3 w-1/6 font-roboto font-semibold text-[22px]"
+                >
                   {t("PURPOSE")}
                 </th>
-                <th scope="col" className="p-3 w-1/6">
+                <th
+                  scope="col"
+                  className="p-3 w-1/6 font-roboto font-semibold text-[22px]"
+                >
                   {t("ACTION")}
                 </th>
               </tr>
