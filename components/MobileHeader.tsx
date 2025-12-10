@@ -89,7 +89,7 @@ const MobileHeader = () => {
             <nav className="py-4 bg-white">
               <Link
                 href="/"
-                className="mx-[10px] block px-6 py-3 text-[20px] text-[#3A3A3A] font-roboto"
+                className="mx-[10px] block px-6 py-3 text-[20px] text-[#3A3A3A] font-roboto font-medium"
                 onClick={handleNavigation}
               >
                 {t("HOME")}
@@ -98,7 +98,7 @@ const MobileHeader = () => {
               <div className="flex flex-col center justify-center">
                 <button
                   onClick={() => toggleSection("ABOUT_US")}
-                  className={`mx-[10px] px-6 py-3 text-left text-[20px] text-[#3A3A3A] font-roboto flex justify-between items-center hover:border-opacity-100 ${expandedSection === "ABOUT_US" ? "border-b border-[#00A7A7] border-opacity-0" : ""}`}
+                  className={`mx-[10px] px-6 py-3 text-left text-[20px] text-[#3A3A3A] font-roboto font-medium flex justify-between items-center hover:border-opacity-100 ${expandedSection === "ABOUT_US" ? "border-b border-[#00A7A7] border-opacity-0" : ""}`}
                 >
                   <span
                     className={`${expandedSection === "ABOUT_US" ? "text-[#0F766E]" : ""}`}
@@ -132,7 +132,7 @@ const MobileHeader = () => {
               <div className="flex flex-col center justify-center">
                 <button
                   onClick={() => toggleSection("SERVICES")}
-                  className={`mx-[10px] px-6 py-3 text-left text-[20px] text-[#3A3A3A] font-roboto flex justify-between items-center hover:border-opacity-100 ${expandedSection === "SERVICES" ? "border-b border-[#00A7A7]" : ""}`}
+                  className={`mx-[10px] px-6 py-3 text-left text-[20px] text-[#3A3A3A] font-roboto font-medium flex justify-between items-center hover:border-opacity-100 ${expandedSection === "SERVICES" ? "border-b border-[#00A7A7]" : ""}`}
                 >
                   <span
                     className={`${expandedSection === "SERVICES" ? "text-[#0F766E]" : ""}`}
@@ -226,7 +226,7 @@ const MobileHeader = () => {
               <div className="flex flex-col center justify-center">
                 <button
                   onClick={() => toggleSection("SUPPORT")}
-                  className={`mx-[10px] px-6 py-3 text-left text-[20px] text-[#3A3A3A] font-roboto flex justify-between items-center hover:border-opacity-100 ${expandedSection === "SUPPORT" ? "border-b border-[#00A7A7] border-opacity-0" : ""}`}
+                  className={`mx-[10px] px-6 py-3 text-left text-[20px] text-[#3A3A3A] font-roboto font-medium flex justify-between items-center hover:border-opacity-100 ${expandedSection === "SUPPORT" ? "border-b border-[#00A7A7] border-opacity-0" : ""}`}
                 >
                   <span
                     className={`${expandedSection === "SUPPORT" ? "text-[#0F766E]" : ""}`}

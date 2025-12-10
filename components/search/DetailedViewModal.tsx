@@ -418,10 +418,10 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
                 <span className="text-[#0F766E]">{caseResult.caseTitle}</span>
               </div>
 
-              <div className="font-[Inter] flex items-center gap-2">
+              <div className="flex items-center gap-2">
                 {!isMobile && (
                   <button
-                    className="flex items-center gap-1 px-3 py-1 bg-teal-600 text-[#334155] border-2 border-[#E2E8F0] rounded-md text-sm hover:bg-teal-700 transition"
+                    className="flex items-center gap-1 px-3 py-1 bg-teal-600 text-[#334155] border-2 border-[#E2E8F0] rounded-md font-roboto font-medium text-[14px] leading-[20px] text-center hover:bg-teal-700 transition"
                     onClick={() => downloadAsPDF(pdfConfig, modalContentRef)}
                   >
                     <svg
@@ -453,7 +453,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
             <div className="overflow-y-auto px-3 md:px-6 pt-4 pb-8 space-y-6">
               {isMobile && (
                 <button
-                  className="flex items-center gap-1 px-3 py-1 bg-teal-600 text-[#334155] border-2 border-[#E2E8F0] rounded-md text-sm hover:bg-teal-700 transition"
+                  className="flex items-center gap-1 px-3 py-1 bg-teal-600 text-[#334155] border-2 border-[#E2E8F0] rounded-md font-roboto font-medium text-[14px] leading-[20px] text-center hover:bg-teal-700 transition"
                   onClick={() => downloadAsPDF(pdfConfig, modalContentRef)}
                 >
                   <svg
@@ -536,7 +536,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
               </div>
 
               <div className="bg-[#F7F5F3] p-6 rounded-md text-sm">
-                <h2 className="font-libre text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
+                <h2 className="font-roboto font-medium text-[20px] leading-[24px] tracking-[-0.2px] text-[#334155] border-b pb-2 mb-3">
                   {t("LITIGANT_DETAILS")}
                 </h2>
                 <div className="font-roboto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -580,7 +580,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
               </div>
 
               <div className="bg-[#F7F5F3] p-6 rounded-md text-sm">
-                <h2 className="font-libre text-[#334155] text-xl font-semibold border-b pb-2 mb-3">
+                <h2 className="font-roboto font-medium text-[20px] leading-[24px] tracking-[-0.2px] text-[#334155] border-b pb-2 mb-3">
                   {t("KEY_DETAILS")}
                 </h2>
                 <div className="font-roboto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -641,7 +641,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
 
               <div className="border rounded-md p-6 bg-white">
                 {/* Order History Section */}
-                <h2 className="font-libre text-xl font-bold mb-3">
+                <h2 className="font-roboto font-bold text-[19.83px] leading-[23px] text-[#0B0C0C] mb-3">
                   {t("ORDER_HISTORY")}
                 </h2>
                 {internalLoading ? (
@@ -830,7 +830,7 @@ const DetailedViewModal: React.FC<DetailedViewModalProps> = ({
 
                 {/* Process Payment Pending Tasks Section */}
                 <div id="pendingTasksSection">
-                  <h2 className="font-libre text-xl font-bold mt-6 mb-3">
+                  <h2 className="font-roboto font-bold text-[19.83px] leading-[23px] text-[#0B0C0C] mt-6 mb-3">
                     {t("PROCESS_PAYMENT_PENDING_TASKS")}
                   </h2>
                   {internalLoading ? (
