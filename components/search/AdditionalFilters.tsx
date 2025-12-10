@@ -90,20 +90,20 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
     <div className="mt-6 bg-white rounded-lg shadow-sm overflow-visible border border-[#E2E8F0]">
       <div className="p-4 bg-[#F8FAFC]">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-libre font-semibold text-[#0F172A]">
+          <h2 className="text-2xl font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-[#0F172A]">
             {t("FILTER")}
           </h2>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-end">
             <button
               onClick={applyFilters}
-              className="px-2 text-lg font-[Inter] font-medium text-[#2563EB] hover:text-blue-800 bg-white rounded-lg border border-[#E2E8F0]"
+              className="px-2 text-lg font-roboto font-medium text-[20px] leading-[24px] tracking-[-0.2px] text-[#2563EB] hover:text-blue-800 bg-white rounded-lg border border-[#E2E8F0]"
             >
               {t("APPLY_FILTER")}
             </button>
             <button
               onClick={onResetFilters}
-              className="text-lg font-[Inter] font-medium text-[#64748B] hover:text-gray-800"
+              className="text-lg font-roboto font-medium text-[20px] leading-[24px] tracking-[-0.2px] text-[#64748B] hover:text-gray-800"
             >
               {t("RESET_ALL")}
             </button>
@@ -145,7 +145,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
             />
 
             <div className="col-span-2">
-              <label className="block text-lg font-roboto font-medium text-[#0A0A0A] mb-1">
+              <label className="block mb-1 font-roboto font-normal text-[23.0741px] leading-[27px] text-[#0A0A0A]">
                 {t("NEXT_HEARING_DATE")}
               </label>
               <div className="flex items-center gap-1">
