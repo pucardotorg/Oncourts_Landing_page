@@ -60,7 +60,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
   return (
     <div className="mt-8">
       <div className="flex justify-between items-center mb-2">
-        <h2 className="font-['Baskerville'] font-semibold text-2xl leading-[31.72px] tracking-[0%] text-[#0F172A]">
+        <h2 className="font-roboto font-medium text-[28px] leading-[32px] tracking-[-0.56px] text-[#0F172A]">
           {t("CASE_DETAILS")}
         </h2>
         {["advocate", "litigant", "all"].includes(selectedTab) && (
@@ -80,13 +80,13 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#334155]" />
             <button
               onClick={handleSearch}
-              className="px-3 py-1.5 text-lg font-[Inter] font-medium text-[#0F766E] hover:text-green-800 bg-white rounded-lg border border-[#0F766E]"
+              className="px-3 py-1.5 font-roboto font-medium text-[20px] leading-[24px] tracking-[-0.2px] text-[#64748B] hover:text-[#0F766E] bg-white rounded-lg border border-[#0F766E]"
             >
               {t("SEARCH")}
             </button>
             <button
               onClick={handleReset}
-              className="px-3 py-1.5 text-lg font-[Inter] font-medium text-[#64748B] hover:text-green-800 bg-white rounded-lg border border-[#64748B]"
+              className="px-3 py-1.5 font-roboto font-medium text-[20px] leading-[24px] tracking-[-0.2px] text-[#64748B] hover:text-[#0F766E] bg-white rounded-lg border border-[#64748B]"
             >
               {t("RESET")}
             </button>
@@ -98,7 +98,7 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
         {searchResults.length > 0 ? (
           <table className="min-w-full">
             <thead className="bg-[#F8FAFC]">
-              <tr className="font-libre font-semibold text-[18px] text-left text-[#0F172A]">
+              <tr className="font-roboto font-medium text-[22.204px] leading-[32px] text-left text-[#0F172A]">
                 <th scope="col" className="p-3 w-2/6">
                   {t("CASE_TITLE")}
                 </th>
@@ -120,24 +120,24 @@ const CaseDetailsTable: React.FC<CaseDetailsTableProps> = ({
               {searchResults.map((result, index) => (
                 <tr
                   key={index}
-                  className="font-roboto bg-white border-t border-[#E2E8F0]"
+                  className="bg-white border-t border-[#E2E8F0]"
                 >
-                  <td className="p-4 font-base text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
+                  <td className="p-4 font-roboto font-normal text-[22.204px] leading-[32px] text-[#334155] break-words border-r border-[#E2E8F0]">
                     {t(result?.caseTitle || "")}
                   </td>
-                  <td className="p-4 font-base text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
+                  <td className="p-4 font-roboto font-normal text-[22.204px] leading-[32px] text-[#334155] break-words border-r border-[#E2E8F0]">
                     {result.stNumber || result.cmpNumber}
                   </td>
-                  <td className="p-4 font-base text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
+                  <td className="p-4 font-roboto font-normal text-[22.204px] leading-[32px] text-[#334155] break-words border-r border-[#E2E8F0]">
                     {formatDate(result.nextHearingDate)}
                   </td>
-                  <td className="p-4 font-base text-[16px] leading-[18px] text-[#334155] break-words border-r border-[#E2E8F0]">
+                  <td className="p-4 font-roboto font-normal text-[22.204px] leading-[32px] text-[#334155] break-words border-r border-[#E2E8F0]">
                     {t(result?.purpose || "")}
                   </td>
-                  <td className="p-2 font-medium text-[16px] leading-[18px] text-[#334155]">
+                  <td className="p-2 text-center">
                     <button
                       onClick={() => onViewCaseDetails(result)}
-                      className="p-2 rounded-md border-2 text-teal-600 hover:text-teal-900"
+                      className="px-4 py-2 font-roboto font-medium text-[20.618px] leading-[32px] text-[#334155] rounded-md border-2 border-[#0F766E] hover:text-[#0F766E]"
                     >
                       {t("VIEW_DETAILS")}
                     </button>
