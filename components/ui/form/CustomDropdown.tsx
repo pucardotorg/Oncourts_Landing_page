@@ -73,7 +73,7 @@ const CustomDropdown: React.FC<DropdownProps> = ({
       {label && (
         <label
           htmlFor={id || name}
-          className="block mb-1 font-roboto font-normal text-[23.0741px] leading-[27px] text-[#0A0A0A]"
+          className="block text-lg font-medium text-[#0A0A0A] mb-1 font-roboto"
         >
           {t(label)}
           {required && (
@@ -88,10 +88,10 @@ const CustomDropdown: React.FC<DropdownProps> = ({
           name={name}
           onClick={toggleDropdown}
           disabled={disabled}
-          className={`w-full h-10 px-3 pr-10 py-2 font-roboto text-[23.0741px] leading-[35px] text-[#334155] text-left border-[1.5px] rounded-md appearance-none flex items-center justify-between ${error ? "border-red-500 focus:ring-red-500" : "border-[#3D3C3C] focus:ring-teal-500 focus:border-teal-500"} ${disabled ? "bg-gray-100 cursor-not-allowed text-gray-400" : className ? className : "bg-white"}`}
+          className={`w-full h-10 px-3 pr-10 py-2 font-roboto text-base text-left border-[1.5px] rounded-md appearance-none flex items-center justify-between ${error ? "border-red-500 focus:ring-red-500" : "border-[#3D3C3C] focus:ring-teal-500 focus:border-teal-500"} ${disabled ? "bg-gray-100 cursor-not-allowed text-gray-400" : className ? className : "bg-white"}`}
         >
           <span
-            className={`block truncate font-roboto text-[23.0741px] leading-[35px] ${!selectedOption ? "text-gray-400" : "text-[#334155]"}`}
+            className={`block truncate ${!selectedOption ? "text-gray-400" : ""}`}
           >
             {selectedOption ? t(selectedOption?.label) : t(placeHolder)}
           </span>
@@ -112,13 +112,13 @@ const CustomDropdown: React.FC<DropdownProps> = ({
               <li
                 key={option.value}
                 onClick={() => handleOptionSelect(option.value)}
-                className={`cursor-pointer px-4 py-2 tfont-roboto text-[23.0741px] leading-[35px] text-[#334155] hover:bg-teal-100 ${
+                className={`cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-teal-100 ${
                   value === option.value
-                    ? "bg-teal-50 font-medium"
+                    ? "bg-teal-50 font-medium font-roboto"
                     : ""
                 }`}
               >
-                <span className="block whitespace-normal break-words">
+                <span className="block whitespace-normal break-words font-roboto">
                   {t(option.label)}
                 </span>
               </li>

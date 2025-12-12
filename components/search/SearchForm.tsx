@@ -109,13 +109,13 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
       {/* Action Buttons */}
       <div
-        className={`
+        className={`font-[Inter] font-medium 
           ${isMobile ? "grid grid-cols-2 gap-2" : "flex justify-end col-span-full md:col-span-2 lg:col-span-4 gap-4"}
           `}
       >
         <button
           onClick={formState.handleClear}
-          className={`border border-gray-300 bg-white hover:bg-gray-50 font-roboto font-medium text-[19.32px] leading-[28px] text-[#334155] text-center
+          className={`border border-gray-300 font-medium text-gray-700 hover:bg-gray-50 bg-white
             ${isMobile ? "px-3 py-2 rounded-lg" : "px-20 py-2 text-lg rounded-md"}`}
         >
           {t(newCaseSearchConfig.buttons.clear)}
@@ -123,7 +123,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
         <button
           onClick={formState.handleSubmit}
           disabled={!formValid}
-          className={`border border-transparent shadow-sm bg-[#0F766E] hover:bg-teal-700 focus:outline-none font-roboto font-medium text-[19.32px] leading-[28px] text-[#334155] text-center
+          className={`border border-transparent shadow-sm font-medium text-white bg-[#0F766E] hover:bg-teal-700 focus:outline-none
              ${
                isMobile
                  ? "px-3 py-2 rounded-lg"
