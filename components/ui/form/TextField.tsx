@@ -49,7 +49,7 @@ const TextField: React.FC<TextFieldProps> = ({
       {label && (
         <label
           htmlFor={id || name}
-          className="block text-lg font-roboto font-medium text-[#0A0A0A]"
+          className="block text-lg font-roboto font-normal text-[#0A0A0A]"
         >
           {t(label)}
           {required && <span className="text-2xl text-red-500">*</span>}
