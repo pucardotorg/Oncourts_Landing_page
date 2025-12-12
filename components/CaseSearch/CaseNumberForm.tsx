@@ -28,7 +28,7 @@ const CaseNumberForm = ({
   return (
     <>
       <div className="mb-4">
-        <label htmlFor="caseType" className="text-teal font-medium text-sm">
+        <label htmlFor="caseType" className="text-teal font-normal text-sm">
           {config.caseTypeLabel}
         </label>
         <div className="w-full rounded-2xl border border-teal p-4 mt-2">
@@ -56,7 +56,7 @@ const CaseNumberForm = ({
 
       <div className="mb-4 flex flex-wrap justify-between space-x-4">
         <div>
-          <label htmlFor="caseNumberInput" className="text-teal font-medium text-sm">
+          <label htmlFor="caseNumberInput" className="text-teal font-normal text-sm">
             {config.caseNumberLabel}
           </label>
           <div className="rounded-2xl border border-teal p-2 mt-1">
@@ -72,7 +72,7 @@ const CaseNumberForm = ({
         </div>
 
         <div className="w-full md:w-1/2">
-          <label htmlFor="yearInput" className="text-teal font-medium text-sm">
+          <label htmlFor="yearInput" className="text-teal font-normal text-sm">
             {config.yearLabel}
           </label>
           <div className="rounded-2xl border border-teal p-2 mt-1">
