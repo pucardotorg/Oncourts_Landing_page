@@ -73,7 +73,7 @@ const CustomDropdown: React.FC<DropdownProps> = ({
       {label && (
         <label
           htmlFor={id || name}
-          className="block text-lg font-medium text-[#0A0A0A] mb-1 font-roboto"
+          className="block text-lg font-normal text-[#0A0A0A] mb-1 font-roboto"
         >
           {t(label)}
           {required && (
