@@ -32,8 +32,6 @@ const AdvocateForm: React.FC<AdvocateFormProps> = ({
   const radioOptions = [
     { id: "bar_code", label: "BAR_CODE" },
     { id: "advocate_name", label: "ADVOCATE_NAME" },
-    { id: "bar_code", label: "BAR_CODE" },
-    { id: "advocate_name", label: "ADVOCATE_NAME" },
   ];
 
   // Removed dropdown options for state code and barcode - using TextField instead
