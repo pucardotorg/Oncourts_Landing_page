@@ -94,7 +94,7 @@ const SearchForCase = () => {
 
   const defaultFilterState = useMemo(
     () => ({
-      courtName: "",
+      courtId: "",
       caseType: "",
       hearingDateFrom: "",
       hearingDateTo: "",
@@ -165,11 +165,11 @@ const SearchForCase = () => {
         setCourtOptions(courtRooms);
         setFormState({
           ...defaultFormState,
-          selectedCourt: courtRooms[0]?.name || "",
+          selectedCourt: courtRooms[0]?.code || "",
         });
         setFilterState({
           ...defaultFilterState,
-          courtName: courtRooms[0]?.name || "",
+          courtId: courtRooms[0]?.code || "",
         });
       }
       if (data && data.MdmsRes && data.MdmsRes["case"]) {
@@ -210,11 +210,11 @@ const SearchForCase = () => {
   // Centralized handler to reset filter state and trigger search
   const handleResetFiltersAndSearch = () => {
     if (selectedTab === "all" && courtOptions.length > 0) {
-      const defaultCourt = courtOptions[0]?.name || "";
+      const defaultCourt = courtOptions[0]?.code || "";
       setOffset(0);
       handleResetFilters({
         ...defaultFilterState,
-        courtName: defaultCourt,
+        courtId: defaultCourt,
       });
       handleSubmit(0, {
         ...defaultFilterState,
@@ -241,7 +241,7 @@ const SearchForCase = () => {
     setSelectedTab(tab);
 
     const defaultCourt =
-      courtOptions.length > 0 ? courtOptions[0]?.name || "" : "";
+      courtOptions.length > 0 ? courtOptions[0]?.code || "" : "";
 
     // Reset form fields on tab change
     setFormState({
@@ -252,7 +252,7 @@ const SearchForCase = () => {
     if (tab === "all") {
       handleResetFilters({
         ...defaultFilterState,
-        courtName: defaultCourt,
+        courtId: defaultCourt,
       });
     } else {
       handleResetFilters();
@@ -336,7 +336,7 @@ const SearchForCase = () => {
   const handleClear = () => {
     setFormState({
       ...defaultFormState,
-      selectedCourt: courtOptions.length > 0 ? courtOptions[0]?.name || "" : "",
+      selectedCourt: courtOptions.length > 0 ? courtOptions[0]?.code || "" : "",
       ...(selectedTab === "advocate" && {
         advocateSearchMethod: formState.advocateSearchMethod,
       }),
