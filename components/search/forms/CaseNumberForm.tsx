@@ -48,7 +48,7 @@ const CaseNumberForm: React.FC<CaseNumberFormProps> = ({
       <CustomDropdown
         label="COURT"
         placeHolder="SELECT_COURT"
-        value={courtOptions?.[0]?.code || selectedCourt}
+        value={selectedCourt || courtOptions?.[0]?.code || ""}
         onChange={onCourtChange}
         options={
           courtOptions?.map((court: CourtRoom) => ({
