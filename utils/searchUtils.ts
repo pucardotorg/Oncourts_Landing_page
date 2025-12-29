@@ -83,7 +83,7 @@ export const buildApiPayload = (
   const filterCriteria = filterState
     ? {
         // Only include non-empty filter values
-        courtName: filterState.courtName || undefined,
+        courtId: filterState.courtId || undefined,
         caseType: filterState.caseType || undefined,
         yearOfFiling: filterState.yearOfFiling || undefined,
         hearingDateFrom: filterState.hearingDateFrom || undefined,
@@ -150,7 +150,7 @@ export const buildApiPayload = (
         searchCaseCriteria: {
           searchType: "case_number" as const,
           caseNumberCriteria: {
-            courtName: selectedCourt || "",
+            courtId: selectedCourt || "",
             caseType: selectedCaseType,
             caseNumber: processedCaseNumber,
             year: selectedYear,
@@ -173,7 +173,7 @@ export const buildApiPayload = (
         searchCaseCriteria: {
           searchType: "filing_number" as const,
           filingNumberCriteria: {
-            courtName: selectedCourt || "",
+            courtId: selectedCourt || "",
             code: code,
             caseNumber: caseNumber,
             year: selectedYear,

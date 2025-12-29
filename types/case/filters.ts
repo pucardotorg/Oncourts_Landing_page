@@ -4,7 +4,7 @@
 
 // Filter state interface used in UI components
 export interface FilterState {
-  courtName: string;
+  courtId: string;
   caseType: string;
   hearingDateFrom: string;
   hearingDateTo: string;
