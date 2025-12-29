@@ -131,12 +131,12 @@ const MobileFilters: React.FC<MobileFiltersProps> = ({
             <CustomDropdown
               label={"COURT_NAME"}
               placeHolder={"SELECT_COURT"}
-              value={localFilters.courtName || courtOptions[0]?.name || ""}
-              onChange={(value) => handleLocalFilterChange("courtName", value)}
+              value={localFilters.courtId || courtOptions[0]?.code || ""}
+              onChange={(value) => handleLocalFilterChange("courtId", value)}
               options={
                 courtOptions?.map((court: CourtRoom) => ({
                   label: court?.name || "",
-                  value: court?.name || "",
+                  value: court?.code || "",
                 })) || []
               }
               className="w-full"

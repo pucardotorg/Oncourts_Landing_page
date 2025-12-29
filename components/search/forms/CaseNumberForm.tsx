@@ -48,12 +48,12 @@ const CaseNumberForm: React.FC<CaseNumberFormProps> = ({
       <CustomDropdown
         label="COURT"
         placeHolder="SELECT_COURT"
-        value={courtOptions?.[0]?.name || selectedCourt}
+        value={courtOptions?.[0]?.code || selectedCourt}
         onChange={onCourtChange}
         options={
           courtOptions?.map((court: CourtRoom) => ({
             label: court?.name || "",
-            value: court?.name || "",
+            value: court?.code || "",
           })) || []
         }
         required
