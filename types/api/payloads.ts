@@ -4,7 +4,7 @@
 
 // Filter criteria interface for API requests - optional fields for flexibility
 export interface FilterCriteria {
-  courtName?: string;
+  courtId?: string;
   caseType?: string;
   hearingDateFrom?: string;
   hearingDateTo?: string;
@@ -34,7 +34,7 @@ export interface SearchCaseBase {
 export interface FilingNumberCriteria extends SearchCaseBase {
   searchType: "filing_number";
   filingNumberCriteria: {
-    courtName: string;
+    courtId: string;
     code: string;
     caseNumber: string;
     year: string;
@@ -45,7 +45,7 @@ export interface FilingNumberCriteria extends SearchCaseBase {
 export interface CaseNumberCriteria extends SearchCaseBase {
   searchType: "case_number";
   caseNumberCriteria: {
-    courtName: string;
+    courtId: string;
     caseType: string;
     caseNumber: string;
     year: string;

@@ -35,7 +35,7 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
   // Local state to track filter changes before applying them
   const [localFilters, setLocalFilters] = useState<FilterState>({
     ...filterState,
-    courtName: courtOptions[0]?.name || "",
+    courtId: courtOptions[0]?.code || "",
   });
   // State to control the opening of date pickers
   const [fromDateOpen, setFromDateOpen] = useState(false);
@@ -119,12 +119,12 @@ const AdditionalFilters: React.FC<AdditionalFiltersProps> = ({
             <CustomDropdown
               label={"COURT_NAME"}
               placeHolder={"SELECT_COURT"}
-              value={localFilters.courtName || courtOptions[0]?.name || ""}
-              onChange={(value) => handleLocalFilterChange("courtName", value)}
+              value={localFilters.courtId || courtOptions[0]?.code || ""}
+              onChange={(value) => handleLocalFilterChange("courtId", value)}
               options={
                 courtOptions?.map((court: CourtRoom) => ({
                   label: court?.name || "",
-                  value: court?.name || "",
+                  value: court?.code || "",
                 })) || []
               }
               className="bg-[#F8FAFC] border-[#94A3B8]"
