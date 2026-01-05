@@ -9,6 +9,24 @@ const nextConfig = {
     NEXT_PUBLIC_ONCOURTS_CITIZEN_DRISTI_ENDPOINT: `${process.env.NEXT_PUBLIC_ONCOURTS_API_ENDPOINT}/ui/citizen/dristi/home/login`,
     NEXT_PUBLIC_ONCOURTS_EMPLOYEE_USER_ENDPOINT: `${process.env.NEXT_PUBLIC_ONCOURTS_API_ENDPOINT}/ui/employee/user/login`,
     NEXT_PUBLIC_GLOBAL: process.env.NEXT_PUBLIC_GLOBAL,
+    NEXT_PUBLIC_ENV: process.env.NEXT_PUBLIC_ENV,
+  },
+  async headers() {
+    if (process.env.NEXT_PUBLIC_ENV === "local") {
+      return [
+        {
+          source: "/:path*",
+          headers: [
+            {
+              key: "X-Robots-Tag",
+              value: "noindex, nofollow",
+            },
+          ],
+        },
+      ];
+    }
+
+    return [];
   },
   async rewrites() {
     const apiEndpoint = process.env.NEXT_PUBLIC_ONCOURTS_API_ENDPOINT;

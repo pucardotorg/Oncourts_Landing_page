@@ -51,6 +51,7 @@ jobs:
         run: |
           docker build \
           --build-arg NEXT_PUBLIC_ONCOURTS_API_ENDPOINT=https://dristi-kerala-dev.pucar.org \
+          --build-arg NEXT_PUBLIC_ENV=local \
           -t docker.io/venkatramireddyb/oncourts-landing-page:${{ env.VERSION }}-${{ env.COMMIT_ID }} .
           docker push docker.io/venkatramireddyb/oncourts-landing-page:${{ env.VERSION }}-${{ env.COMMIT_ID }}
   Workflow_Trigger:
