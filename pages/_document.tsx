@@ -53,6 +53,12 @@ class MyDocument extends Document {
               `,
             }}
           />
+          {process.env.NEXT_PUBLIC_ENV === "local" && (
+            <>
+              <meta name="robots" content="noindex, nofollow" />
+              <meta name="googlebot" content="noindex, nofollow" />
+            </>
+          )}
 
         </Head>
         <body>
