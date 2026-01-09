@@ -8,7 +8,6 @@ class MyDocument extends Document {
         <Head>
           <meta charSet="UTF-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <meta name="robots" content="noindex, nofollow" />
           <link
             href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Raleway:wght@400;700&display=swap"
             rel="stylesheet"
@@ -53,6 +52,12 @@ class MyDocument extends Document {
               `,
             }}
           />
+          {process.env.NEXT_PUBLIC_ENV === "local" && (
+            <>
+              <meta name="robots" content="noindex, nofollow" />
+              <meta name="googlebot" content="noindex, nofollow" />
+            </>
+          )}
 
         </Head>
         <body>
