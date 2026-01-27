@@ -25,8 +25,12 @@ export const FooterConfig = {
   helpResources: [
     { label: "SUPPORT_FORM", url: "https://forms.gle/uCSgGiqGiMQYjjgeA" },
     {
-      label: "USER_MANUAL",
-      url: "https://drive.google.com/file/d/1j4mIw0K2F8m_urJE-zbu-oeluiOL-8Pg/view?usp=sharing",
+      label: "USER_MANUAL_MAGISTRATE_COURT_STAFF",
+      url: "https://drive.google.com/file/d/1roZU0E2HQkSsRlr16HvGVo2e4IKiz22z/view?usp=drive_link",
+    },
+    {
+      label: "USER_MANUAL_ADVOCATE_AND_LITIGANT",
+      url: "https://drive.google.com/file/d/1pEF2c0fDMpjC3KfhVguOF0tpy9IZLCEt/view?usp=drive_link",
     },
     { label: "CONTACT_DETAILS", url: "/help-resources#contactUs" },
     { label: "FAQS", url: "/help-resources#faq" },
