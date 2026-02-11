@@ -84,13 +84,6 @@ const HelpResources = () => {
                 items={[
                   {
                     icon: "/images/file.png",
-                    text: "USER_MANUAL_MAGISTRATE_COURT_STAFF",
-                    link: "https://oncourts.kerala.gov.in/minio-filestore/v1/files/id?tenantId=kl&fileStoreId=f2f84803-67dc-4429-bc26-67029a90ce2f",
-                    section: "User Guide for Magistrate and Court Staff",
-                    newTab: true,
-                  },
-                  {
-                    icon: "/images/file.png",
                     text: "USER_MANUAL_ADVOCATE_AND_LITIGANT",
                     link: "https://oncourts.kerala.gov.in/minio-filestore/v1/files/id?tenantId=kl&fileStoreId=c21569cd-70f1-4a00-b244-afb0cdaf9da5",
                     section: "User Guide for Advocates and Litigants",
