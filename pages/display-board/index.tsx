@@ -111,7 +111,7 @@ export default function DisplayBoard() {
           console.error(
             "API responded with error:",
             response.status,
-            errorText
+            errorText,
           );
           setError("SOMETHING_WENT_WRONG_TRY_LATER_OR_REFRESH");
           setHearingData([]);
@@ -140,7 +140,7 @@ export default function DisplayBoard() {
         setLoading(false);
       }
     },
-    [tenantId]
+    [tenantId],
   );
 
   useEffect(() => {
@@ -167,11 +167,11 @@ export default function DisplayBoard() {
         try {
           const refreshedHearings = await fetchCasesForDate(
             selectedDate,
-            searchValue
+            searchValue,
           );
 
           const stillHasPending = refreshedHearings?.some(
-            (hearing) => hearing.status !== "COMPLETED"
+            (hearing) => hearing.status !== "COMPLETED",
           );
 
           if (isPastFivePM || (!stillHasPending && searchValue === "")) {
@@ -197,7 +197,7 @@ export default function DisplayBoard() {
 
       const shouldStartAutoRefresh = () => {
         return hearingData?.some(
-          (hearingItem) => hearingItem.status !== "COMPLETED"
+          (hearingItem) => hearingItem.status !== "COMPLETED",
         );
       };
 
@@ -246,7 +246,7 @@ export default function DisplayBoard() {
 
     const isAllHearingsNotCompleted = () => {
       return hearingData?.some(
-        (hearingItem) => hearingItem.status !== "COMPLETED"
+        (hearingItem) => hearingItem.status !== "COMPLETED",
       );
     };
 
@@ -400,7 +400,7 @@ export default function DisplayBoard() {
       alert(
         `Failed to download: ${
           error instanceof Error ? error.message : "Unknown error"
-        }`
+        }`,
       );
     }
   };
@@ -430,7 +430,7 @@ export default function DisplayBoard() {
 
   const isInProgressHearing = useMemo(() => {
     const onGoingHearing = hearingData?.find(
-      (hearing) => hearing.status === "IN_PROGRESS"
+      (hearing) => hearing.status === "IN_PROGRESS",
     );
     if (onGoingHearing) {
       return {
@@ -440,6 +440,28 @@ export default function DisplayBoard() {
     }
     return { caseTitle: null, caseNumber: null };
   }, [hearingData]);
+
+  const showJoinHearingButton = useMemo(() => {
+    if (!isInProgressHearing?.caseNumber) return false;
+
+    const now = new Date();
+
+    const start = new Date();
+    start.setHours(10, 30, 0, 0);
+
+    const end = new Date();
+    end.setHours(17, 0, 0, 0);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const hearingDate = new Date(selectedDate);
+    hearingDate.setHours(0, 0, 0, 0);
+
+    const isToday = hearingDate.getTime() === today.getTime();
+
+    return isToday && now >= start && now <= end;
+  }, [isInProgressHearing, selectedDate]);
 
   const handleCalendarIconClick = () => {
     setIsCalendarOpen(!isCalendarOpen);
@@ -513,9 +535,9 @@ export default function DisplayBoard() {
           </div>
 
           <div>
-            {isInProgressHearing?.caseNumber && (
+            {showJoinHearingButton && (
               <div className="flex flex-col sm:flex-row justify-between items-center text-sm text-gray-600 border-t border-slate-300 gap-6 pt-[24px]">
-                {isInProgressHearing?.caseNumber && (
+                {showJoinHearingButton && (
                   <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left w-[100%]">
                     <button
                       className=" max-w-6xl mx-auto px-12 sm:px-12 py-4  flex flex-row justify-center font-roboto text-[14px] leading-[20px] font-medium items-center text-white px-3 w-[100%] h-[40px] gap-1 bg-[#3A3A3A] border border-[#CBD5E1] rounded-[12px] box-border"
@@ -681,7 +703,7 @@ export default function DisplayBoard() {
                   selected={selectedDate ? new Date(selectedDate) : null}
                   onChange={(date: Date | null) => {
                     setSelectedDate(
-                      date ? date.toISOString().split("T")[0] : ""
+                      date ? date.toISOString().split("T")[0] : "",
                     );
                     setSearchValue("");
                   }}
@@ -718,7 +740,7 @@ export default function DisplayBoard() {
                       </span>
                       <span className="w-[clamp(237.22px,calc(237.22px+((369-237.22)*((100vw-1200px)/662))),369px)] font-roboto text-slate-700 text-left text-[clamp(12.88px,calc(12.88px+((20-12.88)*((100vw-1200px)/662))),20px)] leading-[clamp(16.74px,calc(16.74px+((26-16.74)*((100vw-1200px)/662))),26px)] tracking-[-0.2px] border-none outline-none ">
                         {t(
-                          "THE_CAUSE_LIST_FOR_THIS_DAY_WILL_BE_AVAILABLE_AFTER"
+                          "THE_CAUSE_LIST_FOR_THIS_DAY_WILL_BE_AVAILABLE_AFTER",
                         )}
                         <span style={{ color: "#334155", fontWeight: "bold" }}>
                           {" "}
@@ -788,7 +810,7 @@ export default function DisplayBoard() {
           {showRefreshSection && (
             <div className="h-[clamp(53.49px,calc(53.49px+((83-53.49)*((100vw-1200px)/662))),83px)] flex items-center justify-between mb-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] border-t border-b border-[#CBD5E1] py-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)]">
               <div className="join-onoine-hearing-section flex items-center justify-left gap-2 h-[51px]">
-                {isInProgressHearing?.caseNumber && (
+                {showJoinHearingButton && (
                   <div
                     style={{
                       display: "flex",
