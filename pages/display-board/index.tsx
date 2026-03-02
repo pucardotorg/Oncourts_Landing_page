@@ -442,7 +442,7 @@ export default function DisplayBoard() {
   }, [hearingData]);
 
   const showJoinHearingButton = useMemo(() => {
-    if (!isInProgressHearing?.caseNumber) return false;
+    if (!hearingData?.length) return false;
 
     const now = new Date();
 
@@ -460,8 +460,13 @@ export default function DisplayBoard() {
 
     const isToday = hearingDate.getTime() === today.getTime();
 
-    return isToday && now >= start && now <= end;
-  }, [isInProgressHearing, selectedDate]);
+    const hasActiveHearing = hearingData?.some(
+      (hearing) =>
+        hearing.status === "SCHEDULED" || hearing.status === "IN_PROGRESS",
+    );
+
+    return hasActiveHearing && isToday && now >= start && now <= end;
+  }, [selectedDate, hearingData]);
 
   const handleCalendarIconClick = () => {
     setIsCalendarOpen(!isCalendarOpen);
