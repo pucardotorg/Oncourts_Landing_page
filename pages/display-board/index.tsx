@@ -428,19 +428,6 @@ export default function DisplayBoard() {
     return false;
   }, [selectedDate]);
 
-  const isInProgressHearing = useMemo(() => {
-    const onGoingHearing = hearingData?.find(
-      (hearing) => hearing.status === "IN_PROGRESS",
-    );
-    if (onGoingHearing) {
-      return {
-        caseTitle: onGoingHearing.caseTitle || null,
-        caseNumber: onGoingHearing.caseNumber || null,
-      };
-    }
-    return { caseTitle: null, caseNumber: null };
-  }, [hearingData]);
-
   const showJoinHearingButton = useMemo(() => {
     if (!hearingData?.length) return false;
 
