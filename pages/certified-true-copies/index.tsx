@@ -48,7 +48,9 @@ const CertifiedTrueCopies = () => {
             description={ctcText.landing.trackDescription}
             buttonText={ctcText.landing.trackButton}
             buttonVariant="outline"
-            onClick={() => console.log("Track Application Status clicked")}
+            onClick={() =>
+              router.push("/certified-true-copies/view-status-application")
+            }
           />
         </div>
       </div>
