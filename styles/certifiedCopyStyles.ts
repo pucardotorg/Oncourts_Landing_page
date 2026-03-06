@@ -284,6 +284,11 @@ export const ctcText = {
   apply: {
     pageTitle: "CTC_APPLY_PAGE_TITLE",
   },
+  viewStatus:{
+    pageTitle: "VIEW_STATUS_OF_APPLICATION",
+    clearButtonLabel: "CLEAR",
+    searchButtonLabel: "SEARCH_APPLICATION"
+  },
   step3: {
     goBack: "CTC_STEP3_GO_BACK",
     eSign: "CTC_STEP3_ESIGN",
@@ -359,4 +364,8 @@ export const ctcText = {
     goBack: "CTC_OTP_GO_BACK",
     verify: "CTC_OTP_VERIFY",
   },
+  viewCTCStatusTable: {
+    header:"MY_APPLICATIONS",
+    viewText: "CLICK_TO_VIEW"
+  }
 };
