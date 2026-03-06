@@ -28,6 +28,8 @@ export const API_ENDPOINTS = {
   // OpenAPI endpoints
   OPENAPI: {
     CASE: `${API_BASE_URL}/openapi/v1/kl/case`,
+    ESIGN: (tenantId: string) =>
+      `${API_BASE_URL}/openapi/v1/${tenantId}/esign`,
     CASE_BY_CNR: (caseNumber: string) =>
       `${API_BASE_URL}/openapi/v1/kl/case/cnr/${caseNumber}`,
     CASE_BY_TYPE: (year: string, type: string, offset: string, limit: string) =>
@@ -40,6 +42,35 @@ export const API_ENDPOINTS = {
       `${API_BASE_URL}/openapi/v1/magistrate_name/${courtId}/${tenantId}`,
     DOWNLOAD_FILE: (tenantId: string, orderId: string) =>
       `${API_BASE_URL}/openapi/v1/file/${tenantId}/${orderId}`,
+    CASE_SEARCH: (tenantId: string) => `${API_BASE_URL}/openapi/v1/${tenantId}/case/search`,
+  },
+
+  // OTP / Auth endpoints
+  OTP: {
+    SEND: `${API_BASE_URL}/user-otp/v1/_send`,
+    VERIFY: `${API_BASE_URL}/user/oauth/token`,
+  },
+
+  // CTC (Certified True Copy) service endpoints
+  CTC: {
+    CREATE: `${API_BASE_URL}/ctc/applications/_create`,
+    UPDATE: `${API_BASE_URL}/ctc/applications/_update`,
+    SEARCH: `${API_BASE_URL}/ctc/applications/_search`,
+    VALIDATE: `${API_BASE_URL}/ctc/applications/validate`,
+  },
+
+  // Case Management endpoints
+  CASE_MANAGEMENT: {
+    PREVIEW_DOC: `${API_BASE_URL}/casemanagement/casemanager/preview/doc`,
+  },
+
+  // Payment endpoints
+  PAYMENT: {
+    FETCH_BILL: `${API_BASE_URL}/openapi/payment/v1/_fetchbill`,
+    PROCESS_CHALLAN: `${API_BASE_URL}/openapi/payment/v1/_processChallan`,
+    SEARCH_BILL: `${API_BASE_URL}/openapi/payment/v1/_searchbill`,
+    GET_RECEIPT: `${API_BASE_URL}/openapi/payment/v1/getPaymentReceipt`,
+    EPAYMENTS: `${API_BASE_URL}/epayments`,
   },
 
   // MDMS endpoints
