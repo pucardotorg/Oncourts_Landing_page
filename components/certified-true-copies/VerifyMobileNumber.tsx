@@ -16,6 +16,7 @@ interface VerifyMobileNumberProps {
   showErrorToast?: (message: string) => void;
   onValidateSuccess?: (data: ValidateUserInfo) => void;
   onAuthDataReceived?: (data: AuthData) => void;
+  isViewApplication: boolean;
 }
 
 const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
@@ -29,6 +30,7 @@ const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
   showErrorToast,
   onValidateSuccess,
   onAuthDataReceived,
+  isViewApplication = false,
 }) => {
   const { t } = useSafeTranslation();
   const [showOtpModal, setShowOtpModal] = useState(false);
@@ -89,6 +91,7 @@ const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
         courtId={courtId}
         onValidateSuccess={onValidateSuccess}
         onAuthDataReceived={onAuthDataReceived}
+        isViewApplication={isViewApplication}
       />
       <div className={ctcStyles.verifyWrap}>
         <label className={ctcStyles.verifyLabel}>

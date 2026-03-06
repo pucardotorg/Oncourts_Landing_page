@@ -54,13 +54,13 @@ export interface CtcApplication {
   caseBundleNodes?: CaseBundleNode[];
   totalPages?: number;
   status?:
-    | "DRAFT_IN_PROGRESS"
-    | "PENDING_ESIGN"
-    | "PENDING_PAYMENT"
-    | "PENDING_JUDGE_APPROVAL"
-    | "PENDING_CMO_ESIGN"
-    | "ISSUED"
-    | "REJECTED";
+  | "DRAFT_IN_PROGRESS"
+  | "PENDING_ESIGN"
+  | "PENDING_PAYMENT"
+  | "PENDING_JUDGE_APPROVAL"
+  | "PENDING_CMO_ESIGN"
+  | "ISSUED"
+  | "REJECTED";
   judgeComments?: string;
   workflow?: WorkflowObject;
   auditDetails?: AuditDetails;
@@ -80,6 +80,7 @@ export interface CtcSearchCriteria {
   courtId?: string;
   status?: string;
   filingNumber?: string;
+  searchText?: string;
 }
 
 // ─── Step state interfaces ──────────────────────────────────────────────────

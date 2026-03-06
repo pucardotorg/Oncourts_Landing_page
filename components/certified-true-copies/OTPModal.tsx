@@ -15,6 +15,7 @@ const OTPModal = ({
   courtId,
   onValidateSuccess,
   onAuthDataReceived,
+  isViewApplication,
 }: {
   t: (key: string) => string;
   isOpen: boolean;
@@ -26,6 +27,7 @@ const OTPModal = ({
   courtId: string;
   onValidateSuccess?: (data: ValidateUserInfo) => void;
   onAuthDataReceived?: (data: AuthData) => void;
+  isViewApplication: boolean;
 }) => {
   const [otp, setOtp] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
@@ -75,7 +77,7 @@ const OTPModal = ({
       if (!authData?.access_token) {
         setErrorMsg(
           t("OTP_VERIFICATION_FAILED") ||
-            "OTP verification failed. Please try again.",
+            "OTP verification failed. Please try again."
         );
         return;
       }
@@ -86,32 +88,37 @@ const OTPModal = ({
         userInfo: authData?.UserRequest,
       };
       onAuthDataReceived?.(newAuthData);
-
       // Step 2: Call validate API with auth data
-      const validateData = await validateUser(
-        {
-          mobileNumber: phoneNumber,
-          filingNumber: filingNumber,
-          tenantId: tenantId,
-          courtId: courtId,
-        },
-        newAuthData,
-      );
+      if (!isViewApplication) {
+        const validateData = await validateUser(
+          {
+            mobileNumber: phoneNumber,
+            filingNumber: filingNumber,
+            tenantId: tenantId,
+            courtId: courtId,
+          },
+          newAuthData
+        );
 
-      if (validateData?.validateUserInfo) {
-        onValidateSuccess?.(validateData?.validateUserInfo);
+        if (validateData?.validateUserInfo) {
+          onValidateSuccess?.(validateData?.validateUserInfo);
+          onVerify();
+          setTimeout(() => setOtp(""), 200);
+        } else {
+          setErrorMsg(
+            t("VALIDATION_FAILED") ||
+              "User validation failed. Please try again."
+          );
+        }
+      } else {
         onVerify();
         setTimeout(() => setOtp(""), 200);
-      } else {
-        setErrorMsg(
-          t("VALIDATION_FAILED") || "User validation failed. Please try again.",
-        );
       }
     } catch (err) {
       console.error("OTP verify/validate failed:", err);
       setErrorMsg(
         t("OTP_VERIFICATION_FAILED") ||
-          "OTP verification failed. Please try again.",
+          "OTP verification failed. Please try again."
       );
     } finally {
       setIsVerifying(false);
