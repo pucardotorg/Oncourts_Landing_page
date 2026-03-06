@@ -13,7 +13,6 @@ import { ctcStyles, ctcText } from "../../../styles/certifiedCopyStyles";
 import {
   CourtRoom,
   CaseResult,
-  ValidateUserInfo,
   AuthData,
   CtcApplication,
   Step1State,
@@ -48,19 +47,23 @@ const ApplyForCertifiedCopy = () => {
   const [ctcApplication, setCtcApplication] = useState<CtcApplication | null>(
     null,
   );
-  const [applicationNumber, setApplicationNumber] = useState<string>("");
 
   // ── Case search result (shared across steps) ──────────────────────────
   const [caseResult, setCaseResult] = useState<CaseResult | null>(null);
 
-  // ── Validate user info (from OTP verify → validate chain) ─────────────
-  const [validateUserInfo, setValidateUserInfo] =
-    useState<ValidateUserInfo | null>(null);
-
   // ── Auth data (authToken + userInfo from OTP verify) ─────────────────
-  const [authData, setAuthData] = useState<AuthData | null>(null);
+  const [authData, setAuthData] = useState<AuthData | null>(() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const stored = sessionStorage.getItem("ctcAuthData");
+      return stored ? (JSON.parse(stored) as AuthData) : null;
+    } catch {
+      return null;
+    }
+  });
 
   // ── Error toast notification ──────────────────────────────────────────────
+  const [isSearchingCase, setIsSearchingCase] = useState(false);
   const [errorToast, setErrorToast] = useState<{
     show: boolean;
     message: string;
@@ -92,7 +95,7 @@ const ApplyForCertifiedCopy = () => {
     isPhoneVerified: false,
     isPartyToCase: "",
     name: "",
-    party: "",
+    designation: "",
   });
 
   const [step1, setStep1] = useState<Step1State>(() => defaultStep1([]));
@@ -100,11 +103,14 @@ const ApplyForCertifiedCopy = () => {
   const updateStep1 = (patch: Partial<Step1State>) =>
     setStep1((prev) => ({ ...prev, ...patch }));
 
-  const clearStep1 = (courts: CourtRoom[] = courtOptions) => {
-    setStep1(defaultStep1(courts));
-    // Also reset downstream steps and go back to step 1
-    setStep2({ uploadedFileName: "", selectedDocuments: [] });
-    setCurrentStep(1);
+  const clearStep1 = () => {
+    updateStep1({
+      phoneNumber: "",
+      isPhoneVerified: false,
+      isPartyToCase: "",
+      name: "",
+      designation: "",
+    });
   };
 
   // ── Step 2 state (lifted so it survives navigation to Step 3 and back) ──
@@ -167,108 +173,212 @@ const ApplyForCertifiedCopy = () => {
 
   // ── Restore from URL applicationNumber ─────────────────────────────────
 
-  const restoreFromUrl = useCallback(async (appNum: string) => {
-    try {
-      setIsLoading(true);
-      const res = await searchCtcApplications({
-        tenantId: "kl",
-        ctcApplicationNumber: appNum,
-      });
+  const handleSearchCase = useCallback(
+    async (cnrOrFilingNumber: string) => {
+      if (!cnrOrFilingNumber) return;
 
-      const app = res?.ctcApplications?.[0];
-      if (!app) {
-        console.warn("No CTC application found for:", appNum);
-        setIsLoading(false);
-        return;
+      setIsSearchingCase(true);
+      try {
+        const response = await fetch("/api/case/openapi-index", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            searchCaseCriteria: {
+              searchType: "cnr_number",
+              cnrNumberCriteria: {
+                cnrNumber: cnrOrFilingNumber?.trim(),
+              },
+            },
+            offset: 0,
+            limit: 50,
+          }),
+        });
+
+        if (!response?.ok) {
+          showErrorToast?.("Failed to search case. Please try again.");
+          return;
+        }
+
+        const data = await response?.json();
+        const caseItem = data?.items?.[0];
+
+        if (caseItem) {
+          setCaseResult(caseItem as CaseResult);
+          setStep1((prev) => ({
+            ...prev,
+            hasSearched: true,
+            caseNumber:
+              caseItem?.case_number ||
+              caseItem?.courtCaseNumber ||
+              prev.caseNumber ||
+              "",
+          }));
+        } else {
+          showErrorToast?.("No case found for the given criteria.");
+        }
+      } catch (err) {
+        console.error("Case search failed:", err);
+        showErrorToast?.("Failed to search case. Please try again.");
+      } finally {
+        setIsSearchingCase(false);
       }
+    },
+    [showErrorToast],
+  );
 
-      setCtcApplication(app);
-      setApplicationNumber(app?.ctcApplicationNumber || appNum);
+  const restoreFromUrl = useCallback(
+    async (appNum: string, filingNumber: string, courtId: string) => {
+      if (!authData) return; // Wait until authData is available (OTP completed)
+      try {
+        setIsLoading(true);
+        const res = await searchCtcApplications(
+          {
+            tenantId: tenantId,
+            ctcApplicationNumber: appNum,
+            courtId: courtId,
+            filingNumber: filingNumber,
+          },
+          authData!,
+          {},
+        );
 
-      // Prefill Step 1 state from the fetched application
-      setStep1((prev) => ({
-        ...prev,
-        selectedCourt: app?.courtId || prev?.selectedCourt,
-        caseNumber: app?.filingNumber || app?.caseNumber || prev?.caseNumber,
-        hasSearched: true,
-        phoneNumber: app?.mobileNumber || prev?.phoneNumber,
-        isPhoneVerified: true,
-        isPartyToCase: app?.isPartyToCase ? "yes" : "no",
-        name: app?.applicantName || prev?.name,
-        party: app?.partyDesignation || prev?.party,
-      }));
+        const app = res?.ctcApplications?.[0];
+        if (!app) {
+          setIsLoading(false);
+          return;
+        }
 
-      // Prefill Step 2 state if bundle nodes exist
-      if (app?.caseBundleNodes?.length) {
-        const selectedIds = app?.caseBundleNodes
-          ?.flatMap((node) =>
-            node?.children?.length
-              ? node?.children?.map((c) => c?.id).filter(Boolean)
-              : node?.id
-                ? [node?.id]
-                : [],
-          )
-          ?.filter((id): id is string => Boolean(id));
-        setStep2((prev) => ({
+        setCtcApplication(app);
+
+        // Prefill Step 1 state from the fetched application
+        setStep1((prev) => ({
           ...prev,
-          selectedDocuments: selectedIds || prev?.selectedDocuments,
+          selectedCourt: app?.courtId || prev?.selectedCourt,
+          caseNumber: app?.filingNumber || app?.caseNumber || prev?.caseNumber,
+          hasSearched: true,
+          phoneNumber: app?.mobileNumber || prev?.phoneNumber,
+          isPhoneVerified: true,
+          isPartyToCase: app?.isPartyToCase ? "yes" : "no",
+          name: app?.applicantName || "",
+          designation: app?.partyDesignation || "",
         }));
-      }
 
-      // Route to the right step based on status
-      const status = app?.status;
-      if (status === "PENDING_ESIGN") {
-        setCurrentStep(3);
-      } else if (status === "DRAFT_IN_PROGRESS") {
-        setCurrentStep(1);
-      } else {
-        setCurrentStep(1);
+        // Prefill Step 2 state if bundle nodes exist
+        if (app?.caseBundleNodes?.length) {
+          const selectedIds = app?.caseBundleNodes
+            ?.flatMap((node) =>
+              node?.children?.length
+                ? node?.children?.map((c) => c?.id).filter(Boolean)
+                : node?.id
+                  ? [node?.id]
+                  : [],
+            )
+            ?.filter((id): id is string => Boolean(id));
+          setStep2((prev) => ({
+            ...prev,
+            selectedDocuments: selectedIds || prev?.selectedDocuments,
+          }));
+        }
+
+        // Route to the right step based on status
+        const status = app?.status;
+        if (status === "PENDING_ESIGN") {
+          setCurrentStep(3);
+        } else if (status === "DRAFT_IN_PROGRESS") {
+          setCurrentStep(1);
+        } else {
+          setCurrentStep(1);
+        }
+
+        // Auto-fetch case details using filingNumber or CNR if caseResult is empty
+        const cnrOrFiling = app?.filingNumber || app?.caseNumber;
+        if (cnrOrFiling) {
+          handleSearchCase(cnrOrFiling);
+        }
+      } catch (err) {
+        console.error("Failed to restore CTC application:", err);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      console.error("Failed to restore CTC application:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+    },
+    [authData, tenantId, handleSearchCase],
+  );
 
   useEffect(() => {
     if (!router?.isReady) return;
     if (!initialLoadRef?.current) {
       initialLoadRef.current = true;
       getCourtOptions();
-
-      // Check for applicationNumber in URL params
-      const appNum = router?.query?.applicationNumber as string;
-      if (appNum) {
-        setApplicationNumber(appNum);
-        restoreFromUrl(appNum);
-      }
     }
-  }, [router?.isReady, router?.query, getCourtOptions, restoreFromUrl]);
 
-  // ── Callback: after create/update, update local state ──────────────────
+    // Attempt to restore if applicationNumber exists in URL
+    const urlApplicationNumber = router?.query?.applicationNumber as string;
+    const urlCourtId = router?.query?.courtId as string;
+    const urlFilingNumber = router?.query?.filingNumber as string;
 
-  const handleApplicationUpdate = useCallback(
-    (app: CtcApplication) => {
-      setCtcApplication(app);
-      const newAppNum = app?.ctcApplicationNumber;
-      if (newAppNum && newAppNum !== applicationNumber) {
-        setApplicationNumber(newAppNum);
-        // Add applicationNumber to URL without navigation
-        router?.replace(
-          {
-            pathname: router?.pathname,
-            query: { ...router?.query, applicationNumber: newAppNum },
-          },
-          undefined,
-          { shallow: true },
-        );
+    // If not in state, authData is already loaded from local state initialization or history
+
+    const missingParams =
+      !urlCourtId || !urlApplicationNumber || !urlFilingNumber;
+
+    if (missingParams) return;
+
+    if (!authData) return;
+
+    if (ctcApplication?.ctcApplicationNumber === urlApplicationNumber) return;
+
+    restoreFromUrl(urlApplicationNumber, urlFilingNumber, urlCourtId);
+  }, [
+    router?.isReady,
+    router?.query,
+    getCourtOptions,
+    restoreFromUrl,
+    authData,
+    ctcApplication?.ctcApplicationNumber,
+    router,
+  ]);
+
+  // Clear auth data and session storage when leaving the apply flow
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      // If we are navigating to a different base route, clear the session
+      const applyPath = "/certified-true-copies/apply";
+      if (!url.startsWith(applyPath)) {
+        sessionStorage.removeItem("ctcAuthData");
+        setAuthData(null);
       }
-    },
-    [applicationNumber, router],
-  );
+    };
 
-  // ─── Navigation ───────────────────────────────────────────────────────────
+    router?.events?.on("routeChangeStart", handleRouteChange);
+
+    return () => {
+      router?.events?.off("routeChangeStart", handleRouteChange);
+    };
+  }, [router]);
+
+  const handleApplicationCreate = useCallback(
+    (app: CtcApplication) => {
+      sessionStorage.setItem("ctcAuthData", JSON.stringify(authData));
+      setCtcApplication(app);
+      setCurrentStep(2);
+      router?.replace(
+        {
+          pathname: router?.pathname,
+          query: {
+            ...router?.query,
+            applicationNumber: app?.ctcApplicationNumber,
+            courtId: app?.courtId,
+            filingNumber: app?.filingNumber,
+          },
+        },
+        undefined,
+        { shallow: true },
+      );
+    },
+    [router, authData],
+  );
 
   const handleBack = () => {
     if (currentStep > 1) {
@@ -277,8 +387,6 @@ const ApplyForCertifiedCopy = () => {
       router?.back();
     }
   };
-
-  // ─── Render ───────────────────────────────────────────────────────────────
 
   return (
     <div className={ctcStyles.page}>
@@ -323,17 +431,17 @@ const ApplyForCertifiedCopy = () => {
               courtOptions={courtOptions}
               step1={step1}
               updateStep1={updateStep1}
-              clearStep1={() => clearStep1(courtOptions)}
-              onNext={() => setCurrentStep(2)}
+              clearStep1={clearStep1}
               ctcApplication={ctcApplication}
-              applicationNumber={applicationNumber}
-              onApplicationUpdate={handleApplicationUpdate}
+              onApplicationCreate={handleApplicationCreate}
               tenantId={tenantId}
               showErrorToast={showErrorToast}
               caseResult={caseResult}
-              onCaseResultUpdate={setCaseResult}
-              setValidateUserInfo={setValidateUserInfo}
               onAuthDataReceived={setAuthData}
+              authData={authData}
+              onSearchCase={handleSearchCase}
+              isSearching={isSearchingCase}
+              onSaving={setIsLoading}
             />
           )}
           {currentStep === 2 && (
@@ -344,22 +452,22 @@ const ApplyForCertifiedCopy = () => {
               onNext={() => setCurrentStep(3)}
               onBack={() => setCurrentStep(1)}
               ctcApplication={ctcApplication}
-              applicationNumber={applicationNumber}
-              onApplicationUpdate={handleApplicationUpdate}
+              onApplicationUpdate={setCtcApplication}
               tenantId={tenantId}
               showErrorToast={showErrorToast}
               caseResult={caseResult}
+              authData={authData}
             />
           )}
           {currentStep === 3 && (
             <Step3PreviewAndSign
               onBack={() => setCurrentStep(2)}
               ctcApplication={ctcApplication}
-              applicationNumber={applicationNumber}
-              onApplicationUpdate={handleApplicationUpdate}
+              onApplicationUpdate={setCtcApplication}
               tenantId={tenantId}
               showErrorToast={showErrorToast}
               caseResult={caseResult}
+              authData={authData}
             />
           )}
         </div>

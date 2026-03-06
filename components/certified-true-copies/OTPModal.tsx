@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import BaseModal from "./BaseModal";
 import { ctcStyles, ctcText } from "../../styles/certifiedCopyStyles";
 import type { ValidateUserInfo, AuthData } from "../../types";
+import { validateUser } from "../../services/ctcService";
 
 const OTPModal = ({
   t,
@@ -80,38 +81,22 @@ const OTPModal = ({
       }
 
       // Store auth data in parent state
-      onAuthDataReceived?.({
+      const newAuthData = {
         authToken: authData?.access_token,
         userInfo: authData?.UserRequest,
-      });
+      };
+      onAuthDataReceived?.(newAuthData);
 
       // Step 2: Call validate API with auth data
-      const validateResponse = await fetch("/api/ctc/validate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          RequestInfo: {
-            apiId: "Dristi",
-            authToken: authData?.access_token,
-            msgId: `${Date.now()}|en_IN`,
-            plainAccessRequest: {},
-            userInfo: authData?.UserRequest,
-          },
+      const validateData = await validateUser(
+        {
           mobileNumber: phoneNumber,
           filingNumber: filingNumber,
           tenantId: tenantId,
           courtId: courtId,
-        }),
-      });
-
-      if (!validateResponse?.ok) {
-        setErrorMsg(
-          t("VALIDATION_FAILED") || "User validation failed. Please try again.",
-        );
-        return;
-      }
-
-      const validateData = await validateResponse?.json();
+        },
+        newAuthData,
+      );
 
       if (validateData?.validateUserInfo) {
         onValidateSuccess?.(validateData?.validateUserInfo);
@@ -135,7 +120,15 @@ const OTPModal = ({
 
   const footer = (
     <>
-      <button onClick={onClose} className={ctcStyles.otpBtnBack}>
+      <button
+        onClick={() => {
+          if (!isVerifying) onClose();
+        }}
+        disabled={isVerifying}
+        className={`${ctcStyles.otpBtnBack} ${
+          isVerifying ? "opacity-50 cursor-not-allowed" : ""
+        }`}
+      >
         {t(ctcText.otpModal.goBack)}
       </button>
       <button
@@ -155,7 +148,9 @@ const OTPModal = ({
   return (
     <BaseModal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={() => {
+        if (!isVerifying) onClose();
+      }}
       title={t(ctcText.otpModal.title)}
       footer={footer}
     >

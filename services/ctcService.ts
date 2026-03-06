@@ -6,6 +6,7 @@ import type {
   ValidateUserInfo,
   Pagination,
   CtcSearchCriteria,
+  AuthData,
 } from "../types";
 
 // ─── Response types ──────────────────────────────────────────────────────────
@@ -33,10 +34,13 @@ interface DocPreviewResponse {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function buildRequestInfo() {
+function buildRequestInfo(authData: AuthData) {
   return {
-    apiId: "Rainmaker",
+    apiId: "Dristi",
+    authToken: authData?.authToken,
     msgId: `${Date.now()}|en_IN`,
+    plainAccessRequest: {},
+    userInfo: authData?.userInfo,
   };
 }
 
@@ -61,44 +65,50 @@ async function post<T>(url: string, body: unknown): Promise<T> {
 /** POST /api/ctc/create */
 export async function createCtcApplication(
   application: CtcApplication,
+  authData: AuthData,
 ): Promise<CtcApplicationResponse> {
   return post<CtcApplicationResponse>("/api/ctc/create", {
-    RequestInfo: buildRequestInfo(),
-    CtcApplication: application,
+    RequestInfo: buildRequestInfo(authData),
+    ctcApplication: application,
   });
 }
 
 /** POST /api/ctc/update */
 export async function updateCtcApplication(
   application: CtcApplication,
+  authData: AuthData,
 ): Promise<CtcApplicationResponse> {
   return post<CtcApplicationResponse>("/api/ctc/update", {
-    RequestInfo: buildRequestInfo(),
-    CtcApplication: application,
+    RequestInfo: buildRequestInfo(authData),
+    ctcApplication: application,
   });
 }
 
 /** POST /api/ctc/search */
 export async function searchCtcApplications(
   criteria: CtcSearchCriteria,
+  authData: AuthData,
   pagination?: Pagination,
 ): Promise<CtcSearchResponse> {
   return post<CtcSearchResponse>("/api/ctc/search", {
-    RequestInfo: buildRequestInfo(),
+    RequestInfo: buildRequestInfo(authData),
     criteria,
     pagination,
   });
 }
 
 /** POST /api/ctc/validate */
-export async function validateUser(params: {
-  filingNumber: string;
-  mobileNumber: string;
-  tenantId: string;
-  courtId: string;
-}): Promise<ValidateUserResponse> {
+export async function validateUser(
+  params: {
+    filingNumber: string;
+    mobileNumber: string;
+    tenantId: string;
+    courtId: string;
+  },
+  authData: AuthData,
+): Promise<ValidateUserResponse> {
   return post<ValidateUserResponse>("/api/ctc/validate", {
-    RequestInfo: buildRequestInfo(),
+    RequestInfo: buildRequestInfo(authData),
     ...params,
   });
 }
@@ -106,14 +116,17 @@ export async function validateUser(params: {
 // ─── Document Preview API (via Next.js API route) ────────────────────────────
 
 /** POST /api/ctc/preview-doc */
-export async function previewDoc(params: {
-  filingNumber: string;
-  ctcApplicationNumber?: string;
-  courtId: string;
-  caseBundleNode?: CaseBundleNode[];
-}): Promise<DocPreviewResponse> {
+export async function previewDoc(
+  params: {
+    filingNumber: string;
+    ctcApplicationNumber?: string;
+    courtId: string;
+    caseBundleNode?: CaseBundleNode[];
+  },
+  authData: AuthData,
+): Promise<DocPreviewResponse> {
   return post<DocPreviewResponse>("/api/ctc/preview-doc", {
-    RequestInfo: buildRequestInfo(),
+    RequestInfo: buildRequestInfo(authData),
     ...params,
   });
 }

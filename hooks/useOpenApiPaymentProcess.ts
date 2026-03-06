@@ -3,8 +3,8 @@ import {
   callFetchBill,
   callETreasury,
   callSearchBill,
-  type BillResponse,
 } from "../services/openApiPaymentService";
+import type { BillResponse } from "../types";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 

@@ -70,6 +70,7 @@ export const ctcStyles = {
   actionRow: "flex flex-col sm:flex-row justify-end items-center gap-4 mb-2",
   btnSecondary:
     "w-full md:w-auto px-16 py-3 border border-[#CBD5E1] rounded-md text-[#334155] font-medium bg-white hover:bg-gray-50 text-lg transition-colors",
+  btnSecondaryDisabled: "bg-[#EEF2F6] text-[#94A3B8] cursor-not-allowed", 
   btnPrimary:
     "w-full md:w-auto px-20 py-3 rounded-md font-medium text-lg transition-colors text-white",
   btnPrimaryActive: "bg-[#007E7E] hover:bg-[#0e5d55]",

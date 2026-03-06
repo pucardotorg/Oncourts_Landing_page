@@ -10,7 +10,6 @@ import {
   CourtRoom,
   CaseResult,
   Step1State,
-  ValidateUserInfo,
   AuthData,
   CtcApplication,
   CaseSearchResult,
@@ -26,17 +25,16 @@ interface Step1CaseDetailsProps {
   step1: Step1State;
   updateStep1: (patch: Partial<Step1State>) => void;
   clearStep1: () => void;
-  onNext: () => void;
   ctcApplication?: CtcApplication | null;
-  applicationNumber?: string;
-  onApplicationUpdate?: (app: CtcApplication) => void;
+  onApplicationCreate?: (app: CtcApplication) => void;
   tenantId: string;
   showErrorToast?: (message: string) => void;
   caseResult?: CaseResult | null;
-  onCaseResultUpdate?: (result: CaseResult | null) => void;
-  validateUserInfo?: ValidateUserInfo | null;
-  setValidateUserInfo?: (data: ValidateUserInfo) => void;
   onAuthDataReceived?: (data: AuthData) => void;
+  authData?: AuthData | null;
+  onSearchCase: (cnrInput: string) => Promise<void>;
+  isSearching: boolean;
+  onSaving?: (isSaving: boolean) => void;
 }
 
 const DEBOUNCE_MS = 100;
@@ -46,18 +44,19 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
   step1,
   updateStep1,
   clearStep1,
-  onNext,
   ctcApplication,
-  applicationNumber,
-  onApplicationUpdate,
+  onApplicationCreate,
   tenantId,
   showErrorToast,
   caseResult,
-  onCaseResultUpdate,
-  setValidateUserInfo,
   onAuthDataReceived,
+  authData,
+  onSearchCase,
+  isSearching,
+  onSaving,
 }) => {
   const { t } = useSafeTranslation();
+  const [isSaving, setIsSaving] = useState(false);
 
   const {
     selectedCourt,
@@ -68,7 +67,7 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
     isPhoneVerified,
     isPartyToCase,
     name,
-    party,
+    designation,
   } = step1;
 
   // ─── Autocomplete state ─────────────────────────────────────────────────
@@ -81,102 +80,59 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
   // ─── Field class helpers ────────────────────────────────────────────────
   const courtFieldClass = `${ctcStyles.fieldInputHeight} ${hasSearched ? ctcStyles.fieldDisabled : ctcStyles.fieldEnabled}`;
   const caseFieldClass = `${ctcStyles.fieldInputHeight} ${hasSearched ? ctcStyles.fieldDisabled : ctcStyles.fieldEnabled}`;
-
+  const isPartyClass = `${ctcStyles.fieldInputHeight} ${isPartyToCase === "yes" ? ctcStyles.fieldDisabled : ctcStyles.fieldEnabled}`;
   // ─── Derived validity ───────────────────────────────────────────────────
   const canSearch = Boolean(selectedCourt && cnrNumber);
   const canProceed =
     isPhoneVerified &&
     Boolean(isPartyToCase) &&
     Boolean(name) &&
-    (isPartyToCase === "no" || Boolean(party));
-  // ─── Search case by CNR number ──────────────────────────────────────────
-  const [isSearching, setIsSearching] = useState(false);
-
-  const handleSearchCase = async () => {
-    if (!cnrNumber) return;
-
-    setIsSearching(true);
-    try {
-      const response = await fetch("/api/case/openapi-index", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          searchCaseCriteria: {
-            searchType: "cnr_number",
-            cnrNumberCriteria: {
-              cnrNumber: cnrNumber?.trim(),
-            },
-          },
-          offset: 0,
-          limit: 50,
-        }),
-      });
-
-      if (!response?.ok) {
-        showErrorToast?.("Failed to search case. Please try again.");
-        return;
-      }
-
-      const data = await response?.json();
-      const caseItem = data?.items?.[0];
-
-      if (caseItem) {
-        onCaseResultUpdate?.(caseItem as CaseResult);
-        updateStep1({
-          hasSearched: true,
-          caseNumber:
-            caseItem?.case_number ||
-            caseItem?.courtCaseNumber ||
-            caseNumber ||
-            "",
-        });
-      } else {
-        showErrorToast?.("No case found for the given CNR number.");
-      }
-    } catch (err) {
-      console.error("Case search failed:", err);
-      showErrorToast?.("Failed to search case. Please try again.");
-    } finally {
-      setIsSearching(false);
-    }
-  };
+    (isPartyToCase === "no" || Boolean(designation));
 
   // ─── Save draft (create or update) then move to Step 2 ─────────────────
   const handleProceed = async () => {
     const payload: CtcApplication = {
+      ...ctcApplication,
       tenantId,
-      caseNumber: caseNumber || "",
-      caseTitle: ctcApplication?.caseTitle || "",
-      filingNumber: ctcApplication?.filingNumber || caseNumber || "",
-      courtId: selectedCourt || "",
+      caseNumber: caseResult?.stNumber || caseResult?.cmpNumber || "",
+      cnrNumber: caseResult?.cnrNumber || "",
+      caseTitle: caseResult?.caseTitle || "",
+      filingNumber: caseResult?.filingNumber || "",
+      courtId: caseResult?.courtId || "",
       applicantName: name || "",
       mobileNumber: phoneNumber || "",
       isPartyToCase: isPartyToCase === "yes",
-      partyDesignation: party || undefined,
+      partyDesignation: designation,
       workflow: { action: "SAVE_DRAFT" },
     };
 
     try {
-      if (applicationNumber) {
+      if (!authData) {
+        showErrorToast?.("Missing authentication details.");
+        return;
+      }
+
+      setIsSaving(true);
+      onSaving?.(true);
+
+      if (ctcApplication?.ctcApplicationNumber) {
         // Returning user — update existing draft
-        payload.ctcApplicationNumber = applicationNumber;
+        payload.ctcApplicationNumber = ctcApplication?.ctcApplicationNumber;
         payload.id = ctcApplication?.id;
-        const res = await updateCtcApplication(payload);
-        if (res?.ctcApplication) onApplicationUpdate?.(res.ctcApplication);
+        await updateCtcApplication(payload, authData);
       } else {
         // First-time — create new draft
-        const res = await createCtcApplication(payload);
-        if (res?.ctcApplication) onApplicationUpdate?.(res.ctcApplication);
+        const res = await createCtcApplication(payload, authData);
+        if (res?.ctcApplication) onApplicationCreate?.(res.ctcApplication);
       }
     } catch (err) {
       console.error("SAVE_DRAFT failed:", err);
       showErrorToast?.("Failed to save draft. Please try again.");
       return; // Don't navigate on error
+    } finally {
+      setIsSaving(false);
+      onSaving?.(false);
     }
-
-    onNext();
   };
 
   // ─── Close dropdown when clicking outside ──────────────────────────────
@@ -384,8 +340,8 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
                 {t(ctcText.step1.clear)}
               </button>
               <button
-                onClick={handleSearchCase}
-                disabled={!canSearch || isSearching}
+                onClick={() => onSearchCase(cnrNumber)}
+                disabled={!canSearch || isSearching || hasSearched}
                 className={`px-8 py-2 text-lg rounded-md border border-transparent shadow-sm text-white focus:outline-none font-roboto font-medium ${
                   canSearch && !isSearching
                     ? "bg-[#0F766E] hover:bg-teal-700"
@@ -423,11 +379,10 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
                   courtId={selectedCourt || ""}
                   showErrorToast={showErrorToast}
                   onValidateSuccess={(data) => {
-                    setValidateUserInfo?.(data);
                     updateStep1({
                       isPartyToCase: data?.isPartyToCase ? "yes" : "no",
                       name: data?.userName || "",
-                      party: data?.designation || "",
+                      designation: data?.designation || "",
                     });
                   }}
                   onAuthDataReceived={onAuthDataReceived}
@@ -445,7 +400,8 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
                       { value: "yes", label: "Yes" },
                       { value: "no", label: "No" },
                     ]}
-                    className="h-[52px]"
+                    className={isPartyClass}
+                    disabled={true}
                   />
                 </div>
               )}
@@ -466,15 +422,17 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
                     value={name}
                     onChange={(v) => updateStep1({ name: v })}
                     className={ctcStyles.fieldInputHeight}
+                    disabled={isPartyToCase === "yes"}
                   />
                 </div>
                 {isPartyToCase === "yes" && (
                   <div className="flex flex-col flex-1">
                     <TextField
                       label={ctcText.step1.party}
-                      value={party}
-                      onChange={(v) => updateStep1({ party: v })}
+                      value={designation}
+                      onChange={(v) => updateStep1({ designation: v })}
                       className={ctcStyles.fieldInputHeight}
+                      disabled={isPartyToCase === "yes"}
                     />
                   </div>
                 )}
@@ -484,10 +442,15 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
             <FormActions
               secondaryLabel={ctcText.step1.clear}
               onSecondary={clearStep1}
-              primaryLabel={ctcText.step1.verifyProceed}
+              primaryLabel={
+                isSaving ? "Saving..." : ctcText.step1.verifyProceed
+              }
               onPrimary={handleProceed}
-              primaryDisabled={!canProceed}
+              primaryDisabled={!canProceed || isSaving}
               primaryVariant="proceed"
+              isSecondaryDisabled={
+                !!ctcApplication?.ctcApplicationNumber || isSaving
+              }
             />
           </>
         )}

@@ -6,6 +6,7 @@ interface FormActionsProps {
   /** Label for the left (secondary/destructive) button */
   secondaryLabel: string;
   onSecondary: () => void;
+  isSecondaryDisabled?: boolean;
 
   /** Label for the right (primary/proceed) button */
   primaryLabel: string;
@@ -19,6 +20,7 @@ interface FormActionsProps {
 const FormActions: React.FC<FormActionsProps> = ({
   secondaryLabel,
   onSecondary,
+  isSecondaryDisabled = false,
   primaryLabel,
   onPrimary,
   primaryDisabled = false,
@@ -36,11 +38,17 @@ const FormActions: React.FC<FormActionsProps> = ({
       ? ctcStyles.btnNextDisabled
       : ctcStyles.btnPrimaryDisabled;
 
+  const secondaryDisabledClass = ctcStyles.btnSecondaryDisabled;
+
   return (
     <>
       <div className={ctcStyles.divider} />
       <div className={ctcStyles.actionRow}>
-        <button onClick={onSecondary} className={ctcStyles.btnSecondary}>
+        <button
+          onClick={onSecondary}
+          className={`${ctcStyles.btnSecondary} ${isSecondaryDisabled ? secondaryDisabledClass : ""}`}
+          disabled={isSecondaryDisabled}
+        >
           {t(secondaryLabel)}
         </button>
         <button

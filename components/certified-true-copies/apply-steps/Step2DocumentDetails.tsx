@@ -8,6 +8,7 @@ import type {
   Step2State,
   CaseBundleNode,
   CtcApplication,
+  AuthData,
 } from "../../../types";
 import { useSafeTranslation } from "../../../hooks/useSafeTranslation";
 import { svgIcons } from "../../../data/svgIcons";
@@ -20,11 +21,11 @@ interface Step2DocumentDetailsProps {
   onNext: () => void;
   onBack: () => void;
   ctcApplication?: CtcApplication | null;
-  applicationNumber?: string;
   onApplicationUpdate?: (app: CtcApplication) => void;
   tenantId: string;
   showErrorToast?: (message: string) => void;
   caseResult?: CaseResult | null;
+  authData?: AuthData | null;
 }
 
 const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
@@ -34,11 +35,11 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
   onNext,
   onBack,
   ctcApplication,
-  applicationNumber,
   onApplicationUpdate,
   tenantId,
   showErrorToast,
   caseResult,
+  authData,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { t } = useSafeTranslation();
@@ -49,41 +50,48 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
   const { uploadedFileName, selectedDocuments } = step2;
 
   // Fetch document tree from preview API on mount
-  useEffect(() => {
-    const fetchDocTree = async () => {
-      const filingNumber = ctcApplication?.filingNumber;
-      const courtId = ctcApplication?.courtId;
-      if (!filingNumber || !courtId) {
-        if (ctcApplication?.caseBundleNodes?.length) {
-          setBundleNodes(ctcApplication?.caseBundleNodes as CaseBundleNode[]);
-        }
-        return;
-      }
-      try {
-        setIsLoadingDocs(true);
-        const res = await previewDoc({
-          filingNumber,
-          courtId,
-          ctcApplicationNumber: applicationNumber || undefined,
-        });
-        if (res?.caseBundleNodes?.length) {
-          setBundleNodes(res?.caseBundleNodes as CaseBundleNode[]);
-        } else if (ctcApplication?.caseBundleNodes?.length) {
-          setBundleNodes(ctcApplication?.caseBundleNodes as CaseBundleNode[]);
-        }
-      } catch (err) {
-        console.error("Failed to fetch document tree:", err);
-        showErrorToast?.("Failed to load documents. Please try again.");
-        if (ctcApplication?.caseBundleNodes?.length) {
-          setBundleNodes(ctcApplication?.caseBundleNodes as CaseBundleNode[]);
-        }
-      } finally {
-        setIsLoadingDocs(false);
-      }
-    };
-    fetchDocTree();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ctcApplication?.filingNumber, ctcApplication?.courtId]);
+  // useEffect(() => {
+  //   const fetchDocTree = async () => {
+  //     const filingNumber = ctcApplication?.filingNumber;
+  //     const courtId = ctcApplication?.courtId;
+  //     if (!filingNumber || !courtId) {
+  //       if (ctcApplication?.caseBundleNodes?.length) {
+  //         setBundleNodes(ctcApplication?.caseBundleNodes as CaseBundleNode[]);
+  //       }
+  //       return;
+  //     }
+  //     if (!authData) {
+  //       showErrorToast?.("Missing authentication details.");
+  //       return;
+  //     }
+  //     try {
+  //       setIsLoadingDocs(true);
+  //       const res = await previewDoc(
+  //         {
+  //           filingNumber,
+  //           courtId,
+  //           ctcApplicationNumber: applicationNumber || undefined,
+  //         },
+  //         authData,
+  //       );
+  //       if (res?.caseBundleNodes?.length) {
+  //         setBundleNodes(res?.caseBundleNodes as CaseBundleNode[]);
+  //       } else if (ctcApplication?.caseBundleNodes?.length) {
+  //         setBundleNodes(ctcApplication?.caseBundleNodes as CaseBundleNode[]);
+  //       }
+  //     } catch (err) {
+  //       console.error("Failed to fetch document tree:", err);
+  //       showErrorToast?.("Failed to load documents. Please try again.");
+  //       if (ctcApplication?.caseBundleNodes?.length) {
+  //         setBundleNodes(ctcApplication?.caseBundleNodes as CaseBundleNode[]);
+  //       }
+  //     } finally {
+  //       setIsLoadingDocs(false);
+  //     }
+  //   };
+  //   fetchDocTree();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [ctcApplication?.filingNumber, ctcApplication?.courtId]);
 
   /** Resolve a node ID back to its display title from the bundle tree */
   const getTitleById = (id: string, nodes: CaseBundleNode[]): string => {
@@ -107,15 +115,18 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
 
   /** Call _update with SUBMIT action, then navigate to Step 3 */
   const handleNext = async () => {
-    if (applicationNumber && ctcApplication) {
+    if (ctcApplication?.ctcApplicationNumber && authData) {
       try {
-        const res = await updateCtcApplication({
-          ...ctcApplication,
-          tenantId,
-          ctcApplicationNumber: applicationNumber,
-          caseBundleNodes: bundleNodes as CtcApplication["caseBundleNodes"],
-          workflow: { action: "SUBMIT" },
-        });
+        const res = await updateCtcApplication(
+          {
+            ...ctcApplication,
+            tenantId,
+            ctcApplicationNumber: ctcApplication?.ctcApplicationNumber,
+            caseBundleNodes: bundleNodes as CtcApplication["caseBundleNodes"],
+            workflow: { action: "SUBMIT" },
+          },
+          authData,
+        );
         if (res?.ctcApplication) {
           onApplicationUpdate?.(res?.ctcApplication);
         }

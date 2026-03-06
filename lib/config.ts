@@ -56,7 +56,7 @@ export const API_ENDPOINTS = {
     CREATE: `${API_BASE_URL}/ctc/applications/_create`,
     UPDATE: `${API_BASE_URL}/ctc/applications/_update`,
     SEARCH: `${API_BASE_URL}/ctc/applications/_search`,
-    VALIDATE: `${API_BASE_URL}/ctc/applications/validate`,
+    VALIDATE: `${API_BASE_URL}/ctc/applications/_validate`,
   },
 
   // Case Management endpoints

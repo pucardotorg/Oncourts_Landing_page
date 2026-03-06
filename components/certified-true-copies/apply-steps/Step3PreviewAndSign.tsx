@@ -11,26 +11,26 @@ import { useSafeTranslation } from "../../../hooks/useSafeTranslation";
 import useOpenApiPaymentProcess from "../../../hooks/useOpenApiPaymentProcess";
 import { fetchBillFileStoreId } from "../../../services/openApiPaymentService";
 import { updateCtcApplication } from "../../../services/ctcService";
-import type { CtcApplication } from "../../../types";
+import type { CtcApplication, AuthData } from "../../../types";
 
 interface Step3PreviewAndSignProps {
   onBack: () => void;
   ctcApplication?: CtcApplication | null;
-  applicationNumber?: string;
   onApplicationUpdate?: (app: CtcApplication) => void;
   tenantId: string;
   showErrorToast?: (message: string) => void;
   caseResult?: CaseResult | null;
+  authData?: AuthData | null;
 }
 
 const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
   onBack,
   ctcApplication,
-  applicationNumber,
   onApplicationUpdate,
   tenantId,
   showErrorToast,
   caseResult,
+  authData,
 }) => {
   const router = useRouter();
   const { t } = useSafeTranslation();
@@ -48,7 +48,8 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
     setShowPaymentModal,
   } = useOpenApiPaymentProcess({
     tenantId,
-    consumerCode: applicationNumber || "KL-000619-2026-AP2_APPL_FILING",
+    consumerCode:
+      ctcApplication?.ctcApplicationNumber || "KL-000619-2026-AP2_APPL_FILING",
     service: "application-voluntary-submission",
   });
 
@@ -93,14 +94,17 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
 
   /** Go back — call _update with EDIT action to revert to DRAFT_IN_PROGRESS */
   const handleGoBack = async () => {
-    if (applicationNumber && ctcApplication) {
+    if (ctcApplication?.ctcApplicationNumber && ctcApplication && authData) {
       try {
-        const res = await updateCtcApplication({
-          ...ctcApplication,
-          tenantId,
-          ctcApplicationNumber: applicationNumber,
-          workflow: { action: "EDIT" },
-        });
+        const res = await updateCtcApplication(
+          {
+            ...ctcApplication,
+            tenantId,
+            ctcApplicationNumber: ctcApplication?.ctcApplicationNumber,
+            workflow: { action: "EDIT" },
+          },
+          authData,
+        );
         if (res?.ctcApplication) {
           onApplicationUpdate?.(res?.ctcApplication);
         }

@@ -40,6 +40,7 @@ export interface AuditDetails {
 export interface CtcApplication {
   id?: string;
   ctcApplicationNumber?: string;
+  cnrNumber?: string;
   tenantId?: string;
   caseNumber?: string;
   caseTitle?: string;
@@ -76,9 +77,9 @@ export interface Pagination {
 export interface CtcSearchCriteria {
   tenantId: string;
   ctcApplicationNumber?: string;
-  searchByCaseNumberAnTitle?: string;
   courtId?: string;
   status?: string;
+  filingNumber?: string;
 }
 
 // ─── Step state interfaces ──────────────────────────────────────────────────
@@ -92,7 +93,7 @@ export interface Step1State {
   isPhoneVerified: boolean;
   isPartyToCase: string;
   name: string;
-  party: string;
+  designation: string;
 }
 
 export interface Step2State {
