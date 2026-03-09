@@ -8,6 +8,7 @@ import { commonStyles } from "../../../styles/commonStyles";
 import { svgIcons } from "../../../data/svgIcons";
 import VerifyMobileNumber from "../../../components/certified-true-copies/VerifyMobileNumber";
 import ConfigurableTable from "../../../components/common/ConfigurableTable";
+import ViewApplicationModal from "../../../components/certified-true-copies/ViewApplicationModal";
 import { AuthData, CtcApplication } from "../../../types";
 import { searchCtcApplications } from "../../../services/ctcService";
 
@@ -20,6 +21,13 @@ const statusStyles = {
   REJECTED: "bg-[#FCE7F3] text-[#BE185D]",
   DRAFT_IN_PROGRESS: "bg-[#DBEAFE] text-[#1D4ED8]",
 };
+
+const allowedStatuses = [
+  "DRAFT_IN_PROGRESS",
+  "PENDING_ESIGN",
+  "PENDING_PAYMENT",
+  "PENDING_SIGN"
+];
 
 const viewStatusForCertifiedTrueCopy = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +48,8 @@ const viewStatusForCertifiedTrueCopy = () => {
   const [totalCount, setTotalCount] = useState<number>(0);
   const [offset, setOffset] = useState(0);
   const [hasSearched, setHasSearched] = useState(false);
+  const [selectedApplication, setSelectedApplication] =
+    useState<CtcApplication | null>(null);
   const limit = 10;
   const debounceTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(
     null
@@ -82,6 +92,26 @@ const viewStatusForCertifiedTrueCopy = () => {
     if (offset - limit >= 0) {
       setOffset(offset - limit);
       fetchTableData(offset - limit);
+    }
+  };
+
+  const handleDownload = async (fileStoreId: string) => {
+    try {
+      const res = await fetch(
+        `/api/getFileByFileStoreId?tenantId=${tenantId || "kl"}&fileStoreId=${fileStoreId}`,
+        { headers: authData?.authToken ? { "auth-token": authData.authToken } : {} }
+      );
+      if (res.status === 200) {
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `document-${fileStoreId}.pdf`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    } catch (err) {
+      console.error("Download error:", err);
     }
   };
 
@@ -271,11 +301,6 @@ const viewStatusForCertifiedTrueCopy = () => {
                   key: "caseTitle",
                   header: t("CASE_NAME"),
                   render: (app) => {
-                    const allowedStatuses = [
-                      "DRAFT_IN_PROGRESS",
-                      "PENDING_ESIGN",
-                      "PENDING_PAYMENT",
-                    ];
                     const isClickable = allowedStatuses.includes(
                       app?.status || ""
                     );
@@ -318,7 +343,10 @@ const viewStatusForCertifiedTrueCopy = () => {
                     <button
                       onClick={(e) => {
                         e.preventDefault();
-                        // open modal later
+                        if (allowedStatuses.includes(app?.status || "")) {
+                          return;
+                        }
+                        setSelectedApplication(app);
                       }}
                       className="flex items-center gap-2 focus:outline-none hover:text-teal-700"
                     >
@@ -403,6 +431,71 @@ const viewStatusForCertifiedTrueCopy = () => {
           </span>
         </div>
       )}
+
+      {/* ── View Application Modal ────────────────────────────────────── */}
+      <ViewApplicationModal
+        isOpen={!!selectedApplication}
+        onClose={() => setSelectedApplication(null)}
+        application={selectedApplication}
+        topInfoColumns={
+          selectedApplication
+            ? [
+              [
+                {
+                  label: t("CASE_NAME"),
+                  value: selectedApplication?.caseTitle || "N/A",
+                },
+                { label: t("CASE_CATEOGORY"), value: "Criminal" },
+              ],
+              [
+                {
+                  label: t("CASE_NUMBER"),
+                  value: selectedApplication?.caseNumber || "N/A",
+                },
+                { label: t("CASE_TYPE"), value: "Undefined Snull" },
+              ],
+              [
+                {
+                  label: t("FILING_NUMBER"),
+                  value: selectedApplication?.filingNumber || "N/A",
+                },
+                {
+                  label: t("FILING_DATE"),
+                  value: selectedApplication?.auditDetails?.createdTime
+                    ? new Intl.DateTimeFormat("en-IN", {
+                      timeZone: "Asia/Kolkata",
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    })
+                      .format(
+                        new Date(
+                          selectedApplication.auditDetails.createdTime
+                        )
+                      )
+                      .replace(/\//g, "-")
+                    : "-",
+                },
+              ],
+            ]
+            : []
+        }
+        footerButtons={[
+          {
+            label: t("CTC_OTP_GO_BACK"),
+            onClick: () => setSelectedApplication(null),
+            variant: "secondary",
+          },
+          {
+            label: t(`CTC_SUCCESS_DOWNLOAD`),
+            onClick: () => handleDownload("dc358eeb-ff20-4e85-9a9b-d6c397e45fea"), // TODO: use real fileStoreId
+            variant: "primary",
+          },
+        ]}
+        fileStoreId="dc358eeb-ff20-4e85-9a9b-d6c397e45fea" // this needs to change
+        tenantId={tenantId}
+        authToken={authData?.authToken}
+      />
     </div>
   );
 };

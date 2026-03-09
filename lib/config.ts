@@ -59,6 +59,10 @@ export const API_ENDPOINTS = {
     VALIDATE: `${API_BASE_URL}/ctc/applications/_validate`,
   },
 
+  FILESTORE: {
+    FETCH: `${API_BASE_URL}/filestore/v1/files/id`,
+  },
+
   // Case Management endpoints
   CASE_MANAGEMENT: {
     PREVIEW_DOC: `${API_BASE_URL}/casemanagement/casemanager/preview/doc`,
