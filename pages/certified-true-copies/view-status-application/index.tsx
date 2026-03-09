@@ -39,6 +39,7 @@ const viewStatusForCertifiedTrueCopy = () => {
   const [applications, setApplications] = useState<CtcApplication[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [offset, setOffset] = useState(0);
+  const [hasSearched, setHasSearched] = useState(false);
   const limit = 10;
   const debounceTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(
     null
@@ -59,11 +60,13 @@ const viewStatusForCertifiedTrueCopy = () => {
     setSearchQuery("");
     setOffset(0);
     setTotalCount(0);
+    setHasSearched(false);
   };
 
   const handleSearchApplication = () => {
     if (!authData) return;
     setIsPhoneVerified(true);
+    setHasSearched(true);
     setOffset(0);
     fetchTableData(0);
   };
@@ -213,11 +216,10 @@ const viewStatusForCertifiedTrueCopy = () => {
               <button
                 onClick={handleSearchApplication}
                 disabled={!isPhoneVerified}
-                className={`px-8 py-2 text-lg rounded-md border border-transparent focus:outline-none shadow-sm font-roboto font-medium ${
-                  isPhoneVerified
-                    ? "bg-[#0F766E] text-white hover:bg-teal-700"
-                    : "bg-[#EEF2F6] text-[#94A3B8] cursor-not-allowed border-none"
-                }`}
+                className={`px-8 py-2 text-lg rounded-md border border-transparent focus:outline-none shadow-sm font-roboto font-medium ${isPhoneVerified
+                  ? "bg-[#0F766E] text-white hover:bg-teal-700"
+                  : "bg-[#EEF2F6] text-[#94A3B8] cursor-not-allowed border-none"
+                  }`}
               >
                 {t(
                   ctcText?.viewStatus?.searchButtonLabel || "Search Application"
@@ -228,7 +230,7 @@ const viewStatusForCertifiedTrueCopy = () => {
         </div>
 
         {/* My Applications Section */}
-        {isPhoneVerified && (
+        {hasSearched && (
           <div className="w-full mt-4">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-4 gap-4">
               <h2 className="text-[#1E293B] text-[28px] font-bold font-roboto">
@@ -265,23 +267,68 @@ const viewStatusForCertifiedTrueCopy = () => {
             <ConfigurableTable
               columns={[
                 { key: "slNo", header: t("SL_NO") },
-                { key: "caseTitle", header: t("CASE_NAME") },
+                {
+                  key: "caseTitle",
+                  header: t("CASE_NAME"),
+                  render: (app) => {
+                    const allowedStatuses = [
+                      "DRAFT_IN_PROGRESS",
+                      "PENDING_ESIGN",
+                      "PENDING_PAYMENT",
+                    ];
+                    const isClickable = allowedStatuses.includes(
+                      app?.status || ""
+                    );
+
+                    return (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (!isClickable) return;
+
+                          if (authData) {
+                            sessionStorage.setItem(
+                              "ctcAuthData",
+                              JSON.stringify(authData)
+                            );
+                          }
+                          // Use router to push with the requested query parameters
+                          router.push(
+                            `/certified-true-copies/apply?applicationNumber=${encodeURIComponent(
+                              app?.ctcApplicationNumber || ""
+                            )}&courtId=${encodeURIComponent(
+                              app?.courtId || ""
+                            )}&filingNumber=${encodeURIComponent(
+                              app?.filingNumber || ""
+                            )}`
+                          );
+                        }}
+                        className="text-left underline decoration-1 underline-offset-2 hover:text-teal-700 cursor-pointer"
+                      >
+                        {app?.caseTitle}
+                      </button>
+                    );
+                  },
+                },
                 { key: "caseNumber", header: t("CASE_NUMBER") },
                 {
                   key: "application",
                   header: t("APPLICATION"),
                   render: (app) => (
-                    <div className="flex items-center gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        // open modal later
+                      }}
+                      className="flex items-center gap-2 focus:outline-none hover:text-teal-700"
+                    >
                       <span className="text-[#64748B] mt-0.5">
                         {svgIcons.SmallFileIcon()}
                       </span>
-                      <a
-                        href="#"
-                        className="underline decoration-1 underline-offset-2"
-                      >
+                      <span className="underline decoration-1 underline-offset-2">
                         {app?.ctcApplicationNumber}
-                      </a>
-                    </div>
+                      </span>
+                    </button>
                   ),
                 },
                 { key: "applicationDate", header: t("APPLICATION_DATE") },
@@ -290,9 +337,8 @@ const viewStatusForCertifiedTrueCopy = () => {
                   header: "Status",
                   render: (app) => (
                     <span
-                      className={`px-2.5 py-1 text-sm font-semibold rounded-md ${
-                        statusStyles[app?.status || "DRAFT_IN_PROGRESS"]
-                      }`}
+                      className={`px-2.5 py-1 text-sm font-semibold rounded-md ${statusStyles[app?.status || "DRAFT_IN_PROGRESS"]
+                        }`}
                     >
                       {t(app?.status || "UNKNOWN_STATUS")}
                     </span>
@@ -303,17 +349,20 @@ const viewStatusForCertifiedTrueCopy = () => {
                   header: t("ISSUE_DOCUMENT"),
                   render: (app) =>
                     app.hasDocument ? (
-                      <div className="flex items-center gap-2 text-[#475569]">
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          // open modal or download document later
+                        }}
+                        className="flex items-center gap-2 focus:outline-none hover:text-teal-700 text-[#475569]"
+                      >
                         <span className="text-[#64748B]">
                           {svgIcons.fileIcon()}
                         </span>
-                        <a
-                          href="#"
-                          className="underline decoration-1 underline-offset-2"
-                        >
+                        <span className="underline decoration-1 underline-offset-2">
                           {t(ctcText?.viewCTCStatusTable?.viewText)}
-                        </a>
-                      </div>
+                        </span>
+                      </button>
                     ) : null,
                 },
               ]}
