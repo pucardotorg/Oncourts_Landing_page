@@ -27,6 +27,7 @@ interface Step1CaseDetailsProps {
   clearStep1: () => void;
   ctcApplication?: CtcApplication | null;
   onApplicationCreate?: (app: CtcApplication) => void;
+  onApplicationUpdate?: (app: CtcApplication) => void;
   tenantId: string;
   showErrorToast?: (message: string) => void;
   caseResult?: CaseResult | null;
@@ -46,6 +47,7 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
   clearStep1,
   ctcApplication,
   onApplicationCreate,
+  onApplicationUpdate,
   tenantId,
   showErrorToast,
   caseResult,
@@ -119,7 +121,8 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
         // Returning user — update existing draft
         payload.ctcApplicationNumber = ctcApplication?.ctcApplicationNumber;
         payload.id = ctcApplication?.id;
-        await updateCtcApplication(payload, authData);
+        const res = await updateCtcApplication(payload, authData);
+        if (res?.ctcApplication) onApplicationUpdate?.(res.ctcApplication);
       } else {
         // First-time — create new draft
         const res = await createCtcApplication(payload, authData);
@@ -175,7 +178,15 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
           },
         });
 
-        if (!response.ok) throw new Error("API error");
+        if (!response.ok) {
+          console.error(
+            `API /api/case/search failed with status ${response.status}`,
+          );
+          showErrorToast?.("Failed to fetch suggestions");
+          setSuggestions([]);
+          setShowSuggestions(false);
+          return;
+        }
 
         const data = await response.json();
 
@@ -184,14 +195,15 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
 
         setSuggestions(results);
         setShowSuggestions(results?.length > 0);
-      } catch {
+      } catch (err) {
+        console.error("Case search fetch error:", err);
         setSuggestions([]);
         setShowSuggestions(false);
       } finally {
         setIsLoadingSuggestions(false);
       }
     },
-    [selectedCourt, tenantId],
+    [selectedCourt, tenantId, showErrorToast],
   );
 
   // ─── Handle input change with debounce ─────────────────────────────────

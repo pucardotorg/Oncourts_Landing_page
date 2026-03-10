@@ -28,8 +28,6 @@ export const API_ENDPOINTS = {
   // OpenAPI endpoints
   OPENAPI: {
     CASE: `${API_BASE_URL}/openapi/v1/kl/case`,
-    ESIGN: (tenantId: string) =>
-      `${API_BASE_URL}/openapi/v1/${tenantId}/esign`,
     CASE_BY_CNR: (caseNumber: string) =>
       `${API_BASE_URL}/openapi/v1/kl/case/cnr/${caseNumber}`,
     CASE_BY_TYPE: (year: string, type: string, offset: string, limit: string) =>
@@ -42,7 +40,8 @@ export const API_ENDPOINTS = {
       `${API_BASE_URL}/openapi/v1/magistrate_name/${courtId}/${tenantId}`,
     DOWNLOAD_FILE: (tenantId: string, orderId: string) =>
       `${API_BASE_URL}/openapi/v1/file/${tenantId}/${orderId}`,
-    CASE_SEARCH: (tenantId: string) => `${API_BASE_URL}/openapi/v1/${tenantId}/case/search`,
+    CASE_SEARCH: (tenantId: string) =>
+      `${API_BASE_URL}/openapi/v1/${tenantId}/case/search`,
   },
 
   // OTP / Auth endpoints
@@ -61,6 +60,7 @@ export const API_ENDPOINTS = {
 
   FILESTORE: {
     FETCH: `${API_BASE_URL}/filestore/v1/files/id`,
+    UPLOAD: `${API_BASE_URL}/filestore/v1/files`,
   },
 
   // Case Management endpoints
@@ -68,13 +68,22 @@ export const API_ENDPOINTS = {
     PREVIEW_DOC: `${API_BASE_URL}/casemanagement/casemanager/preview/doc`,
   },
 
+  E_SIGN: {
+    ESIGN: `${API_BASE_URL}/e-sign-svc/v1/_esign`,
+  },
+
   // Payment endpoints
   PAYMENT: {
-    FETCH_BILL: `${API_BASE_URL}/openapi/payment/v1/_fetchbill`,
-    PROCESS_CHALLAN: `${API_BASE_URL}/openapi/payment/v1/_processChallan`,
-    SEARCH_BILL: `${API_BASE_URL}/openapi/payment/v1/_searchbill`,
-    GET_RECEIPT: `${API_BASE_URL}/openapi/payment/v1/getPaymentReceipt`,
+    FETCH_BILL: `${API_BASE_URL}/billing-service/bill/v2/_fetchbill`,
+    PROCESS_CHALLAN: `${API_BASE_URL}/etreasury/payment/v1/_processChallan`,
+    SEARCH_BILL: `${API_BASE_URL}/billing-service/bill/v2/_search`,
+    GET_HEAD_BREAKDOWN: `${API_BASE_URL}/etreasury/payment/v1/_getHeadBreakDown`,
     EPAYMENTS: `${API_BASE_URL}/epayments`,
+  },
+
+  // PDF Generation endpoints
+  PDF: {
+    CTC_APPLICATIONS: `${API_BASE_URL}/egov-pdf/ctc-applications`,
   },
 
   // MDMS endpoints

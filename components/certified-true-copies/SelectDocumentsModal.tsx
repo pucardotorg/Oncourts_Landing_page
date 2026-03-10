@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import { svgIcons } from "../../data/svgIcons";
 import { ctcStyles, ctcText } from "../../styles/certifiedCopyStyles";
-import type { CaseBundleNode } from "../../types";
+import type { CaseBundleNode, AuthData } from "../../types";
+import DocViewWrapper from "./DocViewWrapper";
 
 interface SelectDocumentsModalProps {
   isOpen: boolean;
@@ -12,6 +13,9 @@ interface SelectDocumentsModalProps {
   initialSelected?: string[];
   /** CaseBundleNode list from the API response */
   documents: CaseBundleNode[];
+  isParty?: boolean;
+  tenantId?: string;
+  authData?: AuthData | null;
 }
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -22,6 +26,9 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
   onSelect,
   initialSelected = [],
   documents,
+  isParty = false,
+  tenantId,
+  authData,
 }) => {
   const { t } = useSafeTranslation();
   const [searchQuery, setSearchQuery] = useState("");
@@ -30,17 +37,26 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
   >({});
   const [selectedDocs, setSelectedDocs] = useState<string[]>(initialSelected);
 
+  // Scroll lock
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+
   // Sync internal state whenever modal opens
   useEffect(() => {
     if (isOpen) {
       setSelectedDocs(initialSelected);
-
-      // Auto-expand the first section by default
+      setSearchQuery(""); // **Reset search query on open**
       const initial: Record<string, boolean> = {};
-      documents?.forEach((node, i) => {
-        if (node?.children && node?.children?.length > 0) {
-          initial[node.id] = i === 0;
-        }
+      documents?.forEach((node) => {
+        initial[node.id] = false; // **Default all to closed**
       });
       setExpandedSections(initial);
     }
@@ -49,8 +65,43 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
 
   if (!isOpen) return null;
 
-  const toggleSection = (id: string) =>
-    setExpandedSections((prev) => ({ ...prev, [id]: !prev[id] }));
+  // Helper to localize title with a number suffix (e.g. "VAKALATNAMA_HEADING 1" -> "Vakalat 1")
+  const localizeTitle = (title: string): string => {
+    const match = title.trim().match(/^(.*?)\s+(\d+)$/);
+    if (match) {
+      const baseTitle = match[1];
+      const number = match[2];
+      return `${t(baseTitle)} ${number}`;
+    }
+    return t(title);
+  };
+
+  // Helper to get all descendant IDs
+  const getAllDescendantIds = (node: CaseBundleNode): string[] => {
+    let ids: string[] = [];
+    if (node.children) {
+      for (const child of node.children) {
+        ids.push(child.id);
+        ids = ids.concat(getAllDescendantIds(child));
+      }
+    }
+    return ids;
+  };
+
+  const toggleSection = (id: string, node?: CaseBundleNode) => {
+    setExpandedSections((prev) => {
+      const isCurrentlyExpanded = !!prev[id];
+      const nextState = { ...prev, [id]: !isCurrentlyExpanded };
+      // If closing, recursively close all children
+      if (isCurrentlyExpanded && node) {
+        const descendants = getAllDescendantIds(node);
+        for (const descId of descendants) {
+          nextState[descId] = false;
+        }
+      }
+      return nextState;
+    });
+  };
 
   const toggleDocSelection = (id: string) =>
     setSelectedDocs((prev) =>
@@ -64,9 +115,206 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
     onClose();
   };
 
-  // Filter helper — checks if a title matches the search query
   const matchesSearch = (title: string) =>
     title.toLowerCase().includes(searchQuery.toLowerCase());
+
+  // Recursively check if a node or any descendant matches the search query
+  const nodeMatchesSearch = (node: CaseBundleNode): boolean => {
+    if (matchesSearch(localizeTitle(node.title))) return true;
+    return (node.children || []).some((child) => nodeMatchesSearch(child));
+  };
+
+  // Find a node's title by ID across the entire document tree
+  const findNodeTitleById = (
+    id: string,
+    nodes: CaseBundleNode[],
+  ): string | null => {
+    for (const n of nodes) {
+      if (n.id === id) return n.title;
+      if (n.children) {
+        const found = findNodeTitleById(id, n.children);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
+
+  // Find a node's fileStoreId by ID across the entire document tree
+  const findNodeFileStoreIdById = (
+    id: string,
+    nodes: CaseBundleNode[],
+  ): string | null => {
+    for (const n of nodes) {
+      if (n.id === id) return n.fileStoreId || null;
+      if (n.children) {
+        const found = findNodeFileStoreIdById(id, n.children);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
+
+  // Recursive renderer:
+  //   depth 0 → always a collapsible section header (numbered)
+  //             leaf: expands to reveal a single checkbox for itself
+  //             group: expands to render children recursively
+  //   depth > 0, group  → collapsible sub-section (indented)
+  //   depth > 0, leaf   → direct checkbox row
+  const renderNode = (
+    node: CaseBundleNode,
+    depth: number,
+    index: number,
+    pathPrefix: string = "",
+    forceShowChildren: boolean = false,
+  ): React.ReactNode => {
+    const isThisNodeMatch = searchQuery
+      ? matchesSearch(localizeTitle(node.title))
+      : true;
+    const shouldShowAllDescendants = forceShowChildren || isThisNodeMatch;
+
+    const hasChildren = Boolean(node.children && node.children.length > 0);
+    // **If we are searching, we want everything matching to be expanded by default.**
+    const isExpanded = !!expandedSections[node.id] || searchQuery.length > 0;
+    const itemNumber = pathPrefix
+      ? `${pathPrefix}.${index + 1}`
+      : `${index + 1}`;
+
+    if (depth === 0) {
+      if (hasChildren) {
+        const filteredChildren = node.children!.filter(
+          (c) => shouldShowAllDescendants || nodeMatchesSearch(c),
+        );
+        if (
+          searchQuery &&
+          !shouldShowAllDescendants &&
+          filteredChildren.length === 0
+        )
+          return null;
+
+        return (
+          <div key={node.id} className={ctcStyles.modalSection}>
+            <button
+              onClick={() => toggleSection(node.id, node)}
+              className={ctcStyles.modalSectionBtn}
+            >
+              <span className={ctcStyles.modalSectionTitle}>
+                {`${itemNumber}. ${localizeTitle(node.title)}`}
+              </span>
+              {isExpanded
+                ? svgIcons.UpArrowIcon({ fill: "#0F172A", width: "20px" })
+                : svgIcons.DownArrowIcon({ fill: "#0F172A", width: "20px" })}
+            </button>
+            {isExpanded && (
+              <div className={ctcStyles.modalDocItems}>
+                {filteredChildren.map((child, i) =>
+                  renderNode(
+                    child,
+                    depth + 1,
+                    i,
+                    itemNumber,
+                    shouldShowAllDescendants,
+                  ),
+                )}
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      // Top-level leaf: collapsible section that reveals itself as a checkbox
+      if (searchQuery && !shouldShowAllDescendants) return null;
+
+      return (
+        <div key={node.id} className={ctcStyles.modalSection}>
+          <button
+            onClick={() => toggleSection(node.id, node)}
+            className={ctcStyles.modalSectionBtn}
+          >
+            <span className={ctcStyles.modalSectionTitle}>
+              {`${itemNumber}. ${localizeTitle(node.title)}`}
+            </span>
+            {isExpanded
+              ? svgIcons.UpArrowIcon({ fill: "#0F172A", width: "20px" })
+              : svgIcons.DownArrowIcon({ fill: "#0F172A", width: "20px" })}
+          </button>
+          {isExpanded && (
+            <div className={ctcStyles.modalDocItems}>
+              <label className={ctcStyles.modalDocLabel}>
+                <input
+                  type="checkbox"
+                  checked={selectedDocs?.includes(node.id)}
+                  onChange={() => toggleDocSelection(node.id)}
+                  className={ctcStyles.modalDocCheckbox}
+                />
+                <span className={ctcStyles.modalDocText}>
+                  {localizeTitle(node.title)}
+                </span>
+              </label>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // depth > 0 — nested group: collapsible sub-section
+    if (hasChildren) {
+      const filteredChildren = node.children!.filter(
+        (c) => shouldShowAllDescendants || nodeMatchesSearch(c),
+      );
+      if (
+        searchQuery &&
+        !shouldShowAllDescendants &&
+        filteredChildren.length === 0
+      )
+        return null;
+
+      return (
+        <div key={node.id} className="w-full mt-1">
+          <button
+            onClick={() => toggleSection(node.id, node)}
+            className="flex items-center justify-between w-full py-2 px-2 text-left hover:bg-gray-50 rounded-md transition-colors"
+          >
+            <span className="text-lg font-semibold text-gray-700">
+              {`${itemNumber}. ${localizeTitle(node.title)}`}
+            </span>
+            {isExpanded
+              ? svgIcons.UpArrowIcon({ fill: "#64748b", width: "16px" })
+              : svgIcons.DownArrowIcon({ fill: "#64748b", width: "16px" })}
+          </button>
+          {isExpanded && (
+            <div className="pl-5 mt-1 border-l-2 border-gray-100 ml-2">
+              {filteredChildren.map((child, i) =>
+                renderNode(
+                  child,
+                  depth + 1,
+                  i,
+                  itemNumber,
+                  shouldShowAllDescendants,
+                ),
+              )}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // depth > 0 — leaf: direct checkbox
+    if (searchQuery && !shouldShowAllDescendants) return null;
+
+    return (
+      <label key={node.id} className={`${ctcStyles.modalDocLabel} mt-1`}>
+        <input
+          type="checkbox"
+          checked={selectedDocs?.includes(node.id)}
+          onChange={() => toggleDocSelection(node.id)}
+          className={ctcStyles.modalDocCheckbox}
+        />
+        <span className={ctcStyles.modalDocText}>
+          {localizeTitle(node.title)}
+        </span>
+      </label>
+    );
+  };
 
   return (
     <div className={ctcStyles.modalOverlay}>
@@ -115,114 +363,62 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
             </div>
 
             <div className={ctcStyles.modalDocList}>
-              {documents?.map((node, index) => {
-                const hasChildren =
-                  node?.children && node?.children?.length > 0;
-
-                if (hasChildren) {
-                  // ── Section with selectable children ──────────────
-                  const filteredChildren =
-                    node?.children?.filter((child) =>
-                      matchesSearch(child?.title),
-                    ) || [];
-
-                  // Hide entire section if no children match search
-                  if (searchQuery && filteredChildren?.length === 0)
-                    return null;
-
-                  return (
-                    <div key={node.id} className={ctcStyles.modalSection}>
-                      <button
-                        onClick={() => toggleSection(node.id)}
-                        className={ctcStyles.modalSectionBtn}
-                      >
-                        <span className={ctcStyles.modalSectionTitle}>
-                          {`${index + 1}. ${node?.title}`}
-                        </span>
-                        {expandedSections[node.id]
-                          ? svgIcons.UpArrowIcon({
-                              fill: "#0F172A",
-                              width: "20px",
-                            })
-                          : svgIcons.DownArrowIcon({
-                              fill: "#0F172A",
-                              width: "20px",
-                            })}
-                      </button>
-
-                      {expandedSections[node.id] && (
-                        <div className={ctcStyles.modalDocItems}>
-                          {filteredChildren?.map((child) => (
-                            <label
-                              key={child?.id}
-                              className={ctcStyles.modalDocLabel}
-                            >
-                              <input
-                                type="checkbox"
-                                checked={selectedDocs?.includes(child?.id)}
-                                onChange={() => toggleDocSelection(child?.id)}
-                                className={ctcStyles.modalDocCheckbox}
-                              />
-                              <span className={ctcStyles.modalDocText}>
-                                {child?.title}
-                              </span>
-                            </label>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                }
-
-                // ── Leaf node (no children) — render like a section ────
-                if (searchQuery && !matchesSearch(node?.title)) return null;
-
-                return (
-                  <div key={node.id} className={ctcStyles.modalSection}>
-                    <button
-                      onClick={() => toggleSection(node.id)}
-                      className={ctcStyles.modalSectionBtn}
-                    >
-                      <span className={ctcStyles.modalSectionTitle}>
-                        {`${index + 1}. ${node?.title}`}
-                      </span>
-                      {expandedSections[node.id]
-                        ? svgIcons.UpArrowIcon({
-                            fill: "#0F172A",
-                            width: "20px",
-                          })
-                        : svgIcons.DownArrowIcon({
-                            fill: "#0F172A",
-                            width: "20px",
-                          })}
-                    </button>
-
-                    {expandedSections[node.id] && (
-                      <div className={ctcStyles.modalDocItems}>
-                        <label className={ctcStyles.modalDocLabel}>
-                          <input
-                            type="checkbox"
-                            checked={selectedDocs?.includes(node?.id)}
-                            onChange={() => toggleDocSelection(node?.id)}
-                            className={ctcStyles.modalDocCheckbox}
-                          />
-                          <span className={ctcStyles.modalDocText}>
-                            {node?.title}
-                          </span>
-                        </label>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+              {documents?.map((node, index) => renderNode(node, 0, index))}
             </div>
           </div>
 
           {/* Right Preview Area */}
           <div className={ctcStyles.modalPreviewArea}>
-            <p className={ctcStyles.modalPreviewText}>
-              {t(ctcText.selectDocModal.previewText)}
-            </p>
+            {!isParty ? (
+              <p className={ctcStyles.modalPreviewText}>
+                {t(ctcText.selectDocModal.previewText)}
+              </p>
+            ) : selectedDocs.length === 0 ? (
+              <p className={ctcStyles.modalPreviewText}>
+                {t(ctcText.selectDocModal.selectADocumentToPreview)}
+              </p>
+            ) : (
+              <div className="flex flex-col items-center justify-center w-full h-full p-4">
+                <div className="w-full max-w-2xl bg-gray-50 rounded-lg flex flex-col items-center justify-center h-[90%] border border-gray-200 overflow-hidden">
+                  {(() => {
+                    const lastId = selectedDocs[selectedDocs.length - 1];
+                    const selectedTitle =
+                      findNodeTitleById(lastId, documents) ||
+                      "Document Preview";
+                    const fileStoreId = findNodeFileStoreIdById(
+                      lastId,
+                      documents,
+                    );
+
+                    if (fileStoreId) {
+                      return (
+                        <div className="w-full h-full flex flex-col">
+                          <div className="flex-1 w-full bg-white relative overflow-hidden">
+                            <DocViewWrapper
+                              fileStoreId={fileStoreId}
+                              tenantId={tenantId}
+                              authToken={authData?.authToken}
+                            />
+                          </div>
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div className="p-4 flex flex-col items-center justify-center h-full text-center">
+                          <p className="text-gray-600 font-medium text-lg px-4 mb-2">
+                            {localizeTitle(selectedTitle)}
+                          </p>
+                          <p className="text-sm text-gray-400">
+                            No preview available (missing internal FileStore
+                            ID).
+                          </p>
+                        </div>
+                      );
+                    }
+                  })()}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

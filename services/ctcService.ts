@@ -54,8 +54,12 @@ async function post<T>(url: string, body: unknown): Promise<T> {
     body: JSON.stringify(body),
   });
   if (!res?.ok) {
+    if (res?.status === 401 && typeof window !== "undefined") {
+      window.location.href = "/certified-true-copies";
+      return Promise.reject(`Auth Error: 401 Unauthorized for ${url}`);
+    }
     const text = await res?.text().catch(() => "");
-    throw new Error(`API ${url} failed (${res?.status}): ${text}`);
+    return Promise.reject(`API ${url} failed (${res?.status}): ${text}`);
   }
   return res?.json();
 }
@@ -118,10 +122,10 @@ export async function validateUser(
 /** POST /api/ctc/preview-doc */
 export async function previewDoc(
   params: {
+    tenantId: string;
     filingNumber: string;
     ctcApplicationNumber?: string;
     courtId: string;
-    caseBundleNode?: CaseBundleNode[];
   },
   authData: AuthData,
 ): Promise<DocPreviewResponse> {

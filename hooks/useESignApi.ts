@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from "react";
-import { eSignOpenService } from "../services/eSignService";
+import { eSignService } from "../services/eSignService";
+import type { AuthData } from "../types";
 
 interface SignStatus {
   name: string;
@@ -7,12 +8,12 @@ interface SignStatus {
 }
 
 /**
- * useESignOpenApi
+ * useESignApi
  *
  * Provides handleEsign and checkSignStatus utilities.
  * Uses our own /api/esign Next.js route instead of Digit.DRISTIService.
  */
-const useESignOpenApi = () => {
+const useESignApi = () => {
   const tenantId = localStorage.getItem("tenant-id") || "kl";
 
   const esignUrl = "https://es-staging.cdac.in/esignlevel2/2.1/form/signdoc";
@@ -37,6 +38,7 @@ const useESignOpenApi = () => {
       name: string,
       pageModule: string,
       fileStoreId: string,
+      authData: AuthData,
       signPlaceHolder?: string
     ): Promise<boolean> => {
       try {
@@ -47,11 +49,24 @@ const useESignOpenApi = () => {
         sessionStorage.setItem("signStatus", JSON.stringify(newSignStatuses));
 
         // Call our own API service (no Digit.DRISTIService dependency)
-        const eSignResponse = await eSignOpenService({
-          fileStoreId,
-          tenantId,
-          pageModule,
-          signPlaceHolder: signPlaceHolder ?? "EsIIIgNNN_PlAcEholDeR_keYY",
+        const eSignResponse = await eSignService({
+          ESignParameter: {
+            uidToken: "3456565",
+            consent: "6564",
+            authType: "6546",
+            fileStoreId,
+            tenantId,
+            pageModule,
+            signPlaceHolder: signPlaceHolder ?? "EsIIIgNNN_PlAcEholDeR_keYY",
+          },
+          RequestInfo: {
+            apiId: "Dristi",
+            authToken: authData?.authToken,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            userInfo: authData?.userInfo as any,
+            msgId: `${Date.now()}|en_IN`,
+            plainAccessRequest: {},
+          },
         });
 
         if (eSignResponse) {
@@ -144,4 +159,4 @@ const useESignOpenApi = () => {
   return { handleEsign, checkSignStatus };
 };
 
-export default useESignOpenApi;
+export default useESignApi;

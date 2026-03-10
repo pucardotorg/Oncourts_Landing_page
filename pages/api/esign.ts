@@ -22,7 +22,7 @@ export default async function handler(
     return res.status(400).json({ error: "tenantId and fileStoreId are required." });
   }
 
-  const backendUrl = API_ENDPOINTS.OPENAPI.ESIGN(tenantId as string);
+  const backendUrl = API_ENDPOINTS.E_SIGN.ESIGN;
 
   try {
     const response = await fetch(backendUrl, {

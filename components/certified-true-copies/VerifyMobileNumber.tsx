@@ -16,7 +16,7 @@ interface VerifyMobileNumberProps {
   showErrorToast?: (message: string) => void;
   onValidateSuccess?: (data: ValidateUserInfo) => void;
   onAuthDataReceived?: (data: AuthData) => void;
-  isViewApplication: boolean;
+  isViewApplication?: boolean;
 }
 
 const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({

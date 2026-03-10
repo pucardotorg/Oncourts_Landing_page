@@ -4,7 +4,7 @@ import {
   callETreasury,
   callSearchBill,
 } from "../services/openApiPaymentService";
-import type { BillResponse } from "../types";
+import type { BillResponse, AuthData } from "../types";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -18,6 +18,7 @@ export interface PaymentHookParams {
   };
   /** When "applicationSubmission" the modal is NOT auto-closed after payment */
   scenario?: string;
+  authData: AuthData | null;
 }
 
 export interface PaymentHookReturn {
@@ -44,11 +45,12 @@ function isMockEnabled(): boolean {
 
 // ─── Hook ────────────────────────────────────────────────────────────────────
 
-const useOpenApiPaymentProcess = ({
+const usePaymentProcess = ({
   tenantId,
   consumerCode,
   service,
   scenario,
+  authData,
 }: PaymentHookParams): PaymentHookReturn => {
   const [paymentLoader, setPaymentLoader] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -57,12 +59,13 @@ const useOpenApiPaymentProcess = ({
   // ── Fetch bill ──────────────────────────────────────────────────────────
 
   const fetchBill = useCallback(async () => {
+    if (!authData) throw new Error("Missing auth data");
     return callFetchBill({
       consumerCode: [consumerCode],
       tenantId,
       businessService: service,
-    });
-  }, [consumerCode, tenantId, service]);
+    }, authData);
+  }, [consumerCode, tenantId, service, authData]);
 
   // ── Poll until the bill is marked PAID or retries exhausted ─────────────
 
@@ -79,11 +82,12 @@ const useOpenApiPaymentProcess = ({
 
         const intervalId = setInterval(async () => {
           try {
+            if (!authData) return;
             const result = await callSearchBill({
               tenantId,
               consumerCode: [consumerCode || billConsumerCode || ""],
               service: service || billBusinessService || "",
-            });
+            }, authData);
 
             if (result?.Bill?.[0]?.status === "PAID") {
               setPaymentLoader(false);
@@ -107,7 +111,7 @@ const useOpenApiPaymentProcess = ({
         }, intervalMs);
       });
     },
-    [tenantId, consumerCode, service],
+    [tenantId, consumerCode, service, authData],
   );
 
   // ── Mock payment flow ──────────────────────────────────────────────────
@@ -235,11 +239,12 @@ const useOpenApiPaymentProcess = ({
             if (retryCount < maxRetries) {
               retryCount += 1;
               try {
+                if (!authData) return;
                 const result = await callSearchBill({
                   tenantId,
                   consumerCode: [consumerCode || billConsumerCode],
                   service: service || billBusinessService,
-                });
+                }, authData);
 
                 if (result?.Bill?.[0]?.status === "PAID") {
                   setBillPaymentStatus("PAID");
@@ -265,7 +270,7 @@ const useOpenApiPaymentProcess = ({
         if (scenario !== "applicationSubmission") setShowPaymentModal(false);
       });
     },
-    [tenantId, consumerCode, service, scenario],
+    [tenantId, consumerCode, service, scenario, authData],
   );
 
   // ── Open payment portal (main entry point) ────────────────────────────
@@ -273,6 +278,7 @@ const useOpenApiPaymentProcess = ({
   const openPaymentPortal = useCallback(
     async (bill: BillResponse): Promise<boolean> => {
       try {
+        if (!authData) throw new Error("Missing auth data");
         const billDetail = bill?.Bill?.[0]?.billDetails?.[0];
 
         const gateway = await callETreasury({
@@ -284,7 +290,7 @@ const useOpenApiPaymentProcess = ({
           paidBy: billDetail?.additionalDetails?.payer || "",
           tenantId,
           mockEnabled: isMockEnabled(),
-        });
+        }, authData);
 
         if (!gateway?.payload?.url) {
           console.error("Error calling e-Treasury — no payload URL returned.");
@@ -307,7 +313,7 @@ const useOpenApiPaymentProcess = ({
         return false;
       }
     },
-    [tenantId, consumerCode, service, handleMockPayment, handleRealPayment],
+    [tenantId, consumerCode, service, handleMockPayment, handleRealPayment, authData],
   );
 
   return {
@@ -320,4 +326,4 @@ const useOpenApiPaymentProcess = ({
   };
 };
 
-export default useOpenApiPaymentProcess;
+export default usePaymentProcess;

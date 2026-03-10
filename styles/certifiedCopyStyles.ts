@@ -76,7 +76,7 @@ export const ctcStyles = {
   btnPrimaryActive: "bg-[#007E7E] hover:bg-[#0e5d55]",
   btnPrimaryDisabled: "bg-[#969696] cursor-not-allowed",
   btnNextActive: "bg-[#0F766E] hover:bg-[#0e5d55]",
-  btnNextDisabled: "bg-[#EEF2F6] text-[#94A3B8] cursor-not-allowed",
+  btnNextDisabled: "bg-[#969696] cursor-not-allowed",
 
   // Mobile-specific button overrides (pre-search row only)
   btnMobileGrid: "grid grid-cols-2 gap-2 mb-2",
@@ -88,28 +88,28 @@ export const ctcStyles = {
   modalOverlay:
     "fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4",
   modalContainer:
-    "bg-white rounded-lg w-full max-w-[80%] h-[80vh] max-h-[70vh] shadow-2xl flex flex-col overflow-hidden animate-fadeIn",
+    "bg-white rounded-lg w-full max-w-[80%] h-[85vh] max-h-[85vh] shadow-2xl flex flex-col overflow-hidden animate-fadeIn",
   modalHeader:
     "flex justify-between items-center p-4 sm:p-6 border-b border-[#E8E8E8]",
   modalHeaderTitle: "text-2xl font-bold text-[#0A0A0A] font-roboto",
   modalCloseBtn: "text-gray-400 hover:text-gray-600 transition-colors p-1",
   modalBody: "flex flex-1 overflow-hidden flex-col md:flex-row",
   modalSidebar:
-    "w-full md:w-[320px] lg:w-[350px] border-r border-[#E8E8E8] flex flex-col h-full bg-white",
+    "w-full md:w-[30%] lg:w-[30%] border-r border-[#E8E8E8] flex flex-col h-full bg-white",
   modalSidebarHeader: "p-4 border-b border-gray-50 flex-shrink-0",
   modalSidebarTitle: "text-lg font-bold text-[#0A0A0A] mb-3",
   modalSearchInput:
     "w-full pl-9 pr-3 py-2 border border-gray-200 rounded-md text-[16px] focus:outline-none focus:ring-1 focus:ring-teal-600 focus:border-teal-600 bg-gray-50/50",
-  modalDocList: "flex-1 overflow-y-auto px-4 py-2 custom-scrollbar",
-  modalSection: "mb-2 border-b border-[#E8E8E8] pb-2 last:border-b-0",
-  modalSectionBtn: "w-full flex justify-between items-center py-2.5 text-left",
-  modalSectionTitle: "text-lg font-semibold text-[#0A0A0A]",
-  modalDocItems: "flex flex-col gap-1 ml-1 mt-1 mb-2",
-  modalDocLabel: "flex items-start gap-2.5 py-1.5 cursor-pointer group",
+  modalDocList: "flex-1 overflow-y-auto px-5 py-3 custom-scrollbar [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-[#f9fafb] [&::-webkit-scrollbar-thumb]:bg-[#c5c5c5] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#a8a8a8]",
+  modalSection: "mb-3 border-b border-[#E8E8E8] pb-3 last:border-b-0",
+  modalSectionBtn: "w-full flex justify-between items-center py-2 text-left hover:bg-gray-50 rounded-md transition-colors",
+  modalSectionTitle: "text-lg font-bold text-[#0A0A0A]",
+  modalDocItems: "flex flex-col gap-2 ml-2 mt-2 mb-2",
+  modalDocLabel: "flex items-center gap-3 py-2 px-2 cursor-pointer group hover:bg-gray-50 rounded-md transition-colors",
   modalDocCheckbox:
-    "mt-1 w-[14px] h-[14px] rounded-sm border-[#CBD5E1] text-teal-600 focus:ring-teal-600 focus:ring-offset-0 cursor-pointer",
+    "w-4 h-4 rounded-sm border-[#CBD5E1] text-teal-600 focus:ring-teal-600 focus:ring-offset-0 cursor-pointer flex-shrink-0",
   modalDocText:
-    "text-lg text-[#3D3C3C] group-hover:text-gray-900 transition-colors pt-[1px] leading-tight",
+    "text-[17px] text-[#3D3C3C] group-hover:text-gray-900 transition-colors pt-[1px] leading-snug",
   modalPreviewArea:
     "flex-1 bg-[#FAFAFA] flex items-center justify-center p-6 m-4 md:m-0 h-full",
   modalPreviewText: "text-[#64748B] text-xl leading-relaxed text-center max-w-[80%]",
@@ -300,6 +300,7 @@ export const ctcText = {
     sidebarTitle: "CTC_SELECT_DOC_SIDEBAR_TITLE",
     searchPlaceholder: "CTC_SELECT_DOC_SEARCH_PLACEHOLDER",
     previewText: "CTC_SELECT_DOC_PREVIEW_TEXT",
+    selectADocumentToPreview: "SELECT_A_DOCUMENT_TO_PREVIEW",
     goBack: "CTC_SELECT_DOC_GO_BACK",
     selectDocBtn: "CTC_SELECT_DOC_BTN",
   },
@@ -344,7 +345,6 @@ export const ctcText = {
     submissionDate: "CTC_SUCCESS_SUBMISSION_DATE",
     submissionDateValue: "CTC_SUCCESS_SUBMISSION_DATE_VALUE",
     submissionId: "CTC_SUCCESS_SUBMISSION_ID",
-    submissionIdValue: "CTC_SUCCESS_SUBMISSION_ID_VALUE",
     copy: "CTC_SUCCESS_COPY",
     copied: "CTC_SUCCESS_COPIED",
     download: "CTC_SUCCESS_DOWNLOAD",

@@ -1,5 +1,42 @@
 // ─── Payment Data Models ─────────────────────────────────────────────────────
 
+export interface UserInfo {
+  id?: number;
+  uuid?: string;
+  userName?: string;
+  name?: string;
+  mobileNumber?: string;
+  emailId?: string | null;
+  locale?: string | null;
+  type?: string;
+  roles?: { name: string; code: string; tenantId: string }[];
+  active?: boolean;
+  tenantId?: string;
+  permanentCity?: string | null;
+}
+
+export interface RequestInfoData {
+  apiId?: string;
+  authToken?: string;
+  userInfo?: UserInfo;
+  msgId?: string;
+  plainAccessRequest?: Record<string, unknown>;
+}
+
+export interface HeadBreakdownItem {
+  name: string;
+  amount: number;
+}
+
+export interface HeadBreakdownResponse {
+  TreasuryHeadMapping?: {
+    headAmountMapping?: {
+      breakUpList?: HeadBreakdownItem[];
+      totalAmount?: number;
+    };
+  };
+}
+
 export interface FetchBillCriteria {
   consumerCode: string[];
   tenantId: string;
@@ -44,12 +81,4 @@ export interface ChallanPayload {
 
 export interface ETreasuryResponse {
   payload: ChallanPayload;
-}
-
-export interface PaymentReceiptResponse {
-  Document?: {
-    fileStore?: string;
-    [key: string]: unknown;
-  };
-  [key: string]: unknown;
 }

@@ -17,7 +17,9 @@ export default async function handler(
   }
 
   try {
-    const response = await fetch(API_ENDPOINTS.PAYMENT.SEARCH_BILL, {
+    const qs = req.url?.split("?")[1] || "";
+    const url = `${API_ENDPOINTS.PAYMENT.SEARCH_BILL}?${qs}`;
+    const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

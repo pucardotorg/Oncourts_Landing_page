@@ -26,11 +26,25 @@ export default async function handler(
       body: JSON.stringify(req.body),
     });
 
+    const contentType = response.headers.get("content-type") || "";
+
     if (!response?.ok) {
+      const errorBody = await response?.text();
+      if (contentType.includes("text/html")) {
+        res.setHeader("Content-Type", "text/html");
+        return res.status(response?.status).send(errorBody);
+      }
       return res.status(response?.status).json({
         error: `API error: ${response?.status}`,
-        message: await response?.text(),
+        message: errorBody,
       });
+    }
+
+    // Forward HTML responses as-is (e.g. payment confirmation pages)
+    if (contentType.includes("text/html")) {
+      const html = await response.text();
+      res.setHeader("Content-Type", "text/html");
+      return res.status(200).send(html);
     }
 
     const data = await response?.json();

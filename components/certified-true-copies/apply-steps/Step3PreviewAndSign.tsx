@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import AddSignatureModal from "../AddSignatureModal";
 import PaymentModal from "../PaymentModal";
@@ -8,10 +8,10 @@ import type { CaseResult } from "../../../types/case/models";
 import FormActions from "../FormActions";
 import { ctcStyles, ctcText } from "../../../styles/certifiedCopyStyles";
 import { useSafeTranslation } from "../../../hooks/useSafeTranslation";
-import useOpenApiPaymentProcess from "../../../hooks/useOpenApiPaymentProcess";
-import { fetchBillFileStoreId } from "../../../services/openApiPaymentService";
+import usePaymentProcess from "../../../hooks/usePaymentProcess";
 import { updateCtcApplication } from "../../../services/ctcService";
 import type { CtcApplication, AuthData } from "../../../types";
+import DocViewWrapper from "../DocViewWrapper";
 
 interface Step3PreviewAndSignProps {
   onBack: () => void;
@@ -21,6 +21,7 @@ interface Step3PreviewAndSignProps {
   showErrorToast?: (message: string) => void;
   caseResult?: CaseResult | null;
   authData?: AuthData | null;
+  onSaving?: (saving: boolean) => void;
 }
 
 const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
@@ -31,6 +32,7 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
   showErrorToast,
   caseResult,
   authData,
+  onSaving,
 }) => {
   const router = useRouter();
   const { t } = useSafeTranslation();
@@ -38,6 +40,136 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
   const [showSignatureModal, setShowSignatureModal] = useState(false);
   const [isApplicationSigned, setIsApplicationSigned] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [isPdfLoading, setIsPdfLoading] = useState(false);
+  const [pdfBlob, setPdfBlob] = useState<Blob | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [pdfFileStoreId, setPdfFileStoreId] = useState<string>("");
+
+  const ctcApplicationFileStoreId = useMemo(() => {
+    return (
+      ctcApplication?.documents?.find(
+        (d) => d.documentType === "SIGNED_CTC_APPLICATION",
+      )?.fileStore ||
+      ctcApplication?.documents?.find(
+        (d) => d.documentType === "CTC_APPLICATION",
+      )?.fileStore ||
+      ""
+    );
+  }, [ctcApplication]);
+
+  const [signedFileStoreId, setSignedFileStoreId] = useState<string | null>(
+    null,
+  );
+  const [signedMethod, setSignedMethod] = useState<
+    "ESIGN" | "UPLOAD_SIGNED_COPY" | null
+  >(null);
+
+  useEffect(() => {
+    const isSignSuccess = sessionStorage.getItem("isSignSuccess");
+    const storedESignObj = sessionStorage.getItem("signStatus");
+    const parsedESignObj = storedESignObj ? JSON.parse(storedESignObj) : [];
+
+    if (isSignSuccess) {
+      const matchedSignStatus = parsedESignObj?.find(
+        (obj: { name: string; isSigned: boolean }) =>
+          obj.name === "Signature of Applicant" && obj.isSigned === true,
+      );
+      if (isSignSuccess === "success" && matchedSignStatus) {
+        const fileStoreId =
+          sessionStorage.getItem("esignFileStoreId") ||
+          sessionStorage.getItem("fileStoreId");
+        if (fileStoreId) {
+          setSignedFileStoreId(fileStoreId);
+          setSignedMethod("ESIGN");
+          setIsApplicationSigned(true);
+          setShowSignatureModal(true);
+        }
+      }
+    }
+
+    const cleanupTimer = setTimeout(() => {
+      sessionStorage.removeItem("isSignSuccess");
+      sessionStorage.removeItem("signStatus");
+      sessionStorage.removeItem("fileStoreId");
+      sessionStorage.removeItem("esignFileStoreId");
+    }, 2000);
+
+    return () => clearTimeout(cleanupTimer);
+  }, []);
+
+  const hasFetchedPdf = React.useRef(false);
+
+  useEffect(() => {
+    if (!ctcApplication || !authData) return;
+
+    // Skip PDF blob fetch if status is PENDING_SIGN or PENDING_PAYMENT
+    // (document already exists in filestore)
+    const status = ctcApplication?.status;
+    if (status === "PENDING_SIGN" || status === "PENDING_PAYMENT") return;
+
+    // Prevent double-fetch
+    if (hasFetchedPdf.current) return;
+    hasFetchedPdf.current = true;
+
+    setIsPdfLoading(true);
+    onSaving?.(true);
+
+    const fetchPdf = async () => {
+      try {
+        const payload = {
+          RequestInfo: {
+            apiId: "Dristi",
+            authToken: authData.authToken,
+            msgId: `${Date.now()}|en_IN`,
+            plainAccessRequest: {},
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            userInfo: authData.userInfo as any,
+          },
+          criteria: {
+            tenantId: tenantId,
+            courtId: ctcApplication.courtId,
+            filingNumber: ctcApplication.filingNumber,
+            ctcApplicationNumber: ctcApplication.ctcApplicationNumber,
+          },
+          pagination: {
+            limit: 10,
+            offset: 0,
+          },
+        };
+
+        const res = await fetch(
+          `/api/pdf/ctc-applications?tenantId=${tenantId}&qrCode=false&courtId=${ctcApplication.courtId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          },
+        );
+
+        if (!res.ok) throw new Error("Failed to generate PDF");
+
+        const blob = await res.blob();
+        setPdfBlob(blob);
+      } catch (err) {
+        console.error("Failed to generate CTC PDF:", err);
+        showErrorToast?.("Failed to load document preview.");
+        hasFetchedPdf.current = false; // allow retry on error
+      } finally {
+        setIsPdfLoading(false);
+        onSaving?.(false);
+      }
+    };
+
+    fetchPdf();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    ctcApplication?.ctcApplicationNumber,
+    ctcApplication?.status,
+    authData,
+    tenantId,
+  ]);
 
   // ─── Payment hook ─────────────────────────────────────────────────────
   const {
@@ -46,12 +178,20 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
     paymentLoader,
     showPaymentModal,
     setShowPaymentModal,
-  } = useOpenApiPaymentProcess({
+  } = usePaymentProcess({
     tenantId,
-    consumerCode:
-      ctcApplication?.ctcApplicationNumber || "KL-000619-2026-AP2_APPL_FILING",
-    service: "application-voluntary-submission",
+    consumerCode: `${ctcApplication?.ctcApplicationNumber}_CTC_APPLICATION_FEE`,
+    service: "ctc-default",
+    authData: authData || null,
   });
+
+  useEffect(() => {
+    if (ctcApplication?.status === "PENDING_SIGN") {
+      setShowSignatureModal(true);
+    } else if (ctcApplication?.status === "PENDING_PAYMENT") {
+      setShowPaymentModal(true);
+    }
+  }, [ctcApplication?.status, setShowPaymentModal]);
 
   const handleMakePayment = async () => {
     try {
@@ -67,59 +207,103 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
       const paymentStatus = await openPaymentPortal(bill);
 
       if (paymentStatus) {
-        // Fetch receipt file-store ID after successful payment
-        try {
-          const receipt = await fetchBillFileStoreId({
-            billId: bill?.Bill?.[0]?.id as string,
-            tenantId,
-          });
-          const fileStoreId = receipt?.Document?.fileStore;
-          if (fileStoreId) {
-            console.log("Receipt fileStoreId:", fileStoreId);
-            // TODO: store fileStoreId for download if needed
-          }
-        } catch (err) {
-          console.error("Failed to fetch payment receipt:", err);
-        }
-
         setShowPaymentModal(false);
         setShowSuccessModal(true);
       } else {
         console.error("Payment was not completed.");
+        showErrorToast?.("Payment was not completed. Please try again.");
       }
     } catch (err) {
       console.error("Payment flow error:", err);
+      showErrorToast?.("Payment flow failed. Please try again.");
     }
   };
 
-  /** Go back — call _update with EDIT action to revert to DRAFT_IN_PROGRESS */
-  const handleGoBack = async () => {
-    if (ctcApplication?.ctcApplicationNumber && ctcApplication && authData) {
-      try {
-        const res = await updateCtcApplication(
-          {
-            ...ctcApplication,
-            tenantId,
-            ctcApplicationNumber: ctcApplication?.ctcApplicationNumber,
-            workflow: { action: "EDIT" },
-          },
-          authData,
-        );
-        if (res?.ctcApplication) {
-          onApplicationUpdate?.(res?.ctcApplication);
-        }
-      } catch (err) {
-        console.error("EDIT action failed:", err);
-        showErrorToast?.("Failed to go back. Please try again.");
-        return; // Don't navigate on error
-      }
-    }
+  /** Go back — simply navigate to previous step without any API call */
+  const handleGoBack = () => {
     onBack();
   };
 
-  const handleOpenSignature = () => {
-    setIsApplicationSigned(false);
-    setShowSignatureModal(true);
+  const handleOpenSignature = async () => {
+    if (!pdfBlob) {
+      showErrorToast?.("Please wait for the document to finish generating.");
+      return;
+    }
+
+    if (pdfFileStoreId) {
+      // If we already uploaded and submitted during a previous click, just open modal.
+      setIsApplicationSigned(false);
+      setShowSignatureModal(true);
+      return;
+    }
+
+    setIsUploading(true);
+    onSaving?.(true);
+    try {
+      // 1. Upload blob to filestore
+      const file = new File([pdfBlob], "ctc_application.pdf", {
+        type: pdfBlob.type,
+      });
+      const formData = new FormData();
+      formData.append("file", file, file.name);
+      formData.append("tenantId", tenantId);
+      formData.append("module", "DRISTI");
+
+      const res = await fetch(`/api/filestore/upload`, {
+        method: "POST",
+        headers: authData?.authToken
+          ? { "auth-token": authData.authToken }
+          : {},
+        body: formData,
+      });
+
+      if (!res.ok) {
+        showErrorToast?.("File upload failed. Please try again.");
+        return;
+      }
+
+      const data = await res.json();
+      const newFileStoreId = data?.files?.[0]?.fileStoreId;
+
+      if (!newFileStoreId) {
+        showErrorToast?.("Missing fileStoreId in upload response.");
+        return;
+      }
+
+      setPdfFileStoreId(newFileStoreId);
+
+      // 2. Save fileStoreId in documents and call updateCtc with SUBMIT
+      if (ctcApplication && authData) {
+        const prevDocs = ctcApplication.documents || [];
+        const newDoc = {
+          fileStore: newFileStoreId,
+          documentType: "CTC_APPLICATION",
+          tenantId,
+        };
+
+        const updatedApp: CtcApplication = {
+          ...ctcApplication,
+          documents: [...prevDocs, newDoc],
+          tenantId,
+          workflow: { action: "SUBMIT" },
+        };
+
+        const submitRes = await updateCtcApplication(updatedApp, authData);
+        if (submitRes?.ctcApplication) {
+          onApplicationUpdate?.(submitRes.ctcApplication);
+        }
+      }
+
+      // 3. Open AddSignatureModal
+      setIsApplicationSigned(false);
+      setShowSignatureModal(true);
+    } catch (err) {
+      console.error("Filestore upload / submit error:", err);
+      showErrorToast?.("Failed to upload document for signing.");
+    } finally {
+      setIsUploading(false);
+      onSaving?.(false);
+    }
   };
 
   return (
@@ -128,67 +312,64 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
         <div className="flex flex-col gap-6">
           <CaseSummaryRow t={t} caseResult={caseResult} />
 
-          {/* Scrollable on mobile */}
-          <div className="overflow-x-auto">
-            <div className="flex flex-col gap-8 text-center text-[#1E293B] font-medium text-[16px] px-2 sm:px-8 mt-2 min-w-[320px]">
-              <p className="font-bold leading-relaxed text-[17px]">
-                Before The Special Court Of Judicial Magistrate of the First
-                Class, for the trial of cases under
-                <br />
-                section 138 of NIA Act, 1881 at Kollam (&quot;24X7 ON
-                Court&quot;)
-              </p>
-
-              <div className="w-full border-t border-l border-r border-[#1E293B] mt-4 flex flex-col text-[15px]">
-                <div className="grid grid-cols-[1fr_2fr] border-b border-[#1E293B]">
-                  <div className="p-4 border-r border-[#1E293B] text-left bg-[#F8FAFC]">
-                    Complainant 1
-                  </div>
-                  <div className="p-4 text-left">Ravi Kumar</div>
-                </div>
-                <div className="grid grid-cols-[1fr_2fr] border-b border-[#1E293B]">
-                  <div className="p-4 border-r border-[#1E293B] text-left bg-[#F8FAFC] flex items-center">
-                    Advocate
-                  </div>
-                  <div className="p-4 text-left">Suresh TN</div>
-                </div>
-                <div className="grid grid-cols-[1fr_2fr] border-b border-[#1E293B] h-12 bg-white">
-                  <div className="border-r border-[#1E293B] h-full bg-[#F8FAFC]"></div>
-                  <div></div>
-                </div>
-                <div className="grid grid-cols-[1fr_2fr] border-b border-[#1E293B]">
-                  <div className="p-4 border-r border-[#1E293B] text-left bg-[#F8FAFC]">
-                    Accused 1
-                  </div>
-                  <div className="p-4 text-left">Nithish J</div>
-                </div>
-                <div className="grid grid-cols-[1fr_2fr] border-b border-[#1E293B]">
-                  <div className="p-4 border-r border-[#1E293B] text-left bg-[#F8FAFC] flex items-center">
-                    Advocate
-                  </div>
-                  <div className="p-4 text-left">Praveen Kumar</div>
-                </div>
-                <div className="grid grid-cols-[1fr_2fr] border-b border-[#1E293B] h-12 bg-white">
-                  <div className="border-r border-[#1E293B] h-full bg-[#F8FAFC]"></div>
-                  <div></div>
-                </div>
-                <div className="grid grid-cols-[1fr_2fr] border-b border-[#1E293B]">
-                  <div className="p-4 border-r border-[#1E293B] text-left bg-[#F8FAFC] flex items-center">
-                    Offence
-                  </div>
-                  <div className="p-4 text-left">
-                    S. 138 of the Negotiable Instruments Act, 1881
-                  </div>
-                </div>
+          {/* PDF Preview Area */}
+          <div className="w-full flex-1 min-h-[400px] flex items-center justify-center bg-gray-50 border border-gray-200 rounded-lg">
+            {isPdfLoading ? (
+              <div className="flex flex-col items-center gap-3">
+                <svg
+                  className="animate-spin h-8 w-8 text-teal-600"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  />
+                </svg>
+                <p className="text-gray-500 font-medium">
+                  Generating Document...
+                </p>
               </div>
-            </div>
+            ) : ctcApplicationFileStoreId ? (
+              <div className="flex-1 w-full h-full pb-4">
+                <DocViewWrapper
+                  fileStoreId={ctcApplicationFileStoreId}
+                  tenantId={tenantId}
+                  authToken={authData?.authToken}
+                />
+              </div>
+            ) : pdfBlob ? (
+              <div className="flex-1 w-full h-full pb-4">
+                <DocViewWrapper blob={pdfBlob} />
+              </div>
+            ) : (
+              <p className="text-gray-500">
+                Document preview is not available.
+              </p>
+            )}
           </div>
 
           <FormActions
             secondaryLabel={ctcText.step3.goBack}
             onSecondary={handleGoBack}
-            primaryLabel={ctcText.step3.eSign}
+            primaryLabel={isUploading ? "Uploading..." : ctcText.step3.eSign}
             onPrimary={handleOpenSignature}
+            primaryDisabled={
+              isPdfLoading ||
+              isUploading ||
+              (!pdfBlob && !ctcApplicationFileStoreId)
+            }
+            isSecondaryDisabled={isUploading}
             primaryVariant="proceed"
           />
         </div>
@@ -196,32 +377,124 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
 
       <AddSignatureModal
         isOpen={showSignatureModal}
-        onClose={() => setShowSignatureModal(false)}
+        onClose={async () => {
+          // Call EDIT to revert status, then close modal (stay on Step 3)
+          if (
+            ctcApplication?.ctcApplicationNumber &&
+            ctcApplication &&
+            authData
+          ) {
+            try {
+              onSaving?.(true);
+              // Mark all existing documents as inactive
+              const inactiveDocs = (ctcApplication.documents || []).map(
+                (d) => ({ ...d, isActive: false }),
+              );
+              const res = await updateCtcApplication(
+                {
+                  ...ctcApplication,
+                  documents: inactiveDocs,
+                  tenantId,
+                  ctcApplicationNumber: ctcApplication?.ctcApplicationNumber,
+                  workflow: { action: "EDIT" },
+                },
+                authData,
+              );
+              if (res?.ctcApplication) {
+                onApplicationUpdate?.(res?.ctcApplication);
+              }
+            } catch (err) {
+              console.error("EDIT action failed:", err);
+              showErrorToast?.("Failed to go back. Please try again.");
+            } finally {
+              onSaving?.(false);
+            }
+          }
+          setShowSignatureModal(false);
+        }}
         isSigned={isApplicationSigned}
-        onSign={() => setIsApplicationSigned(true)}
-        onProceed={() => {
+        onSignSuccess={(fileId, method) => {
+          setSignedFileStoreId(fileId);
+          setSignedMethod(method);
+          setIsApplicationSigned(true);
+        }}
+        onProceed={async () => {
+          if (ctcApplication && authData && signedFileStoreId && signedMethod) {
+            try {
+              const prevDocs = ctcApplication.documents || [];
+              // Mark CTC_APPLICATION docs as inactive when adding SIGNED_CTC_APPLICATION
+              const updatedPrevDocs = prevDocs.map((d) => ({
+                ...d,
+                isActive:
+                  d.documentType === "CTC_APPLICATION" ? false : d.isActive,
+              }));
+              const newDoc = {
+                fileStoreId: signedFileStoreId,
+                documentType: "SIGNED_CTC_APPLICATION",
+                tenantId,
+              };
+
+              const updatedApp: CtcApplication = {
+                ...ctcApplication,
+                documents: [...updatedPrevDocs, newDoc],
+                tenantId,
+                workflow: { action: signedMethod },
+              };
+
+              await updateCtcApplication(updatedApp, authData);
+              if (onApplicationUpdate) {
+                onApplicationUpdate(updatedApp);
+              }
+            } catch (err) {
+              console.error(
+                "Failed to update application with signature:",
+                err,
+              );
+              showErrorToast?.("Failed to save signature. Please try again.");
+              return; // block proceeding on error
+            }
+          }
+
           setShowSignatureModal(false);
           setShowPaymentModal(true);
         }}
+        authData={authData || null}
+        fileStoreId={pdfFileStoreId}
+        tenantId={tenantId}
       />
 
       <PaymentModal
         isOpen={showPaymentModal}
-        onClose={() => setShowPaymentModal(false)}
+        onClose={() => {
+          setShowPaymentModal(false);
+          router.replace("/certified-true-copies");
+        }}
         onSkip={() => {
           setShowPaymentModal(false);
           router.push("/certified-true-copies");
         }}
         onMakePayment={handleMakePayment}
         paymentLoader={paymentLoader}
+        authData={authData || null}
+        tenantId={tenantId}
+        consumerCode={
+          ctcApplication?.ctcApplicationNumber
+            ? `${ctcApplication.ctcApplicationNumber}_CTC_APPLICATION_FEE`
+            : ""
+        }
+        showErrorToast={showErrorToast}
       />
 
       <SuccessModal
         isOpen={showSuccessModal}
-        onClose={() => setShowSuccessModal(false)}
-        onViewStatus={() => {
+        applicationNumber={ctcApplication?.ctcApplicationNumber || ""}
+        onClose={() => {
           setShowSuccessModal(false);
-          router.push("/certified-true-copies");
+          router.replace("/certified-true-copies");
+        }}
+        onViewStatus={() => {
+          router.replace("/certified-true-copies/view-status-application");
+          setShowSuccessModal(false);
         }}
       />
     </>

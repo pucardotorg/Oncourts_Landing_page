@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import SelectDocumentsModal from "../SelectDocumentsModal";
 import CaseSummaryRow from "../CaseSummaryRow";
 import FormActions from "../FormActions";
@@ -12,7 +12,7 @@ import type {
 } from "../../../types";
 import { useSafeTranslation } from "../../../hooks/useSafeTranslation";
 import { svgIcons } from "../../../data/svgIcons";
-import { updateCtcApplication, previewDoc } from "../../../services/ctcService";
+import { updateCtcApplication } from "../../../services/ctcService";
 
 interface Step2DocumentDetailsProps {
   isParty: boolean;
@@ -26,6 +26,8 @@ interface Step2DocumentDetailsProps {
   showErrorToast?: (message: string) => void;
   caseResult?: CaseResult | null;
   authData?: AuthData | null;
+  bundleNodes: CaseBundleNode[];
+  onSaving?: (saving: boolean) => void;
 }
 
 const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
@@ -40,58 +42,26 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
   showErrorToast,
   caseResult,
   authData,
+  bundleNodes,
+  onSaving,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { t } = useSafeTranslation();
   const [showModal, setShowModal] = useState(false);
-  const [bundleNodes, setBundleNodes] = useState<CaseBundleNode[]>([]);
-  const [isLoadingDocs, setIsLoadingDocs] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const { uploadedFileName, selectedDocuments } = step2;
 
-  // Fetch document tree from preview API on mount
-  // useEffect(() => {
-  //   const fetchDocTree = async () => {
-  //     const filingNumber = ctcApplication?.filingNumber;
-  //     const courtId = ctcApplication?.courtId;
-  //     if (!filingNumber || !courtId) {
-  //       if (ctcApplication?.caseBundleNodes?.length) {
-  //         setBundleNodes(ctcApplication?.caseBundleNodes as CaseBundleNode[]);
-  //       }
-  //       return;
-  //     }
-  //     if (!authData) {
-  //       showErrorToast?.("Missing authentication details.");
-  //       return;
-  //     }
-  //     try {
-  //       setIsLoadingDocs(true);
-  //       const res = await previewDoc(
-  //         {
-  //           filingNumber,
-  //           courtId,
-  //           ctcApplicationNumber: applicationNumber || undefined,
-  //         },
-  //         authData,
-  //       );
-  //       if (res?.caseBundleNodes?.length) {
-  //         setBundleNodes(res?.caseBundleNodes as CaseBundleNode[]);
-  //       } else if (ctcApplication?.caseBundleNodes?.length) {
-  //         setBundleNodes(ctcApplication?.caseBundleNodes as CaseBundleNode[]);
-  //       }
-  //     } catch (err) {
-  //       console.error("Failed to fetch document tree:", err);
-  //       showErrorToast?.("Failed to load documents. Please try again.");
-  //       if (ctcApplication?.caseBundleNodes?.length) {
-  //         setBundleNodes(ctcApplication?.caseBundleNodes as CaseBundleNode[]);
-  //       }
-  //     } finally {
-  //       setIsLoadingDocs(false);
-  //     }
-  //   };
-  //   fetchDocTree();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [ctcApplication?.filingNumber, ctcApplication?.courtId]);
+  // Helper to localize title with a number suffix (e.g. "VAKALATNAMA_HEADING 1" -> "Vakalat 1")
+  const localizeTitle = (title: string): string => {
+    const match = title.trim().match(/^(.*?)\s+(\d+)$/);
+    if (match) {
+      const baseTitle = match[1];
+      const number = match[2];
+      return `${t(baseTitle)} ${number}`;
+    }
+    return t(title);
+  };
 
   /** Resolve a node ID back to its display title from the bundle tree */
   const getTitleById = (id: string, nodes: CaseBundleNode[]): string => {
@@ -105,6 +75,33 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
     return id;
   };
 
+  /** Recursively builds a new tree containing ONLY the selected node IDs and their direct parental path */
+  const filterBundleNodesBySelection = (
+    nodes: CaseBundleNode[],
+    selectedIds: string[],
+  ): CaseBundleNode[] => {
+    const result: CaseBundleNode[] = [];
+
+    for (const node of nodes) {
+      if (selectedIds.includes(node.id)) {
+        // If this exact node is selected, include it (without checking children to match exact leaf)
+        result.push({ ...node, children: node.children ? [] : undefined });
+      } else if (node.children) {
+        // If not selected, check if any of its descendants are selected
+        const filteredChildren = filterBundleNodesBySelection(
+          node.children,
+          selectedIds,
+        );
+        if (filteredChildren.length > 0) {
+          // Keep the parental structural node but only with the pruned descendants
+          result.push({ ...node, children: filteredChildren });
+        }
+      }
+    }
+
+    return result;
+  };
+
   const canProceed =
     (isParty || Boolean(uploadedFileName)) && selectedDocuments?.length > 0;
 
@@ -113,17 +110,23 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
       selectedDocuments: selectedDocuments?.filter((d) => d !== doc),
     });
 
-  /** Call _update with SUBMIT action, then navigate to Step 3 */
+  /** Call _update with SAVE_DRAFT action, then navigate to Step 3 */
   const handleNext = async () => {
+    if (isSaving) return; // prevent double-click
     if (ctcApplication?.ctcApplicationNumber && authData) {
       try {
+        setIsSaving(true);
+        onSaving?.(true);
         const res = await updateCtcApplication(
           {
             ...ctcApplication,
             tenantId,
             ctcApplicationNumber: ctcApplication?.ctcApplicationNumber,
-            caseBundleNodes: bundleNodes as CtcApplication["caseBundleNodes"],
-            workflow: { action: "SUBMIT" },
+            selectedCaseBundle: filterBundleNodesBySelection(
+              bundleNodes,
+              selectedDocuments || [],
+            ) as CtcApplication["selectedCaseBundle"],
+            workflow: { action: "SAVE_DRAFT" },
           },
           authData,
         );
@@ -131,9 +134,12 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
           onApplicationUpdate?.(res?.ctcApplication);
         }
       } catch (err) {
-        console.error("SUBMIT failed:", err);
-        showErrorToast?.("Failed to submit application. Please try again.");
+        console.error("SAVE_DRAFT failed:", err);
+        showErrorToast?.("Failed to save application. Please try again.");
         return; // Don't navigate on error
+      } finally {
+        setIsSaving(false);
+        onSaving?.(false);
       }
     }
     onNext();
@@ -150,18 +156,14 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
         }}
         initialSelected={selectedDocuments}
         documents={bundleNodes}
+        isParty={isParty}
+        tenantId={tenantId}
+        authData={authData}
       />
 
       <div className={ctcStyles.card}>
         <div className="flex flex-col gap-8">
           <CaseSummaryRow t={t} caseResult={caseResult} />
-
-          {isLoadingDocs && (
-            <p className="text-sm text-gray-500 animate-pulse">
-              Loading documents…
-            </p>
-          )}
-
           {/* ── Two-column layout ─────────────────────────────────────────────── */}
           <div
             className={
@@ -260,10 +262,10 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
                     <div
                       key={doc}
                       className={ctcStyles.docTag}
-                      title={getTitleById(doc, bundleNodes)}
+                      title={localizeTitle(getTitleById(doc, bundleNodes))}
                     >
                       <span className={ctcStyles.docTagText}>
-                        {getTitleById(doc, bundleNodes)}
+                        {localizeTitle(getTitleById(doc, bundleNodes))}
                       </span>
                       <button
                         onClick={() => removeDocument(doc)}
@@ -282,9 +284,10 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
           <FormActions
             secondaryLabel={ctcText.step2.goBack}
             onSecondary={onBack}
-            primaryLabel={ctcText.step2.next}
+            primaryLabel={isSaving ? "Saving..." : ctcText.step2.next}
             onPrimary={handleNext}
-            primaryDisabled={!canProceed}
+            primaryDisabled={!canProceed || isSaving}
+            isSecondaryDisabled={isSaving}
             primaryVariant="next"
           />
         </div>

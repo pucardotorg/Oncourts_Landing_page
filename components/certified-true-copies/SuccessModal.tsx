@@ -5,12 +5,14 @@ import { ctcStyles, ctcText } from "../../styles/certifiedCopyStyles";
 
 interface SuccessModalProps {
   isOpen: boolean;
+  applicationNumber: string;
   onClose: () => void;
   onViewStatus: () => void;
 }
 
 const SuccessModal: React.FC<SuccessModalProps> = ({
   isOpen,
+  applicationNumber,
   onClose,
   onViewStatus,
 }) => {
@@ -30,7 +32,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
   }, [isOpen]);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(ctcText.success.submissionIdValue);
+    navigator.clipboard.writeText(applicationNumber);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -68,7 +70,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
                 {t(ctcText.success.submissionId)}
               </span>
               <div className={ctcStyles.successDetailValue}>
-                {ctcText.success.submissionIdValue}
+                {applicationNumber}
                 <button
                   onClick={handleCopy}
                   className={ctcStyles.successCopyBtn}

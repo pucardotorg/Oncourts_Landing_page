@@ -17,8 +17,12 @@ import {
   CtcApplication,
   Step1State,
   Step2State,
+  CaseBundleNode,
 } from "../../../types";
-import { searchCtcApplications } from "../../../services/ctcService";
+import {
+  searchCtcApplications,
+  previewDoc,
+} from "../../../services/ctcService";
 
 // ─── Step labels ──────────────────────────────────────────────────────────────
 
@@ -122,6 +126,57 @@ const ApplyForCertifiedCopy = () => {
   const updateStep2 = (patch: Partial<Step2State>) =>
     setStep2((prev) => ({ ...prev, ...patch }));
 
+  // ── Document bundle nodes (fetched once when entering Step 2) ────────────
+  const [bundleNodes, setBundleNodes] = useState<CaseBundleNode[]>([]);
+  const [isLoadingDocs, setIsLoadingDocs] = useState(false);
+
+  useEffect(() => {
+    if (currentStep !== 2) return;
+
+    const fetchDocTree = async () => {
+      const filingNumber = ctcApplication?.filingNumber;
+      const courtId = ctcApplication?.courtId;
+      if (!filingNumber || !courtId) {
+        if (ctcApplication?.selectedCaseBundle?.length) {
+          setBundleNodes(ctcApplication.selectedCaseBundle as CaseBundleNode[]);
+        }
+        return;
+      }
+      if (!authData) {
+        showErrorToast("Missing authentication details.");
+        return;
+      }
+      try {
+        setIsLoadingDocs(true);
+        const res = await previewDoc(
+          {
+            tenantId,
+            filingNumber,
+            courtId,
+            ctcApplicationNumber: ctcApplication?.ctcApplicationNumber,
+          },
+          authData,
+        );
+        if (res?.caseBundleNodes?.length) {
+          setBundleNodes(res.caseBundleNodes as CaseBundleNode[]);
+        } else if (ctcApplication?.selectedCaseBundle?.length) {
+          setBundleNodes(ctcApplication.selectedCaseBundle as CaseBundleNode[]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch document tree:", err);
+        showErrorToast("Failed to load documents. Please try again.");
+        if (ctcApplication?.selectedCaseBundle?.length) {
+          setBundleNodes(ctcApplication.selectedCaseBundle as CaseBundleNode[]);
+        }
+      } finally {
+        setIsLoadingDocs(false);
+      }
+    };
+
+    fetchDocTree();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStep, ctcApplication?.filingNumber, ctcApplication?.courtId]);
+
   // ─── API ──────────────────────────────────────────────────────────────────
 
   const getCourtOptions = useCallback(async () => {
@@ -165,17 +220,18 @@ const ApplyForCertifiedCopy = () => {
       }
     } catch (error) {
       console.error("Error fetching court options:", error);
+      showErrorToast("Failed to fetch court options. Please refresh.");
       setCourtOptions([]);
     } finally {
       setIsLoading(false);
     }
-  }, [tenantId]);
+  }, [tenantId, showErrorToast]);
 
   // ── Restore from URL applicationNumber ─────────────────────────────────
 
   const handleSearchCase = useCallback(
-    async (cnrOrFilingNumber: string) => {
-      if (!cnrOrFilingNumber) return;
+    async (cnrNumber: string) => {
+      if (!cnrNumber) return;
 
       setIsSearchingCase(true);
       try {
@@ -188,7 +244,7 @@ const ApplyForCertifiedCopy = () => {
             searchCaseCriteria: {
               searchType: "cnr_number",
               cnrNumberCriteria: {
-                cnrNumber: cnrOrFilingNumber?.trim(),
+                cnrNumber: cnrNumber?.trim(),
               },
             },
             offset: 0,
@@ -210,8 +266,8 @@ const ApplyForCertifiedCopy = () => {
             ...prev,
             hasSearched: true,
             caseNumber:
-              caseItem?.case_number ||
               caseItem?.courtCaseNumber ||
+              caseItem?.cmpNumber ||
               prev.caseNumber ||
               "",
           }));
@@ -227,6 +283,15 @@ const ApplyForCertifiedCopy = () => {
     },
     [showErrorToast],
   );
+
+  const getLeafIds = (nodes) => {
+    return nodes.flatMap((node) => {
+      if (node.children?.length) {
+        return getLeafIds(node.children);
+      }
+      return node.fileStoreId ? [node.id] : [];
+    });
+  };
 
   const restoreFromUrl = useCallback(
     async (appNum: string, filingNumber: string, courtId: string) => {
@@ -256,7 +321,8 @@ const ApplyForCertifiedCopy = () => {
         setStep1((prev) => ({
           ...prev,
           selectedCourt: app?.courtId || prev?.selectedCourt,
-          caseNumber: app?.filingNumber || app?.caseNumber || prev?.caseNumber,
+          caseNumber: app?.caseNumber || "",
+          cnrNumber: app?.cnrNumber || "",
           hasSearched: true,
           phoneNumber: app?.mobileNumber || prev?.phoneNumber,
           isPhoneVerified: true,
@@ -266,16 +332,9 @@ const ApplyForCertifiedCopy = () => {
         }));
 
         // Prefill Step 2 state if bundle nodes exist
-        if (app?.caseBundleNodes?.length) {
-          const selectedIds = app?.caseBundleNodes
-            ?.flatMap((node) =>
-              node?.children?.length
-                ? node?.children?.map((c) => c?.id).filter(Boolean)
-                : node?.id
-                  ? [node?.id]
-                  : [],
-            )
-            ?.filter((id): id is string => Boolean(id));
+        if (app?.selectedCaseBundle?.length) {
+          const selectedIds = getLeafIds(app.selectedCaseBundle);
+
           setStep2((prev) => ({
             ...prev,
             selectedDocuments: selectedIds || prev?.selectedDocuments,
@@ -284,26 +343,24 @@ const ApplyForCertifiedCopy = () => {
 
         // Route to the right step based on status
         const status = app?.status;
-        if (status === "PENDING_ESIGN") {
+        if (status && ["PENDING_SIGN", "PENDING_PAYMENT"].includes(status)) {
           setCurrentStep(3);
         } else if (status === "DRAFT_IN_PROGRESS") {
           setCurrentStep(1);
-        } else {
-          setCurrentStep(1);
         }
 
-        // Auto-fetch case details using filingNumber or CNR if caseResult is empty
-        const cnrOrFiling = app?.filingNumber || app?.caseNumber;
-        if (cnrOrFiling) {
-          handleSearchCase(cnrOrFiling);
+        const cnrNumber = app?.cnrNumber;
+        if (cnrNumber) {
+          handleSearchCase(cnrNumber);
         }
       } catch (err) {
         console.error("Failed to restore CTC application:", err);
+        showErrorToast("Failed to restore application details.");
       } finally {
         setIsLoading(false);
       }
     },
-    [authData, tenantId, handleSearchCase],
+    [authData, tenantId, handleSearchCase, showErrorToast],
   );
 
   useEffect(() => {
@@ -340,6 +397,13 @@ const ApplyForCertifiedCopy = () => {
     router,
   ]);
 
+  // ── Auth guard: redirect if authData is missing on Step 2/3 ────────────────
+  useEffect(() => {
+    if (currentStep > 1 && !authData) {
+      router?.replace("/certified-true-copies");
+    }
+  }, [currentStep, authData, router]);
+
   // Clear auth data and session storage when leaving the apply flow
   useEffect(() => {
     const handleRouteChange = (url: string) => {
@@ -358,11 +422,18 @@ const ApplyForCertifiedCopy = () => {
     };
   }, [router]);
 
-  const handleApplicationCreate = useCallback(
+  const handleApplicationUpdate = useCallback(
     (app: CtcApplication) => {
       sessionStorage.setItem("ctcAuthData", JSON.stringify(authData));
       setCtcApplication(app);
-      setCurrentStep(2);
+      setCurrentStep((prev) => prev + 1);
+    },
+    [authData],
+  );
+
+  const handleApplicationCreate = useCallback(
+    (app: CtcApplication) => {
+      handleApplicationUpdate(app);
       router?.replace(
         {
           pathname: router?.pathname,
@@ -377,10 +448,15 @@ const ApplyForCertifiedCopy = () => {
         { shallow: true },
       );
     },
-    [router, authData],
+    [handleApplicationUpdate, router],
   );
 
   const handleBack = () => {
+    const status = ctcApplication?.status;
+    if (status === "PENDING_SIGN" || status === "PENDING_PAYMENT") {
+      router?.replace("/certified-true-copies");
+      return;
+    }
     if (currentStep > 1) {
       setCurrentStep((curr) => curr - 1);
     } else {
@@ -394,7 +470,7 @@ const ApplyForCertifiedCopy = () => {
         <title>{t(ctcText?.apply?.pageTitle)}</title>
       </Head>
 
-      {isLoading && (
+      {(isLoading || isSearchingCase || isLoadingDocs) && (
         <div className={commonStyles?.loading?.container}>
           <div className={commonStyles?.loading?.spinner}></div>
         </div>
@@ -434,6 +510,7 @@ const ApplyForCertifiedCopy = () => {
               clearStep1={clearStep1}
               ctcApplication={ctcApplication}
               onApplicationCreate={handleApplicationCreate}
+              onApplicationUpdate={handleApplicationUpdate}
               tenantId={tenantId}
               showErrorToast={showErrorToast}
               caseResult={caseResult}
@@ -457,6 +534,8 @@ const ApplyForCertifiedCopy = () => {
               showErrorToast={showErrorToast}
               caseResult={caseResult}
               authData={authData}
+              bundleNodes={bundleNodes}
+              onSaving={setIsLoading}
             />
           )}
           {currentStep === 3 && (
@@ -468,6 +547,7 @@ const ApplyForCertifiedCopy = () => {
               showErrorToast={showErrorToast}
               caseResult={caseResult}
               authData={authData}
+              onSaving={setIsLoading}
             />
           )}
         </div>

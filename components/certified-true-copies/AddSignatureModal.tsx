@@ -1,54 +1,77 @@
 import React, { useRef, useState } from "react";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
-import useESignOpenApi from "../../hooks/useESignOpenApi";
+import useESignApi from "../../hooks/useESignApi";
 import { svgIcons } from "../../data/svgIcons";
 import BaseModal from "./BaseModal";
 import { ctcStyles, ctcText } from "../../styles/certifiedCopyStyles";
+import type { AuthData } from "../../types";
 
 interface AddSignatureModalProps {
   isOpen: boolean;
-  onClose: () => void;
+  onClose: () => Promise<void> | void;
   isSigned: boolean;
-  onSign: () => void;
-  onProceed: () => void;
+  onSignSuccess: (
+    fileStoreId: string,
+    method: "ESIGN" | "UPLOAD_SIGNED_COPY",
+  ) => void;
+  onProceed: () => Promise<void> | void;
   /** fileStoreId of the document to be e-signed via Aadhar */
-  fileStoreId?: string;
+  fileStoreId: string;
   /** Page module identifier sent to the eSign API (e.g. "CTC") */
   pageModule?: string;
+  authData: AuthData | null;
+  tenantId: string;
 }
 
 const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
   isOpen,
   onClose,
   isSigned,
-  onSign,
+  onSignSuccess,
   onProceed,
-  fileStoreId = "3c8c125e-2610-4295-bca1-ea2e69fc23b5",
-  pageModule = "ci",
+  fileStoreId,
+  pageModule = "lp",
+  authData,
+  tenantId,
 }) => {
   const { t } = useSafeTranslation();
-  const { handleEsign } = useESignOpenApi();
+  const { handleEsign } = useESignApi();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isESignLoading, setIsESignLoading] = useState(false);
+  const [isUploadLoading, setIsUploadLoading] = useState(false);
+  const [isProceedLoading, setIsProceedLoading] = useState(false);
+  const [isBackLoading, setIsBackLoading] = useState(false);
   const [eSignError, setESignError] = useState("");
+  const mockESignEnabled =
+    window?.globalConfigs?.getConfig("mockESignEnabled") === "true"
+      ? true
+      : false;
+
+  const loading =
+    isESignLoading || isUploadLoading || isProceedLoading || isBackLoading;
 
   const handleAadharESign = async () => {
+    if (mockESignEnabled) {
+      if (fileStoreId) onSignSuccess(fileStoreId, "ESIGN");
+      return;
+    }
     setIsESignLoading(true);
     setESignError("");
     try {
       const redirected = await handleEsign(
-        "Signature",
+        "Signature of Applicant",
         pageModule,
         fileStoreId,
-        "Signature",
+        authData as AuthData,
+        "Signature of Applicant",
       );
       // redirected = true → page will redirect to CDAC portal; we do nothing
       // redirected = false → API failed or no form data returned
       if (!redirected) {
         setESignError("e-Sign request failed. Please try again.");
       }
-      // Do NOT call onSign() here. After the user completes signing on the
-      // CDAC portal, they're redirected back and checkSignStatus() marks them
+      // Do NOT call onSignSuccess() here. After the user completes signing on the
+      // CDAC portal, they're redirected back and useEffect in parent marks them
       // as signed.
     } catch {
       setESignError("Something went wrong. Please try again.");
@@ -57,31 +80,111 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
     }
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      onSign();
+      const file = e.target.files[0];
+      setESignError("");
+      setIsUploadLoading(true);
+      try {
+        const formData = new FormData();
+        formData.append("file", file, file.name);
+        formData.append("tenantId", tenantId);
+        formData.append("module", "DRISTI");
+
+        const res = await fetch(
+          `/api/filestore/upload?tenantId=${tenantId}&module=DRISTI`,
+          {
+            method: "POST",
+            headers: authData?.authToken
+              ? { "auth-token": authData.authToken }
+              : {},
+            body: formData,
+          },
+        );
+
+        if (!res.ok) {
+          setESignError("File upload failed. Please try again.");
+          return;
+        }
+
+        const data = await res.json();
+        const newFileStoreId = data?.files?.[0]?.fileStoreId;
+
+        if (newFileStoreId) {
+          onSignSuccess(newFileStoreId, "UPLOAD_SIGNED_COPY");
+        } else {
+          setESignError("Missing fileStoreId in upload response.");
+        }
+      } catch (err) {
+        console.error("Filestore upload error:", err);
+        setESignError("Failed to upload the signed copy.");
+      } finally {
+        setIsUploadLoading(false);
+      }
+    }
+  };
+
+  const handleDownload = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!fileStoreId) return;
+    try {
+      const res = await fetch(
+        `/api/getFileByFileStoreId?tenantId=${tenantId}&fileStoreId=${fileStoreId}`,
+        {
+          headers: authData?.authToken
+            ? { "auth-token": authData.authToken }
+            : {},
+        },
+      );
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "ctc_application.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Failed to download file for signing:", err);
     }
   };
 
   const footer = (
     <>
       <button
-        onClick={onClose}
-        disabled={isESignLoading}
+        onClick={async () => {
+          if (isBackLoading) return;
+          setIsBackLoading(true);
+          try {
+            await onClose();
+          } finally {
+            setIsBackLoading(false);
+          }
+        }}
+        disabled={loading}
         className={ctcStyles.sigFooterBtnBack}
       >
-        {t(ctcText.addSig.backBtn)}
+        {isBackLoading ? "Loading..." : t(ctcText.addSig.backBtn)}
       </button>
       <button
-        onClick={onProceed}
-        disabled={!isSigned || isESignLoading}
+        onClick={async () => {
+          if (isProceedLoading) return;
+          setIsProceedLoading(true);
+          try {
+            await onProceed();
+          } finally {
+            setIsProceedLoading(false);
+          }
+        }}
+        disabled={!isSigned || loading}
         className={`${ctcStyles.sigFooterBtnProceed} ${
-          isSigned && !isESignLoading
+          isSigned && !loading
             ? ctcStyles.sigFooterBtnProceedActive
             : ctcStyles.sigFooterBtnProceedDisabled
         }`}
       >
-        {t(ctcText.addSig.proceedBtn)}
+        {isProceedLoading ? "Processing..." : t(ctcText.addSig.proceedBtn)}
       </button>
     </>
   );
@@ -112,7 +215,7 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
               {/* E-Sign with Aadhar button — shows spinner while loading */}
               <button
                 onClick={handleAadharESign}
-                disabled={isESignLoading}
+                disabled={loading}
                 className={`${ctcStyles.sigEsignBtn} ${
                   isESignLoading ? "opacity-60 cursor-not-allowed" : ""
                 }`}
@@ -148,13 +251,15 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
 
               <button
                 onClick={() => fileInputRef.current?.click()}
-                disabled={isESignLoading}
+                disabled={loading}
                 className={`${ctcStyles.sigUploadLink} ${
-                  isESignLoading ? "opacity-50 pointer-events-none" : ""
+                  isUploadLoading ? "opacity-50 pointer-events-none" : ""
                 }`}
               >
                 {svgIcons.UploadIcon()}
-                {t(ctcText.addSig.uploadLink)}
+                {isUploadLoading
+                  ? t("Uploading...")
+                  : t(ctcText.addSig.uploadLink)}
               </button>
               <input
                 type="file"
@@ -174,7 +279,11 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
 
             <p className={ctcStyles.sigDownloadHint}>
               {t(ctcText.addSig.downloadHint)}{" "}
-              <a href="#" className={ctcStyles.sigDownloadLink}>
+              <a
+                href="#"
+                onClick={handleDownload}
+                className={ctcStyles.sigDownloadLink}
+              >
                 {t(ctcText.addSig.downloadLinkText)}
               </a>
             </p>

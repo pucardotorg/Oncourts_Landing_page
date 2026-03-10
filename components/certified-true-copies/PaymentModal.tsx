@@ -3,13 +3,19 @@ import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import { svgIcons } from "../../data/svgIcons";
 import BaseModal from "./BaseModal";
 import { ctcStyles, ctcText } from "../../styles/certifiedCopyStyles";
+import type { AuthData, HeadBreakdownItem } from "../../types";
+import { callGetHeadBreakdown } from "../../services/openApiPaymentService";
 
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSkip: () => void;
-  onMakePayment: () => void;
+  onMakePayment: () => Promise<void> | void;
   paymentLoader?: boolean;
+  authData: AuthData | null;
+  tenantId: string;
+  consumerCode: string;
+  showErrorToast?: (msg: string) => void;
 }
 
 const PaymentModal: React.FC<PaymentModalProps> = ({
@@ -18,20 +24,73 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   onSkip,
   onMakePayment,
   paymentLoader = false,
+  authData,
+  tenantId,
+  consumerCode,
+  showErrorToast,
 }) => {
   const { t } = useSafeTranslation();
+  const [isFetchingBreakdown, setIsFetchingBreakdown] = React.useState(false);
+  const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
+  const [breakdownItems, setBreakdownItems] = React.useState<
+    HeadBreakdownItem[]
+  >([]);
+  const [totalAmount, setTotalAmount] = React.useState<number>(0);
+
+  React.useEffect(() => {
+    if (isOpen && authData && tenantId && consumerCode) {
+      let isMounted = true;
+      setIsFetchingBreakdown(true);
+      callGetHeadBreakdown(consumerCode, tenantId, authData)
+        .then((res) => {
+          if (!isMounted) return;
+          const map = res?.TreasuryHeadMapping?.headAmountMapping;
+          setBreakdownItems(map?.breakUpList || []);
+          setTotalAmount(map?.totalAmount || 0);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch payment breakdown:", err);
+          showErrorToast?.("Failed to fetch payment breakdown details.");
+        })
+        .finally(() => {
+          if (isMounted) setIsFetchingBreakdown(false);
+        });
+
+      return () => {
+        isMounted = false;
+      };
+    }
+  }, [isOpen, authData, tenantId, consumerCode, showErrorToast]);
+
+  const isLoading = paymentLoader || isFetchingBreakdown || isPaymentProcessing;
+
+  const handlePayClick = async () => {
+    if (isPaymentProcessing) return;
+    setIsPaymentProcessing(true);
+    try {
+      await onMakePayment();
+    } finally {
+      setIsPaymentProcessing(false);
+    }
+  };
 
   const footer = (
     <>
-      <button onClick={onSkip} className={ctcStyles.payBtnSkip}>
+      <button
+        onClick={onSkip}
+        disabled={isLoading}
+        className={`${ctcStyles.payBtnSkip} ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
+      >
         {t(ctcText.payment.skip)}
       </button>
       <button
-        onClick={onMakePayment}
-        disabled={paymentLoader}
-        className={`${ctcStyles.payBtnPay} ${paymentLoader ? "opacity-70 cursor-wait" : ""}`}
+        onClick={handlePayClick}
+        disabled={isLoading}
+        className={`${ctcStyles.payBtnPay} ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
       >
-        {paymentLoader ? "Processing..." : t(ctcText.payment.makePayment)}
+        {isPaymentProcessing || paymentLoader
+          ? "Processing..."
+          : t(ctcText.payment.makePayment)}
       </button>
     </>
   );
@@ -56,31 +115,55 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
         {/* Fee breakdown */}
         <div className={ctcStyles.payFeeList}>
-          <div className={ctcStyles.payFeeRow}>
-            <span>{t(ctcText.payment.amountDue)}</span>
-            <span className={ctcStyles.payFeeValue}>
-              {t(ctcText.payment.amountDueValue)}
-            </span>
-          </div>
-          <div className={ctcStyles.payFeeRow}>
-            <span>{t(ctcText.payment.courtFees)}</span>
-            <span className={ctcStyles.payFeeValue}>
-              {t(ctcText.payment.courtFeesValue)}
-            </span>
-          </div>
-          <div className={ctcStyles.payFeeRow}>
-            <span>{t(ctcText.payment.advocateFees)}</span>
-            <span className={ctcStyles.payFeeValue}>
-              {t(ctcText.payment.advocateFeesValue)}
-            </span>
-          </div>
+          {isFetchingBreakdown ? (
+            <div className="flex justify-center items-center py-4">
+              <svg
+                className="animate-spin h-6 w-6 text-teal-600"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                />
+              </svg>
+            </div>
+          ) : (
+            <>
+              {breakdownItems.map((item, idx) => (
+                <div key={idx} className={ctcStyles.payFeeRow}>
+                  <span>{t(item.name)}</span>
+                  <span className={ctcStyles.payFeeValue}>₹{item.amount}</span>
+                </div>
+              ))}
 
-          <div className={ctcStyles.payDivider} />
+              {breakdownItems.length > 0 && (
+                <>
+                  <div className={ctcStyles.payDivider} />
+                  <div className={ctcStyles.payTotalRow}>
+                    <span>{t(ctcText.payment.totalFees)}</span>
+                    <span>₹{totalAmount}</span>
+                  </div>
+                </>
+              )}
 
-          <div className={ctcStyles.payTotalRow}>
-            <span>{t(ctcText.payment.totalFees)}</span>
-            <span>{t(ctcText.payment.totalFeesValue)}</span>
-          </div>
+              {breakdownItems.length === 0 && (
+                <div className="text-center text-sm text-gray-500 py-2">
+                  {t("No payment breakdown available.")}
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
     </BaseModal>

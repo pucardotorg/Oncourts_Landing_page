@@ -1,10 +1,20 @@
 // ─── eSign Data Models ───────────────────────────────────────────────────────
 
-export interface ESignRequestData {
+import type { RequestInfoData } from "../payment";
+
+export interface ESignParameter {
+  uidToken?: string;
+  consent?: string;
+  authType?: string;
   fileStoreId: string;
   tenantId: string;
   pageModule: string;
   signPlaceHolder?: string;
+}
+
+export interface ESignRequestData {
+  ESignParameter: ESignParameter;
+  RequestInfo?: RequestInfoData;
 }
 
 export interface ESignResponseData {

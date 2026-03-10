@@ -51,16 +51,17 @@ export interface CtcApplication {
   isPartyToCase?: boolean;
   partyDesignation?: string;
   affidavitDocument?: Document;
-  caseBundleNodes?: CaseBundleNode[];
+  caseBundles?: CaseBundleNode[];
+  selectedCaseBundle?: CaseBundleNode[];
   totalPages?: number;
+  documents?: Document[];
   status?:
   | "DRAFT_IN_PROGRESS"
-  | "PENDING_ESIGN"
+  | "PENDING_SIGN"
   | "PENDING_PAYMENT"
-  | "PENDING_JUDGE_APPROVAL"
-  | "PENDING_CMO_ESIGN"
-  | "ISSUED"
-  | "REJECTED";
+  | "PENDING_APPROVAL"
+  | "PENDING_ISSUE"
+  | "ISSUED";
   judgeComments?: string;
   workflow?: WorkflowObject;
   documents?: Document[];
