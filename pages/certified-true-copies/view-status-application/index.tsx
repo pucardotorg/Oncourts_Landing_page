@@ -128,9 +128,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
     query: string = searchQuery,
   ) => {
     if (!authData?.authToken) {
-      showErrorToast(
-        "Authentication token is missing. Please verify your number again.",
-      );
+      showErrorToast(t(ctcText.viewStatus.tokenMissing));
       return;
     }
 
@@ -155,7 +153,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
       }
     } catch (error) {
       console.error("Fetch applications failed:", error);
-      showErrorToast("Failed to fetch applications due to network error.");
+      showErrorToast(t(ctcText.viewStatus.fetchFailed));
     } finally {
       setIsLoading(false);
     }
@@ -298,7 +296,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
                       }
                     }, 500); // 500ms debounce
                   }}
-                  placeholder="Search by case number or case name"
+                  placeholder={t(ctcText.viewStatus.searchPlaceholder)}
                   className="w-full pl-10 pr-4 py-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-md focus:outline-none focus:ring-1 focus:ring-[#0F766E] text-[#64748B] text-[15px]"
                 />
               </div>
@@ -366,7 +364,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
                         statusStyles[app?.status || "DRAFT_IN_PROGRESS"]
                       }`}
                     >
-                      {t(app?.status || "UNKNOWN_STATUS")}
+                      {t(app?.status || ctcText.viewStatus.unknownStatus)}
                     </span>
                   ),
                 },
@@ -443,14 +441,20 @@ const ViewStatusForCertifiedTrueCopy = () => {
                     label: t("CASE_NAME"),
                     value: selectedApplication?.caseTitle || "N/A",
                   },
-                  { label: t("CASE_CATEGORY"), value: "Criminal" },
+                  {
+                    label: t("CASE_CATEGORY"),
+                    value: t(ctcText.viewStatus.criminal),
+                  },
                 ],
                 [
                   {
                     label: t("CASE_NUMBER"),
                     value: selectedApplication?.caseNumber || "N/A",
                   },
-                  { label: t("CASE_TYPE"), value: "NIA S138" },
+                  {
+                    label: t("CASE_TYPE"),
+                    value: t(ctcText.viewStatus.niaS138),
+                  },
                 ],
                 [
                   {
@@ -478,6 +482,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
               ]
             : []
         }
+        modalTitle={t("VIEW_APPLICATION")}
         footerButtons={[
           {
             label: t("CTC_OTP_GO_BACK"),

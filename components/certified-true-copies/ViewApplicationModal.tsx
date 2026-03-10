@@ -1,7 +1,6 @@
 import React from "react";
 import BaseModal from "./BaseModal";
 import { CtcApplication } from "../../types";
-import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import DocViewWrapper from "./DocViewWrapper";
 
 export interface TopInfoItem {
@@ -22,7 +21,7 @@ interface ViewApplicationModalProps {
   application: CtcApplication | null;
   topInfoColumns?: TopInfoItem[][];
   footerButtons?: FooterButton[];
-  modalTitle?: string;
+  modalTitle: string;
   fileStoreId?: string;
   tenantId?: string;
   authToken?: string;
@@ -39,7 +38,6 @@ const ViewApplicationModal: React.FC<ViewApplicationModalProps> = ({
   tenantId,
   authToken,
 }) => {
-  const { t } = useSafeTranslation();
   if (!isOpen || !application) return null;
 
   const footer =
@@ -66,7 +64,7 @@ const ViewApplicationModal: React.FC<ViewApplicationModalProps> = ({
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
-      title={modalTitle || t("VIEW_APPLICATION")}
+      title={modalTitle}
       maxWidth="max-w-[800px]"
       footer={footer}
     >
@@ -88,7 +86,7 @@ const ViewApplicationModal: React.FC<ViewApplicationModalProps> = ({
                 >
                   {col.map((item, itemIdx) => (
                     <React.Fragment key={itemIdx}>
-                      <span className="text-[#888888] text-xs font-semibold mb-1 uppercase">
+                      <span className="text-[#888888] text-xs font-semibold mb-1">
                         {item.label}
                       </span>
                       <span className="text-[#333333] text-[15px] font-bold">

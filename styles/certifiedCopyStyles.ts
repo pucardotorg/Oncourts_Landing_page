@@ -271,6 +271,9 @@ export const ctcText = {
     select: "CTC_STEP2_SELECT",
     goBack: "CTC_STEP2_GO_BACK",
     next: "CTC_STEP2_NEXT",
+    affidavitUploadFailed: "CTC_STEP2_AFFIDAVIT_UPLOAD_FAILED",
+    affidavitIdFailed: "CTC_STEP2_AFFIDAVIT_ID_FAILED",
+    saveFailed: "CTC_STEP2_SAVE_FAILED",
   },
   // ─── Page-level text ─────────────────────────────────────────────────────
   landing: {
@@ -288,11 +291,29 @@ export const ctcText = {
   viewStatus:{
     pageTitle: "VIEW_STATUS_OF_APPLICATION",
     clearButtonLabel: "CLEAR",
-    searchButtonLabel: "SEARCH_APPLICATION"
+    searchButtonLabel: "SEARCH_APPLICATION",
+    tokenMissing: "CTC_VIEW_STATUS_TOKEN_MISSING",
+    fetchFailed: "CTC_VIEW_STATUS_FETCH_FAILED",
+    searchPlaceholder: "CTC_VIEW_STATUS_SEARCH_PLACEHOLDER",
+    criminal: "CTC_VIEW_STATUS_CRIMINAL",
+    niaS138: "CTC_VIEW_STATUS_NIA_S138",
+    unknownStatus: "UNKNOWN_STATUS",
   },
   step3: {
     goBack: "CTC_STEP3_GO_BACK",
     eSign: "CTC_STEP3_ESIGN",
+    goBackFailed: "CTC_STEP3_GO_BACK_FAILED",
+    saveSignatureFailed: "CTC_STEP3_SAVE_SIGNATURE_FAILED",
+    paymentIncomplete: "CTC_STEP3_PAYMENT_INCOMPLETE",
+    paymentFlowFailed: "CTC_STEP3_PAYMENT_FLOW_FAILED",
+    waitDocumentGeneration: "CTC_STEP3_WAIT_DOCUMENT_GENERATION",
+    uploadFailed: "CTC_STEP3_UPLOAD_FAILED",
+    missingFileStoreId: "CTC_STEP3_MISSING_FILE_STORE_ID",
+    uploadSignDocsFailed: "CTC_STEP3_UPLOAD_SIGN_DOCS_FAILED",
+    generatingDocument: "CTC_STEP3_GENERATING_DOCUMENT",
+    documentPreviewUnavailable: "CTC_STEP3_DOCUMENT_PREVIEW_UNAVAILABLE",
+    loadPreviewFailed: "CTC_STEP3_LOAD_PREVIEW_FAILED",
+    uploading: "CTC_STEP3_UPLOADING",
   },
   // ─── SelectDocumentsModal ─────────────────────────────────────────────────
   selectDocModal: {
@@ -323,6 +344,14 @@ export const ctcText = {
     signedBadge: "CTC_ADD_SIG_SIGNED_BADGE",
     backBtn: "CTC_ADD_SIG_BACK_BTN",
     proceedBtn: "CTC_ADD_SIG_PROCEED_BTN",
+    esignRequestFailed: "CTC_ADD_SIG_ESIGN_REQUEST_FAILED",
+    somethingWentWrong: "CTC_ADD_SIG_SOMETHING_WENT_WRONG",
+    fileUploadFailed: "CTC_ADD_SIG_FILE_UPLOAD_FAILED",
+    missingFileStoreId: "CTC_ADD_SIG_MISSING_FILE_STORE_ID",
+    uploadSignedCopyFailed: "CTC_ADD_SIG_UPLOAD_SIGNED_COPY_FAILED",
+    loading: "CTC_ADD_SIG_LOADING",
+    processing: "CTC_ADD_SIG_PROCESSING",
+    uploading: "CTC_ADD_SIG_UPLOADING",
   },
   // ─── PaymentModal ─────────────────────────────────────────────────────────
   payment: {
@@ -338,6 +367,9 @@ export const ctcText = {
     totalFeesValue: "CTC_PAYMENT_TOTAL_FEES_VALUE",
     skip: "CTC_PAYMENT_SKIP",
     makePayment: "CTC_PAYMENT_MAKE_PAYMENT",
+    fetchBreakdownFailed: "CTC_PAYMENT_FETCH_BREAKDOWN_FAILED",
+    processing: "CTC_PAYMENT_PROCESSING",
+    noBreakdown: "CTC_PAYMENT_NO_BREAKDOWN",
   },
   // ─── SuccessModal ─────────────────────────────────────────────────────────
   success: {
@@ -356,6 +388,10 @@ export const ctcText = {
     label: "CTC_VERIFY_PHONE_LABEL",
     verified: "CTC_VERIFY_PHONE_VERIFIED",
     verify: "CTC_VERIFY_PHONE_VERIFY",
+    userNotRegistered: "CTC_VERIFY_PHONE_USER_NOT_REGISTERED",
+    failedToSendOtp: "CTC_VERIFY_PHONE_FAILED_TO_SEND_OTP",
+    inputPlaceholder: "CTC_VERIFY_PHONE_INPUT_PLACEHOLDER",
+    sendingOtp: "CTC_VERIFY_PHONE_SENDING_OTP",
   },
   // ─── OTPModal ─────────────────────────────────────────────────────────────
   otpModal: {
@@ -364,6 +400,9 @@ export const ctcText = {
     inputPlaceholder: "CTC_OTP_INPUT_PLACEHOLDER",
     goBack: "CTC_OTP_GO_BACK",
     verify: "CTC_OTP_VERIFY",
+    verificationFailed: "CTC_OTP_VERIFICATION_FAILED",
+    validationFailed: "CTC_OTP_VALIDATION_FAILED",
+    verifying: "CTC_OTP_VERIFYING",
   },
   viewCTCStatusTable: {
     header:"MY_APPLICATIONS",

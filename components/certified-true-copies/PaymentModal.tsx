@@ -59,7 +59,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         })
         .catch((err) => {
           console.error("Failed to fetch payment breakdown:", err);
-          showErrorToast?.("Failed to fetch payment breakdown details.");
+          showErrorToast?.(t(ctcText.payment.fetchBreakdownFailed));
         })
         .finally(() => {
           if (isMounted) setIsFetchingBreakdown(false);
@@ -69,7 +69,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         isMounted = false;
       };
     }
-  }, [isOpen, authData, tenantId, consumerCode, showErrorToast]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, authData, tenantId, consumerCode]);
 
   const isLoading = paymentLoader || isFetchingBreakdown || isPaymentProcessing;
 
@@ -98,7 +99,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         className={`${ctcStyles.payBtnPay} ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
       >
         {isPaymentProcessing || paymentLoader
-          ? "Processing..."
+          ? t(ctcText.payment.processing)
           : t(ctcText.payment.makePayment)}
       </button>
     </>
@@ -172,7 +173,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
               {breakdownItems.length === 0 && (
                 <div className="text-center text-sm text-gray-500 py-2">
-                  {t("No payment breakdown available.")}
+                  {t(ctcText.payment.noBreakdown)}
                 </div>
               )}
             </>

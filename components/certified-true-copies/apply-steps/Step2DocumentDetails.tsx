@@ -138,7 +138,7 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
           });
 
           if (!uploadRes.ok) {
-            showErrorToast?.("Failed to upload affidavit. Please try again.");
+            showErrorToast?.(t(ctcText.step2.affidavitUploadFailed));
             return;
           }
 
@@ -146,7 +146,7 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
           const fileStoreId = uploadData?.files?.[0]?.fileStoreId;
 
           if (!fileStoreId) {
-            showErrorToast?.("Failed to get fileStoreId for affidavit.");
+            showErrorToast?.(t(ctcText.step2.affidavitIdFailed));
             return;
           }
 
@@ -175,7 +175,7 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
         }
       } catch (err) {
         console.error("SAVE_DRAFT failed:", err);
-        showErrorToast?.("Failed to save application. Please try again.");
+        showErrorToast?.(t(ctcText.step2.saveFailed));
         return; // Don't navigate on error
       } finally {
         setIsSaving(false);

@@ -55,7 +55,7 @@ const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
       });
 
       if (!response?.ok) {
-        showErrorToast?.(t("USER_NOT_REGISTERED"));
+        showErrorToast?.(t(ctcText.verifyPhone.userNotRegistered));
         return;
       }
 
@@ -63,11 +63,11 @@ const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
       if (data?.isSuccessful) {
         setShowOtpModal(true);
       } else {
-        showErrorToast?.(t("FAILED_TO_SEND_OTP"));
+        showErrorToast?.(t(ctcText.verifyPhone.failedToSendOtp));
       }
     } catch (err) {
       console.error("Send OTP failed:", err);
-      showErrorToast?.(t("FAILED_TO_SEND_OTP"));
+      showErrorToast?.(t(ctcText.verifyPhone.failedToSendOtp));
     } finally {
       setIsSendingOtp(false);
     }
@@ -114,7 +114,7 @@ const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
               onPhoneNumberChange(updatedValue);
             }}
             maxLength={10}
-            placeholder="xxxxx xxxxx"
+            placeholder={t(ctcText.verifyPhone.inputPlaceholder)}
             disabled={isPhoneVerified}
             className={`${ctcStyles.verifyInput} ${
               isPhoneVerified
@@ -151,7 +151,9 @@ const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
                     : ctcStyles.verifyBtnDisabled
                 }`}
               >
-                {isSendingOtp ? "Sending..." : t(ctcText.verifyPhone.verify)}
+                {isSendingOtp
+                  ? t(ctcText.verifyPhone.sendingOtp)
+                  : t(ctcText.verifyPhone.verify)}
               </button>
             )}
           </div>

@@ -79,13 +79,13 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
       // redirected = true → page will redirect to CDAC portal; we do nothing
       // redirected = false → API failed or no form data returned
       if (!redirected) {
-        setESignError("e-Sign request failed. Please try again.");
+        setESignError(t(ctcText.addSig.esignRequestFailed));
       }
       // Do NOT call onSignSuccess() here. After the user completes signing on the
       // CDAC portal, they're redirected back and useEffect in parent marks them
       // as signed.
     } catch {
-      setESignError("Something went wrong. Please try again.");
+      setESignError(t(ctcText.addSig.somethingWentWrong));
     } finally {
       setIsESignLoading(false);
     }
@@ -111,7 +111,7 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
         });
 
         if (!res.ok) {
-          setESignError("File upload failed. Please try again.");
+          setESignError(t(ctcText.addSig.fileUploadFailed));
           return;
         }
 
@@ -121,11 +121,11 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
         if (newFileStoreId) {
           onSignSuccess(newFileStoreId, "UPLOAD_SIGNED_COPY");
         } else {
-          setESignError("Missing fileStoreId in upload response.");
+          setESignError(t(ctcText.addSig.missingFileStoreId));
         }
       } catch (err) {
         console.error("Filestore upload error:", err);
-        setESignError("Failed to upload the signed copy.");
+        setESignError(t(ctcText.addSig.uploadSignedCopyFailed));
       } finally {
         setIsUploadLoading(false);
       }
@@ -173,7 +173,7 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
         disabled={loading}
         className={ctcStyles.sigFooterBtnBack}
       >
-        {isBackLoading ? "Loading..." : t(ctcText.addSig.backBtn)}
+        {isBackLoading ? t(ctcText.addSig.loading) : t(ctcText.addSig.backBtn)}
       </button>
       <button
         onClick={async () => {
@@ -192,7 +192,9 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
             : ctcStyles.sigFooterBtnProceedDisabled
         }`}
       >
-        {isProceedLoading ? "Processing..." : t(ctcText.addSig.proceedBtn)}
+        {isProceedLoading
+          ? t(ctcText.addSig.processing)
+          : t(ctcText.addSig.proceedBtn)}
       </button>
     </>
   );
@@ -254,7 +256,7 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
                         d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
                       />
                     </svg>
-                    {t("Processing…")}
+                    {t(ctcText.addSig.processing)}
                   </span>
                 ) : (
                   t(ctcText.addSig.eSignBtn)
@@ -270,7 +272,7 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
               >
                 {svgIcons.UploadIcon()}
                 {isUploadLoading
-                  ? t("Uploading...")
+                  ? t(ctcText.addSig.uploading)
                   : t(ctcText.addSig.uploadLink)}
               </button>
               <input

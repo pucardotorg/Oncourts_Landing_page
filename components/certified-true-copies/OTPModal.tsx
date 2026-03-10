@@ -87,7 +87,7 @@ const OTPModal = ({
 
       if (!authData?.access_token) {
         setErrorMsg(
-          t("OTP_VERIFICATION_FAILED") ||
+          t(ctcText.otpModal.verificationFailed) ||
             "OTP verification failed. Please try again.",
         );
         return;
@@ -117,7 +117,7 @@ const OTPModal = ({
           setTimeout(() => setOtp(""), 200);
         } else {
           setErrorMsg(
-            t("VALIDATION_FAILED") ||
+            t(ctcText.otpModal.validationFailed) ||
               "User validation failed. Please try again.",
           );
         }
@@ -128,7 +128,7 @@ const OTPModal = ({
     } catch (err) {
       console.error("OTP verify/validate failed:", err);
       setErrorMsg(
-        t("OTP_VERIFICATION_FAILED") ||
+        t(ctcText.otpModal.verificationFailed) ||
           "OTP verification failed. Please try again.",
       );
     } finally {
@@ -158,7 +158,9 @@ const OTPModal = ({
             : ctcStyles.otpBtnSubmitDisabled
         }`}
       >
-        {isVerifying ? "Verifying..." : t(ctcText.otpModal.verify)}
+        {isVerifying
+          ? t(ctcText.otpModal.verifying)
+          : t(ctcText.otpModal.verify)}
       </button>
     </>
   );

@@ -154,7 +154,7 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
         setPdfBlob(blob);
       } catch (err) {
         console.error("Failed to generate CTC PDF:", err);
-        showErrorToast?.("Failed to load document preview.");
+        showErrorToast?.(t(ctcText.step3.loadPreviewFailed));
         hasFetchedPdf.current = false; // allow retry on error
       } finally {
         setIsPdfLoading(false);
@@ -211,11 +211,11 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
         setShowSuccessModal(true);
       } else {
         console.error("Payment was not completed.");
-        showErrorToast?.("Payment was not completed. Please try again.");
+        showErrorToast?.(t(ctcText.step3.paymentIncomplete));
       }
     } catch (err) {
       console.error("Payment flow error:", err);
-      showErrorToast?.("Payment flow failed. Please try again.");
+      showErrorToast?.(t(ctcText.step3.paymentFlowFailed));
     }
   };
 
@@ -226,7 +226,7 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
 
   const handleOpenSignature = async () => {
     if (!pdfBlob) {
-      showErrorToast?.("Please wait for the document to finish generating.");
+      showErrorToast?.(t(ctcText.step3.waitDocumentGeneration));
       return;
     }
 
@@ -258,7 +258,7 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
       });
 
       if (!res.ok) {
-        showErrorToast?.("File upload failed. Please try again.");
+        showErrorToast?.(t(ctcText.step3.uploadFailed));
         return;
       }
 
@@ -266,7 +266,7 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
       const newFileStoreId = data?.files?.[0]?.fileStoreId;
 
       if (!newFileStoreId) {
-        showErrorToast?.("Missing fileStoreId in upload response.");
+        showErrorToast?.(t(ctcText.step3.missingFileStoreId));
         return;
       }
 
@@ -299,7 +299,7 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
       setShowSignatureModal(true);
     } catch (err) {
       console.error("Filestore upload / submit error:", err);
-      showErrorToast?.("Failed to upload document for signing.");
+      showErrorToast?.(t(ctcText.step3.uploadSignDocsFailed));
     } finally {
       setIsUploading(false);
       onSaving?.(false);
@@ -337,7 +337,7 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
                   />
                 </svg>
                 <p className="text-gray-500 font-medium">
-                  Generating Document...
+                  {t(ctcText.step3.generatingDocument)}
                 </p>
               </div>
             ) : ctcApplicationFileStoreId ? (
@@ -354,7 +354,7 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
               </div>
             ) : (
               <p className="text-gray-500">
-                Document preview is not available.
+                {t(ctcText.step3.documentPreviewUnavailable)}
               </p>
             )}
           </div>
@@ -362,7 +362,9 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
           <FormActions
             secondaryLabel={ctcText.step3.goBack}
             onSecondary={handleGoBack}
-            primaryLabel={isUploading ? "Uploading..." : ctcText.step3.eSign}
+            primaryLabel={
+              isUploading ? t(ctcText.step3.uploading) : ctcText.step3.eSign
+            }
             onPrimary={handleOpenSignature}
             primaryDisabled={
               isPdfLoading ||
@@ -405,7 +407,7 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
               }
             } catch (err) {
               console.error("EDIT action failed:", err);
-              showErrorToast?.("Failed to go back. Please try again.");
+              showErrorToast?.(t(ctcText.step3.goBackFailed));
             } finally {
               onSaving?.(false);
             }
@@ -450,7 +452,7 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
                 "Failed to update application with signature:",
                 err,
               );
-              showErrorToast?.("Failed to save signature. Please try again.");
+              showErrorToast?.(t(ctcText.step3.saveSignatureFailed));
               return; // block proceeding on error
             }
           }
