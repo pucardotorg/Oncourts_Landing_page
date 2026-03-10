@@ -50,7 +50,7 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
   const [showModal, setShowModal] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  const { uploadedFileName, selectedDocuments } = step2;
+  const { uploadedFileName, uploadedFile, selectedDocuments } = step2;
 
   // Helper to localize title with a number suffix (e.g. "VAKALATNAMA_HEADING 1" -> "Vakalat 1")
   const localizeTitle = (title: string): string => {
@@ -66,10 +66,13 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
   /** Resolve a node ID back to its display title from the bundle tree */
   const getTitleById = (id: string, nodes: CaseBundleNode[]): string => {
     for (const node of nodes) {
-      if (node?.id === id) return node?.title;
-      if (node?.children) {
-        const found = getTitleById(id, node?.children);
-        if (found) return found;
+      if (node?.id === id) {
+        return node?.title || id;
+      }
+
+      if (node?.children?.length) {
+        const found = getTitleById(id, node.children);
+        if (found !== id) return found;
       }
     }
     return id;
@@ -117,11 +120,48 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
       try {
         setIsSaving(true);
         onSaving?.(true);
+
+        // Upload affidavit file if present
+        let affidavitDocument = ctcApplication.affidavitDocument;
+        if (uploadedFile) {
+          const formData = new FormData();
+          formData.append("file", uploadedFile, uploadedFile.name);
+          formData.append("tenantId", tenantId);
+          formData.append("module", "DRISTI");
+
+          const uploadRes = await fetch(`/api/filestore/upload`, {
+            method: "POST",
+            headers: authData?.authToken
+              ? { "auth-token": authData.authToken }
+              : {},
+            body: formData,
+          });
+
+          if (!uploadRes.ok) {
+            showErrorToast?.("Failed to upload affidavit. Please try again.");
+            return;
+          }
+
+          const uploadData = await uploadRes.json();
+          const fileStoreId = uploadData?.files?.[0]?.fileStoreId;
+
+          if (!fileStoreId) {
+            showErrorToast?.("Failed to get fileStoreId for affidavit.");
+            return;
+          }
+
+          affidavitDocument = {
+            fileStore: fileStoreId,
+            documentType: "AFFIDAVIT",
+          };
+        }
+
         const res = await updateCtcApplication(
           {
             ...ctcApplication,
             tenantId,
             ctcApplicationNumber: ctcApplication?.ctcApplicationNumber,
+            affidavitDocument,
             selectedCaseBundle: filterBundleNodesBySelection(
               bundleNodes,
               selectedDocuments || [],
@@ -212,6 +252,7 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
                       if (e.target.files?.[0]) {
                         updateStep2({
                           uploadedFileName: e.target.files[0].name,
+                          uploadedFile: e.target.files[0],
                         });
                       }
                     }}

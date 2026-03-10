@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import { svgIcons } from "../../data/svgIcons";
 import BaseModal from "./BaseModal";
@@ -30,14 +30,23 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   showErrorToast,
 }) => {
   const { t } = useSafeTranslation();
-  const [isFetchingBreakdown, setIsFetchingBreakdown] = React.useState(false);
-  const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
-  const [breakdownItems, setBreakdownItems] = React.useState<
-    HeadBreakdownItem[]
-  >([]);
-  const [totalAmount, setTotalAmount] = React.useState<number>(0);
+  const [isFetchingBreakdown, setIsFetchingBreakdown] = useState(false);
+  const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
+  const [breakdownItems, setBreakdownItems] = useState<HeadBreakdownItem[]>([]);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
     if (isOpen && authData && tenantId && consumerCode) {
       let isMounted = true;
       setIsFetchingBreakdown(true);
@@ -98,7 +107,11 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   return (
     <BaseModal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={() => {
+        if (!isLoading) {
+          onClose();
+        }
+      }}
       title={t(ctcText.payment.title)}
       footer={footer}
     >

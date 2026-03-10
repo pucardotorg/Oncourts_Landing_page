@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import useESignApi from "../../hooks/useESignApi";
 import { svgIcons } from "../../data/svgIcons";
@@ -50,6 +50,17 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
   const loading =
     isESignLoading || isUploadLoading || isProceedLoading || isBackLoading;
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+
   const handleAadharESign = async () => {
     if (mockESignEnabled) {
       if (fileStoreId) onSignSuccess(fileStoreId, "ESIGN");
@@ -91,16 +102,13 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
         formData.append("tenantId", tenantId);
         formData.append("module", "DRISTI");
 
-        const res = await fetch(
-          `/api/filestore/upload?tenantId=${tenantId}&module=DRISTI`,
-          {
-            method: "POST",
-            headers: authData?.authToken
-              ? { "auth-token": authData.authToken }
-              : {},
-            body: formData,
-          },
-        );
+        const res = await fetch(`/api/filestore/upload`, {
+          method: "POST",
+          headers: authData?.authToken
+            ? { "auth-token": authData.authToken }
+            : {},
+          body: formData,
+        });
 
         if (!res.ok) {
           setESignError("File upload failed. Please try again.");
@@ -192,7 +200,11 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
   return (
     <BaseModal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={() => {
+        if (!loading) {
+          onClose();
+        }
+      }}
       title={t(ctcText.addSig.title)}
       footer={footer}
     >

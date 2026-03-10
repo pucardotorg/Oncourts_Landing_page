@@ -120,6 +120,7 @@ const ApplyForCertifiedCopy = () => {
   // ── Step 2 state (lifted so it survives navigation to Step 3 and back) ──
   const [step2, setStep2] = useState<Step2State>({
     uploadedFileName: "",
+    uploadedFile: null,
     selectedDocuments: [],
   });
 
@@ -399,10 +400,10 @@ const ApplyForCertifiedCopy = () => {
 
   // ── Auth guard: redirect if authData is missing on Step 2/3 ────────────────
   useEffect(() => {
-    if (currentStep > 1 && !authData) {
+    if (!sessionStorage.getItem("ctcAuthData")) {
       router?.replace("/certified-true-copies");
     }
-  }, [currentStep, authData, router]);
+  }, [router]);
 
   // Clear auth data and session storage when leaving the apply flow
   useEffect(() => {
@@ -411,7 +412,6 @@ const ApplyForCertifiedCopy = () => {
       const applyPath = "/certified-true-copies/apply";
       if (!url.startsWith(applyPath)) {
         sessionStorage.removeItem("ctcAuthData");
-        setAuthData(null);
       }
     };
 

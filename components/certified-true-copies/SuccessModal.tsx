@@ -6,6 +6,9 @@ import { ctcStyles, ctcText } from "../../styles/certifiedCopyStyles";
 interface SuccessModalProps {
   isOpen: boolean;
   applicationNumber: string;
+  signedFileStoreId?: string;
+  tenantId?: string;
+  authToken?: string;
   onClose: () => void;
   onViewStatus: () => void;
 }
@@ -13,11 +16,15 @@ interface SuccessModalProps {
 const SuccessModal: React.FC<SuccessModalProps> = ({
   isOpen,
   applicationNumber,
+  signedFileStoreId,
+  tenantId,
+  authToken,
   onClose,
   onViewStatus,
 }) => {
   const { t } = useSafeTranslation();
   const [copied, setCopied] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   // Lock background scroll when modal opens
   useEffect(() => {
@@ -85,9 +92,37 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
 
         {/* Action buttons equal width row */}
         <div className={ctcStyles.successBtnRow}>
-          <button className={ctcStyles.successBtnOutline}>
+          <button
+            className={ctcStyles.successBtnOutline}
+            disabled={isDownloading || !signedFileStoreId}
+            onClick={async () => {
+              if (!signedFileStoreId || !tenantId) return;
+              setIsDownloading(true);
+              try {
+                const res = await fetch(
+                  `/api/getFileByFileStoreId?tenantId=${tenantId}&fileStoreId=${signedFileStoreId}`,
+                  {
+                    headers: authToken ? { "auth-token": authToken } : {},
+                  },
+                );
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `ctc_submission_${applicationNumber}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+              } catch (err) {
+                console.error("Download failed:", err);
+              } finally {
+                setIsDownloading(false);
+              }
+            }}
+          >
             {svgIcons.DownloadSuccessIcon()}
-            {t(ctcText.success.download)}
+            {isDownloading ? "Downloading..." : t(ctcText.success.download)}
           </button>
           <button onClick={onClose} className={ctcStyles.successBtnFill}>
             {t(ctcText.success.close)}

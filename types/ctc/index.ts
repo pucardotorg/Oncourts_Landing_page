@@ -54,7 +54,6 @@ export interface CtcApplication {
   caseBundles?: CaseBundleNode[];
   selectedCaseBundle?: CaseBundleNode[];
   totalPages?: number;
-  documents?: Document[];
   status?:
   | "DRAFT_IN_PROGRESS"
   | "PENDING_SIGN"
@@ -101,6 +100,7 @@ export interface Step1State {
 
 export interface Step2State {
   uploadedFileName: string;
+  uploadedFile: File | null;
   selectedDocuments: string[];
 }
 

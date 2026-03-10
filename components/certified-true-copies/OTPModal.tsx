@@ -33,6 +33,17 @@ const OTPModal = ({
   const [isVerifying, setIsVerifying] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+
   // Reset OTP every time the modal is closed
   useEffect(() => {
     if (!isOpen) {
@@ -77,7 +88,7 @@ const OTPModal = ({
       if (!authData?.access_token) {
         setErrorMsg(
           t("OTP_VERIFICATION_FAILED") ||
-            "OTP verification failed. Please try again."
+            "OTP verification failed. Please try again.",
         );
         return;
       }
@@ -97,7 +108,7 @@ const OTPModal = ({
             tenantId: tenantId,
             courtId: courtId,
           },
-          newAuthData
+          newAuthData,
         );
 
         if (validateData?.validateUserInfo) {
@@ -107,7 +118,7 @@ const OTPModal = ({
         } else {
           setErrorMsg(
             t("VALIDATION_FAILED") ||
-              "User validation failed. Please try again."
+              "User validation failed. Please try again.",
           );
         }
       } else {
@@ -118,7 +129,7 @@ const OTPModal = ({
       console.error("OTP verify/validate failed:", err);
       setErrorMsg(
         t("OTP_VERIFICATION_FAILED") ||
-          "OTP verification failed. Please try again."
+          "OTP verification failed. Please try again.",
       );
     } finally {
       setIsVerifying(false);

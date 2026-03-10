@@ -19,7 +19,7 @@ export default async function handler(
 
   try {
     const url = `${API_ENDPOINTS.FILESTORE.UPLOAD}`;
-    debugger;
+
     // Pass the raw Node.js request stream natively into the fetch polyfill
     const init: RequestInit & { duplex?: string } = {
       method: "POST",

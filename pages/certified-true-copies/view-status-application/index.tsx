@@ -55,7 +55,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
     useState<CtcApplication | null>(null);
   const limit = 10;
   const debounceTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(
-    null
+    null,
   );
   const [selectedFileStoreId, setSelectedFileStoreId] = useState("");
 
@@ -107,7 +107,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
           headers: authData?.authToken
             ? { "auth-token": authData.authToken }
             : {},
-        }
+        },
       );
       if (res.status === 200) {
         const blob = await res.blob();
@@ -125,11 +125,11 @@ const ViewStatusForCertifiedTrueCopy = () => {
 
   const fetchTableData = async (
     currentOffset: number = offset,
-    query: string = searchQuery
+    query: string = searchQuery,
   ) => {
     if (!authData?.authToken) {
       showErrorToast(
-        "Authentication token is missing. Please verify your number again."
+        "Authentication token is missing. Please verify your number again.",
       );
       return;
     }
@@ -143,7 +143,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
           ...(query?.trim() && { searchText: query.trim() }),
         },
         authData,
-        { offSet: currentOffset, limit }
+        { offSet: currentOffset, limit },
       );
 
       const applications = res?.ctcApplications;
@@ -254,13 +254,15 @@ const ViewStatusForCertifiedTrueCopy = () => {
               <button
                 onClick={handleSearchApplication}
                 disabled={!isPhoneVerified}
-                className={`px-8 py-2 text-lg rounded-md border border-transparent focus:outline-none shadow-sm font-roboto font-medium ${isPhoneVerified
+                className={`px-8 py-2 text-lg rounded-md border border-transparent focus:outline-none shadow-sm font-roboto font-medium ${
+                  isPhoneVerified
                     ? "bg-[#0F766E] text-white hover:bg-teal-700"
                     : "bg-[#EEF2F6] text-[#94A3B8] cursor-not-allowed border-none"
-                  }`}
+                }`}
               >
                 {t(
-                  ctcText?.viewStatus?.searchButtonLabel || "Search Application"
+                  ctcText?.viewStatus?.searchButtonLabel ||
+                    "Search Application",
                 )}
               </button>
             </div>
@@ -321,23 +323,24 @@ const ViewStatusForCertifiedTrueCopy = () => {
                           if (authData) {
                             sessionStorage.setItem(
                               "ctcAuthData",
-                              JSON.stringify(authData)
+                              JSON.stringify(authData),
                             );
                           }
                           router.push(
                             `/certified-true-copies/apply?applicationNumber=${encodeURIComponent(
-                              app?.ctcApplicationNumber || ""
+                              app?.ctcApplicationNumber || "",
                             )}&courtId=${encodeURIComponent(
-                              app?.courtId || ""
+                              app?.courtId || "",
                             )}&filingNumber=${encodeURIComponent(
-                              app?.filingNumber || ""
-                            )}`
+                              app?.filingNumber || "",
+                            )}`,
                           );
                           return;
                         }
                         // Extract fileStoreId from documents for SIGNED_CTC_APPLICATION
                         const signedDoc = app?.documents?.find(
-                          (doc) => doc.documentType === "SIGNED_CTC_APPLICATION"
+                          (doc) =>
+                            doc.documentType === "SIGNED_CTC_APPLICATION",
                         );
                         setSelectedFileStoreId(signedDoc?.fileStore || "");
                         setSelectedApplication(app);
@@ -359,8 +362,9 @@ const ViewStatusForCertifiedTrueCopy = () => {
                   header: "Status",
                   render: (app) => (
                     <span
-                      className={`px-2.5 py-1 text-sm font-semibold rounded-md ${statusStyles[app?.status || "DRAFT_IN_PROGRESS"]
-                        }`}
+                      className={`px-2.5 py-1 text-sm font-semibold rounded-md ${
+                        statusStyles[app?.status || "DRAFT_IN_PROGRESS"]
+                      }`}
                     >
                       {t(app?.status || "UNKNOWN_STATUS")}
                     </span>
@@ -434,44 +438,44 @@ const ViewStatusForCertifiedTrueCopy = () => {
         topInfoColumns={
           selectedApplication
             ? [
-              [
-                {
-                  label: t("CASE_NAME"),
-                  value: selectedApplication?.caseTitle || "N/A",
-                },
-                { label: t("CASE_CATEOGORY"), value: "Criminal" },
-              ],
-              [
-                {
-                  label: t("CASE_NUMBER"),
-                  value: selectedApplication?.caseNumber || "N/A",
-                },
-                { label: t("CASE_TYPE"), value: "Undefined Snull" },
-              ],
-              [
-                {
-                  label: t("FILING_NUMBER"),
-                  value: selectedApplication?.filingNumber || "N/A",
-                },
-                {
-                  label: t("FILING_DATE"),
-                  value: selectedApplication?.auditDetails?.createdTime
-                    ? new Intl.DateTimeFormat("en-IN", {
-                      timeZone: "Asia/Kolkata",
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "numeric",
-                    })
-                      .format(
-                        new Date(
-                          selectedApplication.auditDetails.createdTime
-                        )
-                      )
-                      .replace(/\//g, "-")
-                    : "-",
-                },
-              ],
-            ]
+                [
+                  {
+                    label: t("CASE_NAME"),
+                    value: selectedApplication?.caseTitle || "N/A",
+                  },
+                  { label: t("CASE_CATEGORY"), value: "Criminal" },
+                ],
+                [
+                  {
+                    label: t("CASE_NUMBER"),
+                    value: selectedApplication?.caseNumber || "N/A",
+                  },
+                  { label: t("CASE_TYPE"), value: "NIA S138" },
+                ],
+                [
+                  {
+                    label: t("FILING_NUMBER"),
+                    value: selectedApplication?.filingNumber || "N/A",
+                  },
+                  {
+                    label: t("FILING_DATE"),
+                    value: selectedApplication?.auditDetails?.createdTime
+                      ? new Intl.DateTimeFormat("en-IN", {
+                          timeZone: "Asia/Kolkata",
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        })
+                          .format(
+                            new Date(
+                              selectedApplication.auditDetails.createdTime,
+                            ),
+                          )
+                          .replace(/\//g, "-")
+                      : "-",
+                  },
+                ],
+              ]
             : []
         }
         footerButtons={[
@@ -487,7 +491,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
             variant: "primary",
           },
         ]}
-        fileStoreId={selectedFileStoreId || undefined}
+        fileStoreId={selectedFileStoreId}
         tenantId={tenantId}
         authToken={authData?.authToken}
       />

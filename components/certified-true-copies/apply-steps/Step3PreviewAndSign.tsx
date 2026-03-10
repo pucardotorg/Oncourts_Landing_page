@@ -429,7 +429,7 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
                   d.documentType === "CTC_APPLICATION" ? false : d.isActive,
               }));
               const newDoc = {
-                fileStoreId: signedFileStoreId,
+                fileStore: signedFileStoreId,
                 documentType: "SIGNED_CTC_APPLICATION",
                 tenantId,
               };
@@ -466,11 +466,9 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
       <PaymentModal
         isOpen={showPaymentModal}
         onClose={() => {
-          setShowPaymentModal(false);
           router.replace("/certified-true-copies");
         }}
         onSkip={() => {
-          setShowPaymentModal(false);
           router.push("/certified-true-copies");
         }}
         onMakePayment={handleMakePayment}
@@ -488,13 +486,22 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
       <SuccessModal
         isOpen={showSuccessModal}
         applicationNumber={ctcApplication?.ctcApplicationNumber || ""}
+        signedFileStoreId={
+          ctcApplication?.documents?.find(
+            (d) => d.documentType === "SIGNED_CTC_APPLICATION",
+          )?.fileStore ||
+          ctcApplication?.documents?.find(
+            (d) => d.documentType === "CTC_APPLICATION",
+          )?.fileStore ||
+          ""
+        }
+        tenantId={tenantId}
+        authToken={authData?.authToken}
         onClose={() => {
-          setShowSuccessModal(false);
           router.replace("/certified-true-copies");
         }}
         onViewStatus={() => {
           router.replace("/certified-true-copies/view-status-application");
-          setShowSuccessModal(false);
         }}
       />
     </>
