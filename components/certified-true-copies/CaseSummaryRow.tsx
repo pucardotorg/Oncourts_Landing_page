@@ -32,7 +32,7 @@ const CaseSummaryRow: React.FC<CaseSummaryRowProps> = ({ t, caseResult }) => {
     },
     {
       label: ctcText.caseSummary.caseTypeLabel,
-      value: caseResult?.caseStage || "—",
+      value: t(ctcText.viewStatus.niaS138) || "—",
     },
   ];
 
