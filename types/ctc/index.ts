@@ -63,6 +63,7 @@ export interface CtcApplication {
   | "REJECTED";
   judgeComments?: string;
   workflow?: WorkflowObject;
+  documents?: Document[];
   auditDetails?: AuditDetails;
 }
 

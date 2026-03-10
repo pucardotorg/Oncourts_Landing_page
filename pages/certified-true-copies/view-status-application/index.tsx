@@ -20,16 +20,19 @@ const statusStyles = {
   PENDING_CMO_ESIGN: "bg-[#FFEDD5] text-[#B45309]",
   REJECTED: "bg-[#FCE7F3] text-[#BE185D]",
   DRAFT_IN_PROGRESS: "bg-[#DBEAFE] text-[#1D4ED8]",
+  PENDING_ISSUE: "bg-[#FFEDD5] text-[#B45309]",
+  PENDING_SIGN: "bg-[#FFEDD5] text-[#B45309]",
+  PAYMENT_COMPLETE: "bg-[#FFEDD5] text-[#B45309]",
 };
 
 const allowedStatuses = [
   "DRAFT_IN_PROGRESS",
   "PENDING_ESIGN",
   "PENDING_PAYMENT",
-  "PENDING_SIGN"
+  "PENDING_SIGN",
 ];
 
-const viewStatusForCertifiedTrueCopy = () => {
+const ViewStatusForCertifiedTrueCopy = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [authData, setAuthData] = useState<AuthData | null>(null);
   const { t } = useSafeTranslation();
@@ -54,6 +57,7 @@ const viewStatusForCertifiedTrueCopy = () => {
   const debounceTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(
     null
   );
+  const [selectedFileStoreId, setSelectedFileStoreId] = useState("");
 
   const showErrorToast = (message: string) => {
     setErrorToast({ show: true, message });
@@ -99,7 +103,11 @@ const viewStatusForCertifiedTrueCopy = () => {
     try {
       const res = await fetch(
         `/api/getFileByFileStoreId?tenantId=${tenantId || "kl"}&fileStoreId=${fileStoreId}`,
-        { headers: authData?.authToken ? { "auth-token": authData.authToken } : {} }
+        {
+          headers: authData?.authToken
+            ? { "auth-token": authData.authToken }
+            : {},
+        }
       );
       if (res.status === 200) {
         const blob = await res.blob();
@@ -247,8 +255,8 @@ const viewStatusForCertifiedTrueCopy = () => {
                 onClick={handleSearchApplication}
                 disabled={!isPhoneVerified}
                 className={`px-8 py-2 text-lg rounded-md border border-transparent focus:outline-none shadow-sm font-roboto font-medium ${isPhoneVerified
-                  ? "bg-[#0F766E] text-white hover:bg-teal-700"
-                  : "bg-[#EEF2F6] text-[#94A3B8] cursor-not-allowed border-none"
+                    ? "bg-[#0F766E] text-white hover:bg-teal-700"
+                    : "bg-[#EEF2F6] text-[#94A3B8] cursor-not-allowed border-none"
                   }`}
               >
                 {t(
@@ -300,40 +308,6 @@ const viewStatusForCertifiedTrueCopy = () => {
                 {
                   key: "caseTitle",
                   header: t("CASE_NAME"),
-                  render: (app) => {
-                    const isClickable = allowedStatuses.includes(
-                      app?.status || ""
-                    );
-
-                    return (
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (!isClickable) return;
-
-                          if (authData) {
-                            sessionStorage.setItem(
-                              "ctcAuthData",
-                              JSON.stringify(authData)
-                            );
-                          }
-                          // Use router to push with the requested query parameters
-                          router.push(
-                            `/certified-true-copies/apply?applicationNumber=${encodeURIComponent(
-                              app?.ctcApplicationNumber || ""
-                            )}&courtId=${encodeURIComponent(
-                              app?.courtId || ""
-                            )}&filingNumber=${encodeURIComponent(
-                              app?.filingNumber || ""
-                            )}`
-                          );
-                        }}
-                        className="text-left underline decoration-1 underline-offset-2 hover:text-teal-700 cursor-pointer"
-                      >
-                        {app?.caseTitle}
-                      </button>
-                    );
-                  },
                 },
                 { key: "caseNumber", header: t("CASE_NUMBER") },
                 {
@@ -344,8 +318,28 @@ const viewStatusForCertifiedTrueCopy = () => {
                       onClick={(e) => {
                         e.preventDefault();
                         if (allowedStatuses.includes(app?.status || "")) {
+                          if (authData) {
+                            sessionStorage.setItem(
+                              "ctcAuthData",
+                              JSON.stringify(authData)
+                            );
+                          }
+                          router.push(
+                            `/certified-true-copies/apply?applicationNumber=${encodeURIComponent(
+                              app?.ctcApplicationNumber || ""
+                            )}&courtId=${encodeURIComponent(
+                              app?.courtId || ""
+                            )}&filingNumber=${encodeURIComponent(
+                              app?.filingNumber || ""
+                            )}`
+                          );
                           return;
                         }
+                        // Extract fileStoreId from documents for SIGNED_CTC_APPLICATION
+                        const signedDoc = app?.documents?.find(
+                          (doc) => doc.documentType === "SIGNED_CTC_APPLICATION"
+                        );
+                        setSelectedFileStoreId(signedDoc?.fileStore || "");
                         setSelectedApplication(app);
                       }}
                       className="flex items-center gap-2 focus:outline-none hover:text-teal-700"
@@ -488,11 +482,12 @@ const viewStatusForCertifiedTrueCopy = () => {
           },
           {
             label: t(`CTC_SUCCESS_DOWNLOAD`),
-            onClick: () => handleDownload("dc358eeb-ff20-4e85-9a9b-d6c397e45fea"), // TODO: use real fileStoreId
+            onClick: () => handleDownload(selectedFileStoreId),
+            disabled: !selectedFileStoreId,
             variant: "primary",
           },
         ]}
-        fileStoreId="dc358eeb-ff20-4e85-9a9b-d6c397e45fea" // this needs to change
+        fileStoreId={selectedFileStoreId || undefined}
         tenantId={tenantId}
         authToken={authData?.authToken}
       />
@@ -500,4 +495,4 @@ const viewStatusForCertifiedTrueCopy = () => {
   );
 };
 
-export default viewStatusForCertifiedTrueCopy;
+export default ViewStatusForCertifiedTrueCopy;
