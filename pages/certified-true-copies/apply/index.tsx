@@ -400,7 +400,6 @@ const ApplyForCertifiedCopy = () => {
 
   // ── Auth guard: redirect if authData is missing on Step 2/3 ────────────────
   useEffect(() => {
-    debugger;
     if (
       router?.query?.applicationNumber &&
       !sessionStorage.getItem("ctcAuthData")
