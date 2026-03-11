@@ -15,6 +15,7 @@ interface TextFieldProps {
   disabled?: boolean;
   minLength?: number;
   maxLength?: number;
+  labelMargin?: string;
 }
 
 const TextField: React.FC<TextFieldProps> = ({
@@ -31,6 +32,7 @@ const TextField: React.FC<TextFieldProps> = ({
   disabled = false,
   minLength = 1,
   maxLength = 100,
+  labelMargin = "mb-0",
 }) => {
   const { t } = useSafeTranslation();
 
@@ -49,7 +51,7 @@ const TextField: React.FC<TextFieldProps> = ({
       {label && (
         <label
           htmlFor={id || name}
-          className="block text-lg font-roboto font-normal text-[#0A0A0A]"
+          className={`${labelMargin} block text-lg font-roboto font-normal text-[#0A0A0A]`}
         >
           {t(label)}
           {required && <span className="text-2xl text-red-500">*</span>}

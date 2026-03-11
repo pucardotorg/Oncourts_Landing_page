@@ -6,6 +6,8 @@ interface ListItemProps {
 }
 
 const ListItem: React.FC<ListItemProps> = ({ title, date }) => {
+  const tenantId = localStorage.getItem("tenant-id");
+
   const handleDownload = async () => {
     try {
       const response = await fetch("/api/_download", {
@@ -14,7 +16,7 @@ const ListItem: React.FC<ListItemProps> = ({ title, date }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          tenantId: "kl",
+          tenantId: tenantId,
           Criteria: {
             courtId: "KLKM52",
             searchDate: date,
@@ -35,7 +37,9 @@ const ListItem: React.FC<ListItemProps> = ({ title, date }) => {
       document.body.removeChild(link);
     } catch (error) {
       console.log("Download failed:", (error as Error).message);
-      alert(`Failed to download: ${error instanceof Error ? error.message : "Unknown error"}`);
+      alert(
+        `Failed to download: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   };
 
