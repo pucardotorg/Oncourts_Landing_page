@@ -286,11 +286,11 @@ const ApplyForCertifiedCopy = () => {
   );
 
   const getLeafIds = (nodes) => {
-    return nodes.flatMap((node) => {
-      if (node.children?.length) {
-        return getLeafIds(node.children);
+    return nodes?.flatMap((node) => {
+      if (node?.children?.length) {
+        return getLeafIds(node?.children);
       }
-      return node.fileStoreId ? [node.id] : [];
+      return [node?.id];
     });
   };
 
@@ -340,6 +340,35 @@ const ApplyForCertifiedCopy = () => {
             ...prev,
             selectedDocuments: selectedIds || prev?.selectedDocuments,
           }));
+        }
+
+        // Restore affidavit file from filestore if present
+        const affidavitFsId = app?.affidavitDocument?.fileStore;
+        if (affidavitFsId) {
+          try {
+            const affRes = await fetch(
+              `/api/getFileByFileStoreId?tenantId=${tenantId}&fileStoreId=${affidavitFsId}`,
+              {
+                headers: authData?.authToken
+                  ? { "auth-token": authData.authToken }
+                  : {},
+              },
+            );
+            if (affRes.ok) {
+              const blob = await affRes.blob();
+              const fileName =
+                (app?.affidavitDocument?.additionalDetails
+                  ?.fileName as string) || `affidavit.pdf`;
+              const file = new File([blob], fileName, { type: blob.type });
+              setStep2((prev) => ({
+                ...prev,
+                uploadedFile: file,
+                uploadedFileName: fileName,
+              }));
+            }
+          } catch (err) {
+            console.error("Failed to restore affidavit file:", err);
+          }
         }
 
         // Route to the right step based on status

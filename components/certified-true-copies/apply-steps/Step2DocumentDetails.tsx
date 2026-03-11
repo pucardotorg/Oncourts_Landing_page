@@ -63,15 +63,23 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
     return t(title);
   };
 
-  /** Resolve a node ID back to its display title from the bundle tree */
-  const getTitleById = (id: string, nodes: CaseBundleNode[]): string => {
+  /** Resolve a node ID back to its display title from the bundle tree.
+   *  For nested leaf nodes, combines the immediate parent's title with the leaf title. */
+  const getTitleById = (
+    id: string,
+    nodes: CaseBundleNode[],
+    parentTitle?: string,
+  ): string => {
     for (const node of nodes) {
       if (node?.id === id) {
-        return node?.title || id;
+        const title = node?.title || id;
+        return parentTitle
+          ? `${localizeTitle(title)} - ${localizeTitle(parentTitle)}`
+          : localizeTitle(title);
       }
 
       if (node?.children?.length) {
-        const found = getTitleById(id, node.children);
+        const found = getTitleById(id, node.children, node.title);
         if (found !== id) return found;
       }
     }
@@ -153,6 +161,9 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
           affidavitDocument = {
             fileStore: fileStoreId,
             documentType: "AFFIDAVIT",
+            additionalDetails: {
+              fileName: uploadedFile.name,
+            },
           };
         }
 
@@ -274,11 +285,7 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
             )}
 
             {/* ── Select input  (mobile: order 4 | desktop: col-2 row-2) ── */}
-            <div
-              className={`flex flex-col gap-1 ${
-                !isParty ? "order-4 md:order-none" : "w-full max-w-2xl"
-              }`}
-            >
+            <div className={`flex flex-col gap-1 w-full max-w-2xl `}>
               <div className="flex items-center gap-3 w-full">
                 <div className={`${ctcStyles.fileDisplayBox} text-[#0F172A]`}>
                   <span className="truncate">
@@ -303,10 +310,10 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
                     <div
                       key={doc}
                       className={ctcStyles.docTag}
-                      title={localizeTitle(getTitleById(doc, bundleNodes))}
+                      title={getTitleById(doc, bundleNodes)}
                     >
                       <span className={ctcStyles.docTagText}>
-                        {localizeTitle(getTitleById(doc, bundleNodes))}
+                        {getTitleById(doc, bundleNodes)}
                       </span>
                       <button
                         onClick={() => removeDocument(doc)}

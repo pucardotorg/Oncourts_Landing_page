@@ -147,9 +147,6 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
             body: JSON.stringify(payload),
           },
         );
-
-        if (!res.ok) throw new Error("Failed to generate PDF");
-
         const blob = await res.blob();
         setPdfBlob(blob);
       } catch (err) {
