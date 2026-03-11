@@ -407,5 +407,14 @@ export const ctcText = {
   viewCTCStatusTable: {
     header:"MY_APPLICATIONS",
     viewText: "CLICK_TO_VIEW"
-  }
+  },
+  // ─── ViewDocumentsModal (Issue Document column) ───────────────────────────
+  viewDocs: {
+    title: "CTC_VIEW_DOCS_TITLE",
+    downloadSelected: "CTC_VIEW_DOCS_DOWNLOAD_SELECTED",
+    statusApproved: "CTC_VIEW_DOCS_STATUS_APPROVED",
+    statusRejected: "CTC_VIEW_DOCS_STATUS_REJECTED",
+    statusPending: "CTC_VIEW_DOCS_STATUS_PENDING",
+    noPreview: "CTC_VIEW_DOCS_NO_PREVIEW",
+  },
 };

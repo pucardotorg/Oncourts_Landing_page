@@ -4,7 +4,8 @@ export interface CaseBundleNode {
   id: string;
   title: string;
   fileStoreId?: string;
-  status?: "accepted" | "rejected" | "pending";
+  issuedFileStoreId?: string;
+  status?: "ACCEPTED" | "REJECTED" | "PENDING";
   children?: CaseBundleNode[];
 }
 

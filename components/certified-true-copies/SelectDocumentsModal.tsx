@@ -16,6 +16,12 @@ interface SelectDocumentsModalProps {
   isParty?: boolean;
   tenantId?: string;
   authData?: AuthData | null;
+  /** View-only mode for the Issue Document column */
+  isViewMode?: boolean;
+  /** Override modal title (used in view mode) */
+  modalTitle?: string;
+  /** Callback to download selected documents by their issuedFileStoreIds */
+  onDownloadSelected?: (fileStoreIds: string[]) => void;
 }
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -29,6 +35,9 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
   isParty = false,
   tenantId,
   authData,
+  isViewMode = false,
+  modalTitle,
+  onDownloadSelected,
 }) => {
   const { t } = useSafeTranslation();
   const [searchQuery, setSearchQuery] = useState("");
@@ -49,16 +58,95 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
     };
   }, [isOpen]);
 
+  // Collect all accepted leaf IDs for view mode auto-selection
+  const getAcceptedLeafIds = (nodes: CaseBundleNode[]): string[] => {
+    let ids: string[] = [];
+    for (const node of nodes) {
+      if (node.children?.length) {
+        ids = ids.concat(getAcceptedLeafIds(node.children));
+      } else if (node.status === "ACCEPTED") {
+        ids.push(node.id);
+      }
+    }
+    return ids;
+  };
+
+  // Collect all node IDs (for expanding all in view mode)
+  const getAllNodeIds = (nodes: CaseBundleNode[]): Record<string, boolean> => {
+    const map: Record<string, boolean> = {};
+    for (const node of nodes) {
+      map[node.id] = true;
+      if (node.children?.length) {
+        Object.assign(map, getAllNodeIds(node.children));
+      }
+    }
+    return map;
+  };
+
+  // Find a node's issuedFileStoreId by ID across the entire document tree
+  const findNodeIssuedFileStoreIdById = (
+    id: string,
+    nodes: CaseBundleNode[],
+  ): string | null => {
+    for (const n of nodes) {
+      if (n.id === id) return n.issuedFileStoreId || null;
+      if (n.children) {
+        const found = findNodeIssuedFileStoreIdById(id, n.children);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
+
+  // Collect issuedFileStoreIds for selected docs
+  const getSelectedIssuedFileStoreIds = (): string[] => {
+    const ids: string[] = [];
+    for (const docId of selectedDocs) {
+      const fsId = findNodeIssuedFileStoreIdById(docId, documents);
+      if (fsId) ids.push(fsId);
+    }
+    return ids;
+  };
+
   // Sync internal state whenever modal opens
   useEffect(() => {
     if (isOpen) {
-      setSelectedDocs(initialSelected);
       setSearchQuery(""); // **Reset search query on open**
-      const initial: Record<string, boolean> = {};
-      documents?.forEach((node) => {
-        initial[node.id] = false; // **Default all to closed**
-      });
-      setExpandedSections(initial);
+
+      if (isViewMode) {
+        // View mode: expand all nodes, auto-select accepted leaves
+        setExpandedSections(getAllNodeIds(documents));
+        setSelectedDocs(getAcceptedLeafIds(documents));
+      } else {
+        setSelectedDocs(initialSelected);
+        // Expand parent nodes that contain pre-selected documents
+        const expanded: Record<string, boolean> = {};
+        const expandParentsOfSelected = (nodes: CaseBundleNode[]): boolean => {
+          let hasSelected = false;
+          for (const node of nodes) {
+            if (initialSelected.includes(node.id)) {
+              hasSelected = true;
+              expanded[node.id] = true; // expand the node itself (top-level leaf case)
+            }
+            if (node.children?.length) {
+              const childHasSelected = expandParentsOfSelected(node.children);
+              if (childHasSelected) {
+                expanded[node.id] = true;
+                hasSelected = true;
+              }
+            }
+          }
+          return hasSelected;
+        };
+        expandParentsOfSelected(documents);
+        // For nodes without selected children, default to closed
+        documents?.forEach((node) => {
+          if (!(node.id in expanded)) {
+            expanded[node.id] = false;
+          }
+        });
+        setExpandedSections(expanded);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
@@ -145,7 +233,11 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
     nodes: CaseBundleNode[],
   ): string | null => {
     for (const n of nodes) {
-      if (n.id === id) return n.fileStoreId || null;
+      if (n.id === id) {
+        // In view mode prefer issuedFileStoreId
+        if (isViewMode && n.issuedFileStoreId) return n.issuedFileStoreId;
+        return n.fileStoreId || null;
+      }
       if (n.children) {
         const found = findNodeFileStoreIdById(id, n.children);
         if (found) return found;
@@ -244,11 +336,13 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
                   type="checkbox"
                   checked={selectedDocs?.includes(node.id)}
                   onChange={() => toggleDocSelection(node.id)}
+                  disabled={isViewMode && node.status !== "ACCEPTED"}
                   className={ctcStyles.modalDocCheckbox}
                 />
                 <span className={ctcStyles.modalDocText}>
                   {localizeTitle(node.title)}
                 </span>
+                {isViewMode && node.status && renderStatusBadge(node.status)}
               </label>
             </div>
           )}
@@ -307,12 +401,36 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
           type="checkbox"
           checked={selectedDocs?.includes(node.id)}
           onChange={() => toggleDocSelection(node.id)}
+          disabled={isViewMode && node.status !== "ACCEPTED"}
           className={ctcStyles.modalDocCheckbox}
         />
         <span className={ctcStyles.modalDocText}>
           {localizeTitle(node.title)}
         </span>
+        {isViewMode && node.status && renderStatusBadge(node.status)}
       </label>
+    );
+  };
+
+  // Status badge renderer for view mode
+  const renderStatusBadge = (status: CaseBundleNode["status"]) => {
+    const styles: Record<string, string> = {
+      ACCEPTED:
+        "bg-[#D1FAE5] text-[#047857] px-2.5 py-0.5 rounded-md text-xs font-semibold ml-auto flex-shrink-0",
+      REJECTED:
+        "bg-[#FCE7F3] text-[#BE185D] px-2.5 py-0.5 rounded-md text-xs font-semibold ml-auto flex-shrink-0",
+      PENDING:
+        "bg-[#FFEDD5] text-[#B45309] px-2.5 py-0.5 rounded-md text-xs font-semibold ml-auto flex-shrink-0",
+    };
+    const labels: Record<string, string> = {
+      ACCEPTED: ctcText.viewDocs.statusApproved,
+      REJECTED: ctcText.viewDocs.statusRejected,
+      PENDING: ctcText.viewDocs.statusPending,
+    };
+    return (
+      <span className={styles[status || "PENDING"] || styles.PENDING}>
+        {t(labels[status || "PENDING"] || labels.PENDING)}
+      </span>
     );
   };
 
@@ -322,7 +440,7 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
         {/* Header */}
         <div className={ctcStyles.modalHeader}>
           <h2 className={ctcStyles.modalHeaderTitle}>
-            {t(ctcText.selectDocModal.title)}
+            {modalTitle || t(ctcText.selectDocModal.title)}
           </h2>
           <button onClick={onClose} className={ctcStyles.modalCloseBtn}>
             {svgIcons.OtpCloseIcon()}
@@ -369,7 +487,54 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
 
           {/* Right Preview Area */}
           <div className={ctcStyles.modalPreviewArea}>
-            {!isParty ? (
+            {isViewMode ? (
+              // View mode: always show preview using issuedFileStoreId
+              selectedDocs.length === 0 ? (
+                <p className={ctcStyles.modalPreviewText}>
+                  {t(ctcText.selectDocModal.selectADocumentToPreview)}
+                </p>
+              ) : (
+                <div className="flex flex-col items-center justify-center w-full h-full p-4">
+                  <div className="w-full max-w-2xl bg-gray-50 rounded-lg flex flex-col items-center justify-center h-[90%] border border-gray-200 overflow-hidden">
+                    {(() => {
+                      const lastId = selectedDocs[selectedDocs.length - 1];
+                      const selectedTitle =
+                        findNodeTitleById(lastId, documents) ||
+                        "Document Preview";
+                      const fileStoreId = findNodeIssuedFileStoreIdById(
+                        lastId,
+                        documents,
+                      );
+
+                      if (fileStoreId) {
+                        return (
+                          <div className="w-full h-full flex flex-col">
+                            <div className="flex-1 w-full bg-white relative overflow-hidden">
+                              <DocViewWrapper
+                                fileStoreId={fileStoreId}
+                                tenantId={tenantId}
+                                authToken={authData?.authToken}
+                              />
+                            </div>
+                          </div>
+                        );
+                      } else {
+                        return (
+                          <div className="p-4 flex flex-col items-center justify-center h-full text-center">
+                            <p className="text-gray-600 font-medium text-lg px-4 mb-2">
+                              {localizeTitle(selectedTitle)}
+                            </p>
+                            <p className="text-sm text-gray-400">
+                              {t(ctcText.viewDocs.noPreview)}
+                            </p>
+                          </div>
+                        );
+                      }
+                    })()}
+                  </div>
+                </div>
+              )
+            ) : !isParty ? (
               <p className={ctcStyles.modalPreviewText}>
                 {t(ctcText.selectDocModal.previewText)}
               </p>
@@ -409,8 +574,7 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
                             {localizeTitle(selectedTitle)}
                           </p>
                           <p className="text-sm text-gray-400">
-                            No preview available (missing internal FileStore
-                            ID).
+                            {t(ctcText.viewDocs.noPreview)}
                           </p>
                         </div>
                       );
@@ -427,19 +591,39 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
           <button onClick={onClose} className={ctcStyles.modalBtnSecondary}>
             {t(ctcText.selectDocModal.goBack)}
           </button>
-          <button
-            onClick={handleSelect}
-            disabled={selectedDocs.length === 0}
-            className={`${ctcStyles.modalBtnPrimary} ${
-              selectedDocs.length > 0
-                ? ctcStyles.modalBtnPrimaryActive
-                : ctcStyles.modalBtnPrimaryDisabled
-            }`}
-          >
-            {selectedDocs?.length > 0
-              ? `${t(ctcText?.selectDocModal?.selectDocBtn)} (${selectedDocs?.length})`
-              : t(ctcText?.selectDocModal?.selectDocBtn)}
-          </button>
+          {isViewMode ? (
+            <button
+              onClick={() => {
+                if (onDownloadSelected) {
+                  onDownloadSelected(getSelectedIssuedFileStoreIds());
+                }
+              }}
+              disabled={selectedDocs.length === 0}
+              className={`${ctcStyles.modalBtnPrimary} ${
+                selectedDocs.length > 0
+                  ? ctcStyles.modalBtnPrimaryActive
+                  : ctcStyles.modalBtnPrimaryDisabled
+              }`}
+            >
+              {selectedDocs?.length > 0
+                ? `${t(ctcText.viewDocs.downloadSelected)} (${selectedDocs?.length})`
+                : t(ctcText.viewDocs.downloadSelected)}
+            </button>
+          ) : (
+            <button
+              onClick={handleSelect}
+              disabled={selectedDocs.length === 0}
+              className={`${ctcStyles.modalBtnPrimary} ${
+                selectedDocs.length > 0
+                  ? ctcStyles.modalBtnPrimaryActive
+                  : ctcStyles.modalBtnPrimaryDisabled
+              }`}
+            >
+              {selectedDocs?.length > 0
+                ? `${t(ctcText?.selectDocModal?.selectDocBtn)} (${selectedDocs?.length})`
+                : t(ctcText?.selectDocModal?.selectDocBtn)}
+            </button>
+          )}
         </div>
       </div>
     </div>

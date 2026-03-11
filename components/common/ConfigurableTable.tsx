@@ -35,7 +35,7 @@ function ConfigurableTable<T>({
         {data.length > 0 ? (
           <table className="min-w-full text-left border-collapse">
             <thead className="bg-[#F8FAFC]">
-              <tr className="text-[#1E293B] font-bold text-[15px] border-b border-[#E2E8F0]">
+              <tr className="text-[#1E293B] font-semibold text-xl border-b border-[#E2E8F0]">
                 {columns.map((col) => (
                   <th
                     key={col.key as string}
@@ -48,7 +48,7 @@ function ConfigurableTable<T>({
                 ))}
               </tr>
             </thead>
-            <tbody className="text-[#475569] text-[15px]">
+            <tbody className="text-[#475569] text-xl">
               {data.map((item, rowIndex) => (
                 <tr
                   key={rowIndex}

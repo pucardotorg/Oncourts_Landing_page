@@ -9,25 +9,24 @@ import { svgIcons } from "../../../data/svgIcons";
 import VerifyMobileNumber from "../../../components/certified-true-copies/VerifyMobileNumber";
 import ConfigurableTable from "../../../components/common/ConfigurableTable";
 import ViewApplicationModal from "../../../components/certified-true-copies/ViewApplicationModal";
+import SelectDocumentsModal from "../../../components/certified-true-copies/SelectDocumentsModal";
 import { AuthData, CtcApplication } from "../../../types";
 import { searchCtcApplications } from "../../../services/ctcService";
 
 const statusStyles = {
-  ISSUED: "bg-[#D1FAE5] text-[#047857]",
-  PENDING_PAYMENT: "bg-[#FFEDD5] text-[#B45309]",
-  PENDING_ESIGN: "bg-[#FFEDD5] text-[#B45309]",
-  PENDING_JUDGE_APPROVAL: "bg-[#FFEDD5] text-[#B45309]",
-  PENDING_CMO_ESIGN: "bg-[#FFEDD5] text-[#B45309]",
-  REJECTED: "bg-[#FCE7F3] text-[#BE185D]",
   DRAFT_IN_PROGRESS: "bg-[#DBEAFE] text-[#1D4ED8]",
-  PENDING_ISSUE: "bg-[#FFEDD5] text-[#B45309]",
   PENDING_SIGN: "bg-[#FFEDD5] text-[#B45309]",
-  PAYMENT_COMPLETE: "bg-[#FFEDD5] text-[#B45309]",
+  PENDING_PAYMENT: "bg-[#FFEDD5] text-[#B45309]",
+  PENDING_APPROVAL: "bg-[#FFEDD5] text-[#B45309]",
+  PENDING_ISSUE: "bg-[#FFEDD5] text-[#B45309]",
+  PARTIALLY_ISSUED: "bg-[#FFEDD5] text-[#B45309]",
+  ISSUED: "bg-[#D1FAE5] text-[#047857]",
+  REJECTED: "bg-[#FCE7F3] text-[#BE185D]",
+  DELETED: "bg-[#FCE7F3] text-[#BE185D]",
 };
 
 const allowedStatuses = [
   "DRAFT_IN_PROGRESS",
-  "PENDING_ESIGN",
   "PENDING_PAYMENT",
   "PENDING_SIGN",
 ];
@@ -58,6 +57,10 @@ const ViewStatusForCertifiedTrueCopy = () => {
     null,
   );
   const [selectedFileStoreId, setSelectedFileStoreId] = useState("");
+
+  // View Documents modal state
+  const [viewDocsApplication, setViewDocsApplication] =
+    useState<CtcApplication | null>(null);
 
   const showErrorToast = (message: string) => {
     setErrorToast({ show: true, message });
@@ -175,7 +178,9 @@ const ViewStatusForCertifiedTrueCopy = () => {
       return {
         ...application,
         slNo: offset + index + 1,
-        hasDocument: application?.status === "ISSUED",
+        hasDocument: application?.status
+          ? ["PARTIALLY_ISSUED", "ISSUED"]?.includes(application?.status)
+          : false,
         applicationDate: formattedDate,
       };
     });
@@ -199,7 +204,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
         <div className="w-full flex justify-center items-center relative mb-6">
           <button
             onClick={() => {
-              router.back();
+              router.replace("/certified-true-copies");
             }}
             className={ctcStyles.backButton}
           >
@@ -360,11 +365,14 @@ const ViewStatusForCertifiedTrueCopy = () => {
                   header: "Status",
                   render: (app) => (
                     <span
-                      className={`px-2.5 py-1 text-sm font-semibold rounded-md ${
+                      className={`px-2.5 py-1 text-xl font-medium rounded-md ${
                         statusStyles[app?.status || "DRAFT_IN_PROGRESS"]
                       }`}
                     >
-                      {t(app?.status || ctcText.viewStatus.unknownStatus)}
+                      {t(
+                        `CTC_${app?.status}` ||
+                          ctcText.viewStatus.unknownStatus,
+                      )}
                     </span>
                   ),
                 },
@@ -376,11 +384,11 @@ const ViewStatusForCertifiedTrueCopy = () => {
                       <button
                         onClick={(e) => {
                           e.preventDefault();
-                          // open modal or download document later
+                          setViewDocsApplication(app);
                         }}
-                        className="flex items-center gap-2 focus:outline-none hover:text-teal-700 text-[#475569]"
+                        className="flex items-center gap-2 focus:outline-none hover:text-teal-700 text-[#334155]"
                       >
-                        <span className="text-[#64748B]">
+                        <span className="text-[#334155]">
                           {svgIcons.fileIcon()}
                         </span>
                         <span className="underline decoration-1 underline-offset-2">
@@ -499,6 +507,23 @@ const ViewStatusForCertifiedTrueCopy = () => {
         fileStoreId={selectedFileStoreId}
         tenantId={tenantId}
         authToken={authData?.authToken}
+      />
+
+      {/* ── View Documents Modal (Issue Document column) ──────────────── */}
+      <SelectDocumentsModal
+        isOpen={!!viewDocsApplication}
+        onClose={() => setViewDocsApplication(null)}
+        onSelect={() => {}}
+        documents={viewDocsApplication?.selectedCaseBundle || []}
+        isViewMode={true}
+        modalTitle={t(ctcText.viewDocs.title)}
+        tenantId={tenantId}
+        authData={authData}
+        onDownloadSelected={async (fileStoreIds) => {
+          for (const fsId of fileStoreIds) {
+            await handleDownload(fsId);
+          }
+        }}
       />
     </div>
   );
