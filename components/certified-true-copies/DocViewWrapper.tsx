@@ -14,9 +14,11 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
   blob,
 }) => {
   const [iframeUrl, setIframeUrl] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchDoc = useCallback(async () => {
     if (!fileStoreId) return;
+    setIsLoading(true);
     try {
       const uri = `/api/getFileByFileStoreId?tenantId=${tenantId || "kl"}&fileStoreId=${fileStoreId}`;
       const headers: HeadersInit = authToken ? { "auth-token": authToken } : {};
@@ -28,6 +30,8 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
       }
     } catch (err) {
       console.error("DocViewWrapper fetch error:", err);
+    } finally {
+      setIsLoading(false);
     }
   }, [fileStoreId, tenantId, authToken]);
 
@@ -42,6 +46,14 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
     }
   }, [blob, fetchDoc]);
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center w-full h-[500px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
+      </div>
+    );
+  }
+
   if (!iframeUrl) return null;
 
   return (
@@ -50,7 +62,7 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
       title="Document Preview"
       style={{
         width: "100%",
-        height: "500px",
+        height: "100%",
         border: "none",
         display: "block",
       }}

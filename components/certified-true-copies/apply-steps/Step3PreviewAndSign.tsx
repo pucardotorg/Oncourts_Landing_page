@@ -485,6 +485,7 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
       <SuccessModal
         isOpen={showSuccessModal}
         applicationNumber={ctcApplication?.ctcApplicationNumber || ""}
+        submissionDate={ctcApplication?.auditDetails?.createdTime || 0}
         signedFileStoreId={
           ctcApplication?.documents?.find(
             (d) => d.documentType === "SIGNED_CTC_APPLICATION",
@@ -498,9 +499,6 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
         authToken={authData?.authToken}
         onClose={() => {
           router.replace("/certified-true-copies");
-        }}
-        onViewStatus={() => {
-          router.replace("/certified-true-copies/view-status-application");
         }}
       />
     </>

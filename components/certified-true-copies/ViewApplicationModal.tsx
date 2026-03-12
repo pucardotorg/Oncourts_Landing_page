@@ -2,6 +2,7 @@ import React from "react";
 import BaseModal from "./BaseModal";
 import { CtcApplication } from "../../types";
 import DocViewWrapper from "./DocViewWrapper";
+import { ctcText } from "../../styles/certifiedCopyStyles";
 
 export interface TopInfoItem {
   label: string;
@@ -16,6 +17,7 @@ export interface FooterButton {
 }
 
 interface ViewApplicationModalProps {
+  t: (key: string) => string;
   isOpen: boolean;
   onClose: () => void;
   application: CtcApplication | null;
@@ -28,6 +30,7 @@ interface ViewApplicationModalProps {
 }
 
 const ViewApplicationModal: React.FC<ViewApplicationModalProps> = ({
+  t,
   isOpen,
   onClose,
   application,
@@ -65,13 +68,13 @@ const ViewApplicationModal: React.FC<ViewApplicationModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       title={modalTitle}
-      maxWidth="max-w-[800px]"
+      maxWidth="max-w-[70%]"
       footer={footer}
     >
-      <div className="p-6 bg-white overflow-y-auto max-h-[70vh]">
+      <div className="flex flex-col p-6 bg-white h-[70vh] max-h-[70vh] overflow-hidden">
         {/* Top Info Cards */}
         {topInfoColumns && topInfoColumns?.length > 0 && (
-          <div className="bg-[#FAFAFA] border border-[#EEEEEE] rounded-lg p-5 mb-8">
+          <div className="bg-[#FAFAFA] border border-[#EEEEEE] rounded-lg p-5 mb-4 shrink-0 overflow-y-auto max-h-[40%]">
             <div
               className={`grid grid-cols-1 md:grid-cols-${Math.min(topInfoColumns.length, 4)} gap-6`}
             >
@@ -86,10 +89,10 @@ const ViewApplicationModal: React.FC<ViewApplicationModalProps> = ({
                 >
                   {col.map((item, itemIdx) => (
                     <React.Fragment key={itemIdx}>
-                      <span className="text-[#888888] text-xs font-semibold mb-1">
+                      <span className="text-[#64748B] text-lg mb-1">
                         {item.label}
                       </span>
-                      <span className="text-[#333333] text-[15px] font-bold">
+                      <span className="text-[#0F172A] text-xl font-semibold">
                         {item.value}
                       </span>
                       {itemIdx < col.length - 1 && <div className="h-4"></div>}
@@ -101,9 +104,21 @@ const ViewApplicationModal: React.FC<ViewApplicationModalProps> = ({
           </div>
         )}
 
+        {/* Rejection Reason */}
+        {application.status === "REJECTED" && application.judgeComments && (
+          <div className="mb-4 p-4 rounded-md border border-red-200 bg-red-50 shrink-0">
+            <h3 className="text-red-800 text-lg font-semibold mb-1">
+              {t(ctcText.viewStatus.rejectionReason)}
+            </h3>
+            <p className="text-red-700 text-lg whitespace-pre-wrap">
+              {application.judgeComments}
+            </p>
+          </div>
+        )}
+
         {/* Handle Document Viewing */}
         {fileStoreId && (
-          <div className="mt-4">
+          <div className="flex-1 overflow-hidden rounded-md border border-[#E0E0E0]">
             <DocViewWrapper
               fileStoreId={fileStoreId}
               tenantId={tenantId}
