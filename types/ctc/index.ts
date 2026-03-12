@@ -61,7 +61,8 @@ export interface CtcApplication {
   | "PENDING_PAYMENT"
   | "PENDING_APPROVAL"
   | "PENDING_ISSUE"
-  | "ISSUED";
+  | "ISSUED"
+  | "REJECTED";
   judgeComments?: string;
   workflow?: WorkflowObject;
   documents?: Document[];
@@ -108,6 +109,7 @@ export interface Step2State {
 // ─── Misc ────────────────────────────────────────────────────────────────────
 
 export interface CaseSearchResult {
+  caseTitle?: string;
   cmpNumber?: string;
   cnrNumber?: string;
   courtCaseNumber?: string;

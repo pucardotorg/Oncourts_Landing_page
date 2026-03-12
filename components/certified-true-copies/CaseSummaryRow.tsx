@@ -28,7 +28,7 @@ const CaseSummaryRow: React.FC<CaseSummaryRowProps> = ({ t, caseResult }) => {
     },
     {
       label: ctcText.caseSummary.filingDateLabel,
-      value: formatDate(caseResult?.filingDate) || "—",
+      value: formatDate(caseResult?.filingDate, "dd-MM-yyyy") || "—",
     },
     {
       label: ctcText.caseSummary.caseTypeLabel,
