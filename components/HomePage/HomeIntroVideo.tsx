@@ -15,6 +15,7 @@ const HomeIntroVideo = () => {
   const [showCitizenTooltip, setShowCitizenTooltip] = useState(false);
   const [showEmployeeTooltip, setShowEmployeeTooltip] = useState(false);
   const [showSearchTooltip, setShowSearchTooltip] = useState(false);
+  const [showCertifiedCopiesTooltip, setShowCertifiedCopiesTooltip] = useState(false);
   const videoId = "-JoWnkE-uTs";
   const isMobile = useMediaQuery("(max-width: 640px)");
 
@@ -172,6 +173,32 @@ const HomeIntroVideo = () => {
                   {showSearchTooltip && !isMobile && (
                     <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-[99999]">
                       <Tooltip text={t("CASE_SEARCH_TOOLTIP")} />
+                    </div>
+                  )}
+                </div>
+                <div
+                  className="relative"
+                  onMouseEnter={() => setShowCertifiedCopiesTooltip(true)}
+                  onMouseLeave={() => setShowCertifiedCopiesTooltip(false)}
+                >
+                  <button
+                    className={`box-border text-[white] flex flex-row items-center justify-center ${isMobile ? "gap-4" : "gap-[clamp(12.88px,calc(12.88px+((20-12.88)*((100vw-1200px)/662))),20px)]"}  bg-[white] border border-[#0F766E] rounded-[12px] ${isMobile ? "h-[40px] px-[12px] py-2 whitespace-nowrap" : "h-[clamp(44.48px,calc(44.48px+((69-44.48)*((100vw-1200px)/662))),69px)] px-[clamp(10.31px,calc(10.31px+((16-10.31)*((100vw-1200px)/662))),16px)] py-[clamp(20.09px,calc(20.09px+((32-20.09)*((100vw-1200px)/662))),32px)] whitespace-nowrap"}`}
+                    onClick={() => router.push("/certified-true-copies")}
+                  >
+                    <span
+                      className={
+                        isMobile
+                          ? "text-center font-roboto font-medium text-[14px] leading-[20px] text-[#0F766E]"
+                          : "h-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] font-roboto font-medium text-[clamp(18.05px,calc(18.05px+((28-18.05)*((100vw-1200px)/662))),28px)] leading-[clamp(20.62px,calc(20.62px+((32-20.62)*((100vw-1200px)/662))),32px)] tracking-[-0.56px] text-[#0F766E]"
+                      }
+                    >
+                      {" "}
+                      {t("CERTIFIED_TRUE_COPIES")}
+                    </span>
+                  </button>
+                  {showCertifiedCopiesTooltip && !isMobile && (
+                    <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-[99999]">
+                      <Tooltip text={t("CERTIFIED_TRUE_COPIES_TOOLTIP")} />
                     </div>
                   )}
                 </div>

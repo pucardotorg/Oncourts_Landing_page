@@ -40,6 +40,50 @@ export const API_ENDPOINTS = {
       `${API_BASE_URL}/openapi/v1/magistrate_name/${courtId}/${tenantId}`,
     DOWNLOAD_FILE: (tenantId: string, orderId: string) =>
       `${API_BASE_URL}/openapi/v1/file/${tenantId}/${orderId}`,
+    CASE_SEARCH: (tenantId: string) =>
+      `${API_BASE_URL}/openapi/v1/${tenantId}/case/search`,
+  },
+
+  // OTP / Auth endpoints
+  OTP: {
+    SEND: `${API_BASE_URL}/user-otp/v1/_send`,
+    VERIFY: `${API_BASE_URL}/user/oauth/token`,
+  },
+
+  // CTC (Certified True Copy) service endpoints
+  CTC: {
+    CREATE: `${API_BASE_URL}/ctc/applications/_create`,
+    UPDATE: `${API_BASE_URL}/ctc/applications/_update`,
+    SEARCH: `${API_BASE_URL}/ctc/applications/_search`,
+    VALIDATE: `${API_BASE_URL}/ctc/applications/_validate`,
+  },
+
+  FILESTORE: {
+    FETCH: `${API_BASE_URL}/filestore/v1/files/id`,
+    UPLOAD: `${API_BASE_URL}/filestore/v1/files`,
+  },
+
+  // Case Management endpoints
+  CASE_MANAGEMENT: {
+    PREVIEW_DOC: `${API_BASE_URL}/casemanagement/casemanager/preview/doc`,
+  },
+
+  E_SIGN: {
+    ESIGN: `${API_BASE_URL}/e-sign-svc/v1/_esign`,
+  },
+
+  // Payment endpoints
+  PAYMENT: {
+    FETCH_BILL: `${API_BASE_URL}/billing-service/bill/v2/_fetchbill`,
+    PROCESS_CHALLAN: `${API_BASE_URL}/etreasury/payment/v1/_processChallan`,
+    SEARCH_BILL: `${API_BASE_URL}/billing-service/bill/v2/_search`,
+    GET_HEAD_BREAKDOWN: `${API_BASE_URL}/etreasury/payment/v1/_getHeadBreakDown`,
+    EPAYMENTS: `${API_BASE_URL}/epayments`,
+  },
+
+  // PDF Generation endpoints
+  PDF: {
+    CTC_APPLICATIONS: `${API_BASE_URL}/egov-pdf/ctc-applications`,
   },
 
   // MDMS endpoints

@@ -27,38 +27,13 @@ class MyDocument extends Document {
               `,
             }}
           />
-          {/* Inline fallback script */}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                if (typeof window.globalConfigs === 'undefined') {
-                  window.globalConfigs = (function () {
-                    var stateTenantId = "kl";
-                    var centralInstanceEnabled = false;
-                    var localeRegion = "IN";
-                    var localeDefault = "en";
-                    var mdmsContext = "mdms-v2";
-
-                    var getConfig = function (key) {
-                      if (key === "STATE_LEVEL_TENANT_ID") return stateTenantId;
-                      if (key === "ENABLE_SINGLEINSTANCE") return centralInstanceEnabled;
-                      if (key === "LOCALE_REGION") return localeRegion;
-                      if (key === "LOCALE_DEFAULT") return localeDefault;
-                      if (key === "MDMS_CONTEXT_PATH") return mdmsContext;
-                    };
-                    return { getConfig };
-                  })();
-                }
-              `,
-            }}
-          />
+          <script async src={process.env.NEXT_PUBLIC_GLOBAL}></script>
           {process.env.NEXT_PUBLIC_ENV === "local" && (
             <>
               <meta name="robots" content="noindex, nofollow" />
               <meta name="googlebot" content="noindex, nofollow" />
             </>
           )}
-
         </Head>
         <body>
           <Main />

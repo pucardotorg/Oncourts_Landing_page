@@ -33,6 +33,7 @@ export const MENU_ITEMS = {
     },
     { label: "CASE_SEARCH", href: "/search" },
     { label: "DISPLAY_CAUSELIST_HEADING", href: "/display-board" },
+    { label: "CERTIFIED_TRUE_COPIES", href: "/certified-true-copies" },
   ],
   SUPPORT: [
     { label: "HELP_RESOURCES", href: "/help-resources" },
