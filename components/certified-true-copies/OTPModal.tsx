@@ -173,6 +173,7 @@ const OTPModal = ({
       }}
       title={t(ctcText.otpModal.title)}
       footer={footer}
+      maxWidth="max-w-[35%]"
     >
       <div className={ctcStyles.otpBody}>
         <label className={ctcStyles.otpLabel}>
