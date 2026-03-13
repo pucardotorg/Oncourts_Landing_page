@@ -227,47 +227,43 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
       return;
     }
 
-    if (pdfFileStoreId) {
-      // If we already uploaded and submitted during a previous click, just open modal.
-      setIsApplicationSigned(false);
-      setShowSignatureModal(true);
-      return;
-    }
-
     setIsUploading(true);
     onSaving?.(true);
     try {
       // 1. Upload blob to filestore
-      const file = new File([pdfBlob], "ctc_application.pdf", {
-        type: pdfBlob.type,
-      });
-      const formData = new FormData();
-      formData.append("file", file, file.name);
-      formData.append("tenantId", tenantId);
-      formData.append("module", "DRISTI");
-
-      const res = await fetch(`/api/filestore/upload`, {
-        method: "POST",
-        headers: authData?.authToken
-          ? { "auth-token": authData.authToken }
-          : {},
-        body: formData,
-      });
-
-      if (!res.ok) {
-        showErrorToast?.(t(ctcText.step3.uploadFailed));
-        return;
-      }
-
-      const data = await res.json();
-      const newFileStoreId = data?.files?.[0]?.fileStoreId;
-
+      let newFileStoreId = pdfFileStoreId;
       if (!newFileStoreId) {
-        showErrorToast?.(t(ctcText.step3.missingFileStoreId));
-        return;
-      }
+        const file = new File([pdfBlob], "ctc_application.pdf", {
+          type: pdfBlob.type,
+        });
+        const formData = new FormData();
+        formData.append("file", file, file.name);
+        formData.append("tenantId", tenantId);
+        formData.append("module", "DRISTI");
 
-      setPdfFileStoreId(newFileStoreId);
+        const res = await fetch(`/api/filestore/upload`, {
+          method: "POST",
+          headers: authData?.authToken
+            ? { "auth-token": authData.authToken }
+            : {},
+          body: formData,
+        });
+
+        if (!res.ok) {
+          showErrorToast?.(t(ctcText.step3.uploadFailed));
+          return;
+        }
+
+        const data = await res.json();
+        newFileStoreId = data?.files?.[0]?.fileStoreId;
+
+        if (!newFileStoreId) {
+          showErrorToast?.(t(ctcText.step3.missingFileStoreId));
+          return;
+        }
+
+        setPdfFileStoreId(newFileStoreId);
+      }
 
       // 2. Save fileStoreId in documents and call updateCtc with SUBMIT
       if (ctcApplication && authData) {
@@ -310,7 +306,7 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
           <CaseSummaryRow t={t} caseResult={caseResult} />
 
           {/* PDF Preview Area */}
-          <div className="w-full flex-1 min-h-[400px] flex items-center justify-center bg-gray-50 border border-gray-200 rounded-lg">
+          <div className="w-full h-[calc(100vh-250px)] flex flex-col items-center justify-center bg-gray-50 border border-gray-200 rounded-lg overflow-hidden">
             {isPdfLoading ? (
               <div className="flex flex-col items-center gap-3">
                 <svg
@@ -407,6 +403,9 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
               showErrorToast?.(t(ctcText.step3.goBackFailed));
             } finally {
               onSaving?.(false);
+              setSignedFileStoreId(null);
+              setSignedMethod(null);
+              setIsApplicationSigned(false);
             }
           }
           setShowSignatureModal(false);
