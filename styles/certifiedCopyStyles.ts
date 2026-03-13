@@ -202,7 +202,7 @@ export const ctcStyles = {
   successDetailValue: "font-bold text-[#0A0A0A] flex items-center gap-2",
   successCopyBtn:
     "flex items-center gap-1 text-[#007E7E] font-normal hover:text-[#0d5d56] transition-colors ml-4",
-  successBtnRow: "grid grid-cols-1 sm:grid-cols-3 gap-6 w-full",
+  successBtnRow: "grid grid-cols-1 sm:grid-cols-2 gap-6 w-full",
   successBtnOutline:
     "flex items-center justify-center gap-2 px-4 py-3 border border-[#007E7E] rounded-md text-[#007E7E] hover:bg-[#F0FDFA] text-lg font-bold transition-colors w-full text-center",
   successBtnFill:
@@ -298,6 +298,7 @@ export const ctcText = {
     criminal: "CTC_VIEW_STATUS_CRIMINAL",
     niaS138: "CTC_VIEW_STATUS_NIA_S138",
     unknownStatus: "UNKNOWN_STATUS",
+    rejectionReason: "CTC_REASON_FOR_REJECTION",
   },
   step3: {
     goBack: "CTC_STEP3_GO_BACK",
@@ -375,7 +376,6 @@ export const ctcText = {
   success: {
     banner: "CTC_SUCCESS_BANNER",
     submissionDate: "CTC_SUCCESS_SUBMISSION_DATE",
-    submissionDateValue: "CTC_SUCCESS_SUBMISSION_DATE_VALUE",
     submissionId: "CTC_SUCCESS_SUBMISSION_ID",
     copy: "CTC_SUCCESS_COPY",
     copied: "CTC_SUCCESS_COPIED",

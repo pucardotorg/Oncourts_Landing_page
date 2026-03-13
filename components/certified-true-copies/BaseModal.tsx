@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { svgIcons } from "../../data/svgIcons";
 import { ctcStyles } from "../../styles/certifiedCopyStyles";
 
@@ -25,6 +25,18 @@ const BaseModal: React.FC<BaseModalProps> = ({
   children,
   footer,
 }) => {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (

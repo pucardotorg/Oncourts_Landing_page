@@ -2,23 +2,7 @@ import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { svgIcons } from "../../../data/svgIcons";
-
-// Helper function to format date according to the specified format
-const formatDate = (date: Date | null, format: string): string => {
-  if (!date) return "";
-
-  // Simple implementation for dd-MM-yyyy format
-  if (format === "dd-MM-yyyy") {
-    // Get day, month, and year components directly to avoid timezone issues
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Month is 0-indexed
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
-  }
-
-  // Default format
-  return date.toLocaleDateString();
-};
+import { formatDate } from "../../../utils/formatDate";
 
 // Helper function to create a date at noon to avoid timezone issues
 const createDateAtNoon = (year: number, month: number, day: number): Date => {
@@ -70,7 +54,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
     ? createDateAtNoon(
         selected.getFullYear(),
         selected.getMonth(),
-        selected.getDate()
+        selected.getDate(),
       )
     : null;
 
@@ -83,7 +67,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
       const normalizedDate = createDateAtNoon(
         selected.getFullYear(),
         selected.getMonth(),
-        selected.getDate()
+        selected.getDate(),
       );
       setInternalDate(normalizedDate);
     } else {

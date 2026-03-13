@@ -12,6 +12,7 @@ import ViewApplicationModal from "../../../components/certified-true-copies/View
 import SelectDocumentsModal from "../../../components/certified-true-copies/SelectDocumentsModal";
 import { AuthData, CtcApplication } from "../../../types";
 import { searchCtcApplications } from "../../../services/ctcService";
+import { formatDate } from "../../../utils/formatDate";
 
 const statusStyles = {
   DRAFT_IN_PROGRESS: "bg-[#DBEAFE] text-[#1D4ED8]",
@@ -52,7 +53,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const [selectedApplication, setSelectedApplication] =
     useState<CtcApplication | null>(null);
-  const limit = 10;
+  const limit = 20;
   const debounceTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
@@ -167,12 +168,10 @@ const ViewStatusForCertifiedTrueCopy = () => {
     return applications?.map((application, index) => {
       let formattedDate = "-";
       if (application?.auditDetails?.createdTime) {
-        formattedDate = new Intl.DateTimeFormat("en-US", {
-          timeZone: "Asia/Kolkata",
-          month: "long",
-          day: "numeric",
-          year: "numeric",
-        }).format(new Date(application.auditDetails.createdTime));
+        formattedDate = formatDate(
+          application?.auditDetails?.createdTime,
+          "long",
+        );
       }
 
       return {
@@ -273,7 +272,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
         </div>
 
         {/* My Applications Section */}
-        {hasSearched && (
+        {hasSearched && !isLoading && (
           <div className="w-full mt-4">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-4 gap-4">
               <h2 className="text-[#1E293B] text-[28px] font-bold font-roboto">
@@ -438,6 +437,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
 
       {/* ── View Application Modal ────────────────────────────────────── */}
       <ViewApplicationModal
+        t={t}
         isOpen={!!selectedApplication}
         onClose={() => setSelectedApplication(null)}
         application={selectedApplication}
@@ -472,18 +472,10 @@ const ViewStatusForCertifiedTrueCopy = () => {
                   {
                     label: t("FILING_DATE"),
                     value: selectedApplication?.auditDetails?.createdTime
-                      ? new Intl.DateTimeFormat("en-IN", {
-                          timeZone: "Asia/Kolkata",
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                        })
-                          .format(
-                            new Date(
-                              selectedApplication.auditDetails.createdTime,
-                            ),
-                          )
-                          .replace(/\//g, "-")
+                      ? formatDate(
+                          selectedApplication.auditDetails.createdTime,
+                          "dd-MM-yyyy",
+                        )
                       : "-",
                   },
                 ],

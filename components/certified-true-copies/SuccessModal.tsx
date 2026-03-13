@@ -2,25 +2,26 @@ import React, { useState, useEffect } from "react";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import { svgIcons } from "../../data/svgIcons";
 import { ctcStyles, ctcText } from "../../styles/certifiedCopyStyles";
+import { formatDate } from "../../utils/formatDate";
 
 interface SuccessModalProps {
   isOpen: boolean;
   applicationNumber: string;
+  submissionDate: number;
   signedFileStoreId?: string;
   tenantId?: string;
   authToken?: string;
   onClose: () => void;
-  onViewStatus: () => void;
 }
 
 const SuccessModal: React.FC<SuccessModalProps> = ({
   isOpen,
   applicationNumber,
+  submissionDate,
   signedFileStoreId,
   tenantId,
   authToken,
   onClose,
-  onViewStatus,
 }) => {
   const { t } = useSafeTranslation();
   const [copied, setCopied] = useState(false);
@@ -69,7 +70,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
                 {t(ctcText.success.submissionDate)}
               </span>
               <span className={ctcStyles.successDetailValue}>
-                {t(ctcText.success.submissionDateValue)}
+                {formatDate(submissionDate, "dd/MM/yyyy")}
               </span>
             </div>
             <div className={ctcStyles.successDetailRow}>
@@ -126,9 +127,6 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
           </button>
           <button onClick={onClose} className={ctcStyles.successBtnFill}>
             {t(ctcText.success.close)}
-          </button>
-          <button onClick={onViewStatus} className={ctcStyles.successBtnFill}>
-            {t(ctcText.success.viewStatus)}
           </button>
         </div>
       </div>

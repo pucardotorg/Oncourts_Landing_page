@@ -46,6 +46,7 @@ const ApplyForCertifiedCopy = () => {
   const [isLoading, setIsLoading] = useState(false);
   const initialLoadRef = useRef(false);
   const tenantId = localStorage.getItem("tenant-id") || "kl";
+  const [isSearchingList, setIsSearchingList] = useState(false);
 
   // ── CTC application state (shared across steps) ──────────────────────────
   const [ctcApplication, setCtcApplication] = useState<CtcApplication | null>(
@@ -267,7 +268,7 @@ const ApplyForCertifiedCopy = () => {
             ...prev,
             hasSearched: true,
             caseNumber:
-              caseItem?.courtCaseNumber ||
+              caseItem?.stNumber ||
               caseItem?.cmpNumber ||
               prev.caseNumber ||
               "",
@@ -502,7 +503,7 @@ const ApplyForCertifiedCopy = () => {
         <title>{t(ctcText?.apply?.pageTitle)}</title>
       </Head>
 
-      {(isLoading || isSearchingCase || isLoadingDocs) && (
+      {(isLoading || isSearchingCase || isLoadingDocs || isSearchingList) && (
         <div className={commonStyles?.loading?.container}>
           <div className={commonStyles?.loading?.spinner}></div>
         </div>
@@ -551,6 +552,8 @@ const ApplyForCertifiedCopy = () => {
               onSearchCase={handleSearchCase}
               isSearching={isSearchingCase}
               onSaving={setIsLoading}
+              isSearchingList={isSearchingList}
+              setIsSearchingList={setIsSearchingList}
             />
           )}
           {currentStep === 2 && (
