@@ -464,10 +464,18 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
       <PaymentModal
         isOpen={showPaymentModal}
         onClose={() => {
-          router.replace("/certified-true-copies");
+          if (router.query.fromView === "true") {
+            router.replace("/certified-true-copies/view-status-application");
+          } else {
+            router.replace("/certified-true-copies");
+          }
         }}
         onSkip={() => {
-          router.push("/certified-true-copies");
+          if (router.query.fromView === "true") {
+            router.replace("/certified-true-copies/view-status-application");
+          } else {
+            router.replace("/certified-true-copies");
+          }
         }}
         onMakePayment={handleMakePayment}
         paymentLoader={paymentLoader}

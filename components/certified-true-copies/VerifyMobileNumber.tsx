@@ -96,6 +96,7 @@ const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
       <div className={ctcStyles.verifyWrap}>
         <label className={ctcStyles.verifyLabel}>
           {t(ctcText.verifyPhone.label)}
+          <span className="text-red-500 text-2xl leading-none ml-1">*</span>
         </label>
         <div className={ctcStyles.verifyInputWrap}>
           <span className={ctcStyles.verifyPrefix}>+91</span>

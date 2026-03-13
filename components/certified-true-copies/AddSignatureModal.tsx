@@ -94,6 +94,25 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
+      const allowedTypes = [
+        "application/pdf",
+        "image/jpeg",
+        "image/png",
+        "image/jpg",
+      ];
+
+      if (!allowedTypes.includes(file.type)) {
+        setESignError(t("CTC_INVALID_FILE_FORMAT"));
+        e.target.value = "";
+        return;
+      }
+
+      if (file.size > 10 * 1024 * 1024) {
+        setESignError(t("CTC_FILE_SIZE_EXCEEDED"));
+        e.target.value = "";
+        return;
+      }
+
       setESignError("");
       setIsUploadLoading(true);
       try {

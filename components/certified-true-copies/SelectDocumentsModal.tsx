@@ -292,9 +292,10 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
               <span className={ctcStyles.modalSectionTitle}>
                 {`${itemNumber}. ${localizeTitle(node.title)}`}
               </span>
-              {isExpanded
-                ? svgIcons.UpArrowIcon({ fill: "#0F172A", width: "20px" })
-                : svgIcons.DownArrowIcon({ fill: "#0F172A", width: "20px" })}
+              {searchQuery?.length === 0 &&
+                (isExpanded
+                  ? svgIcons.UpArrowIcon({ fill: "#0F172A", width: "20px" })
+                  : svgIcons.DownArrowIcon({ fill: "#0F172A", width: "20px" }))}
             </button>
             {isExpanded && (
               <div className={ctcStyles.modalDocItems}>
@@ -325,9 +326,10 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
             <span className={ctcStyles.modalSectionTitle}>
               {`${itemNumber}. ${localizeTitle(node.title)}`}
             </span>
-            {isExpanded
-              ? svgIcons.UpArrowIcon({ fill: "#0F172A", width: "20px" })
-              : svgIcons.DownArrowIcon({ fill: "#0F172A", width: "20px" })}
+            {searchQuery.length === 0 &&
+              (isExpanded
+                ? svgIcons.UpArrowIcon({ fill: "#0F172A", width: "20px" })
+                : svgIcons.DownArrowIcon({ fill: "#0F172A", width: "20px" }))}
           </button>
           {isExpanded && (
             <div className={ctcStyles.modalDocItems}>
@@ -371,9 +373,10 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
             <span className="text-lg font-semibold text-gray-700">
               {`${itemNumber}. ${localizeTitle(node.title)}`}
             </span>
-            {isExpanded
-              ? svgIcons.UpArrowIcon({ fill: "#64748b", width: "16px" })
-              : svgIcons.DownArrowIcon({ fill: "#64748b", width: "16px" })}
+            {searchQuery.length === 0 &&
+              (isExpanded
+                ? svgIcons.UpArrowIcon({ fill: "#64748b", width: "16px" })
+                : svgIcons.DownArrowIcon({ fill: "#64748b", width: "16px" }))}
           </button>
           {isExpanded && (
             <div className="pl-5 mt-1 border-l-2 border-gray-100 ml-2">
