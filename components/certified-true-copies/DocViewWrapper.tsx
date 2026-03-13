@@ -58,6 +58,7 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
 
   return (
     <iframe
+      key={iframeUrl}
       src={iframeUrl}
       title="Document Preview"
       style={{
