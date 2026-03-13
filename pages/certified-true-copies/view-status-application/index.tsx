@@ -86,7 +86,8 @@ const ViewStatusForCertifiedTrueCopy = () => {
     setIsPhoneVerified(true);
     setHasSearched(true);
     setOffset(0);
-    fetchTableData(0);
+    setSearchQuery("");
+    fetchTableData(0, "");
   };
 
   const handleNextPage = () => {
@@ -149,12 +150,8 @@ const ViewStatusForCertifiedTrueCopy = () => {
       );
 
       const applications = res?.ctcApplications;
-      if (applications?.length) {
-        setApplications(applications);
-        setTotalCount(res?.totalCount || 0);
-      } else {
-        console.warn("No applications returned, falling back to mock data.");
-      }
+      setApplications(applications || []);
+      setTotalCount(res?.totalCount || 0);
     } catch (error) {
       console.error("Fetch applications failed:", error);
       showErrorToast(t(ctcText.viewStatus.fetchFailed));
@@ -262,10 +259,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
                     : "bg-[#EEF2F6] text-[#94A3B8] cursor-not-allowed border-none"
                 }`}
               >
-                {t(
-                  ctcText?.viewStatus?.searchButtonLabel ||
-                    "Search Application",
-                )}
+                {t(ctcText?.viewStatus?.searchButtonLabel)}
               </button>
             </div>
           </div>
@@ -335,7 +329,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
                               app?.courtId || "",
                             )}&filingNumber=${encodeURIComponent(
                               app?.filingNumber || "",
-                            )}`,
+                            )}&fromView=true`,
                           );
                           return;
                         }

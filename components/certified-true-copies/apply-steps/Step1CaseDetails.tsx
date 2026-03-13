@@ -221,7 +221,7 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
         {/* Info banner — shown before search */}
         {!hasSearched && (
           <div className={ctcStyles.infoBox}>
-            {svgIcons.InfoIcon({ width: "40" })}
+            {svgIcons.BlackInfoIcon()}
             <p className={ctcStyles.infoText}>{t(ctcText.step1.infoParty)}</p>
           </div>
         )}
@@ -315,7 +315,7 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
 
             {/* Info banner — shown after search */}
             <div className={ctcStyles.infoBox}>
-              {svgIcons.InfoIcon({ width: "40" })}
+              {svgIcons.BlackInfoIcon()}
               <p className={ctcStyles.infoText}>{t(ctcText.step1.infoPhone)}</p>
             </div>
 

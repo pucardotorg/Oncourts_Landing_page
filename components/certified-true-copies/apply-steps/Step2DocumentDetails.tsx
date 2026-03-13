@@ -220,13 +220,13 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
             className={
               !isParty
                 ? "grid grid-cols-1 md:grid-cols-2 gap-x-8 lg:gap-x-12 w-full"
-                : "w-full"
+                : "w-full flex flex-col"
             }
           >
             {/* ── Upload label  (mobile: order 1 | desktop: col-1 row-1) ── */}
             {!isParty && (
               <label
-                className={`${ctcStyles.label} mb-1 order-1 md:order-none`}
+                className={`${ctcStyles.label} mb-2 order-1 md:order-none`}
               >
                 {t(ctcText.step2.uploadLabel)}
               </label>
@@ -234,7 +234,7 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
 
             {/* ── Select label  (mobile: order 3 | desktop: col-2 row-1) ── */}
             <label
-              className={`${ctcStyles.label} mb-1 ${
+              className={`${ctcStyles.label} mb-2 ${
                 !isParty ? "order-3 md:order-none" : ""
               }`}
             >
@@ -258,12 +258,30 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
                     type="file"
                     ref={fileInputRef}
                     className="hidden"
-                    accept=".txt,.doc,.pdf,.docx"
+                    accept=".pdf,.png,.jpg,.jpeg"
                     onChange={(e) => {
                       if (e.target.files?.[0]) {
+                        const file = e.target.files[0];
+                        const allowedTypes = [
+                          "application/pdf",
+                          "image/jpeg",
+                          "image/png",
+                          "image/jpg",
+                        ];
+                        if (!allowedTypes.includes(file.type)) {
+                          showErrorToast?.(t("CTC_INVALID_FILE_FORMAT"));
+                          e.target.value = "";
+                          return;
+                        }
+                        if (file.size > 10 * 1024 * 1024) {
+                          showErrorToast?.(t("CTC_FILE_SIZE_EXCEEDED"));
+                          e.target.value = "";
+                          return;
+                        }
+
                         updateStep2({
-                          uploadedFileName: e.target.files[0].name,
-                          uploadedFile: e.target.files[0],
+                          uploadedFileName: file.name,
+                          uploadedFile: file,
                         });
                       }
                     }}
@@ -285,9 +303,15 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
             )}
 
             {/* ── Select input  (mobile: order 4 | desktop: col-2 row-2) ── */}
-            <div className={`flex flex-col gap-1 w-full max-w-2xl `}>
+            <div className={`flex flex-col gap-1 w-full`}>
               <div className="flex items-center gap-3 w-full">
-                <div className={`${ctcStyles.fileDisplayBox} text-[#0F172A]`}>
+                <div
+                  className={`${ctcStyles.fileDisplayBox} ${
+                    selectedDocuments?.length > 0
+                      ? "text-[#0F172A]"
+                      : "text-[#BBBBBD]"
+                  }`}
+                >
                   <span className="truncate">
                     {selectedDocuments?.length > 0
                       ? t(`${selectedDocuments?.length} documents selected`)

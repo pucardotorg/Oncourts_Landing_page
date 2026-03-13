@@ -13,7 +13,7 @@ export const ctcStyles = {
 
   // ─── Info banner ─────────────────────────────────────────────────────────
   infoBox:
-    "flex p-2 rounded-lg border border-[#E2E8F0] bg-white gap-3 items-center shadow-[0px_6.85px_10.27px_-3.42px_#0000000D,0px_17.12px_25.69px_-5.14px_#0000001A] w-full mb-2",
+    "flex p-3 rounded-xl border-2 border-[#E2E8F0] bg-white gap-3 items-center w-full mb-2",
   infoText: "text-[#334155] font-roboto text-[20px]",
 
   // ─── Fields ──────────────────────────────────────────────────────────────
@@ -34,7 +34,7 @@ export const ctcStyles = {
   fileDisplayBox:
     "flex-1 border border-[#3D3C3C] rounded-md px-4 py-3.5 bg-white overflow-hidden text-lg whitespace-nowrap text-ellipsis flex items-center h-[50px]",
   fileButton:
-    "flex items-center justify-center gap-2 px-6 py-3.5 border rounded-md font-semibold text-lg whitespace-nowrap transition-colors min-w-[130px] h-[50px] border-[#007E7E] text-[#007E7E] hover:bg-[#F0FDFA]",
+    "flex items-center justify-center gap-2 px-8 py-3.5 border rounded-md font-semibold text-lg whitespace-nowrap transition-colors min-w-[130px] h-[50px] border-[#007E7E] text-[#007E7E] hover:bg-[#F0FDFA]",
   fileHint: "text-[16px] text-[#3D3C3C] mt-1",
 
   // ─── Document tags grid ───────────────────────────────────────────────────
@@ -148,7 +148,7 @@ export const ctcStyles = {
   otpBtnBack:
     "px-6 py-2.5 border border-[#CBD5E1] rounded-md text-[#334155] hover:bg-gray-50 text-lg font-bold transition-colors",
   otpBtnSubmit:
-    "px-7 py-2.5 text-white rounded-md text-lg font-bold transition-colors",
+    "px-8 py-2.5 text-white rounded-md text-lg font-bold transition-colors",
   otpBtnSubmitActive: "bg-[#0F766E] hover:bg-teal-800",
   otpBtnSubmitDisabled: "bg-[#8E8E8E] cursor-not-allowed",
 
@@ -230,14 +230,14 @@ export const ctcStyles = {
   verifyDivider:
     "absolute left-[52px] top-1/2 -translate-y-1/2 h-5 w-[1px] bg-[#CBD5E1] pointer-events-none",
   verifyInput:
-    "w-full pl-[62px] pr-32 py-3.5 border border-[#3D3C3C] rounded-md focus:outline-none text-[16px]",
+    "w-full pl-[62px] pr-32 py-3.5 border border-[#3D3C3C] placeholder:!text-xl rounded-md focus:outline-none text-[16px]",
   verifyInputActive: "text-[#3D3C3C] bg-white",
   verifyInputDisabled: "bg-[#F8FAFC] text-gray-500",
   verifyBtnWrap: "absolute right-1.5 top-1.5 bottom-1.5 flex items-center",
   verifyBadge:
     "flex items-center gap-1.5 px-4 h-full text-[#16A34A] text-[16px] font-medium bg-green-50 rounded border border-green-200",
   verifyBtn:
-    "px-6 h-full text-[16px] font-medium rounded transition-colors",
+    "px-12 h-full text-[16px] font-medium rounded transition-colors",
   verifyBtnActive:
     "bg-[#EFF6FF] text-[#334155] border border-[#CBD5E1] hover:bg-[#DBEAFE]",
   verifyBtnDisabled: "bg-gray-100 text-gray-400 border border-gray-300 cursor-not-allowed",
