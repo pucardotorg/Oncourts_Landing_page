@@ -52,6 +52,7 @@ jobs:
           docker build \
           --build-arg NEXT_PUBLIC_ONCOURTS_API_ENDPOINT=https://dristi-kerala-qa.pucar.org \
           --build-arg NEXT_PUBLIC_GLOBAL=https://pucardotorg.github.io/kerala-configs/pucar-assets/globalconfig/solqa/globalconfig.js \
+          --build-arg NEXT_TEST_GLOBAL=/etc/nginx/conf.d/sub_filter.conf \
           --build-arg NEXT_PUBLIC_ENV=local \
           -t docker.io/venkatramireddyb/oncourts-website:${{ env.VERSION }}-${{ env.COMMIT_ID }} .
           docker push docker.io/venkatramireddyb/oncourts-website:${{ env.VERSION }}-${{ env.COMMIT_ID }}
