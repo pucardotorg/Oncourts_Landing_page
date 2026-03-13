@@ -88,7 +88,7 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
   const canProceed =
     isPhoneVerified &&
     Boolean(isPartyToCase) &&
-    Boolean(name) &&
+    (name?.trim().length || 0) >= 2 &&
     (isPartyToCase === "no" || Boolean(designation));
 
   // ─── Save draft (create or update) then move to Step 2 ─────────────────
@@ -101,7 +101,7 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
       caseTitle: caseResult?.caseTitle || "",
       filingNumber: caseResult?.filingNumber || "",
       courtId: caseResult?.courtId || "",
-      applicantName: name || "",
+      applicantName: name?.trim() || "",
       mobileNumber: phoneNumber || "",
       isPartyToCase: isPartyToCase === "yes",
       partyDesignation: designation,
@@ -210,6 +210,9 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
   // ─── Clear handler — also clear search results ─────────────────────────
   const handleClear = () => {
     clearStep1();
+    if (!hasSearched) {
+      updateStep1({ caseNumber: "" });
+    }
     setSearchResults([]);
     setSearchTotalCount(0);
     setSearchOffset(0);
@@ -260,6 +263,7 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
               placeholder={t(ctcText.step1.caseNumberPlaceholder)}
               className={`block w-full px-3 py-2 font-roboto text-base border-[1.5px] border-[#3D3C3C] rounded-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 ${caseFieldClass} ${hasSearched ? "bg-gray-100 cursor-not-allowed" : ""}`}
               autoComplete="off"
+              maxLength={16}
             />
           </div>
         </div>
@@ -376,7 +380,13 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
                   <TextField
                     label={ctcText.step1.name}
                     value={name}
-                    onChange={(v) => updateStep1({ name: v })}
+                    onChange={(v) => {
+                      let sanitized = v.replace(/[^a-zA-Z ]/g, "");
+                      if (sanitized.startsWith(" ")) {
+                        sanitized = sanitized.trimStart();
+                      }
+                      updateStep1({ name: sanitized });
+                    }}
                     className={ctcStyles.fieldInputHeight}
                     disabled={isPartyToCase === "yes"}
                   />
@@ -389,6 +399,7 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
                       onChange={(v) => updateStep1({ designation: v })}
                       className={ctcStyles.fieldInputHeight}
                       disabled={isPartyToCase === "yes"}
+                      minLength={2}
                     />
                   </div>
                 )}
