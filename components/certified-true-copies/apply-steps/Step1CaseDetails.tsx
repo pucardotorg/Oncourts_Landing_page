@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState } from "react";
 import { useSafeTranslation } from "../../../hooks/useSafeTranslation";
 import CaseSummaryRow from "../CaseSummaryRow";
+import CaseSearchTable from "./CaseSearchTable";
 import { svgIcons } from "../../../data/svgIcons";
 import TextField from "../../ui/form/TextField";
 import CustomDropdown from "../../ui/form/CustomDropdown";
@@ -36,9 +37,9 @@ interface Step1CaseDetailsProps {
   onSearchCase: (cnrInput: string) => Promise<void>;
   isSearching: boolean;
   onSaving?: (isSaving: boolean) => void;
+  isSearchingList: boolean;
+  setIsSearchingList: (isSearchingList: boolean) => void;
 }
-
-const DEBOUNCE_MS = 100;
 
 const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
   courtOptions,
@@ -54,15 +55,15 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
   onAuthDataReceived,
   authData,
   onSearchCase,
-  isSearching,
   onSaving,
+  isSearchingList,
+  setIsSearchingList,
 }) => {
   const { t } = useSafeTranslation();
   const [isSaving, setIsSaving] = useState(false);
 
   const {
     selectedCourt,
-    cnrNumber,
     caseNumber,
     hasSearched,
     phoneNumber,
@@ -72,19 +73,18 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
     designation,
   } = step1;
 
-  // ─── Autocomplete state ─────────────────────────────────────────────────
-  const [suggestions, setSuggestions] = useState<CaseSearchResult[]>([]);
-  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const caseInputWrapperRef = useRef<HTMLDivElement>(null);
+  // ─── Case search table state ──────────────────────────────────────────────
+  const [searchResults, setSearchResults] = useState<CaseSearchResult[]>([]);
+  const [searchTotalCount, setSearchTotalCount] = useState(0);
+  const [searchOffset, setSearchOffset] = useState(0);
+  const searchLimit = 10;
 
   // ─── Field class helpers ────────────────────────────────────────────────
   const courtFieldClass = `${ctcStyles.fieldInputHeight} ${hasSearched ? ctcStyles.fieldDisabled : ctcStyles.fieldEnabled}`;
   const caseFieldClass = `${ctcStyles.fieldInputHeight} ${hasSearched ? ctcStyles.fieldDisabled : ctcStyles.fieldEnabled}`;
   const isPartyClass = `${ctcStyles.fieldInputHeight} ${isPartyToCase === "yes" ? ctcStyles.fieldDisabled : ctcStyles.fieldEnabled}`;
   // ─── Derived validity ───────────────────────────────────────────────────
-  const canSearch = Boolean(selectedCourt && cnrNumber);
+  const canSearch = Boolean(selectedCourt && caseNumber);
   const canProceed =
     isPhoneVerified &&
     Boolean(isPartyToCase) &&
@@ -138,97 +138,81 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
     }
   };
 
-  // ─── Close dropdown when clicking outside ──────────────────────────────
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        caseInputWrapperRef.current &&
-        !caseInputWrapperRef.current.contains(e.target as Node)
-      ) {
-        setShowSuggestions(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  // ─── Debounced API call ─────────────────────────────────────────────────
-  const fetchSuggestions = useCallback(
-    async (query: string) => {
-      if (!query || query.trim().length < 2) {
-        setSuggestions([]);
-        setShowSuggestions(false);
-        return;
-      }
-
-      setIsLoadingSuggestions(true);
-      try {
-        const params = new URLSearchParams({
-          searchText: query.trim(),
-          limit: "5",
-          offset: "0",
-          tenantId: tenantId,
-          courtId: selectedCourt,
-        });
-
-        const response = await fetch(`/api/case/search?${params.toString()}`, {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          console.error(
-            `API /api/case/search failed with status ${response.status}`,
-          );
-          showErrorToast?.("Failed to fetch suggestions");
-          setSuggestions([]);
-          setShowSuggestions(false);
-          return;
-        }
-
-        const data = await response.json();
-
-        // Normalize: the API may return results under different keys
-        const results: CaseSearchResult[] = data?.cases || [];
-
-        setSuggestions(results);
-        setShowSuggestions(results?.length > 0);
-      } catch (err) {
-        console.error("Case search fetch error:", err);
-        setSuggestions([]);
-        setShowSuggestions(false);
-      } finally {
-        setIsLoadingSuggestions(false);
-      }
-    },
-    [selectedCourt, tenantId, showErrorToast],
-  );
-
-  // ─── Handle input change with debounce ─────────────────────────────────
+  // ─── Handle case number input change (no debounce) ─────────────────────
   const handleCaseNumberChange = (value: string) => {
     const sanitized = value.toUpperCase().replace(/[^A-Z0-9/]/g, "");
     updateStep1({ caseNumber: sanitized });
-
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current);
-    }
-
-    debounceTimerRef.current = setTimeout(() => {
-      fetchSuggestions(value);
-    }, DEBOUNCE_MS);
   };
 
-  // ─── Handle suggestion selection ────────────────────────────────────────
-  const handleSelectSuggestion = (item: CaseSearchResult) => {
-    updateStep1({
-      cnrNumber: item?.cnrNumber,
-      caseNumber:
-        item?.courtCaseNumber || item?.cmpNumber || item?.filingNumber,
-    });
-    setSuggestions([]);
-    setShowSuggestions(false);
+  // ─── Search case list (calls /api/case/search) ─────────────────────────
+  const handleSearchCaseList = async (offset = 0) => {
+    if (!caseNumber || caseNumber.trim().length < 2) {
+      showErrorToast?.("Please enter at least 2 characters to search.");
+      return;
+    }
+
+    setIsSearchingList(true);
+    try {
+      const params = new URLSearchParams({
+        searchText: caseNumber.trim(),
+        limit: String(searchLimit),
+        offset: String(offset),
+        tenantId: tenantId,
+        courtId: selectedCourt,
+      });
+
+      const response = await fetch(`/api/case/search?${params.toString()}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        console.error(
+          `API /api/case/search failed with status ${response.status}`,
+        );
+        showErrorToast?.("Failed to search cases. Please try again.");
+        setSearchResults([]);
+        return;
+      }
+
+      const data = await response.json();
+      const results: CaseSearchResult[] = data?.cases || [];
+      const totalCount = data?.pagination?.totalCount || results?.length;
+
+      setSearchResults(results);
+      setSearchTotalCount(totalCount);
+      setSearchOffset(offset);
+    } catch (err) {
+      console.error("Case search fetch error:", err);
+      showErrorToast?.("Failed to search cases. Please try again.");
+      setSearchResults([]);
+    } finally {
+      setIsSearchingList(false);
+    }
+  };
+
+  // ─── Handle "Proceed" on a table row → call openapi-index ──────────────
+  const handleCaseProceed = async (result: CaseSearchResult) => {
+    const cnr = result?.cnrNumber;
+    if (!cnr) {
+      showErrorToast?.("No CNR number found for this case.");
+      return;
+    }
+
+    // Update cnrNumber in state and call the parent's openapi-index handler
+    updateStep1({ cnrNumber: cnr });
+    setSearchResults([]); // Hide the table
+    await onSearchCase(cnr);
+  };
+
+  // ─── Clear handler — also clear search results ─────────────────────────
+  const handleClear = () => {
+    clearStep1();
+    setSearchResults([]);
+    setSearchTotalCount(0);
+    setSearchOffset(0);
   };
 
   return (
@@ -260,83 +244,23 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
             />
           </div>
 
-          {/* ── CNR / Case Number with autocomplete ── */}
-          <div
-            className={`${ctcStyles.fieldHalf} relative`}
-            ref={caseInputWrapperRef}
-          >
+          {/* ── Case Number input (plain, no autocomplete) ── */}
+          <div className={`${ctcStyles.fieldHalf} relative`}>
             {/* Label */}
             <label className="mb-1 block text-lg font-roboto font-normal text-[#0A0A0A]">
               {t(ctcText.step1.caseNumber)}
             </label>
 
-            {/* Input wrapper */}
-            <div className="relative">
-              <input
-                type="text"
-                value={caseNumber}
-                onChange={(e) => handleCaseNumberChange(e.target.value)}
-                disabled={hasSearched}
-                placeholder={t(ctcText.step1.caseNumberPlaceholder)}
-                className={`block w-full px-3 py-2 font-roboto text-base border-[1.5px] border-[#3D3C3C] rounded-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 ${caseFieldClass} ${hasSearched ? "bg-gray-100 cursor-not-allowed" : ""}`}
-                onFocus={() => {
-                  if (suggestions.length > 0) setShowSuggestions(true);
-                }}
-                autoComplete="off"
-              />
-
-              {/* Loading spinner */}
-              {isLoadingSuggestions && (
-                <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <svg
-                    className="animate-spin h-4 w-4 text-teal-600"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                    />
-                  </svg>
-                </div>
-              )}
-            </div>
-
-            {/* Suggestions dropdown */}
-            {showSuggestions && suggestions.length > 0 && (
-              <ul
-                className=" left-0 right-0 bg-white border border-gray-200 shadow-lg overflow-y-auto"
-                style={{ maxHeight: "220px" }} /* ~5 items × ~44px each */
-              >
-                {suggestions?.map((item, idx) => (
-                  <li
-                    key={idx}
-                    onMouseDown={(e) => {
-                      // Use mousedown so it fires before the input's blur
-                      e.preventDefault();
-                      handleSelectSuggestion(item);
-                    }}
-                    className="px-4 py-2.5 cursor-pointer hover:bg-teal-50 border-b border-gray-100 last:border-0"
-                  >
-                    <p className="text-sm font-medium text-gray-800 truncate">
-                      {item?.courtCaseNumber ||
-                        item?.cmpNumber ||
-                        item?.filingNumber}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            )}
+            {/* Input */}
+            <input
+              type="text"
+              value={caseNumber}
+              onChange={(e) => handleCaseNumberChange(e.target.value)}
+              disabled={hasSearched}
+              placeholder={t(ctcText.step1.caseNumberPlaceholder)}
+              className={`block w-full px-3 py-2 font-roboto text-base border-[1.5px] border-[#3D3C3C] rounded-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 ${caseFieldClass} ${hasSearched ? "bg-gray-100 cursor-not-allowed" : ""}`}
+              autoComplete="off"
+            />
           </div>
         </div>
 
@@ -346,23 +270,43 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
             <div className={ctcStyles.divider} />
             <div className="flex justify-end gap-4 mb-2 font-[Inter] font-medium">
               <button
-                onClick={clearStep1}
+                onClick={handleClear}
                 className="px-8 py-2 text-lg rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50 bg-white font-roboto font-medium"
               >
                 {t(ctcText.step1.clear)}
               </button>
               <button
-                onClick={() => onSearchCase(cnrNumber)}
-                disabled={!canSearch || isSearching || hasSearched}
+                onClick={() => handleSearchCaseList(0)}
+                disabled={!canSearch || isSearchingList || hasSearched}
                 className={`px-8 py-2 text-lg rounded-md border border-transparent shadow-sm text-white focus:outline-none font-roboto font-medium ${
-                  canSearch && !isSearching
+                  canSearch && !isSearchingList
                     ? "bg-[#0F766E] hover:bg-teal-700"
                     : "bg-[#8E8E8E] cursor-not-allowed"
                 }`}
               >
-                {isSearching ? t("Searching...") : t(ctcText.step1.searchCase)}
+                {isSearchingList
+                  ? t("Searching...")
+                  : t(ctcText.step1.searchCase)}
               </button>
             </div>
+
+            {/* ── Case search results table ── */}
+            {searchResults.length > 0 && !isSearchingList && (
+              <CaseSearchTable
+                t={t}
+                searchResults={searchResults}
+                onCaseProceed={handleCaseProceed}
+                totalCount={searchTotalCount}
+                offset={searchOffset}
+                limit={searchLimit}
+                onNextPage={() =>
+                  handleSearchCaseList(searchOffset + searchLimit)
+                }
+                onPrevPage={() =>
+                  handleSearchCaseList(Math.max(0, searchOffset - searchLimit))
+                }
+              />
+            )}
           </>
         ) : (
           <>
@@ -453,7 +397,7 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
 
             <FormActions
               secondaryLabel={ctcText.step1.clear}
-              onSecondary={clearStep1}
+              onSecondary={handleClear}
               primaryLabel={
                 isSaving ? "Saving..." : ctcText.step1.verifyProceed
               }
