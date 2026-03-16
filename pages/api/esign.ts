@@ -16,10 +16,14 @@ export default async function handler(
     return res.status(405).json({ error: "Method not allowed. Only POST is supported." });
   }
 
-  const { tenantId, fileStoreId, pageModule, signPlaceHolder } = req.body ?? {};
+  const { tenantId, fileStoreId } =
+    req.body?.ESignParameter ?? {};
 
   if (!tenantId || !fileStoreId) {
-    return res.status(400).json({ error: "tenantId and fileStoreId are required." });
+    console.error("Missing tenantId or fileStoreId in request body");
+    return res
+      .status(400)
+      .json({ error: "tenantId and fileStoreId are required." });
   }
 
   const backendUrl = API_ENDPOINTS.E_SIGN.ESIGN;
@@ -30,7 +34,7 @@ export default async function handler(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ fileStoreId, tenantId, pageModule, signPlaceHolder }),
+      body: JSON.stringify(req.body),
     });
 
     if (!response.ok) {

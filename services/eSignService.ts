@@ -8,12 +8,8 @@ import type { ESignRequestData, ESignResponseData } from "../types";
  */
 export async function eSignService(
   data: ESignRequestData,
-  params?: Record<string, string>,
 ): Promise<ESignResponseData> {
-  const queryString = params
-    ? "?" + new URLSearchParams(params).toString()
-    : "";
-  const response = await fetch(`/api/esign${queryString}`, {
+  const response = await fetch(`/api/esign`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -28,7 +24,9 @@ export async function eSignService(
       return Promise.reject(`Auth Error: 401 Unauthorized for eSign`);
     }
     const errorBody = await response.text();
-    return Promise.reject(`eSign request failed [${response.status}]: ${errorBody}`);
+    return Promise.reject(
+      `eSign request failed [${response.status}]: ${errorBody}`,
+    );
   }
 
   return response.json();

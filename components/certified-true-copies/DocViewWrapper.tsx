@@ -23,6 +23,8 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
   const [numPages, setNumPages] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number>();
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let objectUrl: string | null = null;
@@ -32,13 +34,16 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
     const fetchDoc = async () => {
       if (!fileStoreId) return;
       setIsLoading(true);
+      setError(null);
       try {
         const uri = `/api/getFileByFileStoreId?tenantId=${tenantId || "kl"}&fileStoreId=${fileStoreId}`;
-        const headers: HeadersInit = authToken ? { "auth-token": authToken } : {};
+        const headers: HeadersInit = authToken
+          ? { "auth-token": authToken }
+          : {};
         const response = await fetch(uri, {
           method: "GET",
           headers,
-          signal: controller.signal
+          signal: controller.signal,
         });
         if (response.status === 200) {
           const fetched = await response.blob();
@@ -46,9 +51,20 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
             objectUrl = URL.createObjectURL(fetched);
             setFileUrl(objectUrl);
           }
+        } else {
+          setError(`HTTP Error: ${response.status}`);
         }
-      } catch (err) {
+      } catch (err: unknown) {
+        if (err instanceof Error && err.name === "AbortError") {
+          // Silent for intentional aborts
+          return;
+        }
         console.error("DocViewWrapper fetch error:", err);
+        if (mounted) {
+          setError(
+            err instanceof Error ? err.message : "Failed to fetch document",
+          );
+        }
       } finally {
         if (mounted && !controller.signal.aborted) {
           setIsLoading(false);
@@ -57,6 +73,7 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
     };
 
     if (blob) {
+      setError(null);
       objectUrl = URL.createObjectURL(blob);
       setFileUrl(objectUrl);
     } else {
@@ -65,12 +82,12 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
 
     return () => {
       mounted = false;
-      controller.abort();
+      controller?.abort();
       if (objectUrl) {
         URL.revokeObjectURL(objectUrl);
       }
     };
-  }, [fileStoreId, tenantId, authToken, blob]);
+  }, [fileStoreId, tenantId, authToken, blob, reloadKey]);
   // Track container width correctly, accommodating modal animations
   useEffect(() => {
     let mounted = true;
@@ -105,8 +122,22 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center w-full h-full min-h-[500px]">
+      <div className="flex flex-col justify-center items-center w-full h-full min-h-[500px] gap-4">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col justify-center items-center w-full h-full min-h-[500px] gap-4 bg-gray-50 border border-red-100 rounded-lg p-6">
+        <div className="text-red-500 font-medium text-center">{error}</div>
+        <button
+          onClick={() => setReloadKey((prev) => prev + 1)}
+          className="px-6 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors font-semibold"
+        >
+          Reload Document
+        </button>
       </div>
     );
   }
@@ -134,7 +165,10 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
         }
       >
         {Array.from({ length: numPages }, (_, index) => (
-          <div key={index} className="mb-4 shadow-sm bg-white flex justify-center max-w-full">
+          <div
+            key={index}
+            className="mb-4 shadow-sm bg-white flex justify-center max-w-full"
+          >
             <Page
               pageNumber={index + 1}
               width={containerWidth}
