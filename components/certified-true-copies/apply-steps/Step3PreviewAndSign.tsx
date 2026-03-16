@@ -428,24 +428,50 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
           if (ctcApplication && authData && signedFileStoreId && signedMethod) {
             try {
               const prevDocs = ctcApplication.documents || [];
-              // Mark CTC_APPLICATION docs as inactive when adding SIGNED_CTC_APPLICATION
-              const updatedPrevDocs = prevDocs.map((d) => ({
-                ...d,
-                isActive:
-                  d.documentType === "CTC_APPLICATION" ? false : d.isActive,
-              }));
-              const newDoc = {
-                fileStore: signedFileStoreId,
-                documentType: "SIGNED_CTC_APPLICATION",
-                tenantId,
-              };
+              const mockESignEnabled =
+                window?.globalConfigs?.getConfig("mockESignEnabled") === "true";
 
-              const updatedApp: CtcApplication = {
-                ...ctcApplication,
-                documents: [...updatedPrevDocs, newDoc],
-                tenantId,
-                workflow: { action: signedMethod },
-              };
+              let updatedApp: CtcApplication;
+
+              if (mockESignEnabled && signedMethod === "ESIGN") {
+                // Mock e-sign: Change docType in place to avoid file deletion by backend
+                const updatedDocs = prevDocs.map((d) => {
+                  if (
+                    d.documentType === "CTC_APPLICATION" &&
+                    d.fileStore === signedFileStoreId
+                  ) {
+                    return {
+                      ...d,
+                      documentType: "SIGNED_CTC_APPLICATION",
+                    };
+                  }
+                  return d;
+                });
+                updatedApp = {
+                  ...ctcApplication,
+                  documents: updatedDocs,
+                  tenantId,
+                  workflow: { action: signedMethod },
+                };
+              } else {
+                // Real e-sign or Upload: Mark original CTC_APPLICATION as inactive and add new SIGNED_CTC_APPLICATION
+                const updatedPrevDocs = prevDocs.map((d) => ({
+                  ...d,
+                  isActive:
+                    d.documentType === "CTC_APPLICATION" ? false : d.isActive,
+                }));
+                const newDoc = {
+                  fileStore: signedFileStoreId,
+                  documentType: "SIGNED_CTC_APPLICATION",
+                  tenantId,
+                };
+                updatedApp = {
+                  ...ctcApplication,
+                  documents: [...updatedPrevDocs, newDoc],
+                  tenantId,
+                  workflow: { action: signedMethod },
+                };
+              }
 
               await updateCtcApplication(updatedApp, authData);
               if (onApplicationUpdate) {
