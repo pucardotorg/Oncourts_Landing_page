@@ -58,7 +58,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
     const params = new URLSearchParams(window.location.search);
     const result = params.get("result");
-    const fileStoreId = params.get("fileStoreId");
+    const fileStoreId = params.get("filestoreId");
 
     // Only act when the backend has returned a sign result
     if (!result) return;

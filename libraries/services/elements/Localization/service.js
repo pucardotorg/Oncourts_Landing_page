@@ -56,7 +56,13 @@ const LocalizationStore = {
 
   updateResources: (locale, messages) => {
     let locales = TransformArrayToObj(messages);
-    i18next.addResources(locale, "translations", locales);
+    if (i18next.addResources) {
+      i18next.addResources(locale, "translations", locales);
+    } else if (i18next.default && i18next.default.addResources) {
+      i18next.default.addResources(locale, "translations", locales);
+    } else {
+      console.error("i18next.addResources is not a function", i18next);
+    }
   },
 };
 

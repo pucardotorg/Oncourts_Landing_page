@@ -61,7 +61,7 @@ const Layout: React.FC<LayoutProps> = ({
       if (
         typeof window !== "undefined" &&
         window?.Digit?.Hooks?.useInitStore &&
-        window?.globalConfigs
+        window?.globalConfigs?.getConfig
       ) {
         const code = window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID");
         sessionStorage.setItem("tenant-id", code);

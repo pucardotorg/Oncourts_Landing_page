@@ -43,9 +43,7 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
   const [isBackLoading, setIsBackLoading] = useState(false);
   const [eSignError, setESignError] = useState("");
   const mockESignEnabled =
-    window?.globalConfigs?.getConfig("mockESignEnabled") === "true"
-      ? true
-      : false;
+    window?.globalConfigs?.getConfig?.("mockESignEnabled") === "true";
 
   const loading =
     isESignLoading || isUploadLoading || isProceedLoading || isBackLoading;

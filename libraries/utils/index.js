@@ -9,7 +9,7 @@
  * @returns {string} 
  */
 const getLocaleRegion = () => {
-  return window?.globalConfigs?.getConfig("LOCALE_REGION") || "IN";
+  return window?.globalConfigs?.getConfig?.("LOCALE_REGION") || "IN";
 };
 /**
  * Custom util to get the default locale
@@ -22,7 +22,7 @@ const getLocaleRegion = () => {
  * @returns {string} 
  */
 const getLocaleDefault = () => {
-  return globalConfigs?.getConfig("LOCALE_DEFAULT")  || "en";
+  return window?.globalConfigs?.getConfig?.("LOCALE_DEFAULT") || "en";
 };
 
 /**
@@ -36,7 +36,7 @@ const getLocaleDefault = () => {
  * @returns {string} 
  */
 const getDefaultLanguage = () => {
-  return  `${getLocaleDefault()}_${getLocaleRegion()}`;
+  return `${getLocaleDefault()}_${getLocaleRegion()}`;
 };
 
 export default {
