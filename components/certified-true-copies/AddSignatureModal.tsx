@@ -53,6 +53,7 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      setESignError("");
     } else {
       document.body.style.overflow = "auto";
     }

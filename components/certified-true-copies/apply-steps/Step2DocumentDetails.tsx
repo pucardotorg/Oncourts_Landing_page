@@ -303,7 +303,9 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
             )}
 
             {/* ── Select input  (mobile: order 4 | desktop: col-2 row-2) ── */}
-            <div className={`flex flex-col gap-1 w-full`}>
+            <div
+              className={`flex flex-col gap-1 w-full ${isParty ? "max-w-3xl" : ""}`}
+            >
               <div className="flex items-center gap-3 w-full">
                 <div
                   className={`${ctcStyles.fileDisplayBox} ${

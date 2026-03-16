@@ -45,6 +45,7 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
     Record<string, boolean>
   >({});
   const [selectedDocs, setSelectedDocs] = useState<string[]>(initialSelected);
+  const [previewDocId, setPreviewDocId] = useState<string | null>(null);
 
   // Scroll lock
   useEffect(() => {
@@ -83,13 +84,13 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
     return map;
   };
 
-  // Find a node's issuedFileStoreId by ID across the entire document tree
+  // Find a node's issuedFileStoreId (fallback to fileStoreId) by ID
   const findNodeIssuedFileStoreIdById = (
     id: string,
     nodes: CaseBundleNode[],
   ): string | null => {
     for (const n of nodes) {
-      if (n.id === id) return n.issuedFileStoreId || null;
+      if (n.id === id) return n.issuedFileStoreId || n.fileStoreId || null;
       if (n.children) {
         const found = findNodeIssuedFileStoreIdById(id, n.children);
         if (found) return found;
@@ -112,6 +113,7 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       setSearchQuery(""); // **Reset search query on open**
+      setPreviewDocId(null); // Reset preview document
 
       if (isViewMode) {
         // View mode: expand all nodes, auto-select accepted leaves
@@ -317,6 +319,8 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
       // Top-level leaf: collapsible section that reveals itself as a checkbox
       if (searchQuery && !shouldShowAllDescendants) return null;
 
+      const isDisabled = isViewMode && node.status !== "ACCEPTED";
+
       return (
         <div key={node.id} className={ctcStyles.modalSection}>
           <button
@@ -333,18 +337,45 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
           </button>
           {isExpanded && (
             <div className={ctcStyles.modalDocItems}>
-              <label className={ctcStyles.modalDocLabel}>
+              <label
+                className={`${ctcStyles.modalDocLabel} ${
+                  isDisabled
+                    ? ctcStyles.modalDocLabelDisabled
+                    : ctcStyles.modalDocLabelEnabled
+                }`}
+              >
                 <input
                   type="checkbox"
                   checked={selectedDocs?.includes(node.id)}
                   onChange={() => toggleDocSelection(node.id)}
-                  disabled={isViewMode && node.status !== "ACCEPTED"}
-                  className={ctcStyles.modalDocCheckbox}
+                  disabled={isDisabled}
+                  className={`${ctcStyles.modalDocCheckbox} flex-shrink-0`}
                 />
-                <span className={ctcStyles.modalDocText}>
-                  {localizeTitle(node.title)}
-                </span>
-                {isViewMode && node.status && renderStatusBadge(node.status)}
+                <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between flex-1 min-w-0 gap-2 xl:gap-3">
+                  <span
+                    className={`${ctcStyles.modalDocText} flex-1 min-w-0 pr-2`}
+                  >
+                    {localizeTitle(node.title)}
+                  </span>
+                  <div className="flex flex-row items-center gap-2 flex-shrink-0 mt-1 xl:mt-0">
+                    {isViewMode && renderStatusBadge(node.status)}
+                    {/* Preview Button */}
+                    {(isViewMode
+                      ? findNodeIssuedFileStoreIdById(node.id, documents)
+                      : findNodeFileStoreIdById(node.id, documents)) && (
+                      <button
+                        title={t("PREVIEW_PDF")}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setPreviewDocId(node.id);
+                        }}
+                        className="flex-shrink-0 text-[#0F766E] hover:bg-teal-50 p-1 rounded-full transition-colors"
+                      >
+                        {svgIcons.BlackInfoIcon("20", "20")}
+                      </button>
+                    )}
+                  </div>
+                </div>
               </label>
             </div>
           )}
@@ -398,19 +429,47 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
     // depth > 0 — leaf: direct checkbox
     if (searchQuery && !shouldShowAllDescendants) return null;
 
+    const isDisabled = isViewMode && node.status !== "ACCEPTED";
+
     return (
-      <label key={node.id} className={`${ctcStyles.modalDocLabel} mt-1`}>
+      <label
+        key={node.id}
+        className={`${ctcStyles.modalDocLabel} ${
+          isDisabled
+            ? ctcStyles.modalDocLabelDisabled
+            : ctcStyles.modalDocLabelEnabled
+        } mt-1`}
+      >
         <input
           type="checkbox"
           checked={selectedDocs?.includes(node.id)}
           onChange={() => toggleDocSelection(node.id)}
-          disabled={isViewMode && node.status !== "ACCEPTED"}
-          className={ctcStyles.modalDocCheckbox}
+          disabled={isDisabled}
+          className={`${ctcStyles.modalDocCheckbox} flex-shrink-0`}
         />
-        <span className={ctcStyles.modalDocText}>
-          {localizeTitle(node.title)}
-        </span>
-        {isViewMode && node.status && renderStatusBadge(node.status)}
+        <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between flex-1 min-w-0 gap-2 xl:gap-3">
+          <span className={`${ctcStyles.modalDocText} flex-1 min-w-0 pr-2`}>
+            {localizeTitle(node.title)}
+          </span>
+          <div className="flex flex-row items-center gap-2 flex-shrink-0 mt-1 xl:mt-0">
+            {isViewMode && renderStatusBadge(node.status)}
+            {/* Preview Button */}
+            {(isViewMode
+              ? findNodeIssuedFileStoreIdById(node.id, documents)
+              : findNodeFileStoreIdById(node.id, documents)) && (
+              <button
+                title={t("PREVIEW_PDF")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPreviewDocId(node.id);
+                }}
+                className="flex-shrink-0 text-[#0F766E] hover:bg-teal-50 p-1 rounded-full transition-colors"
+              >
+                {svgIcons.BlackInfoIcon("20", "20")}
+              </button>
+            )}
+          </div>
+        </div>
       </label>
     );
   };
@@ -419,11 +478,11 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
   const renderStatusBadge = (status: CaseBundleNode["status"]) => {
     const styles: Record<string, string> = {
       ACCEPTED:
-        "bg-[#D1FAE5] text-[#047857] px-2.5 py-0.5 rounded-md text-xs font-semibold ml-auto flex-shrink-0",
+        "bg-[#D1FAE5] text-[#047857] px-2.5 py-0.5 rounded-md text-sm font-medium ml-auto flex-shrink-0",
       REJECTED:
-        "bg-[#FCE7F3] text-[#BE185D] px-2.5 py-0.5 rounded-md text-xs font-semibold ml-auto flex-shrink-0",
+        "bg-[#FCE7F3] text-[#BE185D] px-2.5 py-0.5 rounded-md text-sm font-medium ml-auto flex-shrink-0",
       PENDING:
-        "bg-[#FFEDD5] text-[#B45309] px-2.5 py-0.5 rounded-md text-xs font-semibold ml-auto flex-shrink-0",
+        "bg-[#FFEDD5] text-[#B45309] px-2.5 py-0.5 rounded-md text-sm font-medium ml-auto flex-shrink-0",
     };
     const labels: Record<string, string> = {
       ACCEPTED: ctcText.viewDocs.statusApproved,
@@ -492,7 +551,7 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
           <div className={ctcStyles.modalPreviewArea}>
             {isViewMode ? (
               // View mode: always show preview using issuedFileStoreId
-              selectedDocs.length === 0 ? (
+              !previewDocId ? (
                 <p className={ctcStyles.modalPreviewText}>
                   {t(ctcText.selectDocModal.selectADocumentToPreview)}
                 </p>
@@ -500,12 +559,11 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
                 <div className="flex flex-col items-center justify-center w-full h-full p-4">
                   <div className="w-full max-w-2xl bg-gray-50 rounded-lg flex flex-col items-center justify-center h-[90%] border border-gray-200 overflow-hidden">
                     {(() => {
-                      const lastId = selectedDocs[selectedDocs.length - 1];
                       const selectedTitle =
-                        findNodeTitleById(lastId, documents) ||
+                        findNodeTitleById(previewDocId, documents) ||
                         "Document Preview";
                       const fileStoreId = findNodeIssuedFileStoreIdById(
-                        lastId,
+                        previewDocId,
                         documents,
                       );
 
@@ -541,7 +599,7 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
               <p className={ctcStyles.modalPreviewText}>
                 {t(ctcText.selectDocModal.previewText)}
               </p>
-            ) : selectedDocs.length === 0 ? (
+            ) : !previewDocId ? (
               <p className={ctcStyles.modalPreviewText}>
                 {t(ctcText.selectDocModal.selectADocumentToPreview)}
               </p>
@@ -549,12 +607,11 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
               <div className="flex flex-col items-center justify-center w-full h-full p-4">
                 <div className="w-full max-w-2xl bg-gray-50 rounded-lg flex flex-col items-center justify-center h-[90%] border border-gray-200 overflow-hidden">
                   {(() => {
-                    const lastId = selectedDocs[selectedDocs.length - 1];
                     const selectedTitle =
-                      findNodeTitleById(lastId, documents) ||
+                      findNodeTitleById(previewDocId, documents) ||
                       "Document Preview";
                     const fileStoreId = findNodeFileStoreIdById(
-                      lastId,
+                      previewDocId,
                       documents,
                     );
 
