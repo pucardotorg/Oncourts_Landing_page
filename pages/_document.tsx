@@ -27,7 +27,7 @@ class MyDocument extends Document {
               `,
             }}
           />
-          <script async src={process.env.NEXT_PUBLIC_GLOBAL}></script>
+          <script src={process.env.NEXT_PUBLIC_GLOBAL}></script>
           {process.env.NEXT_PUBLIC_ENV === "local" && (
             <>
               <meta name="robots" content="noindex, nofollow" />

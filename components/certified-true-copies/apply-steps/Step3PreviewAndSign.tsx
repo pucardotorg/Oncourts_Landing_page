@@ -429,7 +429,8 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
             try {
               const prevDocs = ctcApplication.documents || [];
               const mockESignEnabled =
-                window?.globalConfigs?.getConfig("mockESignEnabled") === "true";
+                window?.globalConfigs?.getConfig?.("mockESignEnabled") ===
+                "true";
 
               let updatedApp: CtcApplication;
 
