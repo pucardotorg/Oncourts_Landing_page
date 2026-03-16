@@ -47,10 +47,8 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
             setFileUrl(objectUrl);
           }
         }
-      } catch (err: any) {
-        if (err.name !== "AbortError" && mounted) {
-          console.error("DocViewWrapper fetch error:", err);
-        }
+      } catch (err) {
+        console.error("DocViewWrapper fetch error:", err);
       } finally {
         if (mounted && !controller.signal.aborted) {
           setIsLoading(false);
