@@ -15,15 +15,15 @@ import { searchCtcApplications } from "../../../services/ctcService";
 import { formatDate } from "../../../utils/formatDate";
 
 const statusStyles = {
-  DRAFT_IN_PROGRESS: "bg-[#DBEAFE] text-[#1D4ED8]",
-  PENDING_SIGN: "bg-[#FFEDD5] text-[#B45309]",
-  PENDING_PAYMENT: "bg-[#FFEDD5] text-[#B45309]",
-  PENDING_APPROVAL: "bg-[#FFEDD5] text-[#B45309]",
-  PENDING_ISSUE: "bg-[#FFEDD5] text-[#B45309]",
-  PARTIALLY_ISSUED: "bg-[#FFEDD5] text-[#B45309]",
-  ISSUED: "bg-[#D1FAE5] text-[#047857]",
-  REJECTED: "bg-[#FCE7F3] text-[#BE185D]",
-  DELETED: "bg-[#FCE7F3] text-[#BE185D]",
+  DRAFT_IN_PROGRESS: "bg-[#E0F2FE] text-[#1E40AF]",
+  PENDING_SIGN: "bg-[#E0F2FE] text-[#1E40AF]",
+  PENDING_PAYMENT: "bg-[#E0F2FE] text-[#1E40AF]",
+  PENDING_APPROVAL: "bg-[#FFEDD5] text-[#9A3412]",
+  PENDING_ISSUE: "bg-[#FFEDD5] text-[#9A3412]",
+  PARTIALLY_ISSUED: "bg-[#DCFCE7] text-[#166534]",
+  ISSUED: "bg-[#DCFCE7] text-[#166534]",
+  REJECTED: "bg-[#FEE2E2] text-[#991B1B]",
+  DELETED: "bg-[#FEE2E2] text-[#991B1B]",
 };
 
 const allowedStatuses = [

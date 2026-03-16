@@ -105,7 +105,9 @@ export const ctcStyles = {
   modalSectionBtn: "w-full flex justify-between items-center py-2 text-left hover:bg-gray-50 rounded-md transition-colors",
   modalSectionTitle: "text-lg font-bold text-[#0A0A0A]",
   modalDocItems: "flex flex-col gap-2 ml-2 mt-2 mb-2",
-  modalDocLabel: "flex items-center gap-3 py-2 px-2 cursor-pointer group hover:bg-gray-50 rounded-md transition-colors",
+  modalDocLabel: "flex items-center gap-3 py-2 px-2 rounded-md transition-colors",
+  modalDocLabelEnabled: "cursor-pointer group hover:bg-gray-50",
+  modalDocLabelDisabled: "cursor-default",
   modalDocCheckbox:
     "w-4 h-4 rounded-sm border-[#CBD5E1] text-teal-600 focus:ring-teal-600 focus:ring-offset-0 cursor-pointer flex-shrink-0",
   modalDocText:
