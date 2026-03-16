@@ -51,11 +51,10 @@ const ViewApplicationModal: React.FC<ViewApplicationModalProps> = ({
             key={index}
             onClick={btn.onClick}
             disabled={btn.disabled}
-            className={`px-6 py-2 rounded text-lg font-medium ${
-              btn.variant === "primary"
+            className={`px-6 py-2 rounded text-lg font-medium ${btn.variant === "primary"
                 ? "bg-[#0F766E] text-white hover:bg-teal-700"
                 : "border border-gray-300 text-gray-700 hover:bg-gray-50 bg-white"
-            } ${btn.disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+              } ${btn.disabled ? "opacity-50 cursor-not-allowed" : ""}`}
           >
             {btn.label}
           </button>
@@ -81,11 +80,10 @@ const ViewApplicationModal: React.FC<ViewApplicationModalProps> = ({
               {topInfoColumns.map((col, colIdx) => (
                 <div
                   key={colIdx}
-                  className={`flex flex-col ${
-                    colIdx < topInfoColumns.length - 1
+                  className={`flex flex-col ${colIdx < topInfoColumns.length - 1
                       ? "border-r border-[#E0E0E0] md:pr-4"
                       : ""
-                  }`}
+                    }`}
                 >
                   {col.map((item, itemIdx) => (
                     <React.Fragment key={itemIdx}>
@@ -118,7 +116,7 @@ const ViewApplicationModal: React.FC<ViewApplicationModalProps> = ({
 
         {/* Handle Document Viewing */}
         {fileStoreId && (
-          <div className="flex-1 overflow-hidden rounded-md border border-[#E0E0E0]">
+          <div className="flex-1 overflow-hidden rounded-md border border-[#E0E0E0] w-full flex flex-col">
             <DocViewWrapper
               fileStoreId={fileStoreId}
               tenantId={tenantId}
