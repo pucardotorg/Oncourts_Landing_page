@@ -184,11 +184,15 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
 
   useEffect(() => {
     if (ctcApplication?.status === "PENDING_SIGN") {
+      const fsId = ctcApplication.documents?.find(
+        (d) => d.documentType === "CTC_APPLICATION" && d.isActive !== false,
+      )?.fileStore;
+      if (fsId) setPdfFileStoreId(fsId);
       setShowSignatureModal(true);
     } else if (ctcApplication?.status === "PENDING_PAYMENT") {
       setShowPaymentModal(true);
     }
-  }, [ctcApplication?.status, setShowPaymentModal]);
+  }, [ctcApplication, setShowPaymentModal]);
 
   const handleMakePayment = async () => {
     try {
@@ -397,18 +401,22 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
               );
               if (res?.ctcApplication) {
                 onApplicationUpdate?.(res?.ctcApplication);
+                // Reset states to force re-fetch and re-upload on next signature attempt
+                setPdfFileStoreId("");
+                setPdfBlob(null);
+                setShowSignatureModal(false);
+                setSignedFileStoreId(null);
+                setSignedMethod(null);
+                setIsApplicationSigned(false);
+                hasFetchedPdf.current = false;
               }
             } catch (err) {
               console.error("EDIT action failed:", err);
               showErrorToast?.(t(ctcText.step3.goBackFailed));
             } finally {
               onSaving?.(false);
-              setSignedFileStoreId(null);
-              setSignedMethod(null);
-              setIsApplicationSigned(false);
             }
           }
-          setShowSignatureModal(false);
         }}
         isSigned={isApplicationSigned}
         onSignSuccess={(fileId, method) => {

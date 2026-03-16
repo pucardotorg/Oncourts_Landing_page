@@ -51,7 +51,7 @@ const ViewApplicationModal: React.FC<ViewApplicationModalProps> = ({
             key={index}
             onClick={btn.onClick}
             disabled={btn.disabled}
-            className={`px-6 py-2 rounded text-sm font-medium ${
+            className={`px-6 py-2 rounded text-lg font-medium ${
               btn.variant === "primary"
                 ? "bg-[#0F766E] text-white hover:bg-teal-700"
                 : "border border-gray-300 text-gray-700 hover:bg-gray-50 bg-white"
