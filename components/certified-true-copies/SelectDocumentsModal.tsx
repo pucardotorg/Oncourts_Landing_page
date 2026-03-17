@@ -371,7 +371,7 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
                         }}
                         className="flex-shrink-0 text-[#0F766E] hover:bg-teal-50 p-1 rounded-full transition-colors"
                       >
-                        {svgIcons.BlackInfoIcon("20", "20")}
+                        {svgIcons.EyeIcon("20", "20", "#3D3C3C")}
                       </button>
                     )}
                   </div>
@@ -465,7 +465,7 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
                 }}
                 className="flex-shrink-0 text-[#0F766E] hover:bg-teal-50 p-1 rounded-full transition-colors"
               >
-                {svgIcons.BlackInfoIcon("20", "20")}
+                {svgIcons.EyeIcon("20", "20", "#3D3C3C")}
               </button>
             )}
           </div>
@@ -478,11 +478,11 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
   const renderStatusBadge = (status: CaseBundleNode["status"]) => {
     const styles: Record<string, string> = {
       ACCEPTED:
-        "bg-[#D1FAE5] text-[#047857] px-2.5 py-0.5 rounded-md text-sm font-medium ml-auto flex-shrink-0",
+        "bg-[#DCFCE7] text-[#166534] px-2.5 py-0.5 rounded-md text-sm font-medium ml-auto flex-shrink-0",
       REJECTED:
-        "bg-[#FCE7F3] text-[#BE185D] px-2.5 py-0.5 rounded-md text-sm font-medium ml-auto flex-shrink-0",
+        "bg-[#FEE2E2] text-[#991B1B] px-2.5 py-0.5 rounded-md text-sm font-medium ml-auto flex-shrink-0",
       PENDING:
-        "bg-[#FFEDD5] text-[#B45309] px-2.5 py-0.5 rounded-md text-sm font-medium ml-auto flex-shrink-0",
+        "bg-[#FFEDD5] text-[#9A3412] px-2.5 py-0.5 rounded-md text-sm font-medium ml-auto flex-shrink-0",
     };
     const labels: Record<string, string> = {
       ACCEPTED: ctcText.viewDocs.statusApproved,

@@ -24,6 +24,7 @@ const statusStyles = {
   ISSUED: "bg-[#DCFCE7] text-[#166534]",
   REJECTED: "bg-[#FEE2E2] text-[#991B1B]",
   DELETED: "bg-[#FEE2E2] text-[#991B1B]",
+  REJECTED_ALL: "bg-[#FEE2E2] text-[#991B1B]",
 };
 
 const allowedStatuses = [
@@ -175,7 +176,12 @@ const ViewStatusForCertifiedTrueCopy = () => {
         ...application,
         slNo: offset + index + 1,
         hasDocument: application?.status
-          ? ["PARTIALLY_ISSUED", "ISSUED"]?.includes(application?.status)
+          ? [
+              "PENDING_ISSUE",
+              "PARTIALLY_ISSUED",
+              "ISSUED",
+              "REJECTED_ALL",
+            ]?.includes(application?.status)
           : false,
         applicationDate: formattedDate,
       };
@@ -237,6 +243,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
                   onAuthDataReceived={(data: AuthData) => {
                     setAuthData(data);
                   }}
+                  autoFocus={true}
                 />
               </div>
             </div>

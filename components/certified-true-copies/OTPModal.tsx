@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import BaseModal from "./BaseModal";
 import { ctcStyles, ctcText } from "../../styles/certifiedCopyStyles";
 import type { ValidateUserInfo, AuthData } from "../../types";
@@ -32,10 +32,12 @@ const OTPModal = ({
   const [otp, setOtp] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      setTimeout(() => inputRef.current?.focus(), 100);
     } else {
       document.body.style.overflow = "auto";
     }
@@ -188,7 +190,13 @@ const OTPModal = ({
             if (errorMsg) setErrorMsg("");
           }}
           placeholder={t(ctcText.otpModal.inputPlaceholder)}
+          ref={inputRef}
           className={ctcStyles.otpInput}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && otp?.length === 6 && !isVerifying) {
+              handleVerifyOtp();
+            }
+          }}
         />
         {errorMsg && (
           <p className="text-red-600 text-sm mt-2 font-medium">{errorMsg}</p>
