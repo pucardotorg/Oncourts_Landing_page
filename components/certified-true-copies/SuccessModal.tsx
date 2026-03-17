@@ -3,6 +3,7 @@ import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import { svgIcons } from "../../data/svgIcons";
 import { ctcStyles, ctcText } from "../../styles/certifiedCopyStyles";
 import { formatDate } from "../../utils/formatDate";
+import { handleAuthError } from "../../libraries/utils/authUtils";
 
 interface SuccessModalProps {
   isOpen: boolean;
@@ -106,6 +107,9 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
                     headers: authToken ? { "auth-token": authToken } : {},
                   },
                 );
+                if (!res.ok) {
+                  if (handleAuthError(res)) return;
+                }
                 const blob = await res.blob();
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement("a");

@@ -464,7 +464,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
                     value: selectedApplication?.filingNumber || "N/A",
                   },
                   {
-                    label: t("FILING_DATE"),
+                    label: t("CTC_APPLICATION_FILING_DATE"),
                     value: selectedApplication?.auditDetails?.createdTime
                       ? formatDate(
                           selectedApplication.auditDetails.createdTime,
