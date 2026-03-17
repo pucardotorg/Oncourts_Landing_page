@@ -13,6 +13,7 @@ import type {
 import { useSafeTranslation } from "../../../hooks/useSafeTranslation";
 import { svgIcons } from "../../../data/svgIcons";
 import { updateCtcApplication } from "../../../services/ctcService";
+import { handleAuthError } from "../../../libraries/utils/authUtils";
 
 interface Step2DocumentDetailsProps {
   isParty: boolean;
@@ -146,6 +147,7 @@ const Step2DocumentDetails: React.FC<Step2DocumentDetailsProps> = ({
           });
 
           if (!uploadRes.ok) {
+            if (handleAuthError(uploadRes)) return;
             showErrorToast?.(t(ctcText.step2.affidavitUploadFailed));
             return;
           }

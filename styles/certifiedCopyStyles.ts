@@ -155,9 +155,9 @@ export const ctcStyles = {
   otpBtnSubmitDisabled: "bg-[#8E8E8E] cursor-not-allowed",
 
   // ─── AddSignatureModal ────────────────────────────────────────────────────
-  sigModalBody: "p-6 font-roboto",
+  sigModalBody: "px-6 py-4 font-roboto",
   sigModalLabel: "block text-[22px] font-bold text-[#3D3C3C]",
-  sigActionRow: "flex flex-wrap items-center gap-4 mt-2",
+  sigActionRow: "flex flex-wrap items-center gap-8 mt-2",
   sigEsignBtn:
     "px-5 py-2.5 border border-[#007E7E] text-[#007E7E] bg-white rounded flex items-center justify-center font-bold text-lg hover:bg-teal-50 transition-colors",
   sigUploadLink:

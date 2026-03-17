@@ -4,6 +4,7 @@ import useESignApi from "../../hooks/useESignApi";
 import { svgIcons } from "../../data/svgIcons";
 import BaseModal from "./BaseModal";
 import { ctcStyles, ctcText } from "../../styles/certifiedCopyStyles";
+import { handleAuthError } from "../../libraries/utils/authUtils";
 import type { AuthData } from "../../types";
 
 interface AddSignatureModalProps {
@@ -129,6 +130,7 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
         });
 
         if (!res.ok) {
+          if (handleAuthError(res)) return;
           setESignError(t(ctcText.addSig.fileUploadFailed));
           return;
         }
@@ -162,6 +164,9 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
             : {},
         },
       );
+      if (!res.ok) {
+        if (handleAuthError(res)) return;
+      }
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -227,10 +232,11 @@ const AddSignatureModal: React.FC<AddSignatureModalProps> = ({
       }}
       title={t(ctcText.addSig.title)}
       footer={footer}
+      maxWidth="max-w-[30%]"
     >
       <div className={ctcStyles.sigModalBody}>
         {/* Label + Signed badge on the same row */}
-        <div className="flex items-center gap-4 mb-4">
+        <div className="flex items-center gap-4 mb-2">
           <label className={ctcStyles.sigModalLabel}>
             {t(ctcText.addSig.yourSignature)}
           </label>

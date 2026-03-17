@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useSafeTranslation } from "../../../hooks/useSafeTranslation";
+import { handleAuthError } from "../../../libraries/utils/authUtils";
 import Stepper from "../../../components/certified-true-copies/Stepper";
 import Step1CaseDetails from "../../../components/certified-true-copies/apply-steps/Step1CaseDetails";
 import Step2DocumentDetails from "../../../components/certified-true-copies/apply-steps/Step2DocumentDetails";
@@ -47,6 +48,7 @@ const ApplyForCertifiedCopy = () => {
   const initialLoadRef = useRef(false);
   const tenantId = localStorage.getItem("tenant-id") || "kl";
   const [isSearchingList, setIsSearchingList] = useState(false);
+  const [isRestoring, setIsRestoring] = useState(false);
 
   // ── CTC application state (shared across steps) ──────────────────────────
   const [ctcApplication, setCtcApplication] = useState<CtcApplication | null>(
@@ -299,7 +301,7 @@ const ApplyForCertifiedCopy = () => {
     async (appNum: string, filingNumber: string, courtId: string) => {
       if (!authData) return; // Wait until authData is available (OTP completed)
       try {
-        setIsLoading(true);
+        setIsRestoring(true);
         const res = await searchCtcApplications(
           {
             tenantId: tenantId,
@@ -313,7 +315,7 @@ const ApplyForCertifiedCopy = () => {
 
         const app = res?.ctcApplications?.[0];
         if (!app) {
-          setIsLoading(false);
+          setIsRestoring(false);
           return;
         }
 
@@ -355,6 +357,9 @@ const ApplyForCertifiedCopy = () => {
                   : {},
               },
             );
+            if (!affRes.ok) {
+              if (handleAuthError(affRes)) return;
+            }
             if (affRes.ok) {
               const blob = await affRes.blob();
               const fileName =
@@ -382,13 +387,13 @@ const ApplyForCertifiedCopy = () => {
 
         const cnrNumber = app?.cnrNumber;
         if (cnrNumber) {
-          handleSearchCase(cnrNumber);
+          await handleSearchCase(cnrNumber);
         }
       } catch (err) {
         console.error("Failed to restore CTC application:", err);
         showErrorToast("Failed to restore application details.");
       } finally {
-        setIsLoading(false);
+        setIsRestoring(false);
       }
     },
     [authData, tenantId, handleSearchCase, showErrorToast],
@@ -503,7 +508,12 @@ const ApplyForCertifiedCopy = () => {
         <title>{t(ctcText?.apply?.pageTitle)}</title>
       </Head>
 
-      {(isLoading || isSearchingCase || isLoadingDocs || isSearchingList) && (
+      {(isLoading ||
+        isSearchingCase ||
+        isLoadingDocs ||
+        isSearchingList ||
+        isRestoring ||
+        (Boolean(router?.query?.applicationNumber) && !ctcApplication)) && (
         <div className={commonStyles?.loading?.container}>
           <div className={commonStyles?.loading?.spinner}></div>
         </div>
@@ -512,9 +522,11 @@ const ApplyForCertifiedCopy = () => {
       <div className="w-full mx-auto flex flex-col items-center">
         {/* Header */}
         <div className="w-full flex justify-center items-center relative">
-          <button onClick={handleBack} className={ctcStyles.backButton}>
-            {svgIcons.BackArrowIcon()}
-          </button>
+          {Boolean(router?.query?.applicationNumber) && (
+            <button onClick={handleBack} className={ctcStyles.backButton}>
+              {svgIcons.BackArrowIcon()}
+            </button>
+          )}
 
           <h1
             className={

@@ -10,6 +10,7 @@ import { ctcStyles, ctcText } from "../../../styles/certifiedCopyStyles";
 import { useSafeTranslation } from "../../../hooks/useSafeTranslation";
 import usePaymentProcess from "../../../hooks/usePaymentProcess";
 import { updateCtcApplication } from "../../../services/ctcService";
+import { handleAuthError } from "../../../libraries/utils/authUtils";
 import type { CtcApplication, AuthData } from "../../../types";
 import DocViewWrapper from "../DocViewWrapper";
 
@@ -147,6 +148,9 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
             body: JSON.stringify(payload),
           },
         );
+        if (!res.ok) {
+          if (handleAuthError(res)) return;
+        }
         const blob = await res.blob();
         setPdfBlob(blob);
       } catch (err) {
@@ -254,6 +258,7 @@ const Step3PreviewAndSign: React.FC<Step3PreviewAndSignProps> = ({
         });
 
         if (!res.ok) {
+          if (handleAuthError(res)) return;
           showErrorToast?.(t(ctcText.step3.uploadFailed));
           return;
         }
