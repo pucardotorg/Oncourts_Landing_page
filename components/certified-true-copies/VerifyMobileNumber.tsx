@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import { svgIcons } from "../../data/svgIcons";
 import OTPModal from "./OTPModal";
@@ -17,6 +17,7 @@ interface VerifyMobileNumberProps {
   onValidateSuccess?: (data: ValidateUserInfo) => void;
   onAuthDataReceived?: (data: AuthData) => void;
   isViewApplication?: boolean;
+  autoFocus?: boolean;
 }
 
 const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
@@ -31,10 +32,18 @@ const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
   onValidateSuccess,
   onAuthDataReceived,
   isViewApplication = false,
+  autoFocus = false,
 }) => {
   const { t } = useSafeTranslation();
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (autoFocus && !isPhoneVerified) {
+      inputRef.current?.focus();
+    }
+  }, [autoFocus, isPhoneVerified]);
 
   const handleSendOtp = async () => {
     if (phoneNumber?.length !== 10) return;
@@ -117,11 +126,21 @@ const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
             maxLength={10}
             placeholder={t(ctcText.verifyPhone.inputPlaceholder)}
             disabled={isPhoneVerified}
+            onKeyDown={(e) => {
+              if (
+                e.key === "Enter" &&
+                phoneNumber?.length === 10 &&
+                !isSendingOtp
+              ) {
+                handleSendOtp();
+              }
+            }}
             className={`${ctcStyles.verifyInput} ${
               isPhoneVerified
                 ? ctcStyles.verifyInputDisabled
                 : ctcStyles.verifyInputActive
             }`}
+            ref={inputRef}
           />
           <div className={ctcStyles.verifyBtnWrap}>
             {isPhoneVerified ? (
