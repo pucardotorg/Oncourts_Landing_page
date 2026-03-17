@@ -54,7 +54,7 @@ const FormActions: React.FC<FormActionsProps> = ({
         <button
           onClick={onPrimary}
           disabled={primaryDisabled}
-          className={`${ctcStyles.btnPrimary} ${primaryDisabled ? primaryDisabledClass : primaryActiveClass}`}
+          className={`${ctcStyles.btnPrimary} ${primaryVariant === "proceed" && "!px-12"} ${primaryDisabled ? primaryDisabledClass : primaryActiveClass}`}
         >
           {t(primaryLabel)}
         </button>

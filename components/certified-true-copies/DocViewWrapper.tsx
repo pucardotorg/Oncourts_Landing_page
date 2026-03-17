@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
+import { handleAuthError } from "../../libraries/utils/authUtils";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -52,6 +53,7 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
             setFileUrl(objectUrl);
           }
         } else {
+          if (handleAuthError(response)) return;
           setError(`HTTP Error: ${response.status}`);
         }
       } catch (err: unknown) {
