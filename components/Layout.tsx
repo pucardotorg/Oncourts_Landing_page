@@ -42,7 +42,7 @@ const Layout: React.FC<LayoutProps> = ({
   children: React.ReactNode;
 }) => {
   const [digitReady, setDigitReady] = useState(false);
-  const [stateCode, setStateCode] = useState("pb");
+  const [stateCode, setStateCode] = useState("kl");
   const router = useRouter();
   const isLiveRoute = router?.pathname === "/live-causelist";
 
@@ -61,10 +61,11 @@ const Layout: React.FC<LayoutProps> = ({
       if (
         typeof window !== "undefined" &&
         window?.Digit?.Hooks?.useInitStore &&
-        window?.globalConfigs
+        window?.globalConfigs?.getConfig
       ) {
         const code = window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID");
-        setStateCode(code || "pb");
+        sessionStorage.setItem("tenant-id", code);
+        setStateCode(code);
         setDigitReady(true);
         clearInterval(interval);
       }

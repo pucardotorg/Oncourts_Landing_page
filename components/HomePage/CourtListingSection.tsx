@@ -30,6 +30,7 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
   CauseListItem,
   noticeItems,
 }) => {
+  const tenantId = localStorage.getItem("tenant-id");
   const [searchDate, setSearchDate] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 4;
@@ -42,7 +43,7 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
   const maxNoticePages = Math.ceil(noticeItems.length / itemsPerPage);
   const displayedNotices = noticeItems.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const formatDate = (date: Date): string => {
@@ -58,7 +59,10 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
       month: "long",
       year: "numeric",
     };
-    const formattedDate = new Date(selectedDate).toLocaleDateString("en-IN", options);
+    const formattedDate = new Date(selectedDate).toLocaleDateString(
+      "en-IN",
+      options,
+    );
 
     const title = `${formattedDate} Causelist - 24x7 ON Court`;
     setCauseListItemState({
@@ -82,7 +86,7 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          tenantId: "kl",
+          tenantId: tenantId,
           Criteria: {
             courtId: "KLKM52",
             searchDate: date,
@@ -112,12 +116,12 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
       // link.href = fileURL;
       // link.download = `causelist-${date}.pdf`;
       // link.click();
-
     } catch (error) {
       console.log("Download failed:", (error as Error).message);
       alert(
-        `Failed to download: ${error instanceof Error ? error.message : "Unknown error"
-        }`
+        `Failed to download: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
       );
     } finally {
       setLoading(false); // Stop loading
@@ -186,28 +190,33 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
             </div>
           </div>
 
-
           <div className="space-y-4 relative w-[90%] pt-4">
-            {!searchDate ? CauseListItem?.map((item) => (
-              <div
-                key={item.id}
-                className="flex justify-between items-center border rounded p-4"
-              >
-                <div className="flex items-center font-raleway text-lg">
-                  <div className="text-gray-700 hover:text-teal-600 font-semibold underline"
-                  >
-                    {item.fileStoreId ? item.title : `No hearings are scheduled for ${format(item.date, "dd MMM yyyy")}`}
-                  </div>
-                </div>
-                {item.fileStoreId && <div
-                  onClick={() => handlePreview(format(item.date, "yyyy-MM-dd"))} // assuming item.date exists
-                  className="bg-teal text-white px-3 py-2 rounded flex items-center text-sm underline w-[125px] justify-center cursor-pointer"
+            {!searchDate ? (
+              CauseListItem?.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex justify-between items-center border rounded p-4"
                 >
-                  <span>View List</span>
+                  <div className="flex items-center font-raleway text-lg">
+                    <div className="text-gray-700 hover:text-teal-600 font-semibold underline">
+                      {item.fileStoreId
+                        ? item.title
+                        : `No hearings are scheduled for ${format(item.date, "dd MMM yyyy")}`}
+                    </div>
+                  </div>
+                  {item.fileStoreId && (
+                    <div
+                      onClick={() =>
+                        handlePreview(format(item.date, "yyyy-MM-dd"))
+                      } // assuming item.date exists
+                      className="bg-teal text-white px-3 py-2 rounded flex items-center text-sm underline w-[125px] justify-center cursor-pointer"
+                    >
+                      <span>View List</span>
+                    </div>
+                  )}
                 </div>
-                }
-              </div>
-            )) : (
+              ))
+            ) : (
               <div className="flex justify-between items-center border rounded p-4">
                 <div className="flex items-center font-raleway text-lg">
                   <div className="text-gray-700 hover:text-teal-600 font-semibold underline">
@@ -246,8 +255,10 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
             {displayedNotices.length === 0 ? (
               <div className="flex items-center justify-center h-[300px]">
                 <p className="text-gray-500 text-center text-2xl font-semibold px-4">
-                  No official notices are available now.<br />
-                  Please revisit this section for future updates and announcements.
+                  No official notices are available now.
+                  <br />
+                  Please revisit this section for future updates and
+                  announcements.
                 </p>
               </div>
             ) : (
@@ -276,7 +287,9 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
                     <h3 className="font-semibold text-lg text-gray-800 mb-2">
                       {notice.title}
                     </h3>
-                    <p className="text-gray-600 text-md">{notice.description}</p>
+                    <p className="text-gray-600 text-md">
+                      {notice.description}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -293,18 +306,21 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
                 ← Prev
               </button>
 
-              {Array.from({ length: maxNoticePages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => handlePageChange(page)}
-                  className={`px-3 py-1 border rounded mx-1 ${page === currentPage
-                    ? "bg-teal text-white"
-                    : "text-gray-600"
+              {Array.from({ length: maxNoticePages }, (_, i) => i + 1).map(
+                (page) => (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`px-3 py-1 border rounded mx-1 ${
+                      page === currentPage
+                        ? "bg-teal text-white"
+                        : "text-gray-600"
                     }`}
-                >
-                  {page}
-                </button>
-              ))}
+                  >
+                    {page}
+                  </button>
+                ),
+              )}
 
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
@@ -315,12 +331,16 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
               </button>
             </div>
           )}
-
         </div>
       </div>
       {loading ? (
         <div className="fixed inset-0 z-50 bg-gray-500 bg-opacity-60 flex items-center justify-center">
-          <svg className="animate-spin h-8 w-8 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <svg
+            className="animate-spin h-8 w-8 text-teal-600"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
             <circle
               className="opacity-25"
               cx="12"

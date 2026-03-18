@@ -4,7 +4,7 @@ import { useMediaQuery } from "@mui/material";
 
 const InfoBanner: React.FC = () => {
   const isMobile = useMediaQuery("(max-width: 640px)");
-  const tenantId = localStorage.getItem("tenant-id") || "kl";
+  const tenantId = localStorage.getItem("tenant-id");
   const [messages, setMessages] = useState<string[]>([]);
 
   const getInfoMessage = useCallback(async () => {
@@ -32,7 +32,7 @@ const InfoBanner: React.FC = () => {
               msgId: `${Date.now()}|en_IN`,
             },
           }),
-        }
+        },
       );
       const data = await response.json();
       const message =

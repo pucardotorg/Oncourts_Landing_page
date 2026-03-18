@@ -16,12 +16,12 @@ function HomeCauseLists(): JSX.Element {
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [showTooltip, setShowTooltip] = useState(false);
   const [leftCauseList, setLeftCauseList] = useState<CauseListState | null>(
-    null
+    null,
   );
   const [rightCauseList, setRightCauseList] = useState<CauseListState | null>(
-    null
+    null,
   );
-  const tenantId = localStorage.getItem("tenant-id") || "kl";
+  const tenantId = localStorage.getItem("tenant-id");
   const { t } = useSafeTranslation();
 
   const fetchPdf = useCallback(
@@ -58,7 +58,7 @@ function HomeCauseLists(): JSX.Element {
         return null;
       }
     },
-    [tenantId]
+    [tenantId],
   );
 
   const downloadPdf = useCallback(
@@ -95,7 +95,7 @@ function HomeCauseLists(): JSX.Element {
         alert("Failed to download cause list");
       }
     },
-    [tenantId]
+    [tenantId],
   );
 
   const updateCauseLists = useCallback(async () => {
@@ -131,7 +131,7 @@ function HomeCauseLists(): JSX.Element {
       now.getDate(),
       17, // Hours (17:00)
       0, // Minutes
-      45 // Seconds
+      45, // Seconds
     );
 
     // If current time is past today's target time, set target to tomorrow
@@ -149,7 +149,7 @@ function HomeCauseLists(): JSX.Element {
     // Set up refresh timer
     const timeUntilRefresh = calculateTimeUntilRefresh();
     console.log(
-      `Setting refresh timer for ${timeUntilRefresh}ms (${new Date(Date.now() + timeUntilRefresh).toLocaleString()})`
+      `Setting refresh timer for ${timeUntilRefresh}ms (${new Date(Date.now() + timeUntilRefresh).toLocaleString()})`,
     );
 
     const refreshTimer = setTimeout(() => {
