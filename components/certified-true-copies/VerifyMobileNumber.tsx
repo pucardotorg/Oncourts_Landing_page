@@ -18,6 +18,7 @@ interface VerifyMobileNumberProps {
   onAuthDataReceived?: (data: AuthData) => void;
   isViewApplication?: boolean;
   autoFocus?: boolean;
+  required?: boolean;
 }
 
 const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
@@ -33,6 +34,7 @@ const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
   onAuthDataReceived,
   isViewApplication = false,
   autoFocus = false,
+  required = true,
 }) => {
   const { t } = useSafeTranslation();
   const [showOtpModal, setShowOtpModal] = useState(false);
@@ -105,7 +107,9 @@ const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
       <div className={ctcStyles.verifyWrap}>
         <label className={ctcStyles.verifyLabel}>
           {t(ctcText.verifyPhone.label)}
-          <span className="text-red-500 text-2xl leading-none ml-1">*</span>
+          {required && (
+            <span className="text-red-500 text-2xl leading-none ml-1">*</span>
+          )}
         </label>
         <div className={ctcStyles.verifyInputWrap}>
           <span className={ctcStyles.verifyPrefix}>+91</span>

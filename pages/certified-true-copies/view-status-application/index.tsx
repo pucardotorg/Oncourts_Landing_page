@@ -177,6 +177,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
         slNo: offset + index + 1,
         hasDocument: application?.status
           ? [
+              "PENDING_APPROVAL",
               "PENDING_ISSUE",
               "PARTIALLY_ISSUED",
               "ISSUED",
@@ -227,33 +228,30 @@ const ViewStatusForCertifiedTrueCopy = () => {
 
         {/* Card Content for Phone Verification */}
         <div className={`${ctcStyles.card} mb-8`}>
-          <div className="flex flex-col gap-8">
-            <div className="w-full flex justify-start">
-              <div className="flex flex-col w-full lg:w-1/2 min-w-0">
-                <VerifyMobileNumber
-                  phoneNumber={phoneNumber}
-                  onPhoneNumberChange={setPhoneNumber}
-                  isPhoneVerified={isPhoneVerified}
-                  onVerified={() => setIsPhoneVerified(true)}
-                  tenantId={tenantId}
-                  filingNumber={""}
-                  courtId={""}
-                  showErrorToast={showErrorToast}
-                  isViewApplication={true}
-                  onAuthDataReceived={(data: AuthData) => {
-                    setAuthData(data);
-                  }}
-                  autoFocus={true}
-                />
-              </div>
+          <div className="flex flex-col lg:flex-row items-start lg:items-end gap-4 lg:gap-10">
+            <div className="w-full lg:max-w-md">
+              <VerifyMobileNumber
+                phoneNumber={phoneNumber}
+                onPhoneNumberChange={setPhoneNumber}
+                isPhoneVerified={isPhoneVerified}
+                onVerified={() => setIsPhoneVerified(true)}
+                tenantId={tenantId}
+                filingNumber={""}
+                courtId={""}
+                showErrorToast={showErrorToast}
+                isViewApplication={true}
+                onAuthDataReceived={(data: AuthData) => {
+                  setAuthData(data);
+                }}
+                autoFocus={true}
+                required={false}
+              />
             </div>
 
-            <div className={ctcStyles.divider} />
-
-            <div className="flex justify-end gap-4 font-[Inter] font-medium">
+            <div className="flex gap-4 font-[Inter] font-medium w-full">
               <button
                 onClick={handleClear}
-                className="px-8 py-2 text-lg rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50 bg-white font-roboto font-medium"
+                className="px-8 py-3 text-lg rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50 bg-white font-roboto font-medium"
               >
                 {t(ctcText?.viewStatus?.clearButtonLabel || "Clear")}
               </button>
@@ -363,18 +361,54 @@ const ViewStatusForCertifiedTrueCopy = () => {
                 {
                   key: "status",
                   header: "Status",
-                  render: (app) => (
-                    <span
-                      className={`px-2.5 py-1 text-xl font-medium rounded-md ${
-                        statusStyles[app?.status || "DRAFT_IN_PROGRESS"]
-                      }`}
-                    >
-                      {t(
-                        `CTC_${app?.status}` ||
-                          ctcText.viewStatus.unknownStatus,
-                      )}
-                    </span>
-                  ),
+                  render: (app) => {
+                    const isClickable = allowedStatuses.includes(
+                      app?.status || "",
+                    );
+                    const statusContent = (
+                      <span
+                        className={`px-2.5 py-1 text-xl font-medium rounded-md ${
+                          statusStyles[app?.status || "DRAFT_IN_PROGRESS"]
+                        }`}
+                      >
+                        {t(
+                          `CTC_${app?.status}` ||
+                            ctcText.viewStatus.unknownStatus,
+                        )}
+                      </span>
+                    );
+
+                    if (isClickable) {
+                      return (
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (authData) {
+                              sessionStorage.setItem(
+                                "ctcAuthData",
+                                JSON.stringify(authData),
+                              );
+                            }
+                            router.push(
+                              `/certified-true-copies/apply?applicationNumber=${encodeURIComponent(
+                                app?.ctcApplicationNumber || "",
+                              )}&courtId=${encodeURIComponent(
+                                app?.courtId || "",
+                              )}&filingNumber=${encodeURIComponent(
+                                app?.filingNumber || "",
+                              )}&fromView=true`,
+                            );
+                            return;
+                          }}
+                          className="underline decoration-1 underline-offset-2"
+                        >
+                          {statusContent}
+                        </button>
+                      );
+                    }
+
+                    return statusContent;
+                  },
                 },
                 {
                   key: "hasDocument",
