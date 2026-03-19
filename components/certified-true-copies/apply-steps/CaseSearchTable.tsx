@@ -61,12 +61,12 @@ const CaseSearchTable: React.FC<CaseSearchTableProps> = ({
                       result.cmpNumber ||
                       result?.cnrNumber}
                   </td>
-                  <td className="p-2 font-medium text-[16px] leading-[18px] text-[#334155]">
+                  <td className="p-2 font-medium text-[16px] leading-[18px]">
                     <button
                       onClick={() => onCaseProceed(result)}
-                      className="p-2 rounded-md border-2 text-teal-600 hover:text-teal-900"
+                      className="p-2 rounded-md border border-[#0F766E] text-[#0F766E]"
                     >
-                      {t("PROCEED")}
+                      {t("CTC_APPLY")}
                     </button>
                   </td>
                 </tr>

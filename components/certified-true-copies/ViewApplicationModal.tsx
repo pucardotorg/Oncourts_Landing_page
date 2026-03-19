@@ -51,10 +51,11 @@ const ViewApplicationModal: React.FC<ViewApplicationModalProps> = ({
             key={index}
             onClick={btn.onClick}
             disabled={btn.disabled}
-            className={`px-6 py-2 rounded text-lg font-medium ${btn.variant === "primary"
+            className={`px-6 py-2 rounded text-lg font-medium ${
+              btn.variant === "primary"
                 ? "bg-[#0F766E] text-white hover:bg-teal-700"
                 : "border border-gray-300 text-gray-700 hover:bg-gray-50 bg-white"
-              } ${btn.disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+            } ${btn.disabled ? "opacity-50 cursor-not-allowed" : ""}`}
           >
             {btn.label}
           </button>
@@ -70,20 +71,24 @@ const ViewApplicationModal: React.FC<ViewApplicationModalProps> = ({
       maxWidth="max-w-[70%]"
       footer={footer}
     >
-      <div className="flex flex-col p-6 bg-white h-[70vh] max-h-[70vh] overflow-hidden">
+      <div
+        className="flex flex-col gap-4 p-6 bg-white overflow-y-auto"
+        style={{ maxHeight: "70vh" }}
+      >
         {/* Top Info Cards */}
         {topInfoColumns && topInfoColumns?.length > 0 && (
-          <div className="bg-[#FAFAFA] border border-[#EEEEEE] rounded-lg p-5 mb-4 shrink-0 overflow-y-auto max-h-[40%]">
+          <div className="bg-[#FAFAFA] border border-[#EEEEEE] rounded-lg p-5">
             <div
               className={`grid grid-cols-1 md:grid-cols-${Math.min(topInfoColumns.length, 4)} gap-6`}
             >
               {topInfoColumns.map((col, colIdx) => (
                 <div
                   key={colIdx}
-                  className={`flex flex-col ${colIdx < topInfoColumns.length - 1
+                  className={`flex flex-col ${
+                    colIdx < topInfoColumns.length - 1
                       ? "border-r border-[#E0E0E0] md:pr-4"
                       : ""
-                    }`}
+                  }`}
                 >
                   {col.map((item, itemIdx) => (
                     <React.Fragment key={itemIdx}>
@@ -104,7 +109,7 @@ const ViewApplicationModal: React.FC<ViewApplicationModalProps> = ({
 
         {/* Rejection Reason */}
         {application.status === "REJECTED" && application.judgeComments && (
-          <div className="mb-4 p-4 rounded-md border border-red-200 bg-red-50 shrink-0">
+          <div className="p-4 rounded-md border border-red-200 bg-red-50">
             <h3 className="text-red-800 text-lg font-semibold mb-1">
               {t(ctcText.viewStatus.rejectionReason)}
             </h3>
@@ -116,11 +121,12 @@ const ViewApplicationModal: React.FC<ViewApplicationModalProps> = ({
 
         {/* Handle Document Viewing */}
         {fileStoreId && (
-          <div className="flex-1 overflow-hidden rounded-md border border-[#E0E0E0] w-full flex flex-col">
+          <div className="rounded-md border border-[#E0E0E0] w-full">
             <DocViewWrapper
               fileStoreId={fileStoreId}
               tenantId={tenantId}
               authToken={authToken}
+              isView={true}
             />
           </div>
         )}

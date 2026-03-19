@@ -89,7 +89,7 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
     isPhoneVerified &&
     Boolean(isPartyToCase) &&
     (name?.trim().length || 0) >= 2 &&
-    (isPartyToCase === "no" || Boolean(designation));
+    Boolean(designation);
 
   // ─── Save draft (create or update) then move to Step 2 ─────────────────
   const handleProceed = async () => {
@@ -221,14 +221,6 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
   return (
     <div className={ctcStyles.card}>
       <div className="flex flex-col gap-6">
-        {/* Info banner — shown before search */}
-        {!hasSearched && (
-          <div className={ctcStyles.infoBox}>
-            {svgIcons.BlackInfoIcon()}
-            <p className={ctcStyles.infoText}>{t(ctcText.step1.infoParty)}</p>
-          </div>
-        )}
-
         {/* Court + Case Number row */}
         <div className={ctcStyles.fieldRow}>
           <div className={`${ctcStyles.fieldHalf} relative`}>
@@ -317,10 +309,11 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
             {/* Case summary */}
             <CaseSummaryRow t={t} caseResult={caseResult} />
 
-            {/* Info banner — shown after search */}
             <div className={ctcStyles.infoBox}>
               {svgIcons.BlackInfoIcon()}
-              <p className={ctcStyles.infoText}>{t(ctcText.step1.infoPhone)}</p>
+              <p className={ctcStyles.infoText}>
+                {`${t(ctcText.step1.infoPhone)}. ${t(ctcText.step1.infoParty)}.`}
+              </p>
             </div>
 
             {/* Phone number + Party dropdown row */}
@@ -328,7 +321,9 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
               className={`flex flex-col lg:flex-row gap-6 lg:gap-8 w-full mt-2`}
             >
               {/* Phone always takes at most half the width */}
-              <div className="flex flex-col w-full lg:w-1/2 min-w-0">
+              <div
+                className={`flex flex-col w-full ${isPhoneVerified ? "lg:w-1/2" : "lg:w-1/3"}`}
+              >
                 <VerifyMobileNumber
                   phoneNumber={phoneNumber}
                   onPhoneNumberChange={(v) => updateStep1({ phoneNumber: v })}
@@ -391,18 +386,16 @@ const Step1CaseDetails: React.FC<Step1CaseDetailsProps> = ({
                     disabled={isPartyToCase === "yes"}
                   />
                 </div>
-                {isPartyToCase === "yes" && (
-                  <div className="flex flex-col flex-1">
-                    <TextField
-                      label={ctcText.step1.party}
-                      value={designation}
-                      onChange={(v) => updateStep1({ designation: v })}
-                      className={ctcStyles.fieldInputHeight}
-                      disabled={isPartyToCase === "yes"}
-                      minLength={2}
-                    />
-                  </div>
-                )}
+                <div className="flex flex-col flex-1">
+                  <TextField
+                    label={ctcText.step1.party}
+                    value={t(designation)}
+                    onChange={(v) => updateStep1({ designation: v })}
+                    className={ctcStyles.fieldInputHeight}
+                    disabled={true}
+                    minLength={2}
+                  />
+                </div>
               </div>
             )}
 
