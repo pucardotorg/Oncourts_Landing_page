@@ -11,6 +11,7 @@ interface DocViewWrapperProps {
   tenantId?: string;
   authToken?: string;
   blob?: Blob;
+  isView?: boolean;
 }
 
 const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
@@ -18,6 +19,7 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
   tenantId,
   authToken,
   blob,
+  isView = false,
 }) => {
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -149,7 +151,7 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
   return (
     <div
       ref={containerRef}
-      className="w-full h-full overflow-y-auto overflow-x-hidden flex flex-col items-center bg-gray-50 hide-scrollbar"
+      className={`w-full overflow-x-hidden flex flex-col items-center bg-gray-50 ${!isView && "h-full overflow-y-auto hide-scrollbar"}`}
     >
       <Document
         file={fileUrl}

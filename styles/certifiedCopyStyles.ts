@@ -292,8 +292,8 @@ export const ctcText = {
   },
   viewStatus:{
     pageTitle: "VIEW_STATUS_OF_APPLICATION",
-    clearButtonLabel: "CLEAR",
-    searchButtonLabel: "SEARCH_APPLICATION",
+    clearButtonLabel: "CTC_CLEAR_SEARCH",
+    searchButtonLabel: "CTC_VIEW_APPLICATION",
     tokenMissing: "CTC_VIEW_STATUS_TOKEN_MISSING",
     fetchFailed: "CTC_VIEW_STATUS_FETCH_FAILED",
     searchPlaceholder: "CTC_VIEW_STATUS_SEARCH_PLACEHOLDER",
