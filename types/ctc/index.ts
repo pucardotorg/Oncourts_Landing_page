@@ -95,7 +95,7 @@ export interface Step1State {
   hasSearched: boolean;
   phoneNumber: string;
   isPhoneVerified: boolean;
-  isPartyToCase: string;
+  isPartyToCase: boolean | null;
   name: string;
   designation: string;
 }

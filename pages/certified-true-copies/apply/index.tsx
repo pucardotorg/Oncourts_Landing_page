@@ -100,7 +100,7 @@ const ApplyForCertifiedCopy = () => {
     hasSearched: false,
     phoneNumber: "",
     isPhoneVerified: false,
-    isPartyToCase: "",
+    isPartyToCase: null,
     name: "",
     designation: "",
   });
@@ -114,7 +114,7 @@ const ApplyForCertifiedCopy = () => {
     updateStep1({
       phoneNumber: "",
       isPhoneVerified: false,
-      isPartyToCase: "",
+      isPartyToCase: null,
       name: "",
       designation: "",
     });
@@ -330,7 +330,7 @@ const ApplyForCertifiedCopy = () => {
           hasSearched: true,
           phoneNumber: app?.mobileNumber || prev?.phoneNumber,
           isPhoneVerified: true,
-          isPartyToCase: app?.isPartyToCase ? "yes" : "no",
+          isPartyToCase: app?.isPartyToCase ?? false,
           name: app?.applicantName || "",
           designation: app?.partyDesignation || "",
         }));
@@ -570,7 +570,7 @@ const ApplyForCertifiedCopy = () => {
           )}
           {currentStep === 2 && (
             <Step2DocumentDetails
-              isParty={step1?.isPartyToCase === "yes"}
+              isParty={step1?.isPartyToCase ?? false}
               step2={step2}
               updateStep2={updateStep2}
               onNext={() => setCurrentStep(3)}
