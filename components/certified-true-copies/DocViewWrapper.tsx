@@ -22,6 +22,7 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
   isView = false,
 }) => {
   const [fileUrl, setFileUrl] = useState<string | null>(null);
+  const [isImage, setIsImage] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [numPages, setNumPages] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -49,8 +50,11 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
           signal: controller.signal,
         });
         if (response.status === 200) {
+          const contentType = response.headers.get("content-type");
           const fetched = await response.blob();
           if (mounted) {
+            const resolvedType = fetched.type || contentType || "";
+            setIsImage(resolvedType.startsWith("image/"));
             objectUrl = URL.createObjectURL(fetched);
             setFileUrl(objectUrl);
           }
@@ -78,6 +82,7 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
 
     if (blob) {
       setError(null);
+      setIsImage(blob.type.startsWith("image/"));
       objectUrl = URL.createObjectURL(blob);
       setFileUrl(objectUrl);
     } else {
@@ -153,36 +158,47 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
       ref={containerRef}
       className={`w-full overflow-x-hidden flex flex-col items-center bg-gray-50 ${!isView && "h-full overflow-y-auto hide-scrollbar"}`}
     >
-      <Document
-        file={fileUrl}
-        onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-        className="flex flex-col items-center w-full"
-        loading={
-          <div className="flex justify-center items-center w-full h-[500px]">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
-          </div>
-        }
-        error={
-          <div className="flex justify-center items-center w-full h-[500px] text-red-500">
-            Failed to load PDF.
-          </div>
-        }
-      >
-        {Array.from({ length: numPages }, (_, index) => (
-          <div
-            key={index}
-            className="mb-4 shadow-sm bg-white flex justify-center max-w-full"
-          >
-            <Page
-              pageNumber={index + 1}
-              width={containerWidth}
-              renderTextLayer={true}
-              renderAnnotationLayer={true}
-              className="max-w-full"
-            />
-          </div>
-        ))}
-      </Document>
+      {isImage ? (
+        <div className="flex justify-center items-center w-full h-full min-h-[500px] p-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={fileUrl}
+            alt="Document Preview"
+            className="max-w-full max-h-full object-contain shadow-sm bg-white"
+          />
+        </div>
+      ) : (
+        <Document
+          file={fileUrl}
+          onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+          className="flex flex-col items-center w-full"
+          loading={
+            <div className="flex justify-center items-center w-full h-[500px]">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
+            </div>
+          }
+          error={
+            <div className="flex justify-center items-center w-full h-[500px] text-red-500">
+              Failed to load PDF.
+            </div>
+          }
+        >
+          {Array.from({ length: numPages }, (_, index) => (
+            <div
+              key={index}
+              className="mb-4 shadow-sm bg-white flex justify-center max-w-full"
+            >
+              <Page
+                pageNumber={index + 1}
+                width={containerWidth}
+                renderTextLayer={true}
+                renderAnnotationLayer={true}
+                className="max-w-full"
+              />
+            </div>
+          ))}
+        </Document>
+      )}
     </div>
   );
 };
