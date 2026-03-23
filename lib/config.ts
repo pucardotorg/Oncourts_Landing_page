@@ -48,6 +48,7 @@ export const API_ENDPOINTS = {
   OTP: {
     SEND: `${API_BASE_URL}/user-otp/v1/_send`,
     VERIFY: `${API_BASE_URL}/user/oauth/token`,
+    CREATE: `${API_BASE_URL}/user/citizen/_create`,
   },
 
   // CTC (Certified True Copy) service endpoints
