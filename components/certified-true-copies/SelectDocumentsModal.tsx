@@ -447,7 +447,7 @@ const SelectDocumentsModal: React.FC<SelectDocumentsModalProps> = ({
           disabled={isDisabled}
           className={`${ctcStyles.modalDocCheckbox} flex-shrink-0`}
         />
-        <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between flex-1 min-w-0 gap-2 xl:gap-3">
+        <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between flex-1 min-w-0">
           <span className={`${ctcStyles.modalDocText} flex-1 min-w-0 pr-2`}>
             {localizeTitle(node.title)}
           </span>
