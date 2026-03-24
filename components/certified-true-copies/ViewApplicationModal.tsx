@@ -79,27 +79,36 @@ const ViewApplicationModal: React.FC<ViewApplicationModalProps> = ({
         {topInfoColumns && topInfoColumns?.length > 0 && (
           <div className="bg-[#FAFAFA] border border-[#EEEEEE] rounded-lg p-5">
             <div
-              className={`grid grid-cols-1 md:grid-cols-${Math.min(topInfoColumns.length, 4)} gap-6`}
+              className="grid gap-6"
+              style={{
+                gridTemplateColumns: `repeat(${Math.min(topInfoColumns.length, 4)}, 1fr)`,
+              }}
             >
               {topInfoColumns.map((col, colIdx) => (
                 <div
                   key={colIdx}
-                  className={`flex flex-col ${
+                  /* h-full and flex-1 ensure all columns stretch to the height of the tallest one */
+                  className={`flex flex-col justify-between min-w-0 ${
                     colIdx < topInfoColumns.length - 1
-                      ? "border-r border-[#E0E0E0] md:pr-4"
+                      ? "border-r border-[#E0E0E0] pr-4"
                       : ""
                   }`}
                 >
                   {col.map((item, itemIdx) => (
-                    <React.Fragment key={itemIdx}>
-                      <span className="text-[#64748B] text-lg mb-1">
-                        {item.label}
-                      </span>
-                      <span className="text-[#0F172A] text-xl font-semibold">
-                        {item.value}
-                      </span>
-                      {itemIdx < col.length - 1 && <div className="h-4"></div>}
-                    </React.Fragment>
+                    <div
+                      key={itemIdx}
+                      /* This ensures that if Case Name is long, it doesn't overlap the bottom item */
+                      className={itemIdx === 0 ? "mb-4" : ""}
+                    >
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-[#64748B] text-lg mb-1 truncate">
+                          {item.label}
+                        </span>
+                        <span className="text-[#0F172A] text-xl font-semibold break-words whitespace-normal leading-tight">
+                          {item.value}
+                        </span>
+                      </div>
+                    </div>
                   ))}
                 </div>
               ))}
