@@ -4,7 +4,7 @@ import { useMediaQuery } from "@mui/material";
 
 const InfoBanner: React.FC = () => {
   const isMobile = useMediaQuery("(max-width: 640px)");
-  const tenantId = localStorage.getItem("tenant-id");
+  const tenantId = localStorage.getItem("tenant-id") || "kl";
   const [messages, setMessages] = useState<string[]>([]);
 
   const getInfoMessage = useCallback(async () => {
