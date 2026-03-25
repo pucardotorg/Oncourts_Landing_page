@@ -6,7 +6,7 @@ interface ListItemProps {
 }
 
 const ListItem: React.FC<ListItemProps> = ({ title, date }) => {
-  const tenantId = localStorage.getItem("tenant-id");
+  const tenantId = localStorage.getItem("tenant-id") || "kl";
 
   const handleDownload = async () => {
     try {

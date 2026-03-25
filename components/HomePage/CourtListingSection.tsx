@@ -30,7 +30,7 @@ const CourtListingSection: React.FC<CourtListingSectionProps> = ({
   CauseListItem,
   noticeItems,
 }) => {
-  const tenantId = localStorage.getItem("tenant-id");
+  const tenantId = localStorage.getItem("tenant-id") || "kl";
   const [searchDate, setSearchDate] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 4;
