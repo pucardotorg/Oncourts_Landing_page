@@ -52,8 +52,8 @@ jobs:
           docker build \
           --build-arg NEXT_PUBLIC_ONCOURTS_API_ENDPOINT=https://oncourts.kerala.gov.in \
           --build-arg NEXT_PUBLIC_GLOBAL=/globalconfig/globalconfig.js \
-          -t docker.io/venkatramireddyb/oncourts-website:gogs-v1.17.0-1 .
-          docker push docker.io/venkatramireddyb/oncourts-website:gogs-v1.17.0-1
+          -t docker.io/venkatramireddyb/oncourts-website:${{ env.VERSION }}-${{ env.COMMIT_ID }} .
+          docker push docker.io/venkatramireddyb/oncourts-website:${{ env.VERSION }}-${{ env.COMMIT_ID }}
   Workflow_Trigger:
     if: (github.event_name == 'push' && (startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/release') || startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v'))) || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
