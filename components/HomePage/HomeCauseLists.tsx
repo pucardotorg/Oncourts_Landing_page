@@ -21,7 +21,7 @@ function HomeCauseLists(): JSX.Element {
   const [rightCauseList, setRightCauseList] = useState<CauseListState | null>(
     null,
   );
-  const tenantId = localStorage.getItem("tenant-id");
+  const tenantId = localStorage.getItem("tenant-id") || "kl";
   const { t } = useSafeTranslation();
 
   const fetchPdf = useCallback(
