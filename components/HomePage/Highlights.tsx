@@ -57,6 +57,7 @@ const Highlights: React.FC = () => {
   const [stats, setStats] = useState<DashboardMetricsNew>();
   const [lastUpdated, setLastUpdated] = useState<Date>(getLastUpdateTime());
   const isMobile = useMediaQuery("(max-width: 640px)");
+  const tenantId = localStorage.getItem("tenant-id");
 
   // Function to determine last update time (either today at 5PM or yesterday at 5PM)
   function getLastUpdateTime(): Date {
@@ -74,7 +75,7 @@ const Highlights: React.FC = () => {
 
   const fetchImpactGlance = async () => {
     try {
-      const res = await fetch("/api/impactGlance");
+      const res = await fetch(`/api/impactGlance?tenantId=${tenantId}`);
       const data = await res.json();
 
       const transformed = transformImpactGlance(data);
@@ -93,7 +94,7 @@ const Highlights: React.FC = () => {
       now.getDate(),
       17,
       0,
-      45
+      45,
     );
 
     // If current time is past today's target time, set target to tomorrow
@@ -111,7 +112,7 @@ const Highlights: React.FC = () => {
     // Set up refresh timer
     const timeUntilRefresh = calculateTimeUntilRefresh();
     console.log(
-      `[Highlights] Setting refresh timer for ${timeUntilRefresh}ms (${new Date(Date.now() + timeUntilRefresh).toLocaleString()})`
+      `[Highlights] Setting refresh timer for ${timeUntilRefresh}ms (${new Date(Date.now() + timeUntilRefresh).toLocaleString()})`,
     );
 
     const refreshTimer = setTimeout(() => {

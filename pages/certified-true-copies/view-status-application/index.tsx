@@ -39,7 +39,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
   const { t } = useSafeTranslation();
   const isMobile = useMediaQuery("(max-width:640px)");
   const router = useRouter();
-  const tenantId = localStorage.getItem("tenant-id") || "kl";
+  const tenantId = localStorage.getItem("tenant-id");
   const [errorToast, setErrorToast] = useState<{
     show: boolean;
     message: string;
@@ -108,7 +108,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
   const handleDownload = async (fileStoreId: string) => {
     try {
       const res = await fetch(
-        `/api/getFileByFileStoreId?tenantId=${tenantId || "kl"}&fileStoreId=${fileStoreId}`,
+        `/api/getFileByFileStoreId?tenantId=${tenantId}&fileStoreId=${fileStoreId}`,
         {
           headers: authData?.authToken
             ? { "auth-token": authData.authToken }
@@ -143,7 +143,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
     try {
       const res = await searchCtcApplications(
         {
-          tenantId: tenantId,
+          tenantId: tenantId as string,
           ...(query?.trim() && { searchText: query.trim() }),
         },
         authData,
@@ -235,7 +235,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
                 onPhoneNumberChange={setPhoneNumber}
                 isPhoneVerified={isPhoneVerified}
                 onVerified={() => setIsPhoneVerified(true)}
-                tenantId={tenantId}
+                tenantId={tenantId as string}
                 filingNumber={""}
                 courtId={""}
                 showErrorToast={showErrorToast}
@@ -532,7 +532,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
           },
         ]}
         fileStoreId={selectedFileStoreId}
-        tenantId={tenantId}
+        tenantId={tenantId as string}
         authToken={authData?.authToken}
       />
 
@@ -544,7 +544,7 @@ const ViewStatusForCertifiedTrueCopy = () => {
         documents={viewDocsApplication?.selectedCaseBundle || []}
         isViewMode={true}
         modalTitle={t(ctcText.viewDocs.title)}
-        tenantId={tenantId}
+        tenantId={tenantId as string}
         authData={authData}
         onDownloadSelected={async (fileStoreIds) => {
           for (const fsId of fileStoreIds) {
