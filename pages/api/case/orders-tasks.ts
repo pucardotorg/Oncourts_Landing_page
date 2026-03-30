@@ -32,7 +32,7 @@ export default async function handler(
     const {
       limit = 10,
       offset = 0,
-      tenantId = "kl",
+      tenantId,
       courtId,
       forOrders = false,
       forPaymentTask = true,

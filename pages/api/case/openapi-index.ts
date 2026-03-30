@@ -21,7 +21,7 @@ export default async function handler(
 
   try {
     // Forward the request body to the centralized API endpoint
-    const response = await fetch(API_ENDPOINTS.OPENAPI.CASE, {
+    const response = await fetch(API_ENDPOINTS.OPENAPI.CASE(req.query.tenantId as string), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

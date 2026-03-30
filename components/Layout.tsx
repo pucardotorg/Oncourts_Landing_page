@@ -42,7 +42,7 @@ const Layout: React.FC<LayoutProps> = ({
   children: React.ReactNode;
 }) => {
   const [digitReady, setDigitReady] = useState(false);
-  const [stateCode, setStateCode] = useState("kl");
+  const [stateCode, setStateCode] = useState("");
   const router = useRouter();
   const isLiveRoute = router?.pathname === "/live-causelist";
 
@@ -64,7 +64,7 @@ const Layout: React.FC<LayoutProps> = ({
         window?.globalConfigs?.getConfig
       ) {
         const code = window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID");
-        sessionStorage.setItem("tenant-id", code);
+        localStorage.setItem("tenant-id", code);
         setStateCode(code);
         setDigitReady(true);
         clearInterval(interval);

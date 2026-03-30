@@ -24,7 +24,7 @@ export default async function handler(
   const formBody = new URLSearchParams({
     username: username || "",
     password: password || "",
-    tenantId: tenantId || "kl",
+    tenantId: tenantId,
     userType: userType || "citizen",
     scope: scope || "read",
     grant_type: grant_type || "password",

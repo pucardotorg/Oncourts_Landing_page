@@ -1,9 +1,10 @@
 import { API_ENDPOINTS } from '../../lib/config';
 
 export default async function handler(req, res) {
+  const { tenantId } = req.query;
   try {
     const response = await fetch(
-      API_ENDPOINTS.MDMS.SEARCH,
+      API_ENDPOINTS.MDMS.SEARCH(tenantId as string),
       {
         method: "POST",
         headers: {
@@ -12,7 +13,7 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
           MdmsCriteria: {
-            tenantId: "kl",
+            tenantId: tenantId as string,
             moduleDetails: [
               {
                 moduleName: "LandingPage",
