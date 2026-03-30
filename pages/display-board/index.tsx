@@ -66,7 +66,7 @@ export default function DisplayBoard() {
   const [error, setError] = useState("");
   const { t } = useSafeTranslation();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const tenantId = localStorage.getItem("tenant-id") || "kl";
+  const tenantId = localStorage.getItem("tenant-id");
 
   useEffect(() => {
     const fetchHearingLink = async () => {

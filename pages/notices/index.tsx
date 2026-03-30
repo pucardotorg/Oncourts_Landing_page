@@ -32,7 +32,7 @@ const Notices: React.FC = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [noticesList, setNoticesList] = useState<Notice[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const tenantId = localStorage.getItem("tenant-id") || "kl";
+  const tenantId = localStorage.getItem("tenant-id");
   const [searchText, setSearchText] = useState("");
   const isMobile = useMediaQuery("(max-width:640px)");
 

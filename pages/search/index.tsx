@@ -67,7 +67,7 @@ const SearchForCase = () => {
   const [offset, setOffset] = useState(0);
   const limit = 50;
   const [totalCount, setTotalCount] = useState(0);
-  const tenantId = localStorage.getItem("tenant-id") || "kl";
+  const tenantId = localStorage.getItem("tenant-id");
   const [courtOptions, setCourtOptions] = useState<CourtRoom[]>([]);
   const [caseStageOptions, setCaseStageOptions] = useState<CaseStage[]>([]);
   const [caseStatusOptions, setCaseStatusOptions] = useState<CaseStatus[]>([]);
@@ -87,7 +87,7 @@ const SearchForCase = () => {
       advocateName: "",
       litigantName: "",
     }),
-    []
+    [],
   );
   // Form state
   const [formState, setFormState] = useState<FormState>(defaultFormState);
@@ -103,7 +103,7 @@ const SearchForCase = () => {
       yearOfFiling: "",
       caseTitle: "",
     }),
-    []
+    [],
   );
 
   // Additional filters state
@@ -150,7 +150,7 @@ const SearchForCase = () => {
               msgId: `${Date.now()}|en_IN`,
             },
           }),
-        }
+        },
       );
       const data = await response.json();
       // Extract the Court_Rooms array from response
@@ -278,7 +278,7 @@ const SearchForCase = () => {
       results,
       totalCount: count,
       error,
-    } = await searchCases("all", { offset: 0, limit });
+    } = await searchCases(tenantId as string, "all", { offset: 0, limit });
 
     if (error) {
       setErrorNotification({
@@ -373,7 +373,7 @@ const SearchForCase = () => {
   // Submit form
   const handleSubmit = async (
     offsetOverride: number,
-    filterStateOverride?: FilterState
+    filterStateOverride?: FilterState,
   ) => {
     // Check if form is valid before submission
     if (!isFormValid(selectedTab, formState)) {
@@ -390,13 +390,14 @@ const SearchForCase = () => {
       totalCount: count,
       error,
     } = await searchCases(
+      tenantId as string,
       selectedTab,
       {
         ...formState,
         offset: offsetOverride,
         limit,
       },
-      filterStateOverride || filterState
+      filterStateOverride || filterState,
     );
 
     // Handle API errors
@@ -696,7 +697,7 @@ const SearchForCase = () => {
       {showViewDetailedModal && (
         <DetailedViewModal
           isMobile={isMobile}
-          tenantId={tenantId}
+          tenantId={tenantId as string}
           onClose={() => setShowViewDetailedModal(false)}
           caseResult={selectedCase}
         />
