@@ -52,6 +52,10 @@ const nextConfig = {
         source: "/localization/messages/v1/_search/:path*",
         destination: `${apiEndpoint}/localization/messages/v1/_search/:path*`,
       },
+      {
+        source: "/api/ctc/:path*",
+        destination: `${apiEndpoint}/ctc/:path*`,
+      },
     ];
   },
 };
