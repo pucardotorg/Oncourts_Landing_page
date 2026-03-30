@@ -30,7 +30,6 @@ jobs:
 
       # Login to Azure Container Registry
       - name: Login to Docker Registry
-        if: (github.event_name == 'push' && (startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/release/') || startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v'))) || github.event_name == 'workflow_dispatch'
         run: docker login -u venkatramireddyb -p ${{ secrets.ACR_PASSWORD }}
       - name: Set Version from Tag or Branch
         id: set_version
@@ -48,7 +47,6 @@ jobs:
       - name: Get commit ID
         run: echo "COMMIT_ID=$(git rev-parse HEAD)" >> $GITHUB_ENV
       - name: Build and Push Docker image for Landing-Page
-        if: (github.event_name == 'push' && (startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/release/') || startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v'))) || github.event_name == 'workflow_dispatch'
         run: |
           docker build \
           --build-arg NEXT_PUBLIC_ONCOURTS_API_ENDPOINT=https://oncourts-staging.kerala.gov.in \
