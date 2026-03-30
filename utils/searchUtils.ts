@@ -17,7 +17,8 @@ import { transformSearchResponse } from "../TransformData/transformSearchData";
  * Fetch case data from API with error handling
  */
 export const fetchCase = async (
-  payload?: ApiRequestPayload
+  payload?: ApiRequestPayload,
+  tenantId?: string,
 ): Promise<ApiResponse | null> => {
   try {
     // Show messages in development but not in production
@@ -28,7 +29,7 @@ export const fetchCase = async (
     }
 
     // Use the API proxy endpoint to avoid CORS issues
-    const url = "/api/case/openapi-index";
+    const url = `/api/case/openapi-index?tenantId=${tenantId}`;
 
     const options = {
       method: "POST",
@@ -261,6 +262,7 @@ export const buildApiPayload = (
  * Now also accepts filterState to include advanced filtering options
  */
 export const searchCases = async (
+  tenantId: string,
   selectedTab: string,
   formState: Partial<FormState> & {
     offset?: number;
@@ -286,7 +288,7 @@ export const searchCases = async (
     }
 
     // Call the API with the constructed payload
-    const response = await fetchCase(payload);
+    const response = await fetchCase(payload, tenantId);
 
     if (!response) {
       return {

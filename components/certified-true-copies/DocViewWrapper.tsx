@@ -40,7 +40,7 @@ const DocViewWrapper: React.FC<DocViewWrapperProps> = ({
       setIsLoading(true);
       setError(null);
       try {
-        const uri = `/api/getFileByFileStoreId?tenantId=${tenantId || "kl"}&fileStoreId=${fileStoreId}`;
+        const uri = `/api/getFileByFileStoreId?tenantId=${tenantId}&fileStoreId=${fileStoreId}`;
         const headers: HeadersInit = authToken
           ? { "auth-token": authToken }
           : {};

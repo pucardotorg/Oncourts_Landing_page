@@ -28,7 +28,7 @@ export default async function handler(
         name: "digit-user", // default required by payload
         username: username,
         otpReference: otpReference,
-        tenantId: tenantId || "kl",
+        tenantId: tenantId,
       },
       RequestInfo: {
         apiId: "Dristi",
