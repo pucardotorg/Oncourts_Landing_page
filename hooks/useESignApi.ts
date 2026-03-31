@@ -16,7 +16,7 @@ interface SignStatus {
 const useESignApi = () => {
   const tenantId = localStorage.getItem("tenant-id");
 
-  const esignUrl = "https://es-staging.cdac.in/esignlevel2/2.1/form/signdoc";
+  const esignUrl = window?.globalConfigs?.getConfig("ESIGN_URL") || "https://es-staging.cdac.in/esignlevel2/2.1/form/signdoc";
 
   // Read session sign-status once on mount
   const parsedObj: SignStatus[] = useMemo(() => {
