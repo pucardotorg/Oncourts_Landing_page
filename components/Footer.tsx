@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { FooterConfig } from "../data/FooterConfig"; // Ensure path is correct
+import { getFooterConfig } from "../data/FooterConfig";
 import Link from "next/link";
 import { useSafeTranslation } from "../hooks/useSafeTranslation";
 import { useMediaQuery } from "@mui/material";
@@ -10,6 +10,9 @@ const Footer: React.FC = () => {
   const isMobile = useMediaQuery("(max-width:640px)");
   const isMac = useMediaQuery("(max-width:1500px)");
   const isLaptop = useMediaQuery("(max-width:1700px)");
+  const tenantId = localStorage.getItem("tenant-id");
+
+  const FooterConfig = useMemo(() => getFooterConfig(tenantId), [tenantId]);
 
   // Get formatted date based on time condition
   const formattedDate = useMemo(() => {
