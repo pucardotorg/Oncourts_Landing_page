@@ -14,9 +14,9 @@ interface SignStatus {
  * Uses our own /api/esign Next.js route instead of Digit.DRISTIService.
  */
 const useESignApi = () => {
-  const tenantId = localStorage.getItem("tenant-id") || "kl";
+  const tenantId = localStorage.getItem("tenant-id");
 
-  const esignUrl = "https://es-staging.cdac.in/esignlevel2/2.1/form/signdoc";
+  const esignUrl = window?.globalConfigs?.getConfig("ESIGN_URL") || "https://es-staging.cdac.in/esignlevel2/2.1/form/signdoc";
 
   // Read session sign-status once on mount
   const parsedObj: SignStatus[] = useMemo(() => {
@@ -55,7 +55,7 @@ const useESignApi = () => {
             consent: "6564",
             authType: "6546",
             fileStoreId,
-            tenantId,
+            tenantId: tenantId as string,
             pageModule,
             signPlaceHolder: signPlaceHolder ?? "EsIIIgNNN_PlAcEholDeR_keYY",
           },

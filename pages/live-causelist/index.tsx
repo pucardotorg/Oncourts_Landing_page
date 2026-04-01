@@ -179,7 +179,7 @@ export default function LiveCauselist() {
   // Pagination for bottom section (10 per page after the top 4)
   const [currentPage, setCurrentPage] = useState(0); // 0-based for the bottom pages
 
-  const tenantId = useMemo(() => localStorage.getItem("tenant-id") || "kl", []);
+  const tenantId = useMemo(() => localStorage.getItem("tenant-id"), []);
 
   const getRefreshInterval = useCallback(async () => {
     try {

@@ -27,7 +27,7 @@ export const API_ENDPOINTS = {
 
   // OpenAPI endpoints
   OPENAPI: {
-    CASE: `${API_BASE_URL}/openapi/v1/kl/case`,
+    CASE: (tenantId: string) => `${API_BASE_URL}/openapi/v1/${tenantId}/case`,
     CASE_BY_CNR: (caseNumber: string) =>
       `${API_BASE_URL}/openapi/v1/kl/case/cnr/${caseNumber}`,
     CASE_BY_TYPE: (year: string, type: string, offset: string, limit: string) =>
@@ -48,6 +48,7 @@ export const API_ENDPOINTS = {
   OTP: {
     SEND: `${API_BASE_URL}/user-otp/v1/_send`,
     VERIFY: `${API_BASE_URL}/user/oauth/token`,
+    CREATE: `${API_BASE_URL}/user/citizen/_create`,
   },
 
   // CTC (Certified True Copy) service endpoints
@@ -88,7 +89,7 @@ export const API_ENDPOINTS = {
 
   // MDMS endpoints
   MDMS: {
-    SEARCH: `${API_BASE_URL}/egov-mdms-service/v1/_search?tenantId=kl`,
+    SEARCH: (tenantId: string) => `${API_BASE_URL}/egov-mdms-service/v1/_search?tenantId=${tenantId}`,
   },
 };
 

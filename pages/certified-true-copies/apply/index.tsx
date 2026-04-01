@@ -46,7 +46,7 @@ const ApplyForCertifiedCopy = () => {
   const [courtOptions, setCourtOptions] = useState<CourtRoom[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const initialLoadRef = useRef(false);
-  const tenantId = localStorage.getItem("tenant-id") || "kl";
+  const tenantId = localStorage.getItem("tenant-id");
   const [isSearchingList, setIsSearchingList] = useState(false);
   const [isRestoring, setIsRestoring] = useState(false);
 
@@ -100,7 +100,7 @@ const ApplyForCertifiedCopy = () => {
     hasSearched: false,
     phoneNumber: "",
     isPhoneVerified: false,
-    isPartyToCase: "",
+    isPartyToCase: null,
     name: "",
     designation: "",
   });
@@ -114,7 +114,7 @@ const ApplyForCertifiedCopy = () => {
     updateStep1({
       phoneNumber: "",
       isPhoneVerified: false,
-      isPartyToCase: "",
+      isPartyToCase: null,
       name: "",
       designation: "",
     });
@@ -154,7 +154,7 @@ const ApplyForCertifiedCopy = () => {
         setIsLoadingDocs(true);
         const res = await previewDoc(
           {
-            tenantId,
+            tenantId: tenantId as string,
             filingNumber,
             courtId,
             ctcApplicationNumber: ctcApplication?.ctcApplicationNumber,
@@ -239,22 +239,25 @@ const ApplyForCertifiedCopy = () => {
 
       setIsSearchingCase(true);
       try {
-        const response = await fetch("/api/case/openapi-index", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            searchCaseCriteria: {
-              searchType: "cnr_number",
-              cnrNumberCriteria: {
-                cnrNumber: cnrNumber?.trim(),
-              },
+        const response = await fetch(
+          `/api/case/openapi-index?tenantId=${tenantId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
             },
-            offset: 0,
-            limit: 50,
-          }),
-        });
+            body: JSON.stringify({
+              searchCaseCriteria: {
+                searchType: "cnr_number",
+                cnrNumberCriteria: {
+                  cnrNumber: cnrNumber?.trim(),
+                },
+              },
+              offset: 0,
+              limit: 50,
+            }),
+          },
+        );
 
         if (!response?.ok) {
           showErrorToast?.("Failed to search case. Please try again.");
@@ -304,7 +307,7 @@ const ApplyForCertifiedCopy = () => {
         setIsRestoring(true);
         const res = await searchCtcApplications(
           {
-            tenantId: tenantId,
+            tenantId: tenantId as string,
             ctcApplicationNumber: appNum,
             courtId: courtId,
             filingNumber: filingNumber,
@@ -330,7 +333,7 @@ const ApplyForCertifiedCopy = () => {
           hasSearched: true,
           phoneNumber: app?.mobileNumber || prev?.phoneNumber,
           isPhoneVerified: true,
-          isPartyToCase: app?.isPartyToCase ? "yes" : "no",
+          isPartyToCase: app?.isPartyToCase ?? false,
           name: app?.applicantName || "",
           designation: app?.partyDesignation || "",
         }));
@@ -556,7 +559,7 @@ const ApplyForCertifiedCopy = () => {
               ctcApplication={ctcApplication}
               onApplicationCreate={handleApplicationCreate}
               onApplicationUpdate={handleApplicationUpdate}
-              tenantId={tenantId}
+              tenantId={tenantId as string}
               showErrorToast={showErrorToast}
               caseResult={caseResult}
               onAuthDataReceived={setAuthData}
@@ -570,14 +573,14 @@ const ApplyForCertifiedCopy = () => {
           )}
           {currentStep === 2 && (
             <Step2DocumentDetails
-              isParty={step1?.isPartyToCase === "yes"}
+              isParty={step1?.isPartyToCase ?? false}
               step2={step2}
               updateStep2={updateStep2}
               onNext={() => setCurrentStep(3)}
               onBack={() => setCurrentStep(1)}
               ctcApplication={ctcApplication}
               onApplicationUpdate={setCtcApplication}
-              tenantId={tenantId}
+              tenantId={tenantId as string}
               showErrorToast={showErrorToast}
               caseResult={caseResult}
               authData={authData}
@@ -590,7 +593,7 @@ const ApplyForCertifiedCopy = () => {
               onBack={() => setCurrentStep(2)}
               ctcApplication={ctcApplication}
               onApplicationUpdate={setCtcApplication}
-              tenantId={tenantId}
+              tenantId={tenantId as string}
               showErrorToast={showErrorToast}
               caseResult={caseResult}
               authData={authData}

@@ -18,6 +18,7 @@ interface VerifyMobileNumberProps {
   onAuthDataReceived?: (data: AuthData) => void;
   isViewApplication?: boolean;
   autoFocus?: boolean;
+  required?: boolean;
 }
 
 const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
@@ -33,10 +34,14 @@ const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
   onAuthDataReceived,
   isViewApplication = false,
   autoFocus = false,
+  required = true,
 }) => {
   const { t } = useSafeTranslation();
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [otpType, setOtpType] = useState<
+    "CTC_APPLICATION_LOGIN" | "CTC_APPLICATION_REGISTER"
+  >("CTC_APPLICATION_LOGIN");
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -45,8 +50,13 @@ const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
     }
   }, [autoFocus, isPhoneVerified]);
 
-  const handleSendOtp = async () => {
+  const handleSendOtp = async (
+    customType?: "CTC_APPLICATION_LOGIN" | "CTC_APPLICATION_REGISTER",
+  ) => {
     if (phoneNumber?.length !== 10) return;
+
+    const requestType = customType || "CTC_APPLICATION_LOGIN";
+    if (!customType) setOtpType("CTC_APPLICATION_LOGIN");
 
     setIsSendingOtp(true);
     try {
@@ -58,12 +68,33 @@ const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
             mobileNumber: phoneNumber,
             tenantId: tenantId,
             userType: "citizen",
-            type: "LOGIN",
+            type: requestType,
           },
         }),
       });
 
       if (!response?.ok) {
+        const errorData = await response?.json().catch(() => null);
+        let errorFields = errorData?.error?.fields;
+        if (!errorFields && typeof errorData?.message === "string") {
+          try {
+            const parsedMessage = JSON.parse(errorData.message);
+            errorFields = parsedMessage?.error?.fields;
+          } catch {
+            // ignore JSON parse error
+          }
+        }
+
+        if (
+          requestType === "CTC_APPLICATION_LOGIN" &&
+          errorFields?.some(
+            (f: { code: string }) => f.code === "OTP.UNKNOWN_CREDENTIAL",
+          )
+        ) {
+          setOtpType("CTC_APPLICATION_REGISTER");
+          await handleSendOtp("CTC_APPLICATION_REGISTER");
+          return;
+        }
         showErrorToast?.(t(ctcText.verifyPhone.userNotRegistered));
         return;
       }
@@ -101,11 +132,14 @@ const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
         onValidateSuccess={onValidateSuccess}
         onAuthDataReceived={onAuthDataReceived}
         isViewApplication={isViewApplication}
+        otpType={otpType}
       />
       <div className={ctcStyles.verifyWrap}>
         <label className={ctcStyles.verifyLabel}>
           {t(ctcText.verifyPhone.label)}
-          <span className="text-red-500 text-2xl leading-none ml-1">*</span>
+          {required && (
+            <span className="text-red-500 text-2xl leading-none ml-1">*</span>
+          )}
         </label>
         <div className={ctcStyles.verifyInputWrap}>
           <span className={ctcStyles.verifyPrefix}>+91</span>
@@ -163,7 +197,7 @@ const VerifyMobileNumber: React.FC<VerifyMobileNumberProps> = ({
               </div>
             ) : (
               <button
-                onClick={handleSendOtp}
+                onClick={() => handleSendOtp()}
                 disabled={phoneNumber.length !== 10 || isSendingOtp}
                 className={`${ctcStyles.verifyBtn} ${
                   phoneNumber.length === 10 && !isSendingOtp

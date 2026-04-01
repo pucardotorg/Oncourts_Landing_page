@@ -16,6 +16,7 @@ const OTPModal = ({
   onValidateSuccess,
   onAuthDataReceived,
   isViewApplication,
+  otpType = "CTC_APPLICATION_LOGIN",
 }: {
   t: (key: string) => string;
   isOpen: boolean;
@@ -28,6 +29,7 @@ const OTPModal = ({
   onValidateSuccess?: (data: ValidateUserInfo) => void;
   onAuthDataReceived?: (data: AuthData) => void;
   isViewApplication: boolean;
+  otpType?: "CTC_APPLICATION_LOGIN" | "CTC_APPLICATION_REGISTER";
 }) => {
   const [otp, setOtp] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
@@ -66,26 +68,50 @@ const OTPModal = ({
 
     setIsVerifying(true);
     try {
-      // Step 1: Verify OTP → get access_token + UserRequest
-      const response = await fetch("/api/otp/verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: phoneNumber,
-          password: otp,
-          tenantId: tenantId,
-          userType: "citizen",
-          scope: "read",
-          grant_type: "password",
-        }),
-      });
+      let authData: {
+        access_token: string;
+        UserRequest: Record<string, unknown>;
+      };
 
-      if (!response?.ok) {
-        setErrorMsg(t("INVALID_OTP"));
-        return;
+      if (otpType === "CTC_APPLICATION_REGISTER") {
+        const createRes = await fetch("/api/otp/create", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: phoneNumber,
+            otpReference: otp,
+            tenantId: tenantId,
+          }),
+        });
+
+        if (!createRes?.ok) {
+          setErrorMsg(t("INVALID_OTP"));
+          return;
+        }
+
+        authData = await createRes?.json();
+      } else {
+        // Step 1: Verify OTP → get access_token + UserRequest
+        const response = await fetch("/api/otp/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: phoneNumber,
+            password: otp,
+            tenantId: tenantId,
+            userType: "citizen",
+            scope: "read",
+            grant_type: "password",
+          }),
+        });
+
+        if (!response?.ok) {
+          setErrorMsg(t("INVALID_OTP"));
+          return;
+        }
+
+        authData = await response?.json();
       }
-
-      const authData = await response?.json();
 
       if (!authData?.access_token) {
         setErrorMsg(
