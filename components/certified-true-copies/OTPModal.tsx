@@ -16,7 +16,7 @@ const OTPModal = ({
   onValidateSuccess,
   onAuthDataReceived,
   isViewApplication,
-  otpType = "LOGIN",
+  otpType = "CTC_APPLICATION_LOGIN",
 }: {
   t: (key: string) => string;
   isOpen: boolean;
@@ -29,7 +29,7 @@ const OTPModal = ({
   onValidateSuccess?: (data: ValidateUserInfo) => void;
   onAuthDataReceived?: (data: AuthData) => void;
   isViewApplication: boolean;
-  otpType?: "LOGIN" | "REGISTER";
+  otpType?: "CTC_APPLICATION_LOGIN" | "CTC_APPLICATION_REGISTER";
 }) => {
   const [otp, setOtp] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
@@ -73,7 +73,7 @@ const OTPModal = ({
         UserRequest: Record<string, unknown>;
       };
 
-      if (otpType === "REGISTER") {
+      if (otpType === "CTC_APPLICATION_REGISTER") {
         const createRes = await fetch("/api/otp/create", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
