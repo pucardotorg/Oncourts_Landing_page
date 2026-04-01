@@ -10,6 +10,7 @@ import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 
 const HelpResources = () => {
   const { t } = useSafeTranslation();
+  const tenantId = localStorage.getItem("tenant-id");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const faqs = getFaqs(t);
   const toggleFaq = (index: number) => {
@@ -85,7 +86,7 @@ const HelpResources = () => {
                   {
                     icon: "/images/file.png",
                     text: "USER_MANUAL_ADVOCATE_AND_LITIGANT",
-                    link: "https://oncourts.kerala.gov.in/minio-filestore/v1/files/id?tenantId=kl&fileStoreId=c21569cd-70f1-4a00-b244-afb0cdaf9da5",
+                    link: `https://oncourts.kerala.gov.in/minio-filestore/v1/files/id?tenantId=${tenantId}&fileStoreId=c21569cd-70f1-4a00-b244-afb0cdaf9da5`,
                     section: "User Guide for Advocates and Litigants",
                     newTab: true,
                   },
