@@ -18,10 +18,11 @@ permissions:
   security-events: write
   contents: read
 jobs:
-  docker_image-build:
+  docker-image-build:
     runs-on: ubuntu-latest
     outputs:
       deployment_env: ${{ steps.set_deployment_environment.outputs.deployment_env }}
+      image_tag: ${{ steps.set_image_tag.outputs.image_tag }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -57,6 +58,11 @@ jobs:
           --build-arg NEXT_PUBLIC_ENV=local \
           -t docker.io/venkatramireddyb/oncourts-website:${{ env.VERSION }}-${{ env.COMMIT_ID }} .
           docker push docker.io/venkatramireddyb/oncourts-website:${{ env.VERSION }}-${{ env.COMMIT_ID }}
+
+      - name: set image tag
+        id: set_image_tag
+        run: |
+          echo "image_tag=${{ env.VERSION }}-${{ env.COMMIT_ID }}" >> $GITHUB_OUTPUT
 
       - name: set deployment environment
         id: set_deployment_environment
@@ -109,4 +115,4 @@ jobs:
           -H "Accept: application/vnd.github.v3+json" \
           -H "Authorization: token ${{ secrets.GHUB_TOKEN }}" \
           https://api.github.com/repos/pucardotorg/pucar-Devops/actions/workflows/${{ env.WORKFLOW_FILE }}/dispatches \
-          -d '{"ref":"pucar-stg", "inputs": {"service_name": "oncourts-website", "service_tag": "${{ env.VERSION }}-${{ env.COMMIT_ID }}"}}'
+          -d '{"ref":"pucar-stg", "inputs": {"service_name": "oncourts-website", "service_tag": "${{ needs.docker-image-build.outputs.image_tag }}", "environment": "${{ needs.docker-image-build.outputs.deployment_env }}"}}'
