@@ -1,7 +1,12 @@
 import React from "react";
 import BaseModal from "./BaseModal";
 import { CtcApplication } from "../../types";
-import DocViewWrapper from "./DocViewWrapper";
+import dynamic from "next/dynamic";
+
+// react-pdf relies on browser-only globals (DOMMatrix), so load it client-side only
+const DocViewWrapper = dynamic(() => import("./DocViewWrapper"), {
+  ssr: false,
+});
 import { ctcText } from "../../styles/certifiedCopyStyles";
 
 export interface TopInfoItem {

@@ -3,7 +3,12 @@ import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 import { svgIcons } from "../../data/svgIcons";
 import { ctcStyles, ctcText } from "../../styles/certifiedCopyStyles";
 import type { CaseBundleNode, AuthData } from "../../types";
-import DocViewWrapper from "./DocViewWrapper";
+import dynamic from "next/dynamic";
+
+// react-pdf relies on browser-only globals (DOMMatrix), so load it client-side only
+const DocViewWrapper = dynamic(() => import("./DocViewWrapper"), {
+  ssr: false,
+});
 
 interface SelectDocumentsModalProps {
   isOpen: boolean;

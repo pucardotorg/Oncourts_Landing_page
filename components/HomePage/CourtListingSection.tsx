@@ -4,7 +4,12 @@ import Link from "next/link";
 import { svgIcons } from "../../data/svgIcons";
 import styles from "../../styles/WhatsNewCard.module.css";
 import { CauseListItem } from "./NoticeAndCauseListSection";
-import PDFViewer from "../Utils/PDFViewer";
+import dynamic from "next/dynamic";
+
+// react-pdf relies on browser-only globals (DOMMatrix), so load it client-side only
+const PDFViewer = dynamic(() => import("../Utils/PDFViewer"), {
+  ssr: false,
+});
 
 interface NoticeItem {
   id: string;
