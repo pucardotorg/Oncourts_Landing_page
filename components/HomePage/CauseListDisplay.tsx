@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { svgIcons } from "../../data/svgIcons";
-import PdfPreview from "../Utils/PdfPreview";
+import dynamic from "next/dynamic";
+
+// react-pdf relies on browser-only globals (DOMMatrix), so load it client-side only
+const PdfPreview = dynamic(() => import("../Utils/PdfPreview"), {
+  ssr: false,
+});
 import { useMediaQuery } from "@mui/material";
 
 interface CauseListDisplayProps {

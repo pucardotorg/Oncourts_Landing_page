@@ -12,7 +12,12 @@ import usePaymentProcess from "../../../hooks/usePaymentProcess";
 import { updateCtcApplication } from "../../../services/ctcService";
 import { handleAuthError } from "../../../libraries/utils/authUtils";
 import type { CtcApplication, AuthData } from "../../../types";
-import DocViewWrapper from "../DocViewWrapper";
+import dynamic from "next/dynamic";
+
+// react-pdf relies on browser-only globals (DOMMatrix), so load it client-side only
+const DocViewWrapper = dynamic(() => import("../DocViewWrapper"), {
+  ssr: false,
+});
 
 interface Step3PreviewAndSignProps {
   onBack: () => void;
