@@ -7,9 +7,9 @@ export const judges = {
   },
   highCourt: [
     {
-      name: "Justice Nitin Jamdar",
+      name: "Justice Soumen Sen",
       title: "Chief Justice",
-      image: "/images/jOne.png",
+      image: "/images/people/soumenSen.jpg",
     },
     {
       name: "Justice Devan Ramachandran",
