@@ -7,7 +7,7 @@ export const judges = {
   },
   highCourt: [
     {
-      name: "Justice Soumen Sen",
+      name: "Honourable Justice Mr Soumen Sen",
       title: "Chief Justice",
       image: "/images/people/soumenSen.jpg",
     },

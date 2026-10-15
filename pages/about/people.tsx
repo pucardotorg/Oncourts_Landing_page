@@ -8,7 +8,7 @@ import { useSafeTranslation } from "../../hooks/useSafeTranslation";
 const peopleData = {
   chiefJustices: [
     {
-      name: "Justice Soumen Sen",
+      name: "Honourable Justice Mr Soumen Sen",
       title: "CHIEF_JUSTICE",
       image: "/images/people/soumenSen.jpg",
     },
